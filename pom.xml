@@ -13,7 +13,7 @@
   <artifactId>selc-party-registry-proxy</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>selc-party-registry-proxy</name>
-  <description>Microservice to proxy Self Care Party Registry</description>
+  <description>A proxy for all Party Registry data sources used in Self Care</description>
   <properties>
     <selc-commons.version>2.1.0</selc-commons.version>
   </properties>
