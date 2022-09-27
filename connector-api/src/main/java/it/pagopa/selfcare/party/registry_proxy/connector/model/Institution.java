@@ -24,6 +24,6 @@ public interface Institution {
 
     String getZipCode();
 
-    String getOrigin();
+    Origin getOrigin();
 
 }

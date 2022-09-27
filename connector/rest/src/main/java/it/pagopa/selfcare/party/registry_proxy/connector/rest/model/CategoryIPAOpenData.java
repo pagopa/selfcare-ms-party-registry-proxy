@@ -2,6 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest.model;
 
 import com.opencsv.bean.CsvBindByName;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Category;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,8 +19,8 @@ public class CategoryIPAOpenData implements Category {
     private String origin;
 
 
-    public String getOrigin() {
-        return "IPA";
+    public Origin getOrigin() {
+        return Origin.IPA;
     }
 
 }

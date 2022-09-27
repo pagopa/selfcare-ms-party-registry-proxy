@@ -1,5 +1,7 @@
-package it.pagopa.selfcare.party.registry_proxy.core;
+package it.pagopa.selfcare.party.registry_proxy.connector.lucene.writer;
 
+import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis.InstitutionTokenAnalyzer;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -8,15 +10,12 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.BytesRef;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Slf4j
-@Service
 public class InstitutionRAMIndexWriterService implements IndexWriterService<Institution> {
 
     private final InstitutionTokenAnalyzer institutionTokenAnalyzer;
@@ -25,9 +24,8 @@ public class InstitutionRAMIndexWriterService implements IndexWriterService<Inst
 
     @SneakyThrows  //TODO
     @Autowired
-    public InstitutionRAMIndexWriterService(InstitutionTokenAnalyzer institutionTokenAnalyzer) {
+    public InstitutionRAMIndexWriterService(InstitutionTokenAnalyzer institutionTokenAnalyzer, Directory directory) {
         this.institutionTokenAnalyzer = institutionTokenAnalyzer;
-        Directory directory = new RAMDirectory();
         final IndexWriterConfig indexConfig = new IndexWriterConfig(institutionTokenAnalyzer);
         indexWriter = new IndexWriter(directory, indexConfig);
     }
@@ -47,7 +45,7 @@ public class InstitutionRAMIndexWriterService implements IndexWriterService<Inst
                 doc.add(new TextField("digitalAddress", item.getDigitalAddress(), Field.Store.YES));
                 doc.add(new TextField("address", item.getAddress(), Field.Store.YES));
                 doc.add(new TextField("zipCode", item.getZipCode(), Field.Store.YES));
-                doc.add(new TextField("origin", item.getOrigin(), Field.Store.YES));
+                doc.add(new TextField("origin", item.getOrigin().toString(), Field.Store.YES));
 
                 if (item.getO() != null) {
                     doc.add(new StoredField("o", item.getO()));

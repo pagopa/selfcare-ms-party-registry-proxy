@@ -1,4 +1,4 @@
-package it.pagopa.selfcare.party.registry_proxy.core;
+package it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.Analyzer;

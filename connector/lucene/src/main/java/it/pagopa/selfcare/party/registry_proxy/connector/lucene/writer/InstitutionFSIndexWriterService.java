@@ -1,5 +1,7 @@
-package it.pagopa.selfcare.party.registry_proxy.core;
+package it.pagopa.selfcare.party.registry_proxy.connector.lucene.writer;
 
+import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis.InstitutionTokenAnalyzer;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -8,11 +10,9 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.BytesRef;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.nio.file.Paths;
 import java.util.List;
 
 @Slf4j
@@ -25,9 +25,8 @@ public class InstitutionFSIndexWriterService implements IndexWriterService<Insti
 
     @SneakyThrows  //TODO
     @Autowired
-    public InstitutionFSIndexWriterService(InstitutionTokenAnalyzer institutionTokenAnalyzer) {
+    public InstitutionFSIndexWriterService(InstitutionTokenAnalyzer institutionTokenAnalyzer, Directory directory) {
         this.institutionTokenAnalyzer = institutionTokenAnalyzer;
-        Directory directory = FSDirectory.open(Paths.get("index/institutions"));//FIXME: put into config variable
         final IndexWriterConfig indexConfig = new IndexWriterConfig(institutionTokenAnalyzer);
         indexWriter = new IndexWriter(directory, indexConfig);
     }
@@ -47,7 +46,7 @@ public class InstitutionFSIndexWriterService implements IndexWriterService<Insti
                 doc.add(new TextField("digitalAddress", item.getDigitalAddress(), Field.Store.YES));
                 doc.add(new TextField("address", item.getAddress(), Field.Store.YES));
                 doc.add(new TextField("zipCode", item.getZipCode(), Field.Store.YES));
-                doc.add(new TextField("origin", item.getOrigin(), Field.Store.YES));
+                doc.add(new TextField("origin", item.getOrigin().toString(), Field.Store.YES));
 
                 if (item.getO() != null) {
                     doc.add(new StoredField("o", item.getO()));

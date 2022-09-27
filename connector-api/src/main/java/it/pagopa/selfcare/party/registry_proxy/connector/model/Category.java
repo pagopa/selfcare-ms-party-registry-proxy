@@ -8,6 +8,6 @@ public interface Category {
 
     String getKind();
 
-    String getOrigin();
+    Origin getOrigin();
 
 }

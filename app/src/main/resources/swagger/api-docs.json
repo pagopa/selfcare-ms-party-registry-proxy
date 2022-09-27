@@ -1,0 +1,343 @@
+{
+  "openapi" : "3.0.3",
+  "info" : {
+    "title" : "selc-party-registry-proxy",
+    "description" : "Party Registry Proxy API documentation",
+    "version" : "1.0-SNAPSHOT"
+  },
+  "servers" : [ {
+    "url" : "{url}:{port}{basePath}",
+    "variables" : {
+      "url" : { },
+      "port" : { },
+      "basePath" : {
+        "default" : ""
+      }
+    }
+  } ],
+  "tags" : [ {
+    "name" : "institution",
+    "description" : "Institution operations"
+  } ],
+  "paths" : {
+    "/v1/institutions/" : {
+      "get" : {
+        "tags" : [ "institution" ],
+        "summary" : "Search institutions",
+        "description" : "Returns a list of Institutions.",
+        "operationId" : "searchUsingGET",
+        "parameters" : [ {
+          "name" : "search",
+          "in" : "query",
+          "description" : "if passed, the result is filtered based on the contained value.",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "page",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "limit",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InstitutionsResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/v1/institutions/{id}" : {
+      "get" : {
+        "tags" : [ "institution" ],
+        "summary" : "Find institution by ID",
+        "description" : "Returns a single institution. If 'origin' param is filled, the ID to find is treated as 'originId' ($ref: '#/components/schemas/Institution'); otherwise is treated as 'id' ($ref: '#/components/schemas/Institution') ",
+        "operationId" : "findInstitutionUsingGET",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The institution ID. It change semantic based on the origin param value (see notes)",
+          "required" : true,
+          "style" : "simple",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "origin",
+          "in" : "query",
+          "description" : "Describes which is the source of Institution data",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InstitutionResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "InstitutionResource" : {
+        "title" : "InstitutionResource",
+        "required" : [ "address", "description", "digitalAddress", "id", "origin", "originId", "taxCode", "zipCode" ],
+        "type" : "object",
+        "properties" : {
+          "address" : {
+            "type" : "string",
+            "description" : "Institution address"
+          },
+          "aoo" : {
+            "pattern" : "^[a-z]{1,12}$",
+            "type" : "string",
+            "description" : "aoo"
+          },
+          "category" : {
+            "pattern" : "[a-zA-Z\\d]{1,12}",
+            "type" : "string",
+            "description" : "Institution category"
+          },
+          "description" : {
+            "pattern" : "^[A-Za-z Ã¨Ã Ã²Ã¹Ã¬ÃÃÃÃÃ]{2,30}$",
+            "type" : "string",
+            "description" : "Institution description"
+          },
+          "digitalAddress" : {
+            "type" : "string",
+            "description" : "Digital institution address",
+            "format" : "email",
+            "example" : "email@example.com"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "Semantic id to recognize a party between origins (or externalId)"
+          },
+          "o" : {
+            "pattern" : "^[a-z]{1,12}$",
+            "type" : "string",
+            "description" : "o"
+          },
+          "origin" : {
+            "type" : "string",
+            "description" : "Describes which is the source of Institution data",
+            "enum" : [ "INFOCAMERE", "IPA" ]
+          },
+          "originId" : {
+            "pattern" : "^[a-z]{1,12}$",
+            "type" : "string",
+            "description" : "Id of the institution from its origin"
+          },
+          "ou" : {
+            "pattern" : "^[a-z]{1,12}$",
+            "type" : "string",
+            "description" : "ou"
+          },
+          "taxCode" : {
+            "pattern" : "[\\d]{10,13}",
+            "type" : "string",
+            "description" : "Institution fiscal code"
+          },
+          "zipCode" : {
+            "type" : "string",
+            "description" : "Institution zipCode"
+          }
+        }
+      },
+      "InstitutionsResource" : {
+        "title" : "InstitutionsResource",
+        "required" : [ "items", "totalCount" ],
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/InstitutionResource"
+            }
+          },
+          "totalCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }
+      },
+      "InvalidParam" : {
+        "title" : "InvalidParam",
+        "required" : [ "name", "reason" ],
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "Invalid parameter name."
+          },
+          "reason" : {
+            "type" : "string",
+            "description" : "Invalid parameter reason."
+          }
+        }
+      },
+      "Problem" : {
+        "title" : "Problem",
+        "required" : [ "status", "title" ],
+        "type" : "object",
+        "properties" : {
+          "detail" : {
+            "type" : "string",
+            "description" : "Human-readable description of this specific problem."
+          },
+          "instance" : {
+            "type" : "string",
+            "description" : "A URI that describes where the problem occurred."
+          },
+          "invalidParams" : {
+            "type" : "array",
+            "description" : "A list of invalid parameters details.",
+            "items" : {
+              "$ref" : "#/components/schemas/InvalidParam"
+            }
+          },
+          "status" : {
+            "type" : "integer",
+            "description" : "The HTTP status code.",
+            "format" : "int32",
+            "example" : 500
+          },
+          "title" : {
+            "type" : "string",
+            "description" : "Short human-readable summary of the problem."
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "A URL to a page with more details regarding the problem."
+          }
+        },
+        "description" : "A \"problem detail\" as a way to carry machine-readable details of errors (https://datatracker.ietf.org/doc/html/rfc7807)"
+      }
+    },
+    "securitySchemes" : {
+      "bearerAuth" : {
+        "type" : "http",
+        "description" : "A bearer token in the format of a JWS and conformed to the specifications included in [RFC8725](https://tools.ietf.org/html/RFC8725)",
+        "scheme" : "bearer",
+        "bearerFormat" : "JWT"
+      }
+    }
+  }
+}

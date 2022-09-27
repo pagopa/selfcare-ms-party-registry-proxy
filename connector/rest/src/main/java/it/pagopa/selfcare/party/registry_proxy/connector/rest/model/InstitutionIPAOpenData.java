@@ -2,6 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest.model;
 
 import com.opencsv.bean.CsvBindByName;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -35,13 +36,9 @@ public class InstitutionIPAOpenData implements Institution {
         return taxCode;
     }
 
-    public String getO() {
-        return getId();
-    }
-
     @Override
-    public String getOrigin() {
-        return "IPA";
+    public Origin getOrigin() {
+        return Origin.IPA;
     }
 
 }
