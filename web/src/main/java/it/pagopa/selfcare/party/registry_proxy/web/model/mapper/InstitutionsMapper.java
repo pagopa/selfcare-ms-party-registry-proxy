@@ -7,12 +7,12 @@ import java.util.List;
 
 public class InstitutionsMapper {
 
-    public static InstitutionsResource toResource(List<InstitutionResource> institutions) {
+    public static InstitutionsResource toResource(List<InstitutionResource> institutions, long count) {
         InstitutionsResource institutionsResource = null;
         if (institutions != null) {
             institutionsResource = new InstitutionsResource();
             institutionsResource.setItems(institutions);
-            institutionsResource.setTotalCount(institutions.size());
+            institutionsResource.setCount(count);
         }
         return institutionsResource;
     }

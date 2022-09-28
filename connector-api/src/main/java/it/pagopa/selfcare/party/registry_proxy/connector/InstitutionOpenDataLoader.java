@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Slf4j
 @Component
 public class InstitutionOpenDataLoader implements CommandLineRunner {
@@ -27,8 +25,8 @@ public class InstitutionOpenDataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        final List<? extends Institution> institutions = openDataConnector.getInstitutions();
-        indexWriterService.adds(institutions);
+//        final List<? extends Institution> institutions = openDataConnector.getInstitutions();
+//        indexWriterService.adds(institutions);
     }
 
 }

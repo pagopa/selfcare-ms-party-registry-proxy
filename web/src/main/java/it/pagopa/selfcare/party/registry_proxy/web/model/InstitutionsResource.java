@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
@@ -17,6 +18,7 @@ public class InstitutionsResource {
 
     @ApiModelProperty(value = "${swagger.model.institutions.totalCount}", required = true)
     @JsonProperty(required = true)
-    private long totalCount;
+    @NotNull
+    private Long count;
 
 }

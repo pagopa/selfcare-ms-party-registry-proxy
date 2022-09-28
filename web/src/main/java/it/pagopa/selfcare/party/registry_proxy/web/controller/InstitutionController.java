@@ -3,8 +3,10 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.FullTextQueryResult;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
+import it.pagopa.selfcare.party.registry_proxy.core.InstitutionService;
 import it.pagopa.selfcare.party.registry_proxy.web.model.InstitutionResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.InstitutionsResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.InstitutionMapper;
@@ -14,7 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -22,12 +24,12 @@ import java.util.stream.Collectors;
 @Api(tags = "institution")
 public class InstitutionController {
 
-    private final IndexSearchService<Institution> indexSearchService;
+    private final InstitutionService institutionService;
 
 
     @Autowired
-    public InstitutionController(IndexSearchService<Institution> indexSearchService) {
-        this.indexSearchService = indexSearchService;
+    public InstitutionController(InstitutionService institutionService) {
+        this.institutionService = institutionService;
     }
 
     @GetMapping("/")
@@ -39,14 +41,16 @@ public class InstitutionController {
                                                String search,
                                        @ApiParam(value = "${swagger.model.institution.page}")
                                        @RequestParam(value = "page", required = false, defaultValue = "1")
-                                               String page,
+                                               Integer page,
                                        @ApiParam(value = "${swagger.model.institution.limit}")
                                        @RequestParam(value = "limit", required = false, defaultValue = "10")
-                                               String limit) {
-        final List<Institution> institutions = indexSearchService.searchByText("description", search, Integer.parseInt(page), Integer.parseInt(limit));
-        return InstitutionsMapper.toResource(institutions.stream()
-                .map(InstitutionMapper::toResource)
-                .collect(Collectors.toList()));
+                                               Integer limit) {
+        final FullTextQueryResult<Institution> result = institutionService.search(search, page, limit);
+
+        return InstitutionsMapper.toResource(result.getItems().stream()
+                        .map(InstitutionMapper::toResource)
+                        .collect(Collectors.toList()),
+                result.getTotalHits());
     }
 
 
@@ -57,8 +61,8 @@ public class InstitutionController {
     public InstitutionResource findInstitution(@ApiParam("${swagger.api.institution.findInstitution.param.id}")
                                                @PathVariable("id") String id,
                                                @ApiParam("${swagger.model.institution.origin}")
-                                               @RequestParam(value = "origin", required = false) String origin) {
-        return null;
+                                               @RequestParam(value = "origin", required = false) Optional<Origin> origin) {
+        return InstitutionMapper.toResource(institutionService.findById(id, origin));
     }
 
 }

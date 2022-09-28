@@ -8,8 +8,12 @@
   "servers" : [ {
     "url" : "{url}:{port}{basePath}",
     "variables" : {
-      "url" : { },
-      "port" : { },
+      "url" : {
+        "default" : "http://localhost"
+      },
+      "port" : {
+        "default" : "80"
+      },
       "basePath" : {
         "default" : ""
       }
@@ -42,7 +46,8 @@
           "required" : false,
           "style" : "form",
           "schema" : {
-            "type" : "string"
+            "type" : "integer",
+            "format" : "int32"
           }
         }, {
           "name" : "limit",
@@ -51,7 +56,8 @@
           "required" : false,
           "style" : "form",
           "schema" : {
-            "type" : "string"
+            "type" : "integer",
+            "format" : "int32"
           }
         } ],
         "responses" : {
@@ -133,7 +139,8 @@
           "required" : false,
           "style" : "form",
           "schema" : {
-            "type" : "string"
+            "type" : "string",
+            "enum" : [ "INFOCAMERE", "IPA" ]
           }
         } ],
         "responses" : {
@@ -206,17 +213,14 @@
             "description" : "Institution address"
           },
           "aoo" : {
-            "pattern" : "^[a-z]{1,12}$",
             "type" : "string",
             "description" : "aoo"
           },
           "category" : {
-            "pattern" : "[a-zA-Z\\d]{1,12}",
             "type" : "string",
             "description" : "Institution category"
           },
           "description" : {
-            "pattern" : "^[A-Za-z Ã¨Ã Ã²Ã¹Ã¬ÃÃÃÃÃ]{2,30}$",
             "type" : "string",
             "description" : "Institution description"
           },
@@ -231,7 +235,6 @@
             "description" : "Semantic id to recognize a party between origins (or externalId)"
           },
           "o" : {
-            "pattern" : "^[a-z]{1,12}$",
             "type" : "string",
             "description" : "o"
           },
@@ -241,17 +244,14 @@
             "enum" : [ "INFOCAMERE", "IPA" ]
           },
           "originId" : {
-            "pattern" : "^[a-z]{1,12}$",
             "type" : "string",
             "description" : "Id of the institution from its origin"
           },
           "ou" : {
-            "pattern" : "^[a-z]{1,12}$",
             "type" : "string",
             "description" : "ou"
           },
           "taxCode" : {
-            "pattern" : "[\\d]{10,13}",
             "type" : "string",
             "description" : "Institution fiscal code"
           },
@@ -263,18 +263,18 @@
       },
       "InstitutionsResource" : {
         "title" : "InstitutionsResource",
-        "required" : [ "items", "totalCount" ],
+        "required" : [ "count", "items" ],
         "type" : "object",
         "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
           "items" : {
             "type" : "array",
             "items" : {
               "$ref" : "#/components/schemas/InstitutionResource"
             }
-          },
-          "totalCount" : {
-            "type" : "integer",
-            "format" : "int64"
           }
         }
       },
