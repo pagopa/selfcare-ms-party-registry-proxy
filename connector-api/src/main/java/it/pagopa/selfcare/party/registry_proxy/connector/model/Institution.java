@@ -27,7 +27,7 @@ public interface Institution {
     Origin getOrigin();
 
 
-    enum Field {
+    enum Field implements SearchField {
         ID("id"),
         ORIGIN_ID("originId"),
         O("o"),

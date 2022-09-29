@@ -10,10 +10,10 @@ import javax.validation.Validator;
 
 @Aspect
 @Component
-public class InstitutionControllerResponseValidator extends ControllerResponseValidator {
+public class PartyRegistryProxyControllerResponseValidator extends ControllerResponseValidator {
 
     @Autowired
-    public InstitutionControllerResponseValidator(Validator validator) {
+    public PartyRegistryProxyControllerResponseValidator(Validator validator) {
         super(validator);
     }
 

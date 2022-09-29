@@ -9,17 +9,12 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
-public class InstitutionsResource {
+public class CategoriesResource {
 
-    @ApiModelProperty(value = "${swagger.model.institutions.items}", required = true)
+    @ApiModelProperty(value = "${swagger.model.categories.items}", required = true)
     @JsonProperty(required = true)
     @NotNull
     @Valid
-    private List<InstitutionResource> items;
-
-    @ApiModelProperty(value = "${swagger.model.institutions.totalCount}", required = true)
-    @JsonProperty(required = true)
-    @NotNull
-    private Long count;
+    private List<CategoryResource> items;
 
 }

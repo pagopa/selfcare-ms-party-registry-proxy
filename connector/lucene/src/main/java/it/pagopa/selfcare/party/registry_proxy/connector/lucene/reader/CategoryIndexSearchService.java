@@ -1,9 +1,9 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.reader;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
-import it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis.InstitutionTokenAnalyzer;
-import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.InstitutionQueryResult;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis.CategoryTokenAnalyzer;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.CategoryQueryResult;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Category;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryFilter;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchField;
@@ -27,21 +27,21 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-class InstitutionIndexSearchService implements IndexSearchService<Institution> {
+class CategoryIndexSearchService implements IndexSearchService<Category> {
 
-    private final InstitutionTokenAnalyzer institutionTokenAnalyzer;
+    private final CategoryTokenAnalyzer categoryTokenAnalyzer;
     private final Directory directory;
-    private final Function<Document, Institution> documentConverter;
+    private final Function<Document, Category> documentConverter;
     private DirectoryReader reader;
 
 
     @SneakyThrows
     @Autowired
-    public InstitutionIndexSearchService(InstitutionTokenAnalyzer institutionTokenAnalyzer,
-                                         Directory institutionsDirectory,
-                                         Function<Document, Institution> documentConverter) {
-        this.institutionTokenAnalyzer = institutionTokenAnalyzer;
-        this.directory = institutionsDirectory;
+    public CategoryIndexSearchService(CategoryTokenAnalyzer categoryTokenAnalyzer,
+                                      Directory categoriesDirectory,
+                                      Function<Document, Category> documentConverter) {
+        this.categoryTokenAnalyzer = categoryTokenAnalyzer;
+        this.directory = categoriesDirectory;
         this.documentConverter = documentConverter;
         if (DirectoryReader.indexExists(directory)) {
             reader = DirectoryReader.open(directory);
@@ -62,16 +62,16 @@ class InstitutionIndexSearchService implements IndexSearchService<Institution> {
 
     @SneakyThrows
     @Override
-    public QueryResult<Institution> fullTextSearch(SearchField field, String value, int page, int limit) {
+    public QueryResult<Category> fullTextSearch(SearchField field, String value, int page, int limit) {
         DirectoryReader reader = refreshReader();
         final IndexSearcher indexSearcher = new IndexSearcher(reader);
         final TopScoreDocCollector collector = TopScoreDocCollector.create(reader.numDocs(), Integer.MAX_VALUE);
-        final QueryParser parser = new QueryParser(field.toString(), institutionTokenAnalyzer);
+        final QueryParser parser = new QueryParser(field.toString(), categoryTokenAnalyzer);
         parser.setPhraseSlop(4);
         indexSearcher.search(parser.parse(value), collector);
         final TopDocs hits = collector.topDocs((page - 1) * limit, limit);
 
-        final List<Institution> institutions = Arrays.stream(hits.scoreDocs)
+        final List<Category> categories = Arrays.stream(hits.scoreDocs)
                 .map(scoreDoc -> {
                     try {
                         return documentConverter.apply(indexSearcher.doc(scoreDoc.doc));
@@ -80,8 +80,8 @@ class InstitutionIndexSearchService implements IndexSearchService<Institution> {
                     }
                 }).collect(Collectors.toList());
 
-        final InstitutionQueryResult result = new InstitutionQueryResult();
-        result.setItems(institutions);
+        final CategoryQueryResult result = new CategoryQueryResult();
+        result.setItems(categories);
         result.setTotalHits(hits.totalHits.value);
 
         return result;
@@ -90,7 +90,7 @@ class InstitutionIndexSearchService implements IndexSearchService<Institution> {
 
     @SneakyThrows
     @Override
-    public List<Institution> findById(SearchField field, String value) {
+    public List<Category> findById(SearchField field, String value) {
         DirectoryReader reader = refreshReader();
         final IndexSearcher indexSearcher = new IndexSearcher(reader);
         final TermQuery query = new TermQuery(new Term(field.toString(), value));
@@ -109,7 +109,7 @@ class InstitutionIndexSearchService implements IndexSearchService<Institution> {
 
     @SneakyThrows
     @Override
-    public QueryResult<Institution> findAll(int page, int limit, QueryFilter... filters) {
+    public QueryResult<Category> findAll(int page, int limit, QueryFilter... filters) {
         DirectoryReader reader = refreshReader();
         final IndexSearcher indexSearcher = new IndexSearcher(reader);
         final Query query;
@@ -128,7 +128,7 @@ class InstitutionIndexSearchService implements IndexSearchService<Institution> {
 
         final TopDocs hits = collector.topDocs((page - 1) * limit, limit);
 
-        final List<Institution> institutions = Arrays.stream(hits.scoreDocs)
+        final List<Category> categories = Arrays.stream(hits.scoreDocs)
                 .map(scoreDoc -> {
                     try {
                         return documentConverter.apply(indexSearcher.doc(scoreDoc.doc));
@@ -137,8 +137,8 @@ class InstitutionIndexSearchService implements IndexSearchService<Institution> {
                     }
                 }).collect(Collectors.toList());
 
-        final InstitutionQueryResult result = new InstitutionQueryResult();
-        result.setItems(institutions);
+        final CategoryQueryResult result = new CategoryQueryResult();
+        result.setItems(categories);
         result.setTotalHits(hits.totalHits.value);
 
         return result;

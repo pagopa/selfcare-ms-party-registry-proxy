@@ -21,35 +21,28 @@ public class InstitutionResource implements Institution {
     @ApiModelProperty(value = "${swagger.model.institution.originId}", required = true)
     @JsonProperty(required = true)
     @NotBlank
-//    @Pattern(regexp = "^[a-z]{1,12}$")
     private String originId;
 
     @ApiModelProperty(value = "${swagger.model.institution.o}")
-//    @Pattern(regexp = "^[a-z]{1,12}$")
     private String o;
 
     @ApiModelProperty(value = "${swagger.model.institution.ou}")
-//    @Pattern(regexp = "^[a-z]{1,12}$")
     private String ou;
 
     @ApiModelProperty(value = "${swagger.model.institution.aoo}")
-//    @Pattern(regexp = "^[a-z]{1,12}$")
     private String aoo;
 
     @ApiModelProperty(value = "${swagger.model.institution.taxCode}", required = true)
     @JsonProperty(required = true)
     @NotBlank
-//    @Pattern(regexp = "[\\d]{10,13}")
     private String taxCode;
 
     @ApiModelProperty(value = "${swagger.model.institution.category}")
-//    @Pattern(regexp = "[a-zA-Z\\d]{1,12}")
     private String category;
 
     @ApiModelProperty(value = "${swagger.model.institution.description}", required = true)
     @JsonProperty(required = true)
     @NotBlank
-//    @Pattern(regexp = "^[A-Za-z èàòùìÈÀÒÙÌ]{2,30}$")
     private String description;
 
     @ApiModelProperty(value = "${swagger.model.institution.digitalAddress}", required = true)
@@ -68,7 +61,7 @@ public class InstitutionResource implements Institution {
     @NotBlank
     private String zipCode;
 
-    @ApiModelProperty(value = "${swagger.model.institution.origin}", required = true)
+    @ApiModelProperty(value = "${swagger.model.*.origin}", required = true)
     @JsonProperty(required = true)
     @NotNull
     private Origin origin;

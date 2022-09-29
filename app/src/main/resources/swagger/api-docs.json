@@ -20,10 +20,190 @@
     }
   } ],
   "tags" : [ {
+    "name" : "category",
+    "description" : "Category operations"
+  }, {
     "name" : "institution",
     "description" : "Institution operations"
   } ],
   "paths" : {
+    "/v1/categories" : {
+      "get" : {
+        "tags" : [ "category" ],
+        "summary" : "Get all categories",
+        "description" : "Returns the categories list",
+        "operationId" : "findCategoriesUsingGET",
+        "parameters" : [ {
+          "name" : "origin",
+          "in" : "query",
+          "description" : "Describes which is the source of data",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "INFOCAMERE", "IPA" ]
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "page",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "limit",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CategoriesResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/v1/origins/{origin}/categories/{code}" : {
+      "get" : {
+        "tags" : [ "category" ],
+        "summary" : "Get a category",
+        "description" : "Returns a category",
+        "operationId" : "findCategoryUsingGET",
+        "parameters" : [ {
+          "name" : "origin",
+          "in" : "path",
+          "description" : "Describes which is the source of data",
+          "required" : true,
+          "style" : "simple",
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "INFOCAMERE", "IPA" ]
+          }
+        }, {
+          "name" : "code",
+          "in" : "path",
+          "description" : "code",
+          "required" : true,
+          "style" : "simple",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CategoryResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
     "/v1/institutions/" : {
       "get" : {
         "tags" : [ "institution" ],
@@ -135,7 +315,7 @@
         }, {
           "name" : "origin",
           "in" : "query",
-          "description" : "Describes which is the source of Institution data",
+          "description" : "Describes which is the source of data",
           "required" : false,
           "style" : "form",
           "schema" : {
@@ -203,6 +383,43 @@
   },
   "components" : {
     "schemas" : {
+      "CategoriesResource" : {
+        "title" : "CategoriesResource",
+        "required" : [ "items" ],
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CategoryResource"
+            }
+          }
+        }
+      },
+      "CategoryResource" : {
+        "title" : "CategoryResource",
+        "required" : [ "code", "kind", "name", "origin" ],
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "kind" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "origin" : {
+            "type" : "string",
+            "description" : "Describes which is the source of data",
+            "enum" : [ "INFOCAMERE", "IPA" ]
+          }
+        }
+      },
       "InstitutionResource" : {
         "title" : "InstitutionResource",
         "required" : [ "address", "description", "digitalAddress", "id", "origin", "originId", "taxCode", "zipCode" ],
@@ -240,7 +457,7 @@
           },
           "origin" : {
             "type" : "string",
-            "description" : "Describes which is the source of Institution data",
+            "description" : "Describes which is the source of data",
             "enum" : [ "INFOCAMERE", "IPA" ]
           },
           "originId" : {

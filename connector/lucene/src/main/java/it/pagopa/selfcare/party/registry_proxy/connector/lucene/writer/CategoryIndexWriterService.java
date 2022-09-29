@@ -1,8 +1,8 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.writer;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
-import it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis.InstitutionTokenAnalyzer;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis.CategoryTokenAnalyzer;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Category;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution.Field;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -19,28 +19,28 @@ import java.util.function.Function;
 
 @Slf4j
 @Service
-class InstitutionIndexWriterService implements IndexWriterService<Institution> {
+class CategoryIndexWriterService implements IndexWriterService<Category> {
 
     private final IndexWriter indexWriter;
-    private final Function<Institution, Document> documentConverter;
+    private final Function<Category, Document> documentConverter;
 
 
     @SneakyThrows
     @Autowired
-    public InstitutionIndexWriterService(InstitutionTokenAnalyzer institutionTokenAnalyzer,
-                                         Function<Institution, Document> documentConverter,
-                                         Directory institutionsDirectory) {
+    public CategoryIndexWriterService(CategoryTokenAnalyzer categoryTokenAnalyzer,
+                                      Function<Category, Document> documentConverter,
+                                      Directory categoriesDirectory) {
         this.documentConverter = documentConverter;
-        final IndexWriterConfig indexConfig = new IndexWriterConfig(institutionTokenAnalyzer);
-        indexWriter = new IndexWriter(institutionsDirectory, indexConfig);
+        final IndexWriterConfig indexConfig = new IndexWriterConfig(categoryTokenAnalyzer);
+        indexWriter = new IndexWriter(categoriesDirectory, indexConfig);
     }
 
 
     @SneakyThrows
     @Override
-    public void adds(List<? extends Institution> items) {
+    public void adds(List<? extends Category> items) {
         try (indexWriter) {
-            for (Institution item : items) {
+            for (Category item : items) {
                 final Document doc = documentConverter.apply(item);
                 indexWriter.updateDocument(new Term(Field.ID.toString(), item.getId()), doc);
             }

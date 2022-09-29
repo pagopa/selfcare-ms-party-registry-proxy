@@ -1,10 +1,10 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.FullTextQueryResult;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution.Field;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,8 +26,9 @@ class InstitutionServiceImpl implements InstitutionService {
 
 
     @Override
-    public FullTextQueryResult<Institution> search(String searchText, int page, int limit) {
-        return indexSearchService.fullTextSearch(Field.DESCRIPTION, searchText, page, limit);
+    public QueryResult<Institution> search(Optional<String> searchText, int page, int limit) {
+        return searchText.map(s -> indexSearchService.fullTextSearch(Field.DESCRIPTION, s, page, limit))
+                .orElse(indexSearchService.findAll(page, limit));
     }
 
 
@@ -36,7 +37,7 @@ class InstitutionServiceImpl implements InstitutionService {
         if (origin.map(Origin.INFOCAMERE::equals).orElse(false)) {
             throw new RuntimeException("Not implemented yet");
         } else {
-            final List<Institution> institutions = indexSearchService.search(Field.ID, id);
+            final List<Institution> institutions = indexSearchService.findById(Field.ID, id);
             if (institutions.isEmpty()) {
                 throw new RuntimeException();//FIXME use ResourceNotFound
             } else if (institutions.size() > 1) {
