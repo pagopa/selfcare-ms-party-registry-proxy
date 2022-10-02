@@ -6,15 +6,13 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StoredField;
 import org.apache.lucene.document.StringField;
-import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
 
 import static it.pagopa.selfcare.party.registry_proxy.connector.model.Category.Field.*;
 
 @Slf4j
-@Service
-class CategoryToDocumentConverter implements Function<Category, Document> {
+public class CategoryToDocumentConverter implements Function<Category, Document> {
 
     @Override
     public Document apply(Category category) {

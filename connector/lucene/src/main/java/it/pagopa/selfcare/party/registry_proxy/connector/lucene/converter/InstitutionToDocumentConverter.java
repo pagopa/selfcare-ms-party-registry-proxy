@@ -4,15 +4,13 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.document.*;
 import org.apache.lucene.util.BytesRef;
-import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
 
 import static it.pagopa.selfcare.party.registry_proxy.connector.model.Institution.Field.*;
 
 @Slf4j
-@Service
-class InstitutionToDocumentConverter implements Function<Institution, Document> {
+public class InstitutionToDocumentConverter implements Function<Institution, Document> {
 
     @Override
     public Document apply(Institution institution) {

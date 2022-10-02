@@ -16,6 +16,7 @@ public class InstitutionTokenAnalyzer extends Analyzer {
 
     @Override
     protected TokenStreamComponents createComponents(String fieldName) {
+        //TODO: use this analyzer only for description field, for the others field use the standard
         final StandardTokenizer tokenizer = new StandardTokenizer();
         final LowerCaseFilter lowerCaseFilter = new LowerCaseFilter(tokenizer);
         final StopFilter stopFilter = new StopFilter(lowerCaseFilter, ItalianAnalyzer.getDefaultStopSet());

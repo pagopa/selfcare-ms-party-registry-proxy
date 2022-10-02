@@ -5,15 +5,13 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.Category;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.document.Document;
-import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
 
 import static it.pagopa.selfcare.party.registry_proxy.connector.model.Category.Field.*;
 
 @Slf4j
-@Service
-class DocumentToCategoryConverter implements Function<Document, Category> {
+public class DocumentToCategoryConverter implements Function<Document, Category> {
 
     @Override
     public Category apply(Document document) {

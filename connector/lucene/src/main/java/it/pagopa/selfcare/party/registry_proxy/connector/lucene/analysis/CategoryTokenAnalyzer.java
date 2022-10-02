@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class CategoryTokenAnalyzer extends Analyzer {
+public class CategoryTokenAnalyzer extends Analyzer {//TODO: there is no need to use a standard analyzer because the search is always "by id"
 
     @Override
     protected TokenStreamComponents createComponents(String fieldName) {

@@ -1,16 +1,14 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.writer;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
-import it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis.InstitutionTokenAnalyzer;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.converter.InstitutionToDocumentConverter;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution.Field;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.store.Directory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,24 +19,21 @@ import java.util.function.Function;
 @Service
 class InstitutionIndexWriterService implements IndexWriterService<Institution> {
 
-    private final IndexWriter indexWriter;
-    private final Function<Institution, Document> documentConverter;
+    private final Function<Institution, Document> documentConverter = new InstitutionToDocumentConverter();
+    private final IndexWriterFactory indexWriterFactory;
 
 
     @SneakyThrows
     @Autowired
-    public InstitutionIndexWriterService(InstitutionTokenAnalyzer institutionTokenAnalyzer,
-                                         Function<Institution, Document> documentConverter,
-                                         Directory institutionsDirectory) {
-        this.documentConverter = documentConverter;
-        final IndexWriterConfig indexConfig = new IndexWriterConfig(institutionTokenAnalyzer);
-        indexWriter = new IndexWriter(institutionsDirectory, indexConfig);
+    public InstitutionIndexWriterService(IndexWriterFactory institutionIndexWriterFactory) {
+        indexWriterFactory = institutionIndexWriterFactory;
     }
 
 
     @SneakyThrows
     @Override
     public void adds(List<? extends Institution> items) {
+        final IndexWriter indexWriter = indexWriterFactory.create();
         try (indexWriter) {
             for (Institution item : items) {
                 final Document doc = documentConverter.apply(item);
@@ -52,6 +47,7 @@ class InstitutionIndexWriterService implements IndexWriterService<Institution> {
     @SneakyThrows
     @Override
     public void deleteAll() {
+        final IndexWriter indexWriter = indexWriterFactory.create();
         try (indexWriter) {
             indexWriter.deleteAll();
             indexWriter.commit();
