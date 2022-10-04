@@ -20,12 +20,9 @@ import org.apache.lucene.store.Directory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -75,14 +72,12 @@ class CategoryIndexSearchService implements IndexSearchService<Category> {
         final TermQuery query = new TermQuery(new Term(field.toString(), value));
         final TopDocs hits = indexSearcher.search(query, 1);
 
-        return Arrays.stream(hits.scoreDocs)
-                .map(scoreDoc -> {
-                    try {
-                        return documentConverter.apply(indexSearcher.doc(scoreDoc.doc));
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }).collect(Collectors.toList());
+        final List<Category> categories = new ArrayList<>(hits.scoreDocs.length);
+        for (ScoreDoc scoreDoc : hits.scoreDocs) {
+            categories.add(documentConverter.apply(indexSearcher.doc(scoreDoc.doc)));
+        }
+
+        return categories;
     }
 
 

@@ -6,6 +6,8 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.Category.Field;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryFilter;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
+import it.pagopa.selfcare.party.registry_proxy.core.exception.ResourceNotFoundException;
+import it.pagopa.selfcare.party.registry_proxy.core.exception.TooManyResourceFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,13 +46,13 @@ class CategoryServiceImpl implements CategoryService {
     @Override
     public Category findById(String id, Origin origin) {
         if (Origin.INFOCAMERE.equals(origin)) {
-            throw new RuntimeException("Origin not found");//FIXME
+            throw new RuntimeException("Data source not found");//FIXME
         } else {
             final List<Category> categories = indexSearchService.findById(Field.ID, createId(origin, id));
             if (categories.isEmpty()) {
-                throw new RuntimeException();//FIXME use ResourceNotFound
+                throw new ResourceNotFoundException();
             } else if (categories.size() > 1) {
-                throw new RuntimeException();//FIXME use TooManyRecordsFound
+                throw new TooManyResourceFoundException();
             } else {
                 return categories.get(0);
             }

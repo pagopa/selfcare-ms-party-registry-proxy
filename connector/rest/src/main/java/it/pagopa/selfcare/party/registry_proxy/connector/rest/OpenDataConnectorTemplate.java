@@ -5,13 +5,11 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.OpenDataConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Category;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.IPAOpenDataRestClient;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.CategoryIPAOpenData;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.InstitutionIPAOpenData;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.OpenDataRestClient;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.IPAOpenDataCategory;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.IPAOpenDataInstitution;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -20,26 +18,24 @@ import java.io.Reader;
 import java.util.List;
 
 @Slf4j
-@Service
-class IPAOpenDataConnectorImpl implements OpenDataConnector {
+abstract class OpenDataConnectorTemplate implements OpenDataConnector {
 
-    private final IPAOpenDataRestClient restClient;
+    private final OpenDataRestClient restClient;
 
-    @Autowired
-    public IPAOpenDataConnectorImpl(IPAOpenDataRestClient restClient) {
+    public OpenDataConnectorTemplate(OpenDataRestClient restClient) {
         this.restClient = restClient;
     }
 
 
-    @SneakyThrows  //TODO
+    @SneakyThrows
     @Override
     public List<? extends Institution> getInstitutions() {
-        List<InstitutionIPAOpenData> institutions;
+        List<IPAOpenDataInstitution> institutions;
         final String csv = restClient.retrieveInstitutions("True");
 
         try (Reader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(csv.getBytes())))) {
-            CsvToBean<InstitutionIPAOpenData> csvToBean = new CsvToBeanBuilder(reader)
-                    .withType(InstitutionIPAOpenData.class)
+            CsvToBean<IPAOpenDataInstitution> csvToBean = new CsvToBeanBuilder(reader)
+                    .withType(getInstitutionType())
                     .withIgnoreLeadingWhiteSpace(true)
                     .build();
             institutions = csvToBean.parse();
@@ -50,15 +46,15 @@ class IPAOpenDataConnectorImpl implements OpenDataConnector {
     }
 
 
-    @SneakyThrows  //TODO
+    @SneakyThrows
     @Override
     public List<? extends Category> getCategories() {
-        List<CategoryIPAOpenData> categories;
+        List<IPAOpenDataCategory> categories;
         final String csv = restClient.retrieveCategories("True");
 
         try (Reader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(csv.getBytes())))) {
-            CsvToBean<CategoryIPAOpenData> csvToBean = new CsvToBeanBuilder(reader)
-                    .withType(CategoryIPAOpenData.class)
+            CsvToBean<IPAOpenDataCategory> csvToBean = new CsvToBeanBuilder(reader)
+                    .withType(getCategoryType())
                     .withIgnoreLeadingWhiteSpace(true)
                     .build();
             categories = csvToBean.parse();
@@ -67,5 +63,10 @@ class IPAOpenDataConnectorImpl implements OpenDataConnector {
         //TODO: scartare i record che non soddisfano determinati requisiti?
         return categories;
     }
+
+
+    protected abstract Class<? extends Institution> getInstitutionType();
+
+    protected abstract Class<? extends Category> getCategoryType();
 
 }

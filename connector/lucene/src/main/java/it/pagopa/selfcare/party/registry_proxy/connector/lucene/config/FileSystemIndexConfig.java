@@ -10,7 +10,7 @@ import org.springframework.context.annotation.PropertySource;
 
 import java.nio.file.Path;
 
-@Configuration//TODO
+@Configuration
 @PropertySource("classpath:config/lucene-config.properties")
 class FileSystemIndexConfig {
 

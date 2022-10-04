@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(of = "id")
-public class InstitutionIPAOpenData implements Institution {
+public abstract class IPAOpenDataTemplate implements Institution {
 
     private String id;
     @CsvBindByName(column = "Codice_IPA")
@@ -28,7 +28,6 @@ public class InstitutionIPAOpenData implements Institution {
     private String address;
     @CsvBindByName(column = "CAP")
     private String zipCode;
-    private String origin;
 
 
     @Override

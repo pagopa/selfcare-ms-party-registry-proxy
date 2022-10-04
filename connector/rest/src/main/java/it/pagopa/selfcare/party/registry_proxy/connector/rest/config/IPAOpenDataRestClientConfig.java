@@ -12,4 +12,7 @@ import org.springframework.context.annotation.PropertySource;
 @EnableFeignClients(clients = IPAOpenDataRestClient.class)
 @PropertySource("classpath:config/ipa-open-data-rest-client.properties")
 class IPAOpenDataRestClientConfig {
+    public IPAOpenDataRestClientConfig() {
+        System.out.println();
+    }
 }

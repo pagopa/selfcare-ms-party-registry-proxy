@@ -9,20 +9,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Slf4j
 @Component
-public class InstitutionOpenDataLoader implements CommandLineRunner {
+public class OpenDataLoader implements CommandLineRunner {
 
-    private final OpenDataConnector openDataConnector;
+    private final List<OpenDataConnector> openDataConnectors;
     private final IndexWriterService<Institution> institutionIndexWriterService;
     private final IndexWriterService<Category> categoryIndexWriterService;
 
 
     @Autowired
-    public InstitutionOpenDataLoader(OpenDataConnector openDataConnector,
-                                     IndexWriterService<Institution> institutionIndexWriterService,
-                                     IndexWriterService<Category> categoryIndexWriterService) {
-        this.openDataConnector = openDataConnector;
+    public OpenDataLoader(List<OpenDataConnector> openDataConnectors,
+                          IndexWriterService<Institution> institutionIndexWriterService,
+                          IndexWriterService<Category> categoryIndexWriterService) {
+        this.openDataConnectors = openDataConnectors;
         this.institutionIndexWriterService = institutionIndexWriterService;
         this.categoryIndexWriterService = categoryIndexWriterService;
     }
@@ -30,8 +32,10 @@ public class InstitutionOpenDataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        institutionIndexWriterService.adds(openDataConnector.getInstitutions());
-        categoryIndexWriterService.adds(openDataConnector.getCategories());
+        openDataConnectors.forEach(openDataConnector -> {
+            institutionIndexWriterService.adds(openDataConnector.getInstitutions());
+            categoryIndexWriterService.adds(openDataConnector.getCategories());
+        });
     }
 
 }
