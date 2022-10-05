@@ -31,7 +31,7 @@ abstract class OpenDataConnectorTemplate implements OpenDataConnector {
     @Override
     public List<? extends Institution> getInstitutions() {
         List<IPAOpenDataInstitution> institutions;
-        final String csv = restClient.retrieveInstitutions("True");
+        final String csv = restClient.retrieveInstitutions();
 
         try (Reader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(csv.getBytes())))) {
             CsvToBean<IPAOpenDataInstitution> csvToBean = new CsvToBeanBuilder(reader)
@@ -50,7 +50,7 @@ abstract class OpenDataConnectorTemplate implements OpenDataConnector {
     @Override
     public List<? extends Category> getCategories() {
         List<IPAOpenDataCategory> categories;
-        final String csv = restClient.retrieveCategories("True");
+        final String csv = restClient.retrieveCategories();
 
         try (Reader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(csv.getBytes())))) {
             CsvToBean<IPAOpenDataCategory> csvToBean = new CsvToBeanBuilder(reader)
