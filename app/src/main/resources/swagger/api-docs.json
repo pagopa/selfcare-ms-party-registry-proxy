@@ -41,7 +41,7 @@
           "style" : "form",
           "schema" : {
             "type" : "string",
-            "enum" : [ "INFOCAMERE", "IPA" ]
+            "enum" : [ "INFOCAMERE", "IPA", "static" ]
           }
         }, {
           "name" : "page",
@@ -135,7 +135,7 @@
           "style" : "simple",
           "schema" : {
             "type" : "string",
-            "enum" : [ "INFOCAMERE", "IPA" ]
+            "enum" : [ "INFOCAMERE", "IPA", "static" ]
           }
         }, {
           "name" : "code",
@@ -320,7 +320,7 @@
           "style" : "form",
           "schema" : {
             "type" : "string",
-            "enum" : [ "INFOCAMERE", "IPA" ]
+            "enum" : [ "INFOCAMERE", "IPA", "static" ]
           }
         } ],
         "responses" : {
@@ -416,7 +416,7 @@
           "origin" : {
             "type" : "string",
             "description" : "Describes which is the source of data",
-            "enum" : [ "INFOCAMERE", "IPA" ]
+            "enum" : [ "INFOCAMERE", "IPA", "static" ]
           }
         }
       },
@@ -458,7 +458,7 @@
           "origin" : {
             "type" : "string",
             "description" : "Describes which is the source of data",
-            "enum" : [ "INFOCAMERE", "IPA" ]
+            "enum" : [ "INFOCAMERE", "IPA", "static" ]
           },
           "originId" : {
             "type" : "string",

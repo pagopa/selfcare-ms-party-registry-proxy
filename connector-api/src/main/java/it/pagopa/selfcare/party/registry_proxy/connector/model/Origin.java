@@ -1,5 +1,8 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.util.Arrays;
 
 public enum Origin {
@@ -14,12 +17,13 @@ public enum Origin {
     }
 
     @Override
+    @JsonValue
     public String toString() {
         return value;
     }
 
-
-    public static Origin from(String value) {
+    @JsonCreator
+    public static Origin fromValue(String value) {
         return Arrays.stream(values())
                 .filter(origin -> origin.toString().equals(value))
                 .findAny()

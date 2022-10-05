@@ -46,7 +46,7 @@ class CategoryServiceImpl implements CategoryService {
     @Override
     public Category findById(String id, Origin origin) {
         if (Origin.INFOCAMERE.equals(origin)) {
-            throw new RuntimeException("Data source not found");//FIXME
+            throw new RuntimeException("Data source not found");//FIXME: there is no INFOCAMERE categories...choose the right exception to throw
         } else {
             final List<Category> categories = indexSearchService.findById(Field.ID, createId(origin, id));
             if (categories.isEmpty()) {

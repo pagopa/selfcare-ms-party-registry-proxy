@@ -21,7 +21,7 @@ public class DocumentToCategoryConverter implements Function<Document, Category>
             category.setCode(document.get(CODE.toString()));
             category.setName(document.get(NAME.toString()));
             category.setKind(document.get(KIND.toString()));
-            category.setOrigin(Origin.valueOf(document.get(ORIGIN.toString())));
+            category.setOrigin(Origin.fromValue(document.get(ORIGIN.toString())));
         }
         return category;
     }

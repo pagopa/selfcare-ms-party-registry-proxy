@@ -29,7 +29,7 @@ public class DocumentToInstitutionConverter implements Function<Document, Instit
             institution.setDigitalAddress(document.get(DIGITAL_ADDRESS.toString()));
             institution.setAddress(document.get(ADDRESS.toString()));
             institution.setZipCode(document.get(ZIP_CODE.toString()));
-            institution.setOrigin(Origin.valueOf(document.get(ORIGIN.toString())));
+            institution.setOrigin(Origin.fromValue(document.get(ORIGIN.toString())));
         }
         return institution;
     }

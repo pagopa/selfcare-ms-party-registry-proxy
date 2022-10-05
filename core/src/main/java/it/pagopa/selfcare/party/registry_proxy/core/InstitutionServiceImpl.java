@@ -37,7 +37,7 @@ class InstitutionServiceImpl implements InstitutionService {
     @Override
     public Institution findById(String id, Optional<Origin> origin) {
         if (origin.map(Origin.INFOCAMERE::equals).orElse(false)) {
-            throw new RuntimeException("Not implemented yet");//TODO
+            throw new RuntimeException("Not implemented yet");//TODO: onboarding privati
         } else {
             final List<Institution> institutions = indexSearchService.findById(Field.ID, id);
             if (institutions.isEmpty()) {
