@@ -23,7 +23,7 @@ public class CategoryToDocumentConverter implements Function<Category, Document>
             doc.add(new StringField(CODE.toString(), category.getCode(), Field.Store.YES));
             doc.add(new StoredField(NAME.toString(), category.getName()));
             doc.add(new StoredField(KIND.toString(), category.getKind()));
-            doc.add(new StoredField(ORIGIN.toString(), category.getOrigin().toString()));
+            doc.add(new StringField(ORIGIN.toString(), category.getOrigin().toString(), Field.Store.YES));
         }
         return doc;
     }

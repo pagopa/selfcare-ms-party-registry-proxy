@@ -32,7 +32,7 @@ public class InstitutionController {
         this.institutionService = institutionService;
     }
 
-    @GetMapping("/")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "${swagger.api.institution.search.summary}",
             notes = "${swagger.api.institution.search.notes}")
@@ -54,7 +54,7 @@ public class InstitutionController {
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "${swagger.api.institution.findInstitution.summary}",
             notes = "${swagger.api.institution.findInstitution.notes}")

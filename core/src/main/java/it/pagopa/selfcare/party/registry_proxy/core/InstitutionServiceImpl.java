@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -39,7 +41,11 @@ class InstitutionServiceImpl implements InstitutionService {
         if (origin.map(Origin.INFOCAMERE::equals).orElse(false)) {
             throw new RuntimeException("Not implemented yet");//TODO: onboarding privati
         } else {
-            final List<Institution> institutions = indexSearchService.findById(Field.ID, id);
+            final Supplier<List<Institution>> institutionsSupplier = () -> indexSearchService.findById(Field.ID, id);
+            final List<Institution> institutions = origin.map(orig -> institutionsSupplier.get().stream()
+                    .filter(institution -> institution.getOrigin().equals(orig))
+                    .collect(Collectors.toList()))
+                    .orElseGet(institutionsSupplier);
             if (institutions.isEmpty()) {
                 throw new ResourceNotFoundException();
             } else if (institutions.size() > 1) {

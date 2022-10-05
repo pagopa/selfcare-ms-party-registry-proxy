@@ -33,7 +33,7 @@ public class CategoryController {
     }
 
 
-    @GetMapping("/categories")
+    @GetMapping("categories")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "${swagger.api.category.findCategories.summary}",
             notes = "${swagger.api.category.findCategories.notes}")
@@ -52,7 +52,7 @@ public class CategoryController {
     }
 
 
-    @GetMapping("/origins/{origin}/categories/{code}")
+    @GetMapping("origins/{origin}/categories/{code}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "${swagger.api.category.findCategory.summary}",
             notes = "${swagger.api.category.findCategory.notes}")
