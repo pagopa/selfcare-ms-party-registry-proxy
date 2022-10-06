@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static it.pagopa.selfcare.commons.utils.TestUtils.mockInstance;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CategoryToDocumentConverterTest {
@@ -35,9 +36,31 @@ class CategoryToDocumentConverterTest {
 
 
     @Test
-    void apply() {
+    void apply_FullNull() {
         // given
         final Category input = new DummyCategory();
+        // when
+        final Document output = converter.apply(input);
+        // then
+        assertNotNull(output);
+        assertEquals(input.getId(), output.get(Field.ID.toString()));
+        assertEquals(input.getCode(), output.get(Field.CODE.toString()));
+        assertEquals(input.getName(), output.get(Field.NAME.toString()));
+        assertEquals(input.getKind(), output.get(Field.KIND.toString()));
+        assertEquals(input.getOrigin().toString(), output.get(Field.ORIGIN.toString()));
+        final Set<String> fieldValues = Arrays.stream(Field.values())
+                .map(Field::toString)
+                .collect(Collectors.toSet());
+        assertEquals(0, output.getFields().stream()
+                .filter(field -> !fieldValues.contains(field.name()))
+                .count());
+    }
+
+
+    @Test
+    void apply_FullValued() {
+        // given
+        final Category input = mockInstance(new DummyCategory());
         // when
         final Document output = converter.apply(input);
         // then

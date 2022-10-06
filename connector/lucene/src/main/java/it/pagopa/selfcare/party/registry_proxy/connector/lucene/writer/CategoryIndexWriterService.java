@@ -23,7 +23,6 @@ class CategoryIndexWriterService implements IndexWriterService<Category> {
     private final IndexWriterFactory indexWriterFactory;
 
 
-    @SneakyThrows
     @Autowired
     public CategoryIndexWriterService(IndexWriterFactory categoryIndexWriterFactory) {
         this.indexWriterFactory = categoryIndexWriterFactory;

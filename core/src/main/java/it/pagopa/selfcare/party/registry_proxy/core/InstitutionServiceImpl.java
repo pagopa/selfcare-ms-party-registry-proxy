@@ -31,7 +31,7 @@ class InstitutionServiceImpl implements InstitutionService {
 
     @Override
     public QueryResult<Institution> search(Optional<String> searchText, int page, int limit) {
-        return searchText.map(s -> indexSearchService.fullTextSearch(Field.DESCRIPTION, s, page, limit))
+        return searchText.map(text -> indexSearchService.fullTextSearch(Field.DESCRIPTION, text, page, limit))
                 .orElseGet(() -> indexSearchService.findAll(page, limit));
     }
 

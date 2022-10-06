@@ -5,10 +5,10 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 
 import java.util.List;
 
-public interface OpenDataConnector {
+public interface OpenDataConnector<I extends Institution, C extends Category> {
 
-    List<? extends Institution> getInstitutions();
+    List<I> getInstitutions();
 
-    List<? extends Category> getCategories();
+    List<C> getCategories();
 
 }

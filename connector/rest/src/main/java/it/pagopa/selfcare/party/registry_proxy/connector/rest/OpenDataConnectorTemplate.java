@@ -6,8 +6,6 @@ import it.pagopa.selfcare.party.registry_proxy.connector.api.OpenDataConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Category;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.OpenDataRestClient;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.IPAOpenDataCategory;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.IPAOpenDataInstitution;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,23 +16,24 @@ import java.io.Reader;
 import java.util.List;
 
 @Slf4j
-abstract class OpenDataConnectorTemplate implements OpenDataConnector {
+abstract class OpenDataConnectorTemplate<I extends Institution, C extends Category> implements OpenDataConnector<I, C> {
 
     private final OpenDataRestClient restClient;
 
-    public OpenDataConnectorTemplate(OpenDataRestClient restClient) {
+
+    protected OpenDataConnectorTemplate(OpenDataRestClient restClient) {
         this.restClient = restClient;
     }
 
 
     @SneakyThrows
     @Override
-    public List<? extends Institution> getInstitutions() {
-        List<IPAOpenDataInstitution> institutions;
+    public List<I> getInstitutions() {
+        List<I> institutions;
         final String csv = restClient.retrieveInstitutions();
 
         try (Reader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(csv.getBytes())))) {
-            CsvToBean<IPAOpenDataInstitution> csvToBean = new CsvToBeanBuilder(reader)
+            CsvToBean<I> csvToBean = new CsvToBeanBuilder<I>(reader)
                     .withType(getInstitutionType())
                     .withIgnoreLeadingWhiteSpace(true)
                     .build();
@@ -48,12 +47,12 @@ abstract class OpenDataConnectorTemplate implements OpenDataConnector {
 
     @SneakyThrows
     @Override
-    public List<? extends Category> getCategories() {
-        List<IPAOpenDataCategory> categories;
+    public List<C> getCategories() {
+        List<C> categories;
         final String csv = restClient.retrieveCategories();
 
         try (Reader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(csv.getBytes())))) {
-            CsvToBean<IPAOpenDataCategory> csvToBean = new CsvToBeanBuilder(reader)
+            CsvToBean<C> csvToBean = new CsvToBeanBuilder<C>(reader)
                     .withType(getCategoryType())
                     .withIgnoreLeadingWhiteSpace(true)
                     .build();
@@ -65,8 +64,8 @@ abstract class OpenDataConnectorTemplate implements OpenDataConnector {
     }
 
 
-    protected abstract Class<? extends Institution> getInstitutionType();
+    protected abstract Class<I> getInstitutionType();
 
-    protected abstract Class<? extends Category> getCategoryType();
+    protected abstract Class<C> getCategoryType();
 
 }

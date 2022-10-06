@@ -3,12 +3,12 @@ package it.pagopa.selfcare.party.registry_proxy.connector.lucene.reader;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.config.InMemoryIndexConfig;
-import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.CategoryEntity;
-import it.pagopa.selfcare.party.registry_proxy.connector.lucene.writer.DummyCategoryIndexWriterFactory;
-import it.pagopa.selfcare.party.registry_proxy.connector.lucene.writer.DummyCategoryIndexWriterService;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.InstitutionEntity;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.writer.DummyInstitutionIndexWriterFactory;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.writer.DummyInstitutionIndexWriterService;
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.writer.IndexWriterFactory;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Category;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Category.Field;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution.Field;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryFilter;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchField;
@@ -28,43 +28,43 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {
         InMemoryIndexConfig.class,
-        CategoryIndexSearchService.class
+        InstitutionIndexSearchService.class
 })
-class CategoryIndexSearchServiceTest {
+class InstitutionIndexSearchServiceTest {
 
     @Autowired
-    private IndexSearchService<Category> indexSearchService;
+    private IndexSearchService<Institution> indexSearchService;
 
     @Autowired
-    private Directory categoriesDirectory;
+    private Directory institutionsDirectory;
 
-    private List<CategoryEntity> categories;
+    private List<InstitutionEntity> institutions;
 
 
     @PostConstruct
     void init() {
-        categories = List.of(mockInstance(new CategoryEntity(), 1), mockInstance(new CategoryEntity(), 2));
-        final IndexWriterFactory indexWriterFactory = new DummyCategoryIndexWriterFactory(categoriesDirectory);
-        IndexWriterService<Category> indexWriterService = new DummyCategoryIndexWriterService(indexWriterFactory);
-        indexWriterService.adds(categories);
+        institutions = List.of(mockInstance(new InstitutionEntity(), 1), mockInstance(new InstitutionEntity(), 2));
+        final IndexWriterFactory indexWriterFactory = new DummyInstitutionIndexWriterFactory(institutionsDirectory);
+        IndexWriterService<Institution> indexWriterService = new DummyInstitutionIndexWriterService(indexWriterFactory);
+        indexWriterService.adds(institutions);
     }
 
 
     @Test
     void fullTextSearch() {
         // given
-        final SearchField field = Field.ORIGIN;
-        final String value = categories.get(0).getOrigin().toString();
+        final SearchField field = Field.DESCRIPTION;
+        final String value = "description";
         final int page = 1;
         final int limit = 10;
         // when
-        final QueryResult queryResult = indexSearchService.fullTextSearch(field, value, page, limit);
+        final QueryResult<Institution> queryResult = indexSearchService.fullTextSearch(field, value, page, limit);
         // then
         assertNotNull(queryResult);
         assertEquals(2, queryResult.getTotalHits());
         assertNotNull(queryResult.getItems());
         assertEquals(2, queryResult.getItems().size());
-        assertIterableEquals(categories, queryResult.getItems());
+        assertIterableEquals(institutions, queryResult.getItems());
     }
 
 
@@ -72,13 +72,13 @@ class CategoryIndexSearchServiceTest {
     void findById() {
         // given
         final SearchField field = Field.ID;
-        final String value = categories.get(0).getId();
+        final String value = institutions.get(0).getId();
         // when
-        final List<Category> results = indexSearchService.findById(field, value);
+        final List<Institution> results = indexSearchService.findById(field, value);
         // then
         assertNotNull(results);
         assertEquals(1, results.size());
-        assertEquals(categories.get(0), results.get(0));
+        assertEquals(institutions.get(0), results.get(0));
     }
 
 
@@ -88,13 +88,13 @@ class CategoryIndexSearchServiceTest {
         final int page = 1;
         final int limit = 10;
         // when
-        final QueryResult<Category> queryResult = indexSearchService.findAll(page, limit);
+        final QueryResult<Institution> queryResult = indexSearchService.findAll(page, limit);
         // then
         assertNotNull(queryResult);
         assertEquals(2, queryResult.getTotalHits());
         assertNotNull(queryResult.getItems());
         assertEquals(2, queryResult.getItems().size());
-        assertIterableEquals(categories, queryResult.getItems());
+        assertIterableEquals(institutions, queryResult.getItems());
     }
 
 
@@ -105,15 +105,15 @@ class CategoryIndexSearchServiceTest {
         final int limit = 10;
         final QueryFilter filter = new QueryFilter();
         filter.setField(Field.ID);
-        filter.setValue(categories.get(0).getId());
+        filter.setValue(institutions.get(0).getId());
         // when
-        final QueryResult<Category> queryResult = indexSearchService.findAll(page, limit, filter);
+        final QueryResult<Institution> queryResult = indexSearchService.findAll(page, limit, filter);
         // then
         assertNotNull(queryResult);
         assertEquals(1, queryResult.getTotalHits());
         assertNotNull(queryResult.getItems());
         assertEquals(1, queryResult.getItems().size());
-        assertEquals(categories.get(0), queryResult.getItems().get(0));
+        assertEquals(institutions.get(0), queryResult.getItems().get(0));
     }
 
 }
