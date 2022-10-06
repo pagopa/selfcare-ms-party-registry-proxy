@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static it.pagopa.selfcare.commons.utils.TestUtils.mockInstance;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -122,7 +123,8 @@ class InstitutionServiceImplTest {
         // given
         final String id = "pippo";
         final Optional<Origin> origin = Optional.of(Origin.IPA);
-        final DummyInstitution institution = new DummyInstitution();
+        final DummyInstitution institution = mockInstance(new DummyInstitution(), "setOrigin");
+        institution.setOrigin(origin.get());
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of(institution));
         // when

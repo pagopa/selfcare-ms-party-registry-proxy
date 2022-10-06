@@ -204,7 +204,7 @@
         } ]
       }
     },
-    "/v1/institutions/" : {
+    "/v1/institutions" : {
       "get" : {
         "tags" : [ "institution" ],
         "summary" : "Search institutions",
