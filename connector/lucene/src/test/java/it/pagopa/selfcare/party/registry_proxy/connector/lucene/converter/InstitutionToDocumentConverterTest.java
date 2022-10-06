@@ -1,6 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.converter;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.DummyInstitution;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.InstitutionEntity;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution.Field;
 import org.apache.lucene.document.Document;
@@ -36,9 +37,9 @@ class InstitutionToDocumentConverterTest {
 
 
     @Test
-    void apply_FullValued() {
+    void apply() {
         // given
-        final Institution input = mockInstance(new DummyInstitution());
+        final Institution input = new DummyInstitution();
         // when
         final Document output = converter.apply(input);
         // then
@@ -65,9 +66,9 @@ class InstitutionToDocumentConverterTest {
 
 
     @Test
-    void apply_FullNull() {
+    void apply_NullOptionalFields() {
         // given
-        final Institution input = new DummyInstitution();
+        final Institution input = mockInstance(new InstitutionEntity(), "setO", "setOu", "setAoo");
         // when
         final Document output = converter.apply(input);
         // then

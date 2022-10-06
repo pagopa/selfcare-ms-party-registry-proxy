@@ -22,6 +22,9 @@ import java.util.function.Function;
 @Slf4j
 abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
 
+    private static final String FIELD_IS_REQUIRED = "A search field is required";
+    private static final String VALUE_IS_REQUIRED = "A search value is required";
+
     private final DirectoryReaderFactory directoryReaderFactory;
     private final Analyzer analyzer;
     private final Function<Document, T> documentConverter;
@@ -37,8 +40,8 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
     @SneakyThrows
     @Override
     public QueryResult<T> fullTextSearch(SearchField field, String value, int page, int limit) {
-        Assert.notNull(field, "A search field is required");
-        Assert.notNull(value, "A search value is required");
+        Assert.notNull(field, FIELD_IS_REQUIRED);
+        Assert.notNull(value, VALUE_IS_REQUIRED);
         Assert.isTrue(page > 0, "A page number must be great than 0");
         Assert.isTrue(limit > 0, "A limit result must be great than or equal to 1");
         final DirectoryReader reader = directoryReaderFactory.create();
@@ -61,8 +64,8 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
     @SneakyThrows
     @Override
     public List<T> findById(SearchField field, String value) {
-        Assert.notNull(field, "A search field is required");
-        Assert.notNull(value, "A search value is required");
+        Assert.notNull(field, FIELD_IS_REQUIRED);
+        Assert.notNull(value, VALUE_IS_REQUIRED);
         final DirectoryReader reader = directoryReaderFactory.create();
         final IndexSearcher indexSearcher = new IndexSearcher(reader);
         final TermQuery query = new TermQuery(new Term(field.toString(), value));
@@ -88,8 +91,8 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
         } else {
             final BooleanQuery.Builder queryBuilder = new BooleanQuery.Builder();
             for (QueryFilter filter : filters) {
-                Assert.notNull(filter.getField(), "A search field is required");
-                Assert.notNull(filter.getValue(), "A search value is required");
+                Assert.notNull(filter.getField(), FIELD_IS_REQUIRED);
+                Assert.notNull(filter.getValue(), VALUE_IS_REQUIRED);
                 final TermQuery termQuery = new TermQuery(new Term(filter.getField().toString(), filter.getValue()));
                 queryBuilder.add(termQuery, BooleanClause.Occur.MUST);
             }

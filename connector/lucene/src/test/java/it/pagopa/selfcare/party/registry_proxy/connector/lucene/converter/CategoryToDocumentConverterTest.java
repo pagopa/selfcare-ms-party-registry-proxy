@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static it.pagopa.selfcare.commons.utils.TestUtils.mockInstance;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CategoryToDocumentConverterTest {
@@ -60,7 +59,7 @@ class CategoryToDocumentConverterTest {
     @Test
     void apply_FullValued() {
         // given
-        final Category input = mockInstance(new DummyCategory());
+        final Category input = new DummyCategory();
         // when
         final Document output = converter.apply(input);
         // then
