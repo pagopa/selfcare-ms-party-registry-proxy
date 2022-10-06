@@ -63,7 +63,7 @@ ingress:
   hosts:
     - host: ""
       paths:
-        - path: /ms-party-registry-proxy/v1/(.*)
+        - path: /party-registry-proxy/(.*)
           pathType: ImplementationSpecific
   tls: []
   #  - secretName: chart-example-tls
@@ -97,5 +97,8 @@ affinity: {}
 
 config:
   APPLICATIONINSIGHTS_ROLE_NAME: "ms-party-registry-proxy"
-  PARTY_REGISTRY_CATEGORIES_URL: "https://indicepa.gov.it/ipa-dati/datastore/dump/84ebb2e7-0e61-427b-a1dd-ab8bb2a84f07?format=json"
-  PARTY_REGISTRY_INSTITUTIONS_URL: "https://indicepa.gov.it/ipa-dati/datastore/dump/d09adf99-dc10-4349-8c53-27b1e5aa97b6?format=json"
+  IPA_OPEN_DATA_URL: "https://indicepa.gov.it/ipa-dati/datastore/dump"
+  IPA_OPEN_DATA_INSTITUTION_ENDPOINT: "/d09adf99-dc10-4349-8c53-27b1e5aa97b6"
+  IPA_OPEN_DATA_CATEGORY_ENDPOINT: "/84ebb2e7-0e61-427b-a1dd-ab8bb2a84f07"
+  LUCENE_INDEX_INSTITUTIONS_FOLDER: "index/institutions"
+  LUCENE_INDEX_CATEGORIES_FOLDER: "index/categories"

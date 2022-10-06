@@ -1,6 +1,6 @@
-#TODO change name
 server:
   port: ${MS_PARTY_REGISTRY_PROXY_SERVER_PORT:8080}
+  shutdown: graceful
 
 spring:
   application:
@@ -10,6 +10,12 @@ spring:
     include:
       # TO enable specific-language documentations
       - swaggerEN
+  zipkin:
+    enabled: false
+  sleuth:
+    baggage:
+      remote-fields: X-Client-Ip
+      correlation-fields: X-Client-Ip
 
 info:
   build:
@@ -22,3 +28,5 @@ info:
 logging:
   level:
     it.pagopa.selfcare.party.registry_proxy: ${MS_PARTY_REGISTRY_PROXY_LOG_LEVEL:DEBUG}
+  pattern:
+    additional-info: ",%X{X-Client-Ip:-}]"
