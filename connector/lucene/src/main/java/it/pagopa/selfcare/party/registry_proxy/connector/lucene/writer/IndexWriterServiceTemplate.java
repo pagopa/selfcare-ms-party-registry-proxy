@@ -19,6 +19,7 @@ abstract class IndexWriterServiceTemplate<T> implements IndexWriterService<T> {
 
 
     public IndexWriterServiceTemplate(IndexWriterFactory indexWriterFactory, Function<T, Document> documentConverter) {
+        log.trace("Initializing {}", getClass().getSimpleName());
         this.indexWriterFactory = indexWriterFactory;
         this.documentConverter = documentConverter;
     }
@@ -27,6 +28,8 @@ abstract class IndexWriterServiceTemplate<T> implements IndexWriterService<T> {
     @SneakyThrows
     @Override
     public void adds(List<? extends T> items) {
+        log.trace("adds start");
+        log.debug("adds items = {}", items);
         final IndexWriter indexWriter = indexWriterFactory.create();
         try (indexWriter) {
             for (T item : items) {
@@ -35,17 +38,20 @@ abstract class IndexWriterServiceTemplate<T> implements IndexWriterService<T> {
             }
             indexWriter.commit();
         }
+        log.trace("adds end");
     }
 
 
     @SneakyThrows
     @Override
     public void deleteAll() {
+        log.trace("deleteAll start");
         final IndexWriter indexWriter = indexWriterFactory.create();
         try (indexWriter) {
             indexWriter.deleteAll();
             indexWriter.commit();
         }
+        log.trace("deleteAll end");
     }
 
 

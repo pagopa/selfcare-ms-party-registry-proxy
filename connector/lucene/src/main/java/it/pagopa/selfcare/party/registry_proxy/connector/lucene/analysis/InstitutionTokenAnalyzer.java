@@ -14,6 +14,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class InstitutionTokenAnalyzer extends Analyzer {
 
+    public InstitutionTokenAnalyzer() {
+        log.trace("Initializing {}", InstitutionTokenAnalyzer.class.getSimpleName());
+    }
+
     @Override
     protected TokenStreamComponents createComponents(String fieldName) {
         //TODO: use this analyzer only for description field, for the others field use the standard

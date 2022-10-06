@@ -25,19 +25,27 @@ class InstitutionServiceImpl implements InstitutionService {
 
     @Autowired
     InstitutionServiceImpl(IndexSearchService<Institution> indexSearchService) {
+        log.trace("Initializing {}", InstitutionServiceImpl.class.getSimpleName());
         this.indexSearchService = indexSearchService;
     }
 
 
     @Override
     public QueryResult<Institution> search(Optional<String> searchText, int page, int limit) {
-        return searchText.map(text -> indexSearchService.fullTextSearch(Field.DESCRIPTION, text, page, limit))
+        log.trace("search start");
+        log.debug("search searchText = {}, page = {}, limit = {}", searchText, page, limit);
+        final QueryResult<Institution> queryResult = searchText.map(text -> indexSearchService.fullTextSearch(Field.DESCRIPTION, text, page, limit))
                 .orElseGet(() -> indexSearchService.findAll(page, limit));
+        log.debug("search result = {}", queryResult);
+        log.trace("search end");
+        return queryResult;
     }
 
 
     @Override
     public Institution findById(String id, Optional<Origin> origin) {
+        log.trace("findById start");
+        log.debug("findById id = {}, origin = {}", id, origin);
         if (origin.map(Origin.INFOCAMERE::equals).orElse(false)) {
             throw new RuntimeException("Not implemented yet");//TODO: onboarding privati
         } else {
@@ -51,7 +59,10 @@ class InstitutionServiceImpl implements InstitutionService {
             } else if (institutions.size() > 1) {
                 throw new TooManyResourceFoundException();
             } else {
-                return institutions.get(0);
+                final Institution institution = institutions.get(0);
+                log.debug("findById result = {}", institution);
+                log.trace("findById end");
+                return institution;
             }
         }
     }

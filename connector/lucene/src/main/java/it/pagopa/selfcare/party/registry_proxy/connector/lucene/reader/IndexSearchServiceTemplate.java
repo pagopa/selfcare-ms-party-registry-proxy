@@ -31,6 +31,7 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
 
 
     public IndexSearchServiceTemplate(Directory directory, Analyzer analyzer, Function<Document, T> documentConverter) {
+        log.trace("Initializing {}", getClass().getSimpleName());
         directoryReaderFactory = new DirectoryReaderFactory(directory);
         this.analyzer = analyzer;
         this.documentConverter = documentConverter;
@@ -40,6 +41,8 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
     @SneakyThrows
     @Override
     public QueryResult<T> fullTextSearch(SearchField field, String value, int page, int limit) {
+        log.trace("fullTextSearch start");
+        log.debug("fullTextSearch field = {}, value = {}, page = {}, limit = {}", field, value, page, limit);
         Assert.notNull(field, FIELD_IS_REQUIRED);
         Assert.notNull(value, VALUE_IS_REQUIRED);
         Assert.isTrue(page > 0, "A page number must be great than 0");
@@ -57,13 +60,18 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
             categories.add(documentConverter.apply(indexSearcher.doc(scoreDoc.doc)));
         }
 
-        return getQueryResult(categories, hits.totalHits.value);
+        final QueryResult<T> queryResult = getQueryResult(categories, hits.totalHits.value);
+        log.debug("fullTextSearch result = {}", queryResult);
+        log.trace("fullTextSearch end");
+        return queryResult;
     }
 
 
     @SneakyThrows
     @Override
     public List<T> findById(SearchField field, String value) {
+        log.trace("findById start");
+        log.debug("findById field = {}, value = {}", field, value);
         Assert.notNull(field, FIELD_IS_REQUIRED);
         Assert.notNull(value, VALUE_IS_REQUIRED);
         final DirectoryReader reader = directoryReaderFactory.create();
@@ -76,6 +84,8 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
             items.add(documentConverter.apply(indexSearcher.doc(scoreDoc.doc)));
         }
 
+        log.debug("findById result = {}", items);
+        log.trace("findById end");
         return items;
     }
 
@@ -83,6 +93,8 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
     @SneakyThrows
     @Override
     public QueryResult<T> findAll(int page, int limit, QueryFilter... filters) {
+        log.trace("findAll start");
+        log.debug("findAll page = {}, limit = {}, filters = {}", page, limit, filters);
         final DirectoryReader reader = directoryReaderFactory.create();
         final IndexSearcher indexSearcher = new IndexSearcher(reader);
         final Query query;
@@ -108,7 +120,10 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
             items.add(documentConverter.apply(indexSearcher.doc(scoreDoc.doc)));
         }
 
-        return getQueryResult(items, hits.totalHits.value);
+        final QueryResult<T> queryResult = getQueryResult(items, hits.totalHits.value);
+        log.debug("findAll result = {}", queryResult);
+        log.trace("findAll end");
+        return queryResult;
     }
 
 

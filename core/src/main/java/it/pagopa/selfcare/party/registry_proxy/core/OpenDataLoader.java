@@ -26,6 +26,7 @@ public class OpenDataLoader implements CommandLineRunner {
                           IndexWriterService<Institution> institutionIndexWriterService,
                           BeanFactory beanFactory,
                           IndexWriterService<Category> categoryIndexWriterService) {
+        log.trace("Initializing {}", OpenDataLoader.class.getSimpleName());
         this.openDataConnectors = openDataConnectors;
         this.institutionIndexWriterService = institutionIndexWriterService;
         this.categoryIndexWriterService = categoryIndexWriterService;
@@ -34,10 +35,12 @@ public class OpenDataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        log.trace("run start");
         openDataConnectors.forEach(openDataConnector -> {
             institutionIndexWriterService.adds(openDataConnector.getInstitutions());
             categoryIndexWriterService.adds(openDataConnector.getCategories());
         });
+        log.trace("run end");
     }
 
 }

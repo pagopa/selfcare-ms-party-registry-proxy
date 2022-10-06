@@ -1,6 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.config;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,9 +11,14 @@ import org.springframework.context.annotation.PropertySource;
 
 import java.nio.file.Path;
 
+@Slf4j
 @Configuration
 @PropertySource("classpath:config/lucene-config.properties")
 class FileSystemIndexConfig {
+
+    public FileSystemIndexConfig() {
+        log.trace("Initializing {}", FileSystemIndexConfig.class.getSimpleName());
+    }
 
     @SneakyThrows
     @Bean

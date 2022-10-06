@@ -11,6 +11,7 @@ import it.pagopa.selfcare.party.registry_proxy.web.model.CategoriesResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.CategoryResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.CategoriesMapper;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.CategoryMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "/v1", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(tags = "category")
@@ -29,6 +31,7 @@ public class CategoryController {
 
     @Autowired
     public CategoryController(CategoryService categoryService) {
+        log.trace("Initializing {}", CategoryController.class.getSimpleName());
         this.categoryService = categoryService;
     }
 
@@ -45,10 +48,15 @@ public class CategoryController {
                                              @ApiParam(value = "${swagger.model.*.limit}")
                                              @RequestParam(value = "limit", required = false, defaultValue = "10")
                                                      Integer limit) {
+        log.trace("findCategories start");
+        log.debug("findCategories origin = {}, page = {}, limit = {}", origin, page, limit);
         final QueryResult<Category> result = categoryService.search(origin, page, limit);
-        return CategoriesMapper.toResource(result.getItems().stream()
+        final CategoriesResource categoriesResource = CategoriesMapper.toResource(result.getItems().stream()
                 .map(CategoryMapper::toResource)
                 .collect(Collectors.toList()));
+        log.debug("findCategories result = {}", categoriesResource);
+        log.trace("findCategories end");
+        return categoriesResource;
     }
 
 
@@ -60,7 +68,12 @@ public class CategoryController {
                                          @PathVariable("origin") Origin origin,
                                          @ApiParam("${swagger.model.category.code}")
                                          @PathVariable("code") String code) {
-        return CategoryMapper.toResource(categoryService.findById(code, origin));
+        log.trace("findCategory start");
+        log.debug("findCategory origin = {}, code = {}", origin, code);
+        final CategoryResource categoryResource = CategoryMapper.toResource(categoryService.findById(code, origin));
+        log.debug("findCategory result = {}", categoryResource);
+        log.trace("findCategory end");
+        return categoryResource;
     }
 
 }

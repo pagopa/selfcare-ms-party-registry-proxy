@@ -19,6 +19,7 @@ class MockOpenDataConnector extends OpenDataConnectorTemplate {
     @Autowired
     public MockOpenDataConnector(MockOpenDataRestClient restClient) {
         super(restClient);
+        log.trace("Initializing {}", MockOpenDataConnector.class.getSimpleName());
     }
 
 
@@ -31,4 +32,5 @@ class MockOpenDataConnector extends OpenDataConnectorTemplate {
     protected Class<MockOpenDataCategory> getCategoryType() {
         return MockOpenDataCategory.class;
     }
+
 }

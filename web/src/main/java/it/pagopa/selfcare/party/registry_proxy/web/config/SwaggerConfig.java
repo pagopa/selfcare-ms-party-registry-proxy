@@ -3,6 +3,7 @@ package it.pagopa.selfcare.party.registry_proxy.web.config;
 import com.fasterxml.classmate.TypeResolver;
 import it.pagopa.selfcare.commons.web.model.Problem;
 import it.pagopa.selfcare.commons.web.swagger.BaseSwaggerConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
@@ -26,6 +27,7 @@ import static it.pagopa.selfcare.commons.web.swagger.BaseSwaggerConfig.*;
 /**
  * The Class SwaggerConfig.
  */
+@Slf4j
 @Configuration
 @Import(BaseSwaggerConfig.class)
 class SwaggerConfig {
@@ -49,6 +51,7 @@ class SwaggerConfig {
 
     @Autowired
     SwaggerConfig(Environment environment) {
+        log.trace("Initializing {}", SwaggerConfig.class.getSimpleName());
         this.environment = environment;
     }
 

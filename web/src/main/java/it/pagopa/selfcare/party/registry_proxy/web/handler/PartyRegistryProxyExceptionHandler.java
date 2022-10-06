@@ -14,6 +14,10 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RestControllerAdvice
 public class PartyRegistryProxyExceptionHandler {
 
+    public PartyRegistryProxyExceptionHandler() {
+        log.trace("Initializing {}", PartyRegistryProxyExceptionHandler.class.getSimpleName());
+    }
+
     @ExceptionHandler({ResourceNotFoundException.class})
     ResponseEntity<Problem> handleResourceNotFoundException(ResourceNotFoundException e) {
         log.warn(e.toString());

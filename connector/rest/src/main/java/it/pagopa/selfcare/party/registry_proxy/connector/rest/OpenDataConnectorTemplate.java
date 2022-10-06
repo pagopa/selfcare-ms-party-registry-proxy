@@ -29,6 +29,7 @@ abstract class OpenDataConnectorTemplate<I extends Institution, C extends Catego
     @SneakyThrows
     @Override
     public List<I> getInstitutions() {
+        log.trace("getInstitutions start");
         List<I> institutions;
         final String csv = restClient.retrieveInstitutions();
 
@@ -41,6 +42,8 @@ abstract class OpenDataConnectorTemplate<I extends Institution, C extends Catego
         }
 
         //TODO: scartare i record che non soddisfano determinati requisiti?
+        log.debug("getInstitutions result = {}", institutions);
+        log.trace("getInstitutions end");
         return institutions;
     }
 
@@ -48,6 +51,7 @@ abstract class OpenDataConnectorTemplate<I extends Institution, C extends Catego
     @SneakyThrows
     @Override
     public List<C> getCategories() {
+        log.trace("getCategories start");
         List<C> categories;
         final String csv = restClient.retrieveCategories();
 
@@ -60,6 +64,8 @@ abstract class OpenDataConnectorTemplate<I extends Institution, C extends Catego
         }
 
         //TODO: scartare i record che non soddisfano determinati requisiti?
+        log.debug("getCategories result = {}", categories);
+        log.trace("getCategories end");
         return categories;
     }
 

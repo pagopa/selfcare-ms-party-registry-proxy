@@ -11,6 +11,7 @@ import it.pagopa.selfcare.party.registry_proxy.web.model.InstitutionResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.InstitutionsResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.InstitutionMapper;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.InstitutionsMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "/v1/institutions", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(tags = "institution")
@@ -29,28 +31,34 @@ public class InstitutionController {
 
     @Autowired
     public InstitutionController(InstitutionService institutionService) {
+        log.trace("Initializing {}", InstitutionController.class.getSimpleName());
         this.institutionService = institutionService;
     }
+
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "${swagger.api.institution.search.summary}",
             notes = "${swagger.api.institution.search.notes}")
     public InstitutionsResource search(@ApiParam("${swagger.model.institution.search}")
-                                           @RequestParam(value = "search", required = false)
-                                                   Optional<String> search,
+                                       @RequestParam(value = "search", required = false)
+                                               Optional<String> search,
                                        @ApiParam(value = "${swagger.model.*.page}")
-                                           @RequestParam(value = "page", required = false, defaultValue = "1")
-                                                   Integer page,
+                                       @RequestParam(value = "page", required = false, defaultValue = "1")
+                                               Integer page,
                                        @ApiParam(value = "${swagger.model.*.limit}")
-                                           @RequestParam(value = "limit", required = false, defaultValue = "10")
-                                                   Integer limit) {
+                                       @RequestParam(value = "limit", required = false, defaultValue = "10")
+                                               Integer limit) {
+        log.trace("search start");
+        log.debug("search search = {}, page = {}, limit = {}", search, page, limit);
         final QueryResult<Institution> result = institutionService.search(search, page, limit);
-
-        return InstitutionsMapper.toResource(result.getItems().stream()
+        final InstitutionsResource institutionsResource = InstitutionsMapper.toResource(result.getItems().stream()
                         .map(InstitutionMapper::toResource)
                         .collect(Collectors.toList()),
                 result.getTotalHits());
+        log.debug("search result = {}", institutionsResource);
+        log.trace("search end");
+        return institutionsResource;
     }
 
 
@@ -62,7 +70,12 @@ public class InstitutionController {
                                                @PathVariable("id") String id,
                                                @ApiParam("${swagger.model.*.origin}")
                                                @RequestParam(value = "origin", required = false) Optional<Origin> origin) {
-        return InstitutionMapper.toResource(institutionService.findById(id, origin));
+        log.trace("findInstitution start");
+        log.debug("findInstitution id = {}, origin = {}", id, origin);
+        final InstitutionResource institutionResource = InstitutionMapper.toResource(institutionService.findById(id, origin));
+        log.debug("findInstitution result = {}", institutionResource);
+        log.trace("findInstitution end");
+        return institutionResource;
     }
 
 }

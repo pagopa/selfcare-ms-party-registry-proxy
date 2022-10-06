@@ -13,6 +13,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class CategoryTokenAnalyzer extends Analyzer {//TODO: there is no need to use a standard analyzer because the search is always "by id"
 
+
+    public CategoryTokenAnalyzer() {
+        log.trace("Initializing {}", CategoryTokenAnalyzer.class.getSimpleName());
+    }
+
+
     @Override
     protected TokenStreamComponents createComponents(String fieldName) {
         final StandardTokenizer tokenizer = new StandardTokenizer();

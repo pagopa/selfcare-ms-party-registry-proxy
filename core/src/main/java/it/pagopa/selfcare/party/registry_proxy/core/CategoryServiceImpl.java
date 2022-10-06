@@ -26,25 +26,34 @@ class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     CategoryServiceImpl(IndexSearchService<Category> indexSearchService) {
+        log.trace("Initializing {}", CategoryServiceImpl.class.getSimpleName());
         this.indexSearchService = indexSearchService;
     }
 
 
     @Override
     public QueryResult<Category> search(Optional<Origin> origin, int page, int limit) {
+        log.trace("search start");
+        log.debug("search origin = {}, page = {}, limit = {}", origin, page, limit);
+        final QueryResult<Category> queryResult;
         if (origin.isPresent()) {
             final QueryFilter queryFilter = new QueryFilter();
             queryFilter.setField(Field.ORIGIN);
             queryFilter.setValue(origin.get().toString());
-            return indexSearchService.findAll(page, limit, queryFilter);
+            queryResult = indexSearchService.findAll(page, limit, queryFilter);
         } else {
-            return indexSearchService.findAll(page, limit);
+            queryResult = indexSearchService.findAll(page, limit);
         }
+        log.debug("search result = {}", queryResult);
+        log.trace("search end");
+        return queryResult;
     }
 
 
     @Override
     public Category findById(String id, Origin origin) {
+        log.trace("findById start");
+        log.debug("findById id = {}, origin = {}", id, origin);
         if (Origin.INFOCAMERE.equals(origin)) {
             throw new RuntimeException("Data source not found");//FIXME: there is no INFOCAMERE categories...choose the right exception to throw
         } else {
@@ -54,7 +63,10 @@ class CategoryServiceImpl implements CategoryService {
             } else if (categories.size() > 1) {
                 throw new TooManyResourceFoundException();
             } else {
-                return categories.get(0);
+                final Category category = categories.get(0);
+                log.debug("findById result = {}", category);
+                log.trace("findById end");
+                return category;
             }
         }
     }

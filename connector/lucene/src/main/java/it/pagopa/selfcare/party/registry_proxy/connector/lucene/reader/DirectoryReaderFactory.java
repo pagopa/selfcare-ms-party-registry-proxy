@@ -17,18 +17,22 @@ public class DirectoryReaderFactory {
 
     @Autowired
     public DirectoryReaderFactory(Directory directory) {
+        log.trace("Initializing {}", DirectoryReaderFactory.class.getSimpleName());
         this.directory = directory;
     }
 
 
     @SneakyThrows
     public DirectoryReader create() {
+        log.trace("create start");
         if (currentReader == null) {
             currentReader = DirectoryReader.open(directory);
         } else {
             currentReader = Optional.ofNullable(DirectoryReader.openIfChanged(currentReader))
                     .orElse(currentReader);
         }
+        log.debug("create result = {}", currentReader);
+        log.trace("create end");
         return currentReader;
     }
 

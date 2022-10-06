@@ -11,4 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @EnableWebSecurity
 @Import(SecurityConfig.class)
 class PartyRegistryProxySecurityConfig {
+
+    public PartyRegistryProxySecurityConfig() {
+        log.trace("Initializing {}", PartyRegistryProxySecurityConfig.class.getSimpleName());
+    }
+
 }

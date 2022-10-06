@@ -16,6 +16,7 @@ class IPAOpenDataConnector extends OpenDataConnectorTemplate {
     @Autowired
     public IPAOpenDataConnector(IPAOpenDataRestClient restClient) {
         super(restClient);
+        log.trace("Initializing {}", IPAOpenDataConnector.class.getSimpleName());
     }
 
 
