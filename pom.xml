@@ -12,7 +12,7 @@
     <!-- lookup parent from repository -->
   </parent>
   <artifactId>selc-party-registry-proxy</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>0.0.1-SNAPSHOT</version>
   <name>selc-party-registry-proxy</name>
   <description>A proxy for all Party Registry data sources used in Self Care</description>
 
@@ -26,33 +26,33 @@
       <dependency>
         <groupId>it.pagopa.selfcare.party</groupId>
         <artifactId>selc-party-registry-proxy-connector-rest</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.0.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>it.pagopa.selfcare.party</groupId>
         <artifactId>selc-party-registry-proxy-connector-lucene</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.0.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>it.pagopa.selfcare.party</groupId>
         <artifactId>selc-party-registry-proxy-connector-api</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.0.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>it.pagopa.selfcare.party</groupId>
         <artifactId>selc-party-registry-proxy-connector-api</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.0.1-SNAPSHOT</version>
         <type>test-jar</type>
       </dependency>
       <dependency>
         <groupId>it.pagopa.selfcare.party</groupId>
         <artifactId>selc-party-registry-proxy-core</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.0.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>it.pagopa.selfcare.party</groupId>
         <artifactId>selc-party-registry-proxy-web</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.0.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>it.pagopa.selfcare</groupId>
