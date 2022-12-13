@@ -3,7 +3,7 @@
   "info" : {
     "title" : "selc-party-registry-proxy",
     "description" : "Party Registry Proxy API documentation",
-    "version" : "1.0-SNAPSHOT"
+    "version" : "0.0.1-SNAPSHOT"
   },
   "servers" : [ {
     "url" : "{url}:{port}{basePath}",
