@@ -12,9 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
@@ -25,20 +22,15 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@ContextConfiguration(classes = {InfoCamereServiceImpl.class})
 @ExtendWith(SpringExtension.class)
 class InfoCamereServiceImplTest {
-    @MockBean
+    @Mock
     private InfoCamereConnector infoCamereConnector;
-
-    @Autowired
-    private InfoCamereServiceImpl infoCamereServiceImpl;
-
     @Mock
     private InfoCamereBatchRequestConnector infoCamereBatchRequestConnector;
 
     @InjectMocks
-    private InfoCamereServiceImpl iniPecServiceImpl;
+    private InfoCamereServiceImpl infoCamereServiceImpl;
 
     /**
      * Method under test: {@link InfoCamereServiceImpl#businessesByLegal(GetBusinessesByLegal)}
@@ -72,7 +64,7 @@ class InfoCamereServiceImplTest {
 
         when(infoCamereBatchRequestConnector.save(any())).thenReturn(infoCamereBatchRequest);
 
-        assertNotNull(iniPecServiceImpl.createBatchRequestByCf("cf"));
+        assertNotNull(infoCamereServiceImpl.createBatchRequestByCf("cf"));
     }
 }
 
