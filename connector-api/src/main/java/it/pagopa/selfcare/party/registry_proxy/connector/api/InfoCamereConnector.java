@@ -9,6 +9,5 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCa
 public interface InfoCamereConnector {
     Businesses businessesByLegal(GetBusinessesByLegal getBusinessesByLegal);
     InfoCamerePolling callEServiceRequestId(InfoCamereCfRequest infoCamereCfRequest);
-
     InfoCamerePec callEServiceRequestPec(String correlationId);
 }

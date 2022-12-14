@@ -30,7 +30,6 @@ public class InfoCamereController {
 
     private final InfoCamereService infoCamereService;
 
-    @Autowired
     public InfoCamereController(InfoCamereService infoCamereService) {
         log.trace("Initializing {}", InfoCamereController.class.getSimpleName());
         this.infoCamereService = infoCamereService;

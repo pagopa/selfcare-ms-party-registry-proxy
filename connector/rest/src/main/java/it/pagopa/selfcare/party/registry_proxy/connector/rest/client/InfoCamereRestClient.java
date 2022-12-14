@@ -22,7 +22,7 @@ public interface InfoCamereRestClient {
 
     @PostMapping(value = "${rest-client.info-camere.callEServiceRequestId.path}", consumes = APPLICATION_JSON_VALUE)
     @ResponseBody
-    InfoCamerePollingResponse callEServiceRequestId(@PathVariable("cf") InfoCamereCfRequest infoCamereCfRequest);
+    InfoCamerePollingResponse callEServiceRequestId(@RequestBody InfoCamereCfRequest infoCamereCfRequest);
 
     @PostMapping(value = "${rest-client.info-camere.callEServiceRequestPec.path}", consumes = APPLICATION_JSON_VALUE)
     @ResponseBody

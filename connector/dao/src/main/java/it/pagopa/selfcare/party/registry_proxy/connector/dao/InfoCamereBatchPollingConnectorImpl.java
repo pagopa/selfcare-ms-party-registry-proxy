@@ -4,7 +4,6 @@ import it.pagopa.selfcare.party.registry_proxy.connector.api.InfoCamereBatchPoll
 import it.pagopa.selfcare.party.registry_proxy.connector.dao.model.InfoCamereBatchPollingEntity;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereBatchPolling;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -19,7 +18,6 @@ public class InfoCamereBatchPollingConnectorImpl implements InfoCamereBatchPolli
 
     private final InfoCamereBatchPollingRepository repository;
 
-    @Autowired
     public InfoCamereBatchPollingConnectorImpl(InfoCamereBatchPollingRepository repository) {
         this.repository = repository;
     }

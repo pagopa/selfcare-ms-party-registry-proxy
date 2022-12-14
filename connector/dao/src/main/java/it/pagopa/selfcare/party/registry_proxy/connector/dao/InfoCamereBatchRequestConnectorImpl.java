@@ -4,8 +4,8 @@ import it.pagopa.selfcare.party.registry_proxy.connector.api.InfoCamereBatchRequ
 import it.pagopa.selfcare.party.registry_proxy.connector.dao.model.InfoCamereBatchRequestEntity;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.BatchStatus;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereBatchRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -16,12 +16,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class InfoCamereBatchRequestConnectorImpl implements InfoCamereBatchRequestConnector {
 
     private final InfoCamereBatchRequestRepository repository;
 
-    @Autowired
     public InfoCamereBatchRequestConnectorImpl(InfoCamereBatchRequestRepository repository) {
         this.repository = repository;
     }

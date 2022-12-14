@@ -46,6 +46,7 @@ public class InfoCamereBatchPollingServiceImpl implements InfoCamereBatchPolling
 
     private void callService(InfoCamereBatchPolling infoCamereBatchPolling){
         InfoCamerePec infoCamerePec = infoCamereConnector.callEServiceRequestPec(infoCamereBatchPolling.getPollingId());
+        log.info("Calling ini pec with pec size: {} and pollingId: {}",infoCamerePec.getElencoPec().size(),infoCamerePec.getIdentificativoRichiesta());
         //Invio email per firma contratto
         setWorkedBatchPolling(infoCamereBatchPolling);
     }

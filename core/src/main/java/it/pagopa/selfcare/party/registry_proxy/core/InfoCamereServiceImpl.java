@@ -18,8 +18,7 @@ class InfoCamereServiceImpl implements InfoCamereService {
     private final InfoCamereConnector infoCamereConnector;
     private final InfoCamereBatchRequestConnector infoCamereBatchRequestConnector;
 
-    @Autowired
-    InfoCamereServiceImpl(InfoCamereConnector infoCamereConnector,
+    public InfoCamereServiceImpl(InfoCamereConnector infoCamereConnector,
                           InfoCamereBatchRequestConnector infoCamereBatchRequestConnector) {
         log.trace("Initializing {}", InfoCamereServiceImpl.class.getSimpleName());
         this.infoCamereConnector = infoCamereConnector;

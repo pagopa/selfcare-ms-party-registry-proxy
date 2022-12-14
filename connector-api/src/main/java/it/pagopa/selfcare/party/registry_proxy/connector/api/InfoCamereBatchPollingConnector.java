@@ -6,8 +6,6 @@ import java.util.List;
 
 
 public interface InfoCamereBatchPollingConnector {
-
     InfoCamereBatchPolling save(InfoCamereBatchPolling infoCamereBatchPolling);
     List<InfoCamereBatchPolling> findByStatus(String status);
-
 }

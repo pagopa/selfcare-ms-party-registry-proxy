@@ -18,10 +18,9 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class InfoCamereConnectorImpl implements InfoCamereConnector {
-    private InfoCamereRestClient restClient;
-    private IniPecJwsGenerator iniPecJwsGenerator;
+    private final InfoCamereRestClient restClient;
+    private final IniPecJwsGenerator iniPecJwsGenerator;
 
-    @Autowired
     public InfoCamereConnectorImpl(InfoCamereRestClient restClient, IniPecJwsGenerator iniPecJwsGenerator) {
         log.trace("Initializing {}", InfoCamereConnectorImpl.class.getSimpleName());
         this.restClient = restClient;
@@ -43,12 +42,14 @@ public class InfoCamereConnectorImpl implements InfoCamereConnector {
 
     @Override
     public InfoCamerePolling callEServiceRequestId(InfoCamereCfRequest infoCamereCfRequest) {
+        log.trace("start callEServiceRequestId with cf size: {}",infoCamereCfRequest.getElencoCf().size());
         InfoCamerePollingResponse infoCamerePollingResponse = restClient.callEServiceRequestId(infoCamereCfRequest);
         return convertIniPecPolling(infoCamerePollingResponse);
     }
 
     @Override
     public InfoCamerePec callEServiceRequestPec(String correlationId) {
+        log.trace("start callEServiceRequestPec with correlationId: {}",correlationId);
         InfoCamerePecResponse infoCamerePecResponse = restClient.callEServiceRequestPec(correlationId);
         return convertIniPecPec(infoCamerePecResponse);
     }
