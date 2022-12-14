@@ -8,14 +8,22 @@ import java.util.stream.Collectors;
 
 public class BusinessesMapper {
     public static BusinessesResource toResource(Businesses businesses) {
-        BusinessesResource resource = new BusinessesResource();
-        resource.setLegalTaxId(businesses.getLegalTaxId());
-        resource.setRequestDateTime(businesses.getRequestDateTime());
-        resource.setBusinesses(businesses.getBusinesses()
-                .stream()
-                .map(BusinessMapper::toResource)
-                .collect(Collectors.toList())
-        );
+        BusinessesResource resource = null;
+        if(businesses != null) {
+            resource = new BusinessesResource();
+            resource.setLegalTaxId(businesses.getLegalTaxId());
+            resource.setRequestDateTime(businesses.getRequestDateTime());
+            if(businesses.getBusinesses() != null) {
+                resource.setBusinesses(
+                        businesses.getBusinesses()
+                                .stream()
+                                .map(BusinessMapper::toResource)
+                                .collect(Collectors.toList())
+                );
+            }
+
+        }
+
         return resource;
     }
 }
