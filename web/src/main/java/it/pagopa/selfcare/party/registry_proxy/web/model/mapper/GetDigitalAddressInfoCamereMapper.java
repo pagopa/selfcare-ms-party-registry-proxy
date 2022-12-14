@@ -13,7 +13,7 @@ public class GetDigitalAddressInfoCamereMapper {
             return null;
         }
         GetDigitalAddressInfoCamereOKDto resource = new GetDigitalAddressInfoCamereOKDto();
-        resource.setCorrelationId(infoCamereBatchRequest.getCorrelationId());
+        resource.setCorrelationId(infoCamereBatchRequest.getId());
         return resource;
     }
 

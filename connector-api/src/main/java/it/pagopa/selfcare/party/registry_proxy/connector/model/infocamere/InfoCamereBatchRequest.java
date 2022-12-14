@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 public class InfoCamereBatchRequest {
 
     private String id;
-    private String correlationId;
     private String batchId;
     private String cf;
     private Integer retry;
