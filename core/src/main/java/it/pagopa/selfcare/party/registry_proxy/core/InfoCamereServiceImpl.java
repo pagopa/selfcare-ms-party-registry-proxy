@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 class InfoCamereServiceImpl implements InfoCamereService {
-    private InfoCamereConnector infoCamereConnector;
+    private final InfoCamereConnector infoCamereConnector;
 
     @Autowired
     InfoCamereServiceImpl(InfoCamereConnector infoCamereConnector) {

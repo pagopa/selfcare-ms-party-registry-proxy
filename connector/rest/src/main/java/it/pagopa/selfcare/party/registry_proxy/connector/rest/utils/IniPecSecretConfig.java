@@ -19,17 +19,11 @@ public class IniPecSecretConfig {
     }
     private SSLData getSslDataSecretValue(String iniPecPublicKey, String iniPecPrivateKey, String iniPecCertificate) {
         SSLData sslData = new SSLData();
+        log.info("founded secret value for secrets: {} {} {}", iniPecPublicKey, iniPecPrivateKey, iniPecCertificate);
+        sslData.setPub(iniPecPublicKey);
+        sslData.setKey(iniPecPrivateKey);
+        sslData.setCert(iniPecCertificate);
 
-        if(iniPecPublicKey != null && iniPecPrivateKey != null && iniPecCertificate != null){
-            log.info("founded secret value for secrets: {} {} {}", iniPecPublicKey, iniPecPrivateKey, iniPecCertificate);
-            sslData.setPub(iniPecPublicKey);
-            sslData.setKey(iniPecPrivateKey);
-            sslData.setCert(iniPecCertificate);
-
-            return sslData;
-        }else{
-            log.info("secret value for secrets not found");
-            throw new RuntimeException();
-        }
+        return sslData;
     }
 }

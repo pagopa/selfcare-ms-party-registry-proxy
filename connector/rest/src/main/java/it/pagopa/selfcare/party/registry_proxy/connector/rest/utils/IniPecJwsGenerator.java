@@ -85,5 +85,4 @@ public class IniPecJwsGenerator {
         KeyFactory kf = KeyFactory.getInstance("RSA");
         return (RSAPrivateKey) kf.generatePrivate(encodedKeySpec);
     }
-
 }
