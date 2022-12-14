@@ -18,6 +18,7 @@
     </dependencies>
 
     <modules>
+        <module>dao</module>
         <module>rest</module>
         <module>lucene</module>
     </modules>
