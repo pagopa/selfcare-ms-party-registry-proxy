@@ -8,7 +8,7 @@ public class BusinessMapper {
     public static BusinessResource toResource(Business business) {
         BusinessResource resource = new BusinessResource();
         resource.setBusinessName(business.getBusinessName());
-        resource.setTaxId(business.getTaxId());
+        resource.setBusinessTaxId(business.getBusinessTaxId());
         return resource;
     }
 }

@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class BusinessResource {
-    private String taxId;
+    private String businessTaxId;
     private String businessName;
 }

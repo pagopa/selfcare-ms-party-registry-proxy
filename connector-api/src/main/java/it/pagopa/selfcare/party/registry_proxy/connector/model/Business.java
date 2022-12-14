@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class Business {
     @JsonProperty("cfImpresa")
-    private String taxId;
+    private String businessTaxId;
     @JsonProperty("denominazione")
     private String businessName;
 }
