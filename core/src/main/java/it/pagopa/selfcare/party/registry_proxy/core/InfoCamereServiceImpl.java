@@ -7,7 +7,6 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.GetBusinessesByLe
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.BatchStatus;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereBatchRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
