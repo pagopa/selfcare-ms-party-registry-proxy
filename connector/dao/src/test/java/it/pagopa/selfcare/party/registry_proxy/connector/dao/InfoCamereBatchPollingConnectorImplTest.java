@@ -1,7 +1,5 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.dao;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.dao.InfoCamereBatchPollingConnectorImpl;
-import it.pagopa.selfcare.party.registry_proxy.connector.dao.InfoCamereBatchPollingRepository;
 import it.pagopa.selfcare.party.registry_proxy.connector.dao.model.InfoCamereBatchPollingEntity;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereBatchPolling;
 import org.bson.types.ObjectId;

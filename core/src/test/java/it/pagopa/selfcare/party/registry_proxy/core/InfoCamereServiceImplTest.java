@@ -57,7 +57,6 @@ class InfoCamereServiceImplTest {
         infoCamereBatchRequest.setCf("cf");
         infoCamereBatchRequest.setRetry(0);
         infoCamereBatchRequest.setStatus("status");
-        infoCamereBatchRequest.setCorrelationId("correlationId");
         infoCamereBatchRequest.setLastReserved(LocalDateTime.now());
         infoCamereBatchRequest.setTimeStamp(LocalDateTime.now());
         infoCamereBatchRequest.setTtl(LocalDateTime.now());

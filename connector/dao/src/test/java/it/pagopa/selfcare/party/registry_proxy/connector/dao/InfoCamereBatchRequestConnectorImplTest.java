@@ -36,7 +36,6 @@ class InfoCamereBatchRequestConnectorImplTest {
         infoCamereBatchRequest.setCf("taxId");
         infoCamereBatchRequest.setRetry(0);
         infoCamereBatchRequest.setStatus("status");
-        infoCamereBatchRequest.setCorrelationId("correlationId");
         infoCamereBatchRequest.setLastReserved(LocalDateTime.now());
         infoCamereBatchRequest.setTimeStamp(LocalDateTime.now());
         infoCamereBatchRequest.setTtl(LocalDateTime.now());
@@ -105,7 +104,6 @@ class InfoCamereBatchRequestConnectorImplTest {
         infoCamereBatchRequest.setCf("taxId");
         infoCamereBatchRequest.setRetry(0);
         infoCamereBatchRequest.setStatus("status");
-        infoCamereBatchRequest.setCorrelationId("correlationId");
         infoCamereBatchRequest.setLastReserved(LocalDateTime.now());
         infoCamereBatchRequest.setTimeStamp(LocalDateTime.now());
         infoCamereBatchRequest.setTtl(LocalDateTime.now());
@@ -126,7 +124,6 @@ class InfoCamereBatchRequestConnectorImplTest {
         infoCamereBatchRequest.setCf("taxId");
         infoCamereBatchRequest.setRetry(0);
         infoCamereBatchRequest.setStatus("status");
-        infoCamereBatchRequest.setCorrelationId("correlationId");
         infoCamereBatchRequest.setLastReserved(LocalDateTime.now());
         infoCamereBatchRequest.setTimeStamp(LocalDateTime.now());
         infoCamereBatchRequest.setTtl(LocalDateTime.now());

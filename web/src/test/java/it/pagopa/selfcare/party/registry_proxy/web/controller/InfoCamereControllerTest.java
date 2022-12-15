@@ -71,7 +71,6 @@ class InfoCamereControllerTest {
         infoCamereBatchRequest.setCf("taxId");
         infoCamereBatchRequest.setRetry(0);
         infoCamereBatchRequest.setStatus("status");
-        infoCamereBatchRequest.setCorrelationId("correlationId");
         infoCamereBatchRequest.setLastReserved(LocalDateTime.now());
         infoCamereBatchRequest.setTimeStamp(LocalDateTime.now());
         infoCamereBatchRequest.setTtl(LocalDateTime.now());
@@ -88,7 +87,7 @@ class InfoCamereControllerTest {
 
         GetDigitalAddressInfoCamereOKDto getDigitalAddressInfoCamereOKDto = infoCamereController.createBatchRequest(dto).getBody();
         assert getDigitalAddressInfoCamereOKDto != null;
-        assertEquals(getDigitalAddressInfoCamereOKDto.getCorrelationId(), "correlationId");
+        assertEquals(getDigitalAddressInfoCamereOKDto.getCorrelationId(), "id");
     }
 }
 
