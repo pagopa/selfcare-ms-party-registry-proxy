@@ -1,7 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.web.model.mapper;
 
 
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Businesses;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.web.model.BusinessesResource;
 
 import java.util.stream.Collectors;

@@ -2,8 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.core;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.InfoCamereBatchRequestConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.InfoCamereConnector;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Businesses;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.GetBusinessesByLegal;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereBatchRequest;
 
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ class InfoCamereServiceImplTest {
     private InfoCamereServiceImpl infoCamereServiceImpl;
 
     /**
-     * Method under test: {@link InfoCamereServiceImpl#businessesByLegal(GetBusinessesByLegal)}
+     * Method under test: {@link InfoCamereServiceImpl#businessesByLegal(String)}
      */
     @Test
     void testBusinessesByLegal() {
@@ -41,12 +40,10 @@ class InfoCamereServiceImplTest {
         businesses.setBusinesses(new ArrayList<>());
         businesses.setLegalTaxId("42");
         businesses.setRequestDateTime("2020-03-01");
-        when(infoCamereConnector.businessesByLegal((GetBusinessesByLegal) any())).thenReturn(businesses);
+        when(infoCamereConnector.businessesByLegal(any())).thenReturn(businesses);
 
-        GetBusinessesByLegal getBusinessesByLegal = new GetBusinessesByLegal();
-        getBusinessesByLegal.setLegalTaxId("42");
-        assertSame(businesses, infoCamereServiceImpl.businessesByLegal(getBusinessesByLegal));
-        verify(infoCamereConnector).businessesByLegal((GetBusinessesByLegal) any());
+        assertSame(businesses, infoCamereServiceImpl.businessesByLegal("42"));
+        verify(infoCamereConnector).businessesByLegal(any());
     }
 
     @Test

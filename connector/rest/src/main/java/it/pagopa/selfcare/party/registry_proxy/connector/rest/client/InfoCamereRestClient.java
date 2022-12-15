@@ -1,6 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.client;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Businesses;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereCfRequest;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.infocamere.InfoCamerePecResponse;

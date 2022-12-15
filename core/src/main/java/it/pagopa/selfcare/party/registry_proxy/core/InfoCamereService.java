@@ -1,11 +1,10 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Businesses;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.GetBusinessesByLegal;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereBatchRequest;
 
 public interface InfoCamereService {
-    Businesses businessesByLegal(GetBusinessesByLegal getBusinessesByLegalDto);
+    Businesses businessesByLegal(String legalTaxId);
     InfoCamereBatchRequest createBatchRequestByCf(String cf);
 
 

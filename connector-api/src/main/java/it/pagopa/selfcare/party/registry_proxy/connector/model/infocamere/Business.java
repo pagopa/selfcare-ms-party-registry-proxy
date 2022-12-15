@@ -1,4 +1,4 @@
-package it.pagopa.selfcare.party.registry_proxy.connector.model;
+package it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

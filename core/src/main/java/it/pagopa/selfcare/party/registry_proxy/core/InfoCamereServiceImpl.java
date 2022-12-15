@@ -2,8 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.core;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.InfoCamereBatchRequestConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.InfoCamereConnector;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Businesses;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.GetBusinessesByLegal;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.BatchStatus;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereBatchRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +23,9 @@ class InfoCamereServiceImpl implements InfoCamereService {
         this.infoCamereBatchRequestConnector = infoCamereBatchRequestConnector;
     }
     @Override
-    public Businesses businessesByLegal(GetBusinessesByLegal getBusinessesByLegalDto) {
+    public Businesses businessesByLegal(String legalTaxId) {
         log.trace("businessesByLegal start");
-        return this.infoCamereConnector.businessesByLegal(getBusinessesByLegalDto);
+        return this.infoCamereConnector.businessesByLegal(legalTaxId);
     }
 
     @Override

@@ -2,6 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.web.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.pagopa.selfcare.party.registry_proxy.core.CategoryService;
+import it.pagopa.selfcare.party.registry_proxy.core.InfoCamereService;
 import it.pagopa.selfcare.party.registry_proxy.core.InstitutionService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,9 @@ class SwaggerConfigTest {
 
     @MockBean
     private CategoryService categoryService;
+
+    @MockBean
+    private InfoCamereService infoCamereService;
 
     @Autowired
     WebApplicationContext context;

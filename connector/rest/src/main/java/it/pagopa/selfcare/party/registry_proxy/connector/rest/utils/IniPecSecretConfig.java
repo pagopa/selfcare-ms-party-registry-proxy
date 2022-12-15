@@ -15,15 +15,8 @@ public class IniPecSecretConfig {
     public IniPecSecretConfig(@Value("${inipec.secret.public-key}") String iniPecPublicKey,
                               @Value("${inipec.secret.private-key}") String iniPecPrivateKey,
                               @Value("${inipec.secret.certificate}") String iniPecCertificate) {
-        this.iniPecAuthRestSecret = getSslDataSecretValue(iniPecPublicKey, iniPecPrivateKey, iniPecCertificate);
-    }
-    private SSLData getSslDataSecretValue(String iniPecPublicKey, String iniPecPrivateKey, String iniPecCertificate) {
-        SSLData sslData = new SSLData();
         log.info("founded secret value for secrets: {} {} {}", iniPecPublicKey, iniPecPrivateKey, iniPecCertificate);
-        sslData.setPub(iniPecPublicKey);
-        sslData.setKey(iniPecPrivateKey);
-        sslData.setCert(iniPecCertificate);
-
-        return sslData;
+        this.iniPecAuthRestSecret = new SSLData(iniPecCertificate, iniPecPrivateKey, iniPecPublicKey);
     }
+
 }

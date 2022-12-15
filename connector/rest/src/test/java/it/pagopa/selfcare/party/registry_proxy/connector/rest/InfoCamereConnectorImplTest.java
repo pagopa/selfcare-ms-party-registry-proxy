@@ -5,8 +5,7 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Businesses;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.GetBusinessesByLegal;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.InfoCamereRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.TokenType;
@@ -34,7 +33,7 @@ class InfoCamereConnectorImplTest {
     private IniPecJwsGenerator iniPecJwsGenerator;
 
     /**
-     * Method under test: {@link InfoCamereConnectorImpl#businessesByLegal(GetBusinessesByLegal)}
+     * Method under test: {@link InfoCamereConnectorImpl#businessesByLegal(String)}
      */
     @Test
     void testBusinessesByLegal() {
@@ -47,15 +46,13 @@ class InfoCamereConnectorImplTest {
         businesses.setBusinesses(new ArrayList<>());
         businesses.setLegalTaxId("42");
         businesses.setRequestDateTime("2020-03-01");
-        when(infoCamereRestClient.businessesByLegal((String) any(), (String) any())).thenReturn(businesses);
-        when(infoCamereRestClient.getToken((String) any())).thenReturn(clientCredentialsResponse);
+        when(infoCamereRestClient.businessesByLegal(any(), any())).thenReturn(businesses);
+        when(infoCamereRestClient.getToken(any())).thenReturn(clientCredentialsResponse);
         when(iniPecJwsGenerator.createAuthRest()).thenReturn("Create Auth Rest");
 
-        GetBusinessesByLegal getBusinessesByLegal = new GetBusinessesByLegal();
-        getBusinessesByLegal.setLegalTaxId("42");
-        assertSame(businesses, infoCamereConnectorImpl.businessesByLegal(getBusinessesByLegal));
-        verify(infoCamereRestClient).businessesByLegal((String) any(), (String) any());
-        verify(infoCamereRestClient).getToken((String) any());
+        assertSame(businesses, infoCamereConnectorImpl.businessesByLegal("42"));
+        verify(infoCamereRestClient).businessesByLegal(any(), any());
+        verify(infoCamereRestClient).getToken(any());
         verify(iniPecJwsGenerator).createAuthRest();
     }
 }

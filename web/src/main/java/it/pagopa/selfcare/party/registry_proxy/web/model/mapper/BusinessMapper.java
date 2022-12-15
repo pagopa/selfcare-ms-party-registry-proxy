@@ -1,7 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.web.model.mapper;
 
 
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Business;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Business;
 import it.pagopa.selfcare.party.registry_proxy.web.model.BusinessResource;
 
 public class BusinessMapper {

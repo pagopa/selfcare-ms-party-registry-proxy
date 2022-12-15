@@ -1,8 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.InfoCamereConnector;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Businesses;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.GetBusinessesByLegal;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereCfRequest;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamerePec;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamerePolling;
@@ -12,7 +11,6 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.infocamere.I
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.infocamere.InfoCamerePollingResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.IniPecJwsGenerator;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -28,10 +26,10 @@ public class InfoCamereConnectorImpl implements InfoCamereConnector {
     }
 
     @Override
-    public Businesses businessesByLegal(GetBusinessesByLegal getBusinessesByLegal) {
+    public Businesses businessesByLegal(String legalTaxId) {
         log.trace("start businessesByLegal");
         String accessToken = "Bearer " + this.getToken().getAccessToken();
-        return this.restClient.businessesByLegal(getBusinessesByLegal.getLegalTaxId(), accessToken);
+        return this.restClient.businessesByLegal(legalTaxId, accessToken);
     }
 
     private ClientCredentialsResponse getToken() {

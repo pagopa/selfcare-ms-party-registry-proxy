@@ -3,7 +3,7 @@ package it.pagopa.selfcare.party.registry_proxy.web.model.mapper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Business;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Business;
 import it.pagopa.selfcare.party.registry_proxy.web.model.BusinessResource;
 import org.junit.jupiter.api.Test;
 

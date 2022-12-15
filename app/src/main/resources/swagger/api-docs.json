@@ -23,6 +23,9 @@
     "name" : "category",
     "description" : "Category operations"
   }, {
+    "name" : "infocamere",
+    "description" : "Info Camere Controller"
+  }, {
     "name" : "institution",
     "description" : "Institution operations"
   } ],
@@ -180,6 +183,128 @@
           },
           "404" : {
             "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/v1/businesses" : {
+      "post" : {
+        "tags" : [ "infocamere" ],
+        "summary" : "businessesByLegal",
+        "operationId" : "businessesByLegalUsingPOST",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GetBusinessesByLegalDto"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BusinessesResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/v1/digital-address" : {
+      "post" : {
+        "tags" : [ "infocamere" ],
+        "summary" : "createBatchRequest",
+        "operationId" : "createBatchRequestUsingPOST",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GetDigitalAddressInfoCamereRequestBodyDto"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetDigitalAddressInfoCamereOKDto"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
             "content" : {
               "application/problem+json" : {
                 "schema" : {
@@ -383,6 +508,36 @@
   },
   "components" : {
     "schemas" : {
+      "BusinessResource" : {
+        "title" : "BusinessResource",
+        "type" : "object",
+        "properties" : {
+          "businessName" : {
+            "type" : "string"
+          },
+          "businessTaxId" : {
+            "type" : "string"
+          }
+        }
+      },
+      "BusinessesResource" : {
+        "title" : "BusinessesResource",
+        "type" : "object",
+        "properties" : {
+          "businesses" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/BusinessResource"
+            }
+          },
+          "legalTaxId" : {
+            "type" : "string"
+          },
+          "requestDateTime" : {
+            "type" : "string"
+          }
+        }
+      },
       "CategoriesResource" : {
         "title" : "CategoriesResource",
         "required" : [ "items" ],
@@ -417,6 +572,42 @@
             "type" : "string",
             "description" : "Describes which is the source of data",
             "enum" : [ "INFOCAMERE", "IPA", "static" ]
+          }
+        }
+      },
+      "GetBusinessesByLegalDto" : {
+        "title" : "GetBusinessesByLegalDto",
+        "type" : "object",
+        "properties" : {
+          "legalTaxId" : {
+            "type" : "string"
+          }
+        }
+      },
+      "GetDigitalAddressInfoCamereOKDto" : {
+        "title" : "GetDigitalAddressInfoCamereOKDto",
+        "type" : "object",
+        "properties" : {
+          "correlationId" : {
+            "type" : "string"
+          }
+        }
+      },
+      "GetDigitalAddressInfoCamereRequestBodyDto" : {
+        "title" : "GetDigitalAddressInfoCamereRequestBodyDto",
+        "type" : "object",
+        "properties" : {
+          "filter" : {
+            "$ref" : "#/components/schemas/GetDigitalAddressInfoCamereRequestBodyFilterDto"
+          }
+        }
+      },
+      "GetDigitalAddressInfoCamereRequestBodyFilterDto" : {
+        "title" : "GetDigitalAddressInfoCamereRequestBodyFilterDto",
+        "type" : "object",
+        "properties" : {
+          "taxId" : {
+            "type" : "string"
           }
         }
       },

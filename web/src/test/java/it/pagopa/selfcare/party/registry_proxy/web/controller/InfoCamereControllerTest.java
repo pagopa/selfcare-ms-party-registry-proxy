@@ -1,8 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Businesses;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.GetBusinessesByLegal;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereBatchRequest;
 import it.pagopa.selfcare.party.registry_proxy.core.InfoCamereService;
 import it.pagopa.selfcare.party.registry_proxy.web.model.GetBusinessesByLegalDto;
@@ -46,7 +45,7 @@ class InfoCamereControllerTest {
         businesses.setBusinesses(new ArrayList<>());
         businesses.setLegalTaxId("42");
         businesses.setRequestDateTime("2020-03-01");
-        when(infoCamereService.businessesByLegal((GetBusinessesByLegal) any())).thenReturn(businesses);
+        when(infoCamereService.businessesByLegal(any())).thenReturn(businesses);
 
         GetBusinessesByLegalDto getBusinessesByLegalDto = new GetBusinessesByLegalDto();
         getBusinessesByLegalDto.setLegalTaxId("42");
