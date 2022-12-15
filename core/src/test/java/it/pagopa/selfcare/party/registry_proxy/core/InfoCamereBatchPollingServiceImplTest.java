@@ -1,5 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
+import it.pagopa.selfcare.party.registry_proxy.connector.api.EventHubConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.InfoCamereBatchPollingConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.InfoCamereBatchRequestConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.InfoCamereConnector;
@@ -29,6 +30,8 @@ class InfoCamereBatchPollingServiceImplTest {
     private InfoCamereBatchRequestConnector infoCamereBatchRequestConnector;
     @Mock
     private InfoCamereConnector infoCamereConnector;
+    @Mock
+    private EventHubConnector eventHubConnector;
 
     @Test
     void testGetPecList() {
@@ -71,6 +74,7 @@ class InfoCamereBatchPollingServiceImplTest {
         List<InfoCamereBatchRequest> infoCamereBatchRequests = new ArrayList<>();
         infoCamereBatchRequests.add(infoCamereBatchRequest);
 
+        when(eventHubConnector.push(any())).thenReturn(true);
         when(infoCamereBatchRequestConnector.findAllByBatchId(any())).thenReturn(infoCamereBatchRequests);
 
         infoCamereBatchRequest.setStatus(BatchStatus.WORKED.getValue());
