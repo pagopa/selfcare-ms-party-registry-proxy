@@ -141,5 +141,76 @@
     <module>connector-api</module>
     <module>connector</module>
   </modules>
+  <!-- ELIMINA -->
+  <profiles>
+    <profile>
+      <id>coverage</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>prepare-agent</id>
+                <goals>
+                  <goal>prepare-agent</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>report</id>
+                <goals>
+                  <goal>report</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>sonar</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <sonar.host.url>https://sonarqube.nttdata-emea.com</sonar.host.url>
+        <sonar.projectKey>ITA-TechSol-ADC-PagoPa_SelfCare-Party-Registry-Proxy</sonar.projectKey>
+        <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
+        <sonar.login>c907f4f4f9e2a6283f578116d8f78e3ef2ed0b35</sonar.login>
+        <sonar.projectName>ITA-TechSol-ADC-PagoPa_SelfCare-Party-Registry-Proxy </sonar.projectName>
+        <sonar.projectDescription>PM Fabio Foglia - fabio.foglia@nttdata.com</sonar.projectDescription>
+        <argLine> --add-opens java.base/jdk.internal.reflect=ALL-UNNAMED</argLine>
+        <sonar.coverage.exclusions>
+          **/it/pagopa/selfcare/party/registry_proxy/**,
+          **/it/pagopa/selfcare/party/registry_proxy/**
+        </sonar.coverage.exclusions>
+        <sonar.cpd.exclusions>
+          **/it/pagopa/selfcare/party/registry_proxy/**,
+          **/it/pagopa/selfcare/party/registry_proxy/**
+        </sonar.cpd.exclusions>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.surefire.reportsPath>${project.basedir}/target/surefire-reports</sonar.surefire.reportsPath>
+      </properties>
+    </profile>
+  </profiles>
+  <!-- ELIMINA -->
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>report</id>
+            <goals>
+              <goal>report-aggregate</goal>
+            </goals>
+            <phase>verify</phase>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
