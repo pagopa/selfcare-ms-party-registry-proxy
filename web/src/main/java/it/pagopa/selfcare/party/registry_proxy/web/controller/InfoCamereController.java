@@ -35,8 +35,8 @@ public class InfoCamereController {
     }
 
     @PostMapping("/businesses")
-    public ResponseEntity<BusinessesResource> businessesByLegal(@RequestBody GetBusinessesByLegalDto getBusinessesByLegalDto) {
-        Businesses businesses = infoCamereService.businessesByLegal(getBusinessesByLegalDto.getLegalTaxId());
+    public ResponseEntity<BusinessesResource> businessesByLegalTaxId(@RequestBody GetBusinessesByLegalDto getBusinessesByLegalDto) {
+        Businesses businesses = infoCamereService.businessesByLegalTaxId(getBusinessesByLegalDto.getLegalTaxId());
         return ResponseEntity.ok().body(BusinessesMapper.toResource(businesses));
     }
 

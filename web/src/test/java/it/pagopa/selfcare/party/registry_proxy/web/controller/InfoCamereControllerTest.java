@@ -37,7 +37,7 @@ class InfoCamereControllerTest {
     private InfoCamereService infoCamereService;
 
     /**
-     * Method under test: {@link InfoCamereController#businessesByLegal(GetBusinessesByLegalDto)}
+     * Method under test: {@link InfoCamereController#businessesByLegalTaxId(GetBusinessesByLegalDto)}
      */
     @Test
     void testBusinessesByLegal() throws Exception {
@@ -45,7 +45,7 @@ class InfoCamereControllerTest {
         businesses.setBusinesses(new ArrayList<>());
         businesses.setLegalTaxId("42");
         businesses.setRequestDateTime("2020-03-01");
-        when(infoCamereService.businessesByLegal(any())).thenReturn(businesses);
+        when(infoCamereService.businessesByLegalTaxId(any())).thenReturn(businesses);
 
         GetBusinessesByLegalDto getBusinessesByLegalDto = new GetBusinessesByLegalDto();
         getBusinessesByLegalDto.setLegalTaxId("42");

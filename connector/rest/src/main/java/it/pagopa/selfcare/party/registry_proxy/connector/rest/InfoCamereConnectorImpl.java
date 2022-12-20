@@ -26,10 +26,10 @@ public class InfoCamereConnectorImpl implements InfoCamereConnector {
     }
 
     @Override
-    public Businesses businessesByLegal(String legalTaxId) {
+    public Businesses businessesByLegalTaxId(String legalTaxId) {
         log.trace("start businessesByLegal");
         String accessToken = "Bearer " + this.getToken().getAccessToken();
-        return this.restClient.businessesByLegal(legalTaxId, accessToken);
+        return this.restClient.businessesByLegalTaxId(legalTaxId, accessToken);
     }
 
     private ClientCredentialsResponse getToken() {

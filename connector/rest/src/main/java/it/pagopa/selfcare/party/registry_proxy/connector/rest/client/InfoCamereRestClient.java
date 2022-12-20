@@ -18,7 +18,7 @@ public interface InfoCamereRestClient {
 
     @GetMapping(value = "${rest-client.info-camere.businessesByLegal.path}", consumes = APPLICATION_JSON_VALUE)
     @ResponseBody
-    Businesses businessesByLegal(@PathVariable("taxId") String taxId, @RequestHeader("Authorization") String accessToken);
+    Businesses businessesByLegalTaxId(@PathVariable("taxId") String taxId, @RequestHeader("Authorization") String accessToken);
 
     @PostMapping(value = "${rest-client.info-camere.callEServiceRequestId.path}", consumes = APPLICATION_JSON_VALUE)
     @ResponseBody

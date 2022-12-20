@@ -33,7 +33,7 @@ class InfoCamereConnectorImplTest {
     private IniPecJwsGenerator iniPecJwsGenerator;
 
     /**
-     * Method under test: {@link InfoCamereConnectorImpl#businessesByLegal(String)}
+     * Method under test: {@link InfoCamereConnectorImpl#businessesByLegalTaxId(String)}
      */
     @Test
     void testBusinessesByLegal() {
@@ -46,12 +46,12 @@ class InfoCamereConnectorImplTest {
         businesses.setBusinesses(new ArrayList<>());
         businesses.setLegalTaxId("42");
         businesses.setRequestDateTime("2020-03-01");
-        when(infoCamereRestClient.businessesByLegal(any(), any())).thenReturn(businesses);
+        when(infoCamereRestClient.businessesByLegalTaxId(any(), any())).thenReturn(businesses);
         when(infoCamereRestClient.getToken(any())).thenReturn(clientCredentialsResponse);
         when(iniPecJwsGenerator.createAuthRest()).thenReturn("Create Auth Rest");
 
-        assertSame(businesses, infoCamereConnectorImpl.businessesByLegal("42"));
-        verify(infoCamereRestClient).businessesByLegal(any(), any());
+        assertSame(businesses, infoCamereConnectorImpl.businessesByLegalTaxId("42"));
+        verify(infoCamereRestClient).businessesByLegalTaxId(any(), any());
         verify(infoCamereRestClient).getToken(any());
         verify(iniPecJwsGenerator).createAuthRest();
     }

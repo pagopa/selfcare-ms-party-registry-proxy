@@ -6,7 +6,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCa
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamerePolling;
 
 public interface InfoCamereConnector {
-    Businesses businessesByLegal(String legalTaxId);
+    Businesses businessesByLegalTaxId(String legalTaxId);
     InfoCamerePolling callEServiceRequestId(InfoCamereCfRequest infoCamereCfRequest);
     InfoCamerePec callEServiceRequestPec(String correlationId);
 }

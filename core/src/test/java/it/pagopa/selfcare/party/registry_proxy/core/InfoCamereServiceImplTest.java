@@ -32,7 +32,7 @@ class InfoCamereServiceImplTest {
     private InfoCamereServiceImpl infoCamereServiceImpl;
 
     /**
-     * Method under test: {@link InfoCamereServiceImpl#businessesByLegal(String)}
+     * Method under test: {@link InfoCamereServiceImpl#businessesByLegalTaxId(String)}
      */
     @Test
     void testBusinessesByLegal() {
@@ -42,7 +42,7 @@ class InfoCamereServiceImplTest {
         businesses.setRequestDateTime("2020-03-01");
         when(infoCamereConnector.businessesByLegal(any())).thenReturn(businesses);
 
-        assertSame(businesses, infoCamereServiceImpl.businessesByLegal("42"));
+        assertSame(businesses, infoCamereServiceImpl.businessesByLegalTaxId("42"));
         verify(infoCamereConnector).businessesByLegal(any());
     }
 
