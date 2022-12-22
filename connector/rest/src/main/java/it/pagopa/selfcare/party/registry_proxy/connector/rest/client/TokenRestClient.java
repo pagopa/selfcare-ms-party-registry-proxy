@@ -8,7 +8,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @FeignClient(name = "${rest-client.info-camere.token.serviceCode}", url = "${rest-client.info-camere.token.base-url}")
 public interface TokenRestClient {
-    @GetMapping(value = "${rest-client.info-camere.token.path}", consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "${rest-client.info-camere.token.path}", consumes = APPLICATION_JSON_VALUE)
     @ResponseBody
     ClientCredentialsResponse getToken(@RequestHeader("Authorization") String bearerToken);
 }

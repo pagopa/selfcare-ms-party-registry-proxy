@@ -49,7 +49,7 @@ class InfoCamereConnectorTest {
         clientCredentialsResponse.setTokenType(TokenType.BEARER);
         clientCredentialsResponse.setExpiresIn(0);
         when(iniPecJwsGenerator.createAuthRest(any())).thenReturn(jws);
-        when(tokenRestClient.getToken(jws)).thenReturn(clientCredentialsResponse);
+        when(tokenRestClient.getToken(any())).thenReturn(clientCredentialsResponse);
         when(infoCamereRestClient.callEServiceRequestId(any(),any())).thenReturn(infoCamerePollingResponse);
 
         InfoCamereCfRequest infoCamereCfRequest = new InfoCamereCfRequest();
@@ -78,7 +78,7 @@ class InfoCamereConnectorTest {
         clientCredentialsResponse.setTokenType(TokenType.BEARER);
         clientCredentialsResponse.setExpiresIn(0);
         when(iniPecJwsGenerator.createAuthRest(any())).thenReturn(jws);
-        when(tokenRestClient.getToken(jws)).thenReturn(clientCredentialsResponse);
+        when(tokenRestClient.getToken(any())).thenReturn(clientCredentialsResponse);
         when(infoCamereRestClient.callEServiceRequestPec(any(),any())).thenReturn(infoCamerePecResponse);
 
         InfoCamerePec infoCamerePec = infoCamereClientImpl.callEServiceRequestPec("correlationId");
