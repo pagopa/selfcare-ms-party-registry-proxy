@@ -33,7 +33,7 @@ class InfoCamereConnectorTest {
         InfoCamerePollingResponse infoCamerePollingResponse = new InfoCamerePollingResponse();
         infoCamerePollingResponse.setDataOraRichiesta("Data Ora Richiesta");
         infoCamerePollingResponse.setIdentificativoRichiesta("Identificativo Richiesta");
-        when(infoCamereRestClient.callEServiceRequestId(any())).thenReturn(infoCamerePollingResponse);
+        when(infoCamereRestClient.callEServiceRequestId(any(),any())).thenReturn(infoCamerePollingResponse);
 
         InfoCamereCfRequest infoCamereCfRequest = new InfoCamereCfRequest();
         infoCamereCfRequest.setDataOraRichiesta("Data Ora Richiesta");
@@ -56,7 +56,7 @@ class InfoCamereConnectorTest {
         infoCamerePecResponse.setIdentificativoRichiesta("correlationId");
         infoCamerePecResponse.setDataOraDownload("Data Ora Download");
 
-        when(infoCamereRestClient.callEServiceRequestPec(any())).thenReturn(infoCamerePecResponse);
+        when(infoCamereRestClient.callEServiceRequestPec(any(),any())).thenReturn(infoCamerePecResponse);
 
         InfoCamerePec infoCamerePec = infoCamereClientImpl.callEServiceRequestPec("correlationId");
         assertEquals(infoCamerePec.getElencoPec().get(0).getPecImpresa(),"pecImpresa");

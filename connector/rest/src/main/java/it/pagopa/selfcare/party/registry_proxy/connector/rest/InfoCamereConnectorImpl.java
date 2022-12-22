@@ -6,6 +6,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCa
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamerePec;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamerePolling;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.InfoCamereRestClient;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.TokenRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.infocamere.InfoCamerePecResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.infocamere.InfoCamerePollingResponse;
@@ -17,11 +18,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class InfoCamereConnectorImpl implements InfoCamereConnector {
     private final InfoCamereRestClient restClient;
+    private final TokenRestClient tokenRestClient;
     private final IniPecJwsGenerator iniPecJwsGenerator;
 
-    public InfoCamereConnectorImpl(InfoCamereRestClient restClient, IniPecJwsGenerator iniPecJwsGenerator) {
+    public InfoCamereConnectorImpl(InfoCamereRestClient restClient, TokenRestClient tokenRestClient, IniPecJwsGenerator iniPecJwsGenerator) {
         log.trace("Initializing {}", InfoCamereConnectorImpl.class.getSimpleName());
         this.restClient = restClient;
+        this.tokenRestClient = tokenRestClient;
         this.iniPecJwsGenerator = iniPecJwsGenerator;
     }
 
@@ -34,21 +37,23 @@ public class InfoCamereConnectorImpl implements InfoCamereConnector {
 
     private ClientCredentialsResponse getToken() {
         log.trace("start getToken");
-        String jws = "Bearer " + iniPecJwsGenerator.createAuthRest();
-        return this.restClient.getToken(jws);
+        String jws = iniPecJwsGenerator.createAuthRest();
+        return this.tokenRestClient.getToken(jws);
     }
 
     @Override
     public InfoCamerePolling callEServiceRequestId(InfoCamereCfRequest infoCamereCfRequest) {
         log.trace("start callEServiceRequestId with cf size: {}",infoCamereCfRequest.getElencoCf().size());
-        InfoCamerePollingResponse infoCamerePollingResponse = restClient.callEServiceRequestId(infoCamereCfRequest);
+        String accessToken = "Bearer " + this.getToken().getAccessToken();
+        InfoCamerePollingResponse infoCamerePollingResponse = restClient.callEServiceRequestId(infoCamereCfRequest,accessToken);
         return convertIniPecPolling(infoCamerePollingResponse);
     }
 
     @Override
     public InfoCamerePec callEServiceRequestPec(String correlationId) {
         log.trace("start callEServiceRequestPec with correlationId: {}",correlationId);
-        InfoCamerePecResponse infoCamerePecResponse = restClient.callEServiceRequestPec(correlationId);
+        String accessToken = "Bearer " + this.getToken().getAccessToken();
+        InfoCamerePecResponse infoCamerePecResponse = restClient.callEServiceRequestPec(correlationId,accessToken);
         return convertIniPecPec(infoCamerePecResponse);
     }
 
