@@ -27,8 +27,8 @@ public class IniPecJwsGenerator {
     private final IniPecSecretConfig iniPecSecretConfig;
     private final String clientId;
 
-    public IniPecJwsGenerator(@Value("${inipec.aud}") String aud,
-                              @Value("${inipec.client-id}") String clientId,
+    public IniPecJwsGenerator(@Value("${rest-client.info-camere.base-url}") String aud,
+                              @Value("${rest-client.info-camere.client-id}") String clientId,
                               IniPecSecretConfig iniPecSecretConfig) {
         this.aud = aud;
         this.iniPecSecretConfig = iniPecSecretConfig;
@@ -48,8 +48,8 @@ public class IniPecJwsGenerator {
 
     private Map<String, Object> createHeaderMap(SSLData sslData) {
         Map<String, Object> map = new HashMap<>();
-        map.put(HeaderParams.TYPE, "JWT");
-        map.put(HeaderParams.ALGORITHM, "ES256");
+        map.put(HeaderParams.TYPE, "jwt");
+        map.put(HeaderParams.ALGORITHM, "RS256");
         map.put("x5c", List.of(sslData.getCert()));
         log.debug("HeaderMap type: {}, alg: {}",map.get(HeaderParams.TYPE), map.get(HeaderParams.ALGORITHM));
         return map;
@@ -60,11 +60,13 @@ public class IniPecJwsGenerator {
         long nowSeconds = System.currentTimeMillis() / 1000L;
         long expireSeconds = nowSeconds + 60;
 
-        map.put(RegisteredClaims.AUDIENCE, aud);
-        map.put(RegisteredClaims.EXPIRES_AT, expireSeconds);
-        map.put(RegisteredClaims.ISSUER, clientId);
         map.put(RegisteredClaims.SUBJECT, clientId);
-        map.put(RegisteredClaims.JWT_ID, UUID.randomUUID().toString());
+        map.put(RegisteredClaims.AUDIENCE, aud);
+        map.put(RegisteredClaims.ISSUED_AT, nowSeconds);
+        map.put(RegisteredClaims.EXPIRES_AT, expireSeconds);
+
+        //map.put(RegisteredClaims.ISSUER, clientId);
+        //map.put(RegisteredClaims.JWT_ID, UUID.randomUUID().toString());
 
         log.debug("ClaimMap audience: {}",map.get(RegisteredClaims.AUDIENCE));
         return map;

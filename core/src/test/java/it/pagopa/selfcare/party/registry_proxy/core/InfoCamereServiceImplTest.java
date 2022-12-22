@@ -40,10 +40,10 @@ class InfoCamereServiceImplTest {
         businesses.setBusinesses(new ArrayList<>());
         businesses.setLegalTaxId("42");
         businesses.setRequestDateTime("2020-03-01");
-        when(infoCamereConnector.businessesByLegal(any())).thenReturn(businesses);
+        when(infoCamereConnector.businessesByLegalTaxId(any())).thenReturn(businesses);
 
         assertSame(businesses, infoCamereServiceImpl.businessesByLegalTaxId("42"));
-        verify(infoCamereConnector).businessesByLegal(any());
+        verify(infoCamereConnector).businessesByLegalTaxId(any());
     }
 
     @Test

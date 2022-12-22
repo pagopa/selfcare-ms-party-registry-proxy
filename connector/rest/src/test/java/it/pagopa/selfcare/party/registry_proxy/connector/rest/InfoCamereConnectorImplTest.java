@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.InfoCamereRestClient;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.TokenRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.TokenType;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.IniPecJwsGenerator;
@@ -30,6 +31,9 @@ class InfoCamereConnectorImplTest {
     private InfoCamereRestClient infoCamereRestClient;
 
     @MockBean
+    private TokenRestClient tokenRestClient;
+
+    @MockBean
     private IniPecJwsGenerator iniPecJwsGenerator;
 
     /**
@@ -47,12 +51,12 @@ class InfoCamereConnectorImplTest {
         businesses.setLegalTaxId("42");
         businesses.setRequestDateTime("2020-03-01");
         when(infoCamereRestClient.businessesByLegalTaxId(any(), any())).thenReturn(businesses);
-        when(infoCamereRestClient.getToken(any())).thenReturn(clientCredentialsResponse);
+        when(tokenRestClient.getToken(any())).thenReturn(clientCredentialsResponse);
         when(iniPecJwsGenerator.createAuthRest()).thenReturn("Create Auth Rest");
 
         assertSame(businesses, infoCamereConnectorImpl.businessesByLegalTaxId("42"));
         verify(infoCamereRestClient).businessesByLegalTaxId(any(), any());
-        verify(infoCamereRestClient).getToken(any());
+        verify(tokenRestClient).getToken(any());
         verify(iniPecJwsGenerator).createAuthRest();
     }
 }
