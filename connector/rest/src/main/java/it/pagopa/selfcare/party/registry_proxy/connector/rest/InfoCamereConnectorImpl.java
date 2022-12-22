@@ -31,20 +31,20 @@ public class InfoCamereConnectorImpl implements InfoCamereConnector {
     @Override
     public Businesses businessesByLegalTaxId(String legalTaxId) {
         log.trace("start businessesByLegal");
-        String accessToken = "Bearer " + this.getToken().getAccessToken();
+        String accessToken = "Bearer " + this.getToken("sede-impresa-pa").getAccessToken();
         return this.restClient.businessesByLegalTaxId(legalTaxId, accessToken);
     }
 
-    private ClientCredentialsResponse getToken() {
+    private ClientCredentialsResponse getToken(String scope) {
         log.trace("start getToken");
-        String jws = iniPecJwsGenerator.createAuthRest();
+        String jws = "Bearer " + iniPecJwsGenerator.createAuthRest(scope);
         return this.tokenRestClient.getToken(jws);
     }
 
     @Override
     public InfoCamerePolling callEServiceRequestId(InfoCamereCfRequest infoCamereCfRequest) {
         log.trace("start callEServiceRequestId with cf size: {}",infoCamereCfRequest.getElencoCf().size());
-        String accessToken = "Bearer " + this.getToken().getAccessToken();
+        String accessToken = "Bearer " + this.getToken("pec-pa").getAccessToken();
         InfoCamerePollingResponse infoCamerePollingResponse = restClient.callEServiceRequestId(infoCamereCfRequest,accessToken);
         return convertIniPecPolling(infoCamerePollingResponse);
     }
@@ -52,7 +52,7 @@ public class InfoCamereConnectorImpl implements InfoCamereConnector {
     @Override
     public InfoCamerePec callEServiceRequestPec(String correlationId) {
         log.trace("start callEServiceRequestPec with correlationId: {}",correlationId);
-        String accessToken = "Bearer " + this.getToken().getAccessToken();
+        String accessToken = "Bearer " + this.getToken("pec-pa").getAccessToken();
         InfoCamerePecResponse infoCamerePecResponse = restClient.callEServiceRequestPec(correlationId,accessToken);
         return convertIniPecPec(infoCamerePecResponse);
     }

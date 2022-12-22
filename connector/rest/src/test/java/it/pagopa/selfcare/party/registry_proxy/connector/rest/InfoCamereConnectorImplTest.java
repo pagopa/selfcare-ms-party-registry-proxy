@@ -1,6 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -52,12 +53,12 @@ class InfoCamereConnectorImplTest {
         businesses.setRequestDateTime("2020-03-01");
         when(infoCamereRestClient.businessesByLegalTaxId(any(), any())).thenReturn(businesses);
         when(tokenRestClient.getToken(any())).thenReturn(clientCredentialsResponse);
-        when(iniPecJwsGenerator.createAuthRest()).thenReturn("Create Auth Rest");
+        when(iniPecJwsGenerator.createAuthRest(anyString())).thenReturn("Create Auth Rest");
 
         assertSame(businesses, infoCamereConnectorImpl.businessesByLegalTaxId("42"));
         verify(infoCamereRestClient).businessesByLegalTaxId(any(), any());
         verify(tokenRestClient).getToken(any());
-        verify(iniPecJwsGenerator).createAuthRest();
+        verify(iniPecJwsGenerator).createAuthRest(anyString());
     }
 }
 
