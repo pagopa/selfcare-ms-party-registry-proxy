@@ -31,20 +31,24 @@ public class InfoCamereBatchRequestServiceImpl implements InfoCamereBatchRequest
 
     @Override
     public void batchPecListRequest() {
+        log.trace("batchPecListRequest start");
         boolean hasNext = true;
         while(hasNext){
             hasNext = false;
             List<InfoCamereBatchRequest> infoCamereBatchRequests = infoCamereBatchRequestConnector.findAllByBatchId(BatchStatus.NO_BATCH_ID.getValue());
+            log.info("Found Batch Requests size: {} with no batch id",infoCamereBatchRequests.size());
             if(infoCamereBatchRequests != null && !infoCamereBatchRequests.isEmpty()){
                 hasNext = true;
                 setNewBatchId(infoCamereBatchRequests);
             }
         }
+        log.trace("batchPecListRequest end");
     }
 
     private void setNewBatchId(List<InfoCamereBatchRequest> infoCamereBatchRequests){
         String batchId = UUID.randomUUID().toString();
         List<InfoCamereBatchRequest> infoCamereBatchRequestsWithBatchId = infoCamereBatchRequestConnector.setBatchIdAndStatusWorking(infoCamereBatchRequests,batchId);
+        log.info("Setted batchId: {} at Batch Requests size: {}",batchId,infoCamereBatchRequestsWithBatchId.size());
         List<String> requestCfIniPec = infoCamereBatchRequestsWithBatchId.stream()
                 .filter(iniPecBatchRequest -> iniPecBatchRequest.getRetry() <= 3)
                 .map(InfoCamereBatchRequest::getCf)
@@ -56,10 +60,11 @@ public class InfoCamereBatchRequestServiceImpl implements InfoCamereBatchRequest
         InfoCamereCfRequest infoCamereCfRequest = new InfoCamereCfRequest();
         infoCamereCfRequest.setDataOraRichiesta(LocalDateTime.now().toString());
         infoCamereCfRequest.setElencoCf(requestCfIniPec);
+        log.info("Calling ini pec with cf size: {} and batchId: {}",requestCfIniPec.size(),batchId);
         InfoCamerePolling infoCamerePolling = infoCamereConnector.callEServiceRequestId(infoCamereCfRequest);
+        log.info("Called ini pec with batchId: {} and pollingId: {}",batchId,infoCamerePolling.getIdentificativoRichiesta());
         infoCamereBatchPollingConnector.save(createIniPecBatchPolling(batchId, infoCamerePolling.getIdentificativoRichiesta()));
-        log.info("Calling ini pec with cf size: {} and batchId: {} and pollingId: {}",requestCfIniPec.size(),batchId, infoCamerePolling.getIdentificativoRichiesta());
-
+        log.info("Created Batch Polling with batchId: {} and pollingId: {}",batchId,infoCamerePolling.getIdentificativoRichiesta());
     }
 
     private InfoCamereBatchPolling createIniPecBatchPolling(String batchId, String pollingId){
@@ -72,10 +77,12 @@ public class InfoCamereBatchRequestServiceImpl implements InfoCamereBatchRequest
     }
 
     public void recovery(){
+        log.trace("recovery start");
         boolean hasNext = true;
         while(hasNext) {
             hasNext = false;
             List<InfoCamereBatchRequest> infoCamereBatchRequests = infoCamereBatchRequestConnector.findAllByBatchIdNotAndStatusWorking(BatchStatus.NO_BATCH_ID.getValue());
+            log.info("Resetting batchId and status at Batch Requests size: {} with status at WORKING",infoCamereBatchRequests.size());
             if(infoCamereBatchRequests !=null && !infoCamereBatchRequests.isEmpty()){
                 hasNext = true;
                 infoCamereBatchRequests.forEach(iniPecBatchRequest -> {
@@ -84,7 +91,9 @@ public class InfoCamereBatchRequestServiceImpl implements InfoCamereBatchRequest
                     infoCamereBatchRequestConnector.save(iniPecBatchRequest);
                 });
             }
+            log.info("Resetted batchId and status at Batch Requests size: {} with status at WORKING",infoCamereBatchRequests.size());
         }
         batchPecListRequest();
+        log.trace("recovery end");
     }
 }
