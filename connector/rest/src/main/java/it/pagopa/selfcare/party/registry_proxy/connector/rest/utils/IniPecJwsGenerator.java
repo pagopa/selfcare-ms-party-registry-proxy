@@ -35,11 +35,11 @@ public class IniPecJwsGenerator {
         this.clientId = clientId;
     }
 
-    public String createAuthRest() {
+    public String createAuthRest(String scope) {
         try {
             log.info("start to createAuthRest");
             SSLData sslData = iniPecSecretConfig.getIniPecAuthRestSecret();
-            return JWT.create().withHeader(createHeaderMap(sslData)).withPayload(createClaimMap())
+            return JWT.create().withHeader(createHeaderMap(sslData)).withPayload(createClaimMap(scope))
                     .sign(Algorithm.RSA256(getPublicKey(sslData.getPub()), getPrivateKey(sslData.getKey())));
         } catch (NoSuchAlgorithmException | InvalidKeySpecException | IOException e) {
             throw new RuntimeException(e);
@@ -50,23 +50,24 @@ public class IniPecJwsGenerator {
         Map<String, Object> map = new HashMap<>();
         map.put(HeaderParams.TYPE, "jwt");
         map.put(HeaderParams.ALGORITHM, "RS256");
+        map.put("use","sig");
         map.put("x5c", List.of(sslData.getCert()));
         log.debug("HeaderMap type: {}, alg: {}",map.get(HeaderParams.TYPE), map.get(HeaderParams.ALGORITHM));
         return map;
     }
 
-    private Map<String, Object> createClaimMap() {
+    private Map<String, Object> createClaimMap(String scope) {
         Map<String, Object> map = new HashMap<>();
         long nowSeconds = System.currentTimeMillis() / 1000L;
         long expireSeconds = nowSeconds + 60;
 
         map.put(RegisteredClaims.SUBJECT, clientId);
+        map.put(RegisteredClaims.ISSUER, clientId);
         map.put(RegisteredClaims.AUDIENCE, aud);
         map.put(RegisteredClaims.ISSUED_AT, nowSeconds);
         map.put(RegisteredClaims.EXPIRES_AT, expireSeconds);
-
-        //map.put(RegisteredClaims.ISSUER, clientId);
-        //map.put(RegisteredClaims.JWT_ID, UUID.randomUUID().toString());
+        map.put(RegisteredClaims.JWT_ID, UUID.randomUUID().toString());
+        map.put("scope",scope);
 
         log.debug("ClaimMap audience: {}",map.get(RegisteredClaims.AUDIENCE));
         return map;

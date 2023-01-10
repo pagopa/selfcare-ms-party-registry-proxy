@@ -4,8 +4,12 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCa
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamerePec;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Pec;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.InfoCamereRestClient;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.TokenRestClient;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.TokenType;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.infocamere.InfoCamerePecResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.infocamere.InfoCamerePollingResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.IniPecJwsGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,11 +32,24 @@ class InfoCamereConnectorTest {
     @Mock
     private InfoCamereRestClient infoCamereRestClient;
 
+    @Mock
+    private IniPecJwsGenerator iniPecJwsGenerator;
+
+    @Mock
+    private TokenRestClient tokenRestClient;
+
     @Test
     void testCallEServiceRequestId() {
         InfoCamerePollingResponse infoCamerePollingResponse = new InfoCamerePollingResponse();
         infoCamerePollingResponse.setDataOraRichiesta("Data Ora Richiesta");
         infoCamerePollingResponse.setIdentificativoRichiesta("Identificativo Richiesta");
+        String jws = "jws";
+        ClientCredentialsResponse clientCredentialsResponse = new ClientCredentialsResponse();
+        clientCredentialsResponse.setAccessToken("accessToken");
+        clientCredentialsResponse.setTokenType(TokenType.BEARER);
+        clientCredentialsResponse.setExpiresIn(0);
+        when(iniPecJwsGenerator.createAuthRest(any())).thenReturn(jws);
+        when(tokenRestClient.getToken(any())).thenReturn(clientCredentialsResponse);
         when(infoCamereRestClient.callEServiceRequestId(any(),any())).thenReturn(infoCamerePollingResponse);
 
         InfoCamereCfRequest infoCamereCfRequest = new InfoCamereCfRequest();
@@ -55,7 +72,13 @@ class InfoCamereConnectorTest {
         infoCamerePecResponse.setElencoPec(pecs);
         infoCamerePecResponse.setIdentificativoRichiesta("correlationId");
         infoCamerePecResponse.setDataOraDownload("Data Ora Download");
-
+        String jws = "jws";
+        ClientCredentialsResponse clientCredentialsResponse = new ClientCredentialsResponse();
+        clientCredentialsResponse.setAccessToken("accessToken");
+        clientCredentialsResponse.setTokenType(TokenType.BEARER);
+        clientCredentialsResponse.setExpiresIn(0);
+        when(iniPecJwsGenerator.createAuthRest(any())).thenReturn(jws);
+        when(tokenRestClient.getToken(any())).thenReturn(clientCredentialsResponse);
         when(infoCamereRestClient.callEServiceRequestPec(any(),any())).thenReturn(infoCamerePecResponse);
 
         InfoCamerePec infoCamerePec = infoCamereClientImpl.callEServiceRequestPec("correlationId");

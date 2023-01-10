@@ -22,6 +22,6 @@ public interface InfoCamereRestClient {
 
     @GetMapping(value = "${rest-client.info-camere.callEServiceRequestPec.path}", consumes = APPLICATION_JSON_VALUE)
     @ResponseBody
-    InfoCamerePecResponse callEServiceRequestPec(@PathVariable("correlationId") String identificativoRichiesta, @RequestHeader("Authorization") String accessToken);
+    InfoCamerePecResponse callEServiceRequestPec(@PathVariable("identificativoRichiesta") String identificativoRichiesta, @RequestHeader("Authorization") String accessToken);
 
 }

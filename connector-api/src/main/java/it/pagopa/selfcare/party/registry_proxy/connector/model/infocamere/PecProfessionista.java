@@ -5,8 +5,6 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class Pec {
-    private String cf;
-    private String pecImpresa;
-    private List<PecProfessionista> pecProfessionistas;
+public class PecProfessionista {
+    private String pecProfessionista;
 }

@@ -5,6 +5,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.api.InfoCamereConnector
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.BatchStatus;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereBatchRequest;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.MaskDataUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,7 @@ class InfoCamereServiceImpl implements InfoCamereService {
 
     @Override
     public InfoCamereBatchRequest createBatchRequestByCf(String cf){
+        log.trace("createBatchReqeustByCf start");
         InfoCamereBatchRequest infoCamereBatchRequest = new InfoCamereBatchRequest();
         infoCamereBatchRequest.setCf(cf);
         infoCamereBatchRequest.setRetry(0);
@@ -37,7 +39,7 @@ class InfoCamereServiceImpl implements InfoCamereService {
         infoCamereBatchRequest.setStatus(BatchStatus.NOT_WORKED.getValue());
         infoCamereBatchRequest.setLastReserved(LocalDateTime.now());
         infoCamereBatchRequest.setTimeStamp(LocalDateTime.now());
-        log.info("Created Batch Request for taxId: {}",cf);
+        log.info("Created Batch Request for taxId: {}", MaskDataUtils.maskString(cf));
         return infoCamereBatchRequestConnector.save(infoCamereBatchRequest);
     }
 }
