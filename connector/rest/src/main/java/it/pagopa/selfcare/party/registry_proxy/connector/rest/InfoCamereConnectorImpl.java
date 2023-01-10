@@ -1,10 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.InfoCamereConnector;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereCfRequest;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamerePec;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamerePolling;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.InfoCamereRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.TokenRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
@@ -70,5 +67,11 @@ public class InfoCamereConnectorImpl implements InfoCamereConnector {
         iniPec.setIdentificativoRichiesta(response.getIdentificativoRichiesta());
         iniPec.setDataOraDownload(response.getDataOraDownload());
         return iniPec;
+    }
+
+    @Override
+    public InfoCamereLegalAddress legalAddressByTaxId(String taxId) {
+        String accessToken = "Bearer " + this.getToken().getAccessToken();
+        return this.restClient.legalAddressByTaxId(taxId, accessToken);
     }
 }
