@@ -3,14 +3,13 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 import io.swagger.annotations.Api;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereBatchRequest;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereLegalAddress;
 import it.pagopa.selfcare.party.registry_proxy.core.InfoCamereBatchRequestService;
 import it.pagopa.selfcare.party.registry_proxy.core.InfoCamereService;
-import it.pagopa.selfcare.party.registry_proxy.web.model.BusinessesResource;
-import it.pagopa.selfcare.party.registry_proxy.web.model.GetBusinessesByLegalDto;
-import it.pagopa.selfcare.party.registry_proxy.web.model.GetDigitalAddressInfoCamereOKDto;
-import it.pagopa.selfcare.party.registry_proxy.web.model.GetDigitalAddressInfoCamereRequestBodyDto;
+import it.pagopa.selfcare.party.registry_proxy.web.model.*;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.BusinessesMapper;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.GetDigitalAddressInfoCamereMapper;
+import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.LegalAddressMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -52,5 +51,11 @@ public class InfoCamereController {
     public ResponseEntity<String> test(@RequestBody @Valid GetDigitalAddressInfoCamereRequestBodyDto dto) {
         infoCamereBatchRequestService.batchPecListRequest();
         return ResponseEntity.ok("ok");
+    }
+
+    @PostMapping("/professional-address")
+    public ResponseEntity<LegalAddressResource> legalAddressByTaxId(@RequestBody ProfessionalAddressRequestBodyDto getAddressRegistroImpreseRequestBodyDto) {
+        InfoCamereLegalAddress infoCamereLegalAddressResponse = infoCamereService.legalAddressByTaxId(getAddressRegistroImpreseRequestBodyDto.getFilter().getTaxId());
+        return ResponseEntity.ok().body(LegalAddressMapper.toResource(infoCamereLegalAddressResponse));
     }
 }

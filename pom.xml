@@ -140,7 +140,6 @@
     <module>app</module>
     <module>connector-api</module>
     <module>connector</module>
-    <module>aggregator</module>
   </modules>
 
   <build>

@@ -5,6 +5,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.api.InfoCamereConnector
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.BatchStatus;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereBatchRequest;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereLegalAddress;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -39,5 +40,11 @@ class InfoCamereServiceImpl implements InfoCamereService {
         infoCamereBatchRequest.setTimeStamp(LocalDateTime.now());
         log.info("Created Batch Request for taxId: {}",cf);
         return infoCamereBatchRequestConnector.save(infoCamereBatchRequest);
+    }
+
+    @Override
+    public InfoCamereLegalAddress legalAddressByTaxId(String taxId) {
+        log.info("legalAddressByTaxId start");
+        return this.infoCamereConnector.legalAddressByTaxId(taxId);
     }
 }
