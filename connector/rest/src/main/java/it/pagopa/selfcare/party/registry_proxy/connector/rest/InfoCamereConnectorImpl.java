@@ -28,12 +28,12 @@ public class InfoCamereConnectorImpl implements InfoCamereConnector {
     @Override
     public Businesses businessesByLegalTaxId(String legalTaxId) {
         log.trace("start businessesByLegal");
-        String accessToken = "Bearer " + this.getToken("sede-impresa-pa").getAccessToken();
+        String accessToken = "Bearer " + this.getToken("lr-pa").getAccessToken();
         return this.restClient.businessesByLegalTaxId(legalTaxId, accessToken);
     }
 
     private ClientCredentialsResponse getToken(String scope) {
-        log.trace("start getToken");
+        log.trace("start getToken with scope {}", scope);
         String jws = "Bearer " + iniPecJwsGenerator.createAuthRest(scope);
         return this.tokenRestClient.getToken(jws);
     }
@@ -71,7 +71,7 @@ public class InfoCamereConnectorImpl implements InfoCamereConnector {
 
     @Override
     public InfoCamereLegalAddress legalAddressByTaxId(String taxId) {
-        String accessToken = "Bearer " + this.getToken().getAccessToken();
+        String accessToken = "Bearer " + this.getToken("sede-impresa-pa").getAccessToken();
         return this.restClient.legalAddressByTaxId(taxId, accessToken);
     }
 }

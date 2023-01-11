@@ -3,19 +3,30 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereBatchRequest;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereLegalAddress;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereLocationAddress;
+import it.pagopa.selfcare.party.registry_proxy.core.InfoCamereBatchRequestService;
 import it.pagopa.selfcare.party.registry_proxy.core.InfoCamereService;
 import it.pagopa.selfcare.party.registry_proxy.web.model.GetBusinessesByLegalDto;
 import it.pagopa.selfcare.party.registry_proxy.web.model.GetDigitalAddressInfoCamereOKDto;
 import it.pagopa.selfcare.party.registry_proxy.web.model.GetDigitalAddressInfoCamereRequestBodyDto;
 import it.pagopa.selfcare.party.registry_proxy.web.model.GetDigitalAddressInfoCamereRequestBodyFilterDto;
+import it.pagopa.selfcare.party.registry_proxy.web.model.ProfessionalAddressRequestBodyDto;
+import it.pagopa.selfcare.party.registry_proxy.web.model.ProfessionalAddressRequestBodyFilterDto;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
@@ -29,8 +40,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
+@ContextConfiguration(classes = {InfoCamereController.class})
 @ExtendWith(SpringExtension.class)
 class InfoCamereControllerTest {
+    @MockBean
+    private InfoCamereBatchRequestService infoCamereBatchRequestService;
+
     @InjectMocks
     private InfoCamereController infoCamereController;
     @Mock
@@ -87,6 +102,47 @@ class InfoCamereControllerTest {
         GetDigitalAddressInfoCamereOKDto getDigitalAddressInfoCamereOKDto = infoCamereController.createBatchRequest(dto).getBody();
         assert getDigitalAddressInfoCamereOKDto != null;
         assertEquals(getDigitalAddressInfoCamereOKDto.getCorrelationId(), "id");
+    }
+
+    /**
+     * Method under test: {@link InfoCamereController#legalAddressByTaxId(ProfessionalAddressRequestBodyDto)}
+     */
+    @Test
+    void testLegalAddressByTaxId() throws Exception {
+        InfoCamereLocationAddress infoCamereLocationAddress = new InfoCamereLocationAddress();
+        infoCamereLocationAddress.setAddress("42 Main St");
+        infoCamereLocationAddress.setMunicipality("Municipality");
+        infoCamereLocationAddress.setPostalCode("Postal Code");
+        infoCamereLocationAddress.setProvince("Province");
+        infoCamereLocationAddress.setStreet("Street");
+        infoCamereLocationAddress.setStreetNumber("42");
+        infoCamereLocationAddress.setToponym("Toponym");
+
+        InfoCamereLegalAddress infoCamereLegalAddress = new InfoCamereLegalAddress();
+        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
+        infoCamereLegalAddress.setDateTimeExtraction(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
+        infoCamereLegalAddress.setLegalAddress(infoCamereLocationAddress);
+        infoCamereLegalAddress.setTaxId("42");
+        when(infoCamereService.legalAddressByTaxId(any())).thenReturn(infoCamereLegalAddress);
+
+        ProfessionalAddressRequestBodyFilterDto professionalAddressRequestBodyFilterDto = new ProfessionalAddressRequestBodyFilterDto();
+        professionalAddressRequestBodyFilterDto.setTaxId("42");
+
+        ProfessionalAddressRequestBodyDto professionalAddressRequestBodyDto = new ProfessionalAddressRequestBodyDto();
+        professionalAddressRequestBodyDto.setFilter(professionalAddressRequestBodyFilterDto);
+        String content = (new ObjectMapper()).writeValueAsString(professionalAddressRequestBodyDto);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/v1/professional-address")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content);
+        MockMvcBuilders.standaloneSetup(infoCamereController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .string(
+                                "{\"dateTimeExtraction\":0,\"taxId\":\"42\",\"legalAddress\":{\"description\":\"42 Main St\",\"municipality\":"
+                                        + "\"Municipality\",\"province\":\"Province\",\"address\":\"Toponym Street 42\",\"zip\":\"Postal Code\"}}"));
     }
 }
 

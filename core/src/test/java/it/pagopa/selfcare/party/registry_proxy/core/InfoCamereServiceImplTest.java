@@ -4,13 +4,20 @@ import it.pagopa.selfcare.party.registry_proxy.connector.api.InfoCamereBatchRequ
 import it.pagopa.selfcare.party.registry_proxy.connector.api.InfoCamereConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereBatchRequest;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereLegalAddress;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereLocationAddress;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
@@ -21,6 +28,7 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@ContextConfiguration(classes = {InfoCamereServiceImpl.class})
 @ExtendWith(SpringExtension.class)
 class InfoCamereServiceImplTest {
     @Mock
@@ -61,6 +69,30 @@ class InfoCamereServiceImplTest {
         when(infoCamereBatchRequestConnector.save(any())).thenReturn(infoCamereBatchRequest);
 
         assertNotNull(infoCamereServiceImpl.createBatchRequestByCf("cf"));
+    }
+
+    /**
+     * Method under test: {@link InfoCamereServiceImpl#legalAddressByTaxId(String)}
+     */
+    @Test
+    void testLegalAddressByTaxId() {
+        InfoCamereLocationAddress infoCamereLocationAddress = new InfoCamereLocationAddress();
+        infoCamereLocationAddress.setAddress("42 Main St");
+        infoCamereLocationAddress.setMunicipality("Municipality");
+        infoCamereLocationAddress.setPostalCode("Postal Code");
+        infoCamereLocationAddress.setProvince("Province");
+        infoCamereLocationAddress.setStreet("Street");
+        infoCamereLocationAddress.setStreetNumber("42");
+        infoCamereLocationAddress.setToponym("Toponym");
+
+        InfoCamereLegalAddress infoCamereLegalAddress = new InfoCamereLegalAddress();
+        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
+        infoCamereLegalAddress.setDateTimeExtraction(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
+        infoCamereLegalAddress.setLegalAddress(infoCamereLocationAddress);
+        infoCamereLegalAddress.setTaxId("42");
+        when(infoCamereConnector.legalAddressByTaxId(any())).thenReturn(infoCamereLegalAddress);
+        assertSame(infoCamereLegalAddress, infoCamereServiceImpl.legalAddressByTaxId("42"));
+        verify(infoCamereConnector).legalAddressByTaxId(any());
     }
 }
 
