@@ -4,6 +4,7 @@ import com.auth0.jwt.HeaderParams;
 import com.auth0.jwt.RegisteredClaims;
 import com.auth0.jwt.algorithms.Algorithm;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.SSLData;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,7 @@ import java.util.*;
 
 @Component
 @Slf4j
+@Data
 public class IniPecJwsGenerator {
     private final String aud;
     private final IniPecSecretConfig iniPecSecretConfig;
@@ -59,7 +61,7 @@ public class IniPecJwsGenerator {
     private Map<String, Object> createClaimMap(String scope) {
         Map<String, Object> map = new HashMap<>();
         long nowSeconds = System.currentTimeMillis() / 1000L;
-        long expireSeconds = nowSeconds + 60;
+        long expireSeconds = nowSeconds + 86400;
 
         map.put(RegisteredClaims.SUBJECT, clientId);
         map.put(RegisteredClaims.ISSUER, clientId);

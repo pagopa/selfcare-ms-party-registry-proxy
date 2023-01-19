@@ -5,6 +5,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.InfoCamereRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.TokenRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.InipecScopeEnum;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.infocamere.InfoCamerePecResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.infocamere.InfoCamerePollingResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.IniPecJwsGenerator;
@@ -18,6 +19,7 @@ public class InfoCamereConnectorImpl implements InfoCamereConnector {
     private final TokenRestClient tokenRestClient;
     private final IniPecJwsGenerator iniPecJwsGenerator;
 
+
     public InfoCamereConnectorImpl(InfoCamereRestClient restClient, TokenRestClient tokenRestClient, IniPecJwsGenerator iniPecJwsGenerator) {
         log.trace("Initializing {}", InfoCamereConnectorImpl.class.getSimpleName());
         this.restClient = restClient;
@@ -26,10 +28,11 @@ public class InfoCamereConnectorImpl implements InfoCamereConnector {
     }
 
     @Override
-    public Businesses businessesByLegalTaxId(String legalTaxId) {
-        log.trace("start businessesByLegal");
-        String accessToken = "Bearer " + this.getToken("lr-pa").getAccessToken();
-        return this.restClient.businessesByLegalTaxId(legalTaxId, accessToken);
+    public Businesses institutionsByLegalTaxId(String legalTaxId) {
+        log.info("start institutionsByLegalTaxId");
+        String accessToken = "Bearer " + this.getToken(InipecScopeEnum.LEGALE_RAPPRESENTANTE.value()).getAccessToken();
+        log.info("Access token retrieved: {}", accessToken);
+        return this.restClient.institutionsByLegalTaxId(legalTaxId, accessToken, iniPecJwsGenerator.getClientId());
     }
 
     private ClientCredentialsResponse getToken(String scope) {
@@ -41,7 +44,7 @@ public class InfoCamereConnectorImpl implements InfoCamereConnector {
     @Override
     public InfoCamerePolling callEServiceRequestId(InfoCamereCfRequest infoCamereCfRequest) {
         log.trace("start callEServiceRequestId with cf size: {}",infoCamereCfRequest.getElencoCf().size());
-        String accessToken = "Bearer " + this.getToken("pec-pa").getAccessToken();
+        String accessToken = "Bearer " + this.getToken(InipecScopeEnum.PEC.value()).getAccessToken();
         InfoCamerePollingResponse infoCamerePollingResponse = restClient.callEServiceRequestId(infoCamereCfRequest,accessToken);
         return convertIniPecPolling(infoCamerePollingResponse);
     }
@@ -49,7 +52,7 @@ public class InfoCamereConnectorImpl implements InfoCamereConnector {
     @Override
     public InfoCamerePec callEServiceRequestPec(String correlationId) {
         log.trace("start callEServiceRequestPec with correlationId: {}",correlationId);
-        String accessToken = "Bearer " + this.getToken("pec-pa").getAccessToken();
+        String accessToken = "Bearer " + this.getToken(InipecScopeEnum.PEC.value()).getAccessToken();
         InfoCamerePecResponse infoCamerePecResponse = restClient.callEServiceRequestPec(correlationId,accessToken);
         return convertIniPecPec(infoCamerePecResponse);
     }
@@ -71,7 +74,9 @@ public class InfoCamereConnectorImpl implements InfoCamereConnector {
 
     @Override
     public InfoCamereLegalAddress legalAddressByTaxId(String taxId) {
-        String accessToken = "Bearer " + this.getToken("sede-impresa-pa").getAccessToken();
+        log.info("start legalAddressByTaxId");
+        String accessToken = "Bearer " + this.getToken(InipecScopeEnum.SEDE.value()).getAccessToken();
+        log.info("Access token retrieved: {}", accessToken);
         return this.restClient.legalAddressByTaxId(taxId, accessToken);
     }
 }

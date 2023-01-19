@@ -22,8 +22,4 @@
         <module>rest</module>
         <module>lucene</module>
     </modules>
-    <!-- ELIMINA -->
-    <properties>
-        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/connector/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-    </properties>
 </project>

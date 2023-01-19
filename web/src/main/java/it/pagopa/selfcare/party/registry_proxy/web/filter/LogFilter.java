@@ -1,5 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.web.filter;
 
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.MaskDataUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -15,7 +16,7 @@ import java.io.UnsupportedEncodingException;
 @Component
 public class LogFilter implements Filter {
 
-
+    private static final int MAX_LENGTH_CONTENT = 150;
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
@@ -34,14 +35,15 @@ public class LogFilter implements Filter {
         Long endTime = System.currentTimeMillis() - startTime;
         String requestBody = this.getContentAsString(requestCacheWrapperObject.getContentAsByteArray(), request.getCharacterEncoding());
         String responseBody = this.getContentAsString(responseCacheWrapperObject.getContentAsByteArray(), response.getCharacterEncoding());
-        log.info("Request from URI : {} - method: {} - timelapse: {}ms - Request body {} - Response body {}", httpUri, httpMethod, endTime, requestBody, responseBody);
+        log.info("Request from URI : {} - method: {} - timelapse: {}ms - Request body {} - Response body {}", httpUri, httpMethod, endTime, MaskDataUtils.maskInformation(requestBody), MaskDataUtils.maskInformation(responseBody));
         responseCacheWrapperObject.copyBodyToResponse();
     }
 
     private String getContentAsString(byte[] buf, String charsetName) {
         if (buf == null || buf.length == 0) return "";
         try {
-            return new String(buf, charsetName);
+            String content = new String(buf, charsetName);
+            return content.substring(0, Math.min(MAX_LENGTH_CONTENT, content.length()));
         } catch (UnsupportedEncodingException ex) {
             return "Unsupported Encoding";
         }

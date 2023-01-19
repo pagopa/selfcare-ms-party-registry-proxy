@@ -26,8 +26,4 @@
             <artifactId>selc-party-registry-proxy-connector-rest</artifactId>
         </dependency>
     </dependencies>
-    <!-- ELIMINA -->
-    <properties>
-        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/core/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-    </properties>
 </project>

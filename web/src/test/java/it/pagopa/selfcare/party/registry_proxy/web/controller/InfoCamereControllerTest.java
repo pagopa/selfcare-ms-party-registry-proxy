@@ -7,12 +7,9 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCa
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereLocationAddress;
 import it.pagopa.selfcare.party.registry_proxy.core.InfoCamereBatchRequestService;
 import it.pagopa.selfcare.party.registry_proxy.core.InfoCamereService;
-import it.pagopa.selfcare.party.registry_proxy.web.model.GetBusinessesByLegalDto;
-import it.pagopa.selfcare.party.registry_proxy.web.model.GetDigitalAddressInfoCamereOKDto;
-import it.pagopa.selfcare.party.registry_proxy.web.model.GetDigitalAddressInfoCamereRequestBodyDto;
-import it.pagopa.selfcare.party.registry_proxy.web.model.GetDigitalAddressInfoCamereRequestBodyFilterDto;
-import it.pagopa.selfcare.party.registry_proxy.web.model.ProfessionalAddressRequestBodyDto;
-import it.pagopa.selfcare.party.registry_proxy.web.model.ProfessionalAddressRequestBodyFilterDto;
+import it.pagopa.selfcare.party.registry_proxy.web.model.*;
+import it.pagopa.selfcare.party.registry_proxy.web.model.GetInstitutionsByLegalDto;
+import it.pagopa.selfcare.party.registry_proxy.web.model.GetInstitutionsByLegalFilterDto;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -26,7 +23,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
@@ -40,7 +36,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
-@ContextConfiguration(classes = {InfoCamereController.class})
 @ExtendWith(SpringExtension.class)
 class InfoCamereControllerTest {
     @MockBean
@@ -52,20 +47,23 @@ class InfoCamereControllerTest {
     private InfoCamereService infoCamereService;
 
     /**
-     * Method under test: {@link InfoCamereController#businessesByLegalTaxId(GetBusinessesByLegalDto)}
+     * Method under test: {@link InfoCamereController#institutionsByLegalTaxId(GetInstitutionsByLegalDto)}
      */
     @Test
-    void testBusinessesByLegal() throws Exception {
+    void testInstitutionsByLegalTaxId() throws Exception {
         Businesses businesses = new Businesses();
         businesses.setBusinesses(new ArrayList<>());
         businesses.setLegalTaxId("42");
         businesses.setRequestDateTime("2020-03-01");
-        when(infoCamereService.businessesByLegalTaxId(any())).thenReturn(businesses);
+        when(infoCamereService.institutionsByLegalTaxId(any())).thenReturn(businesses);
 
-        GetBusinessesByLegalDto getBusinessesByLegalDto = new GetBusinessesByLegalDto();
-        getBusinessesByLegalDto.setLegalTaxId("42");
-        String content = (new ObjectMapper()).writeValueAsString(getBusinessesByLegalDto);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/v1/businesses")
+        GetInstitutionsByLegalFilterDto getInstitutionsByLegalFilterDto = new GetInstitutionsByLegalFilterDto();
+        getInstitutionsByLegalFilterDto.setLegalTaxId("42");
+
+        GetInstitutionsByLegalDto getInstitutionsByLegalDto = new GetInstitutionsByLegalDto();
+        getInstitutionsByLegalDto.setFilter(getInstitutionsByLegalFilterDto);
+        String content = (new ObjectMapper()).writeValueAsString(getInstitutionsByLegalDto);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/v1/info-camere/institutions")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
         MockMvcBuilders.standaloneSetup(infoCamereController)
@@ -131,7 +129,7 @@ class InfoCamereControllerTest {
         ProfessionalAddressRequestBodyDto professionalAddressRequestBodyDto = new ProfessionalAddressRequestBodyDto();
         professionalAddressRequestBodyDto.setFilter(professionalAddressRequestBodyFilterDto);
         String content = (new ObjectMapper()).writeValueAsString(professionalAddressRequestBodyDto);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/v1/professional-address")
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/v1/info-camere/legal-address")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
         MockMvcBuilders.standaloneSetup(infoCamereController)

@@ -10,7 +10,6 @@ public class InfoCamereInterceptor implements RequestInterceptor {
     public void apply(RequestTemplate requestTemplate) {
         log.trace("apply start");
         log.debug("RequestTemplate template = {}", requestTemplate);
-
         log.trace("apply end");
     }
 }

@@ -25,9 +25,9 @@ class InfoCamereServiceImpl implements InfoCamereService {
         this.infoCamereBatchRequestConnector = infoCamereBatchRequestConnector;
     }
     @Override
-    public Businesses businessesByLegalTaxId(String legalTaxId) {
-        log.info("businessesByLegalTaxId for legalTaxId: {}", MaskDataUtils.maskString(legalTaxId));
-        return this.infoCamereConnector.businessesByLegalTaxId(legalTaxId);
+    public Businesses institutionsByLegalTaxId(String legalTaxId) {
+        log.info("institutionsByLegalTaxId for legalTaxId: {}", MaskDataUtils.maskString(legalTaxId));
+        return this.infoCamereConnector.institutionsByLegalTaxId(legalTaxId);
     }
 
     @Override

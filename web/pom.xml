@@ -34,8 +34,4 @@
             <artifactId>feign-core</artifactId>
         </dependency>
     </dependencies>
-    <!-- ELIMINA -->
-    <properties>
-        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../web/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-    </properties>
 </project>

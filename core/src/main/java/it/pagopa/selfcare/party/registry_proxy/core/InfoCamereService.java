@@ -5,7 +5,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCa
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereLegalAddress;
 
 public interface InfoCamereService {
-    Businesses businessesByLegalTaxId(String legalTaxId);
+    Businesses institutionsByLegalTaxId(String legalTaxId);
     InfoCamereBatchRequest createBatchRequestByCf(String cf);
 
     InfoCamereLegalAddress legalAddressByTaxId(String taxId);
