@@ -49,17 +49,13 @@ class InfoCamereConnectorImplTest {
      */
     @Test
     void testBusinessesByLegal() {
-        ClientCredentialsResponse clientCredentialsResponse = new ClientCredentialsResponse();
-        clientCredentialsResponse.setAccessToken("ABC123");
-        clientCredentialsResponse.setExpiresIn(1);
-        clientCredentialsResponse.setTokenType(TokenType.BEARER);
 
         Businesses businesses = new Businesses();
         businesses.setBusinesses(new ArrayList<>());
         businesses.setLegalTaxId("42");
         businesses.setRequestDateTime("2020-03-01");
         when(infoCamereRestClient.institutionsByLegalTaxId(any(), any(), any())).thenReturn(businesses);
-        when(tokenRestClient.getToken(any())).thenReturn(clientCredentialsResponse);
+        when(tokenRestClient.getToken(any())).thenReturn("ABC123");
         when(iniPecJwsGenerator.createAuthRest(anyString())).thenReturn("Create Auth Rest");
 
         assertSame(businesses, infoCamereConnectorImpl.institutionsByLegalTaxId("42"));
@@ -87,16 +83,12 @@ class InfoCamereConnectorImplTest {
         infoCamereLegalAddress.setDateTimeExtraction(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
         infoCamereLegalAddress.setLegalAddress(infoCamereLocationAddress);
         infoCamereLegalAddress.setTaxId("42");
-        when(infoCamereRestClient.legalAddressByTaxId((String) any(), (String) any())).thenReturn(infoCamereLegalAddress);
+        when(infoCamereRestClient.legalAddressByTaxId((String) any(), (String) any(), (String) any())).thenReturn(infoCamereLegalAddress);
 
-        ClientCredentialsResponse clientCredentialsResponse = new ClientCredentialsResponse();
-        clientCredentialsResponse.setAccessToken("ABC123");
-        clientCredentialsResponse.setExpiresIn(1);
-        clientCredentialsResponse.setTokenType(TokenType.BEARER);
-        when(tokenRestClient.getToken((String) any())).thenReturn(clientCredentialsResponse);
+        when(tokenRestClient.getToken((String) any())).thenReturn("ABC123");
         when(iniPecJwsGenerator.createAuthRest((String) any())).thenReturn("Create Auth Rest");
         assertSame(infoCamereLegalAddress, infoCamereConnectorImpl.legalAddressByTaxId("42"));
-        verify(infoCamereRestClient).legalAddressByTaxId((String) any(), (String) any());
+        verify(infoCamereRestClient).legalAddressByTaxId((String) any(), (String) any(), (String) any());
         verify(tokenRestClient).getToken((String) any());
         verify(iniPecJwsGenerator).createAuthRest((String) any());
     }

@@ -30,21 +30,20 @@ public class InfoCamereConnectorImpl implements InfoCamereConnector {
     @Override
     public Businesses institutionsByLegalTaxId(String legalTaxId) {
         log.info("start institutionsByLegalTaxId");
-        String accessToken = "Bearer " + this.getToken(InipecScopeEnum.LEGALE_RAPPRESENTANTE.value()).getAccessToken();
-        log.info("Access token retrieved: {}", accessToken);
+        String accessToken = "Bearer " + this.getToken(InipecScopeEnum.LEGALE_RAPPRESENTANTE.value());
         return this.restClient.institutionsByLegalTaxId(legalTaxId, accessToken, iniPecJwsGenerator.getClientId());
     }
 
-    private ClientCredentialsResponse getToken(String scope) {
+    private String getToken(String scope) {
         log.trace("start getToken with scope {}", scope);
-        String jws = "Bearer " + iniPecJwsGenerator.createAuthRest(scope);
+        String jws = iniPecJwsGenerator.createAuthRest(scope);
         return this.tokenRestClient.getToken(jws);
     }
 
     @Override
     public InfoCamerePolling callEServiceRequestId(InfoCamereCfRequest infoCamereCfRequest) {
         log.trace("start callEServiceRequestId with cf size: {}",infoCamereCfRequest.getElencoCf().size());
-        String accessToken = "Bearer " + this.getToken(InipecScopeEnum.PEC.value()).getAccessToken();
+        String accessToken = "Bearer " + this.getToken(InipecScopeEnum.PEC.value());
         InfoCamerePollingResponse infoCamerePollingResponse = restClient.callEServiceRequestId(infoCamereCfRequest,accessToken);
         return convertIniPecPolling(infoCamerePollingResponse);
     }
@@ -52,7 +51,7 @@ public class InfoCamereConnectorImpl implements InfoCamereConnector {
     @Override
     public InfoCamerePec callEServiceRequestPec(String correlationId) {
         log.trace("start callEServiceRequestPec with correlationId: {}",correlationId);
-        String accessToken = "Bearer " + this.getToken(InipecScopeEnum.PEC.value()).getAccessToken();
+        String accessToken = "Bearer " + this.getToken(InipecScopeEnum.PEC.value());
         InfoCamerePecResponse infoCamerePecResponse = restClient.callEServiceRequestPec(correlationId,accessToken);
         return convertIniPecPec(infoCamerePecResponse);
     }
@@ -75,8 +74,7 @@ public class InfoCamereConnectorImpl implements InfoCamereConnector {
     @Override
     public InfoCamereLegalAddress legalAddressByTaxId(String taxId) {
         log.info("start legalAddressByTaxId");
-        String accessToken = "Bearer " + this.getToken(InipecScopeEnum.SEDE.value()).getAccessToken();
-        log.info("Access token retrieved: {}", accessToken);
-        return this.restClient.legalAddressByTaxId(taxId, accessToken);
+        String accessToken = "Bearer " + this.getToken(InipecScopeEnum.SEDE.value());
+        return this.restClient.legalAddressByTaxId(taxId, accessToken, this.iniPecJwsGenerator.getClientId());
     }
 }

@@ -61,7 +61,7 @@ public class IniPecJwsGenerator {
     private Map<String, Object> createClaimMap(String scope) {
         Map<String, Object> map = new HashMap<>();
         long nowSeconds = System.currentTimeMillis() / 1000L;
-        long expireSeconds = nowSeconds + 86400;
+        long expireSeconds = nowSeconds + 120;
 
         map.put(RegisteredClaims.SUBJECT, clientId);
         map.put(RegisteredClaims.ISSUER, clientId);

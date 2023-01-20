@@ -27,5 +27,5 @@ public interface InfoCamereRestClient {
 
     @PostMapping(value = "${rest-client.info-camere.legalAddressByTaxId.path}", consumes = APPLICATION_JSON_VALUE)
     @ResponseBody
-    InfoCamereLegalAddress legalAddressByTaxId(@PathVariable("taxId") String taxId, @RequestHeader("Authorization") String accessToken);
+    InfoCamereLegalAddress legalAddressByTaxId(@PathVariable("taxId") String taxId, @RequestHeader("Authorization") String accessToken, @RequestParam(name = "client_id") String clientId);
 }

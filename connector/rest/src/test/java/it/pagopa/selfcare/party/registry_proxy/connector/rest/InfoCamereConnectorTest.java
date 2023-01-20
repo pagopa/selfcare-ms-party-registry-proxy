@@ -44,12 +44,8 @@ class InfoCamereConnectorTest {
         infoCamerePollingResponse.setDataOraRichiesta("Data Ora Richiesta");
         infoCamerePollingResponse.setIdentificativoRichiesta("Identificativo Richiesta");
         String jws = "jws";
-        ClientCredentialsResponse clientCredentialsResponse = new ClientCredentialsResponse();
-        clientCredentialsResponse.setAccessToken("accessToken");
-        clientCredentialsResponse.setTokenType(TokenType.BEARER);
-        clientCredentialsResponse.setExpiresIn(0);
         when(iniPecJwsGenerator.createAuthRest(any())).thenReturn(jws);
-        when(tokenRestClient.getToken(any())).thenReturn(clientCredentialsResponse);
+        when(tokenRestClient.getToken(any())).thenReturn("ABC123");
         when(infoCamereRestClient.callEServiceRequestId(any(),any())).thenReturn(infoCamerePollingResponse);
 
         InfoCamereCfRequest infoCamereCfRequest = new InfoCamereCfRequest();
@@ -73,12 +69,8 @@ class InfoCamereConnectorTest {
         infoCamerePecResponse.setIdentificativoRichiesta("correlationId");
         infoCamerePecResponse.setDataOraDownload("Data Ora Download");
         String jws = "jws";
-        ClientCredentialsResponse clientCredentialsResponse = new ClientCredentialsResponse();
-        clientCredentialsResponse.setAccessToken("accessToken");
-        clientCredentialsResponse.setTokenType(TokenType.BEARER);
-        clientCredentialsResponse.setExpiresIn(0);
         when(iniPecJwsGenerator.createAuthRest(any())).thenReturn(jws);
-        when(tokenRestClient.getToken(any())).thenReturn(clientCredentialsResponse);
+        when(tokenRestClient.getToken(any())).thenReturn("ABC123");
         when(infoCamereRestClient.callEServiceRequestPec(any(),any())).thenReturn(infoCamerePecResponse);
 
         InfoCamerePec infoCamerePec = infoCamereClientImpl.callEServiceRequestPec("correlationId");

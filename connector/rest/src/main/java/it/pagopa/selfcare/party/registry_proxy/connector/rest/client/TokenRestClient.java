@@ -5,10 +5,11 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
-@FeignClient(name = "${rest-client.info-camere.token.serviceCode}", url = "${rest-client.info-camere.token.base-url}")
+@FeignClient(name = "${rest-client.info-camere.token.serviceCode}", url = "${rest-client.info-camere.token.url}")
 public interface TokenRestClient {
-    @PostMapping(value = "${rest-client.info-camere.token.path}", consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = TEXT_PLAIN_VALUE)
     @ResponseBody
-    ClientCredentialsResponse getToken(@RequestHeader("Authorization") String bearerToken);
+    String getToken(@RequestBody String bearerToken);
 }
