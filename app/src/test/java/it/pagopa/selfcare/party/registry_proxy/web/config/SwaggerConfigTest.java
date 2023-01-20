@@ -41,10 +41,6 @@ class SwaggerConfigTest {
 
     @MockBean
     private InfoCamereService infoCamereService;
-    @MockBean
-    private InfoCamereBatchRequestService infoCamereBatchRequestService;
-    @MockBean
-    private InfoCamereBatchPollingService infoCamereBatchPollingService;
 
     @Autowired
     WebApplicationContext context;

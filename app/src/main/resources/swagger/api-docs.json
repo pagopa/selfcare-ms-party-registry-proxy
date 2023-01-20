@@ -207,16 +207,17 @@
         } ]
       }
     },
-    "/v1/businesses" : {
+    "/v1/info-camere/institutions" : {
       "post" : {
         "tags" : [ "infocamere" ],
-        "summary" : "businessesByLegalTaxId",
-        "operationId" : "businessesByLegalTaxIdUsingPOST",
+        "summary" : "Get institutions by legal tax id",
+        "description" : "Get the list of companies represented by the tax code of the person (physical or juridical) passed as a parameter",
+        "operationId" : "institutionsByLegalTaxIdUsingPOST",
         "requestBody" : {
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/GetBusinessesByLegalDto"
+                "$ref" : "#/components/schemas/GetInstitutionsByLegalDto"
               }
             }
           }
@@ -228,128 +229,6 @@
               "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/BusinessesResource"
-                }
-              }
-            }
-          },
-          "400" : {
-            "description" : "Bad Request",
-            "content" : {
-              "application/problem+json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Problem"
-                }
-              }
-            }
-          },
-          "401" : {
-            "description" : "Unauthorized",
-            "content" : {
-              "application/problem+json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Problem"
-                }
-              }
-            }
-          },
-          "500" : {
-            "description" : "Internal Server Error",
-            "content" : {
-              "application/problem+json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Problem"
-                }
-              }
-            }
-          }
-        },
-        "security" : [ {
-          "bearerAuth" : [ "global" ]
-        } ]
-      }
-    },
-    "/v1/digital-address" : {
-      "post" : {
-        "tags" : [ "infocamere" ],
-        "summary" : "createBatchRequest",
-        "operationId" : "createBatchRequestUsingPOST",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/GetDigitalAddressInfoCamereRequestBodyDto"
-              }
-            }
-          }
-        },
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GetDigitalAddressInfoCamereOKDto"
-                }
-              }
-            }
-          },
-          "400" : {
-            "description" : "Bad Request",
-            "content" : {
-              "application/problem+json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Problem"
-                }
-              }
-            }
-          },
-          "401" : {
-            "description" : "Unauthorized",
-            "content" : {
-              "application/problem+json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Problem"
-                }
-              }
-            }
-          },
-          "500" : {
-            "description" : "Internal Server Error",
-            "content" : {
-              "application/problem+json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Problem"
-                }
-              }
-            }
-          }
-        },
-        "security" : [ {
-          "bearerAuth" : [ "global" ]
-        } ]
-      }
-    },
-    "/v1/test" : {
-      "post" : {
-        "tags" : [ "infocamere" ],
-        "summary" : "test",
-        "operationId" : "testUsingPOST",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/GetDigitalAddressInfoCamereRequestBodyDto"
-              }
-            }
-          }
-        },
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "string"
                 }
               }
             }
@@ -636,38 +515,20 @@
           }
         }
       },
-      "GetBusinessesByLegalDto" : {
-        "title" : "GetBusinessesByLegalDto",
-        "type" : "object",
-        "properties" : {
-          "legalTaxId" : {
-            "type" : "string"
-          }
-        }
-      },
-      "GetDigitalAddressInfoCamereOKDto" : {
-        "title" : "GetDigitalAddressInfoCamereOKDto",
-        "type" : "object",
-        "properties" : {
-          "correlationId" : {
-            "type" : "string"
-          }
-        }
-      },
-      "GetDigitalAddressInfoCamereRequestBodyDto" : {
-        "title" : "GetDigitalAddressInfoCamereRequestBodyDto",
+      "GetInstitutionsByLegalDto" : {
+        "title" : "GetInstitutionsByLegalDto",
         "type" : "object",
         "properties" : {
           "filter" : {
-            "$ref" : "#/components/schemas/GetDigitalAddressInfoCamereRequestBodyFilterDto"
+            "$ref" : "#/components/schemas/GetInstitutionsByLegalFilterDto"
           }
         }
       },
-      "GetDigitalAddressInfoCamereRequestBodyFilterDto" : {
-        "title" : "GetDigitalAddressInfoCamereRequestBodyFilterDto",
+      "GetInstitutionsByLegalFilterDto" : {
+        "title" : "GetInstitutionsByLegalFilterDto",
         "type" : "object",
         "properties" : {
-          "taxId" : {
+          "legalTaxId" : {
             "type" : "string"
           }
         }

@@ -25,11 +25,6 @@
             <artifactId>selc-party-registry-proxy-connector-lucene</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>it.pagopa.selfcare.party</groupId>
-            <artifactId>selc-party-registry-proxy-connector-dao</artifactId>
-            <scope>runtime</scope>
-        </dependency>
     </dependencies>
 
     <build>

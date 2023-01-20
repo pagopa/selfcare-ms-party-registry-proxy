@@ -7,20 +7,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereLegalAddress;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.InfoCamereLocationAddress;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.InfoCamereRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.TokenRestClient;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.TokenType;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.IniPecJwsGenerator;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,35 +54,6 @@ class InfoCamereConnectorImplTest {
         verify(infoCamereRestClient).institutionsByLegalTaxId(any(), any(), any());
         verify(tokenRestClient).getToken(any());
         verify(iniPecJwsGenerator).createAuthRest(anyString());
-    }
-
-    /**
-     * Method under test: {@link InfoCamereConnectorImpl#legalAddressByTaxId(String)}
-     */
-    @Test
-    void testLegalAddressByTaxId() {
-        InfoCamereLocationAddress infoCamereLocationAddress = new InfoCamereLocationAddress();
-        infoCamereLocationAddress.setAddress("42 Main St");
-        infoCamereLocationAddress.setMunicipality("Municipality");
-        infoCamereLocationAddress.setPostalCode("Postal Code");
-        infoCamereLocationAddress.setProvince("Province");
-        infoCamereLocationAddress.setStreet("Street");
-        infoCamereLocationAddress.setStreetNumber("42");
-        infoCamereLocationAddress.setToponym("Toponym");
-
-        InfoCamereLegalAddress infoCamereLegalAddress = new InfoCamereLegalAddress();
-        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
-        infoCamereLegalAddress.setDateTimeExtraction(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        infoCamereLegalAddress.setLegalAddress(infoCamereLocationAddress);
-        infoCamereLegalAddress.setTaxId("42");
-        when(infoCamereRestClient.legalAddressByTaxId((String) any(), (String) any(), (String) any())).thenReturn(infoCamereLegalAddress);
-
-        when(tokenRestClient.getToken((String) any())).thenReturn("ABC123");
-        when(iniPecJwsGenerator.createAuthRest((String) any())).thenReturn("Create Auth Rest");
-        assertSame(infoCamereLegalAddress, infoCamereConnectorImpl.legalAddressByTaxId("42"));
-        verify(infoCamereRestClient).legalAddressByTaxId((String) any(), (String) any(), (String) any());
-        verify(tokenRestClient).getToken((String) any());
-        verify(iniPecJwsGenerator).createAuthRest((String) any());
     }
 }
 
