@@ -3,6 +3,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest.utils;
 import com.auth0.jwt.HeaderParams;
 import com.auth0.jwt.RegisteredClaims;
 import com.auth0.jwt.algorithms.Algorithm;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.InternalException;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.SSLData;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +45,7 @@ public class IniPecJwsGenerator {
             return JWT.create().withHeader(createHeaderMap(sslData)).withPayload(createClaimMap(scope))
                     .sign(Algorithm.RSA256(getPublicKey(sslData.getPub()), getPrivateKey(sslData.getKey())));
         } catch (NoSuchAlgorithmException | InvalidKeySpecException | IOException e) {
-            throw new RuntimeException(e);
+            throw new InternalException(e);
         }
     }
 
