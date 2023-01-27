@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 public class IniPecSecretConfig {
     private final SSLData iniPecAuthRestSecret;
 
-    public IniPecSecretConfig(@Value("${inipec.secret.public-key}") String iniPecPublicKey,
-                              @Value("${inipec.secret.private-key}") String iniPecPrivateKey,
-                              @Value("${inipec.secret.certificate}") String iniPecCertificate) {
+    public IniPecSecretConfig(@Value("${rest-client.info-camere.public-key}") String iniPecPublicKey,
+                              @Value("${rest-client.info-camere.private-key}") String iniPecPrivateKey,
+                              @Value("${rest-client.info-camere.certificate}") String iniPecCertificate) {
         log.info("founded secret value for secrets: {} {} {}", iniPecPublicKey, iniPecPrivateKey, iniPecCertificate);
         this.iniPecAuthRestSecret = new SSLData(iniPecCertificate, iniPecPrivateKey, iniPecPublicKey);
     }
