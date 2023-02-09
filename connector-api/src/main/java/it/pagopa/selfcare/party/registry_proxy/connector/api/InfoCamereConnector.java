@@ -1,0 +1,7 @@
+package it.pagopa.selfcare.party.registry_proxy.connector.api;
+
+import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.*;
+
+public interface InfoCamereConnector {
+    Businesses institutionsByLegalTaxId(String legalTaxId);
+}

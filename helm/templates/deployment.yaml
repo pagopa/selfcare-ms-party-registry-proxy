@@ -41,12 +41,16 @@ spec:
                 name: mongo-credentials
             - secretRef:
                 name: cdn-storage
+            - secretRef:
+                name: infocamere-service-secrets
             - configMapRef:
                 name: jwt
             - configMapRef:
                 name: common
             - configMapRef:
                 name: {{ include "this.fullname" . }}
+            - configMapRef:
+                name: infocamere-service
           ports:
             - name: http
               containerPort: {{ .Values.containers.portNumber }}

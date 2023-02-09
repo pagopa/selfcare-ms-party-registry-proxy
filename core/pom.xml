@@ -21,6 +21,9 @@
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>it.pagopa.selfcare.party</groupId>
+            <artifactId>selc-party-registry-proxy-connector-rest</artifactId>
+        </dependency>
     </dependencies>
-
 </project>
