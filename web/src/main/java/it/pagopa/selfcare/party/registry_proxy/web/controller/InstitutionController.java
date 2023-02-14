@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -42,16 +43,20 @@ public class InstitutionController {
             notes = "${swagger.api.institution.search.notes}")
     public InstitutionsResource search(@ApiParam("${swagger.model.institution.search}")
                                        @RequestParam(value = "search", required = false)
-                                               Optional<String> search,
+                                       Optional<String> search,
                                        @ApiParam(value = "${swagger.model.*.page}")
                                        @RequestParam(value = "page", required = false, defaultValue = "1")
-                                               Integer page,
+                                       Integer page,
                                        @ApiParam(value = "${swagger.model.*.limit}")
                                        @RequestParam(value = "limit", required = false, defaultValue = "10")
-                                               Integer limit) {
+                                       Integer limit,
+                                       @ApiParam(value = "${swagger.model.*.categories}")
+                                       @RequestParam(value = "categories", required = false)
+                                       Optional<List<String>> categories) {
         log.trace("search start");
         log.debug("search search = {}, page = {}, limit = {}", search, page, limit);
-        final QueryResult<Institution> result = institutionService.search(search, page, limit);
+
+        final QueryResult<Institution> result = categories.isEmpty() ? institutionService.search(search, page, limit) : institutionService.search(search, categories, page, limit);;
         final InstitutionsResource institutionsResource = InstitutionsMapper.toResource(result.getItems().stream()
                         .map(InstitutionMapper::toResource)
                         .collect(Collectors.toList()),

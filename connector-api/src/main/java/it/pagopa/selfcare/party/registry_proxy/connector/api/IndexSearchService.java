@@ -11,6 +11,8 @@ public interface IndexSearchService<T> {
 
     QueryResult<T> fullTextSearch(SearchField field, String value, int page, int limit);
 
+    QueryResult<T> fullTextSearch(SearchField field, String value, SearchField filter, List<String> categories, int page, int limit);
+
     List<T> findById(SearchField field, String value);
 
     @SneakyThrows
