@@ -86,7 +86,7 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
         final TopScoreDocCollector collector = TopScoreDocCollector.create(reader.numDocs(), Integer.MAX_VALUE);
 
        // FUNZIONA ABBASTANZA (Da rivedere)
-        final QueryParser parser = new QueryParser(field.toString(), analyzer);
+        /*final QueryParser parser = new QueryParser(field.toString(), analyzer);
         parser.setPhraseSlop(4);
         indexSearcher.search(parser.parse(value + " AND (L6 OR L4 OR L45)"), collector);
         final TopDocs hits = collector.topDocs((page - 1) * limit, limit);
@@ -102,7 +102,29 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
         queryResultFiltered.setTotalHits(queryResult.getTotalHits());
         log.debug("fullTextSearch result = {}", queryResultFiltered);
         log.trace("fullTextSearch end");
-        return (QueryResult<T>) queryResultFiltered;
+        return (QueryResult<T>) queryResultFiltered;*/
+
+
+        final QueryParser parser = new QueryParser(field.toString(), analyzer);
+        final QueryParser cparser = new QueryParser("category", analyzer);
+        Query allDcs = new MatchAllDocsQuery();
+        BooleanQuery.Builder bq = new BooleanQuery.Builder();
+        bq.add(allDcs, BooleanClause.Occur.SHOULD);
+
+
+        //PhraseQuery phraseQuery = new PhraseQuery("category", "L6");
+        //bq.add(phraseQuery, BooleanClause.Occur.SHOULD);
+        bq.add(cparser.parse("L6"), BooleanClause.Occur.MUST);
+        bq.add(parser.parse(value), BooleanClause.Occur.SHOULD);x
+        indexSearcher.search(bq.build(), collector);
+        final TopDocs hits = collector.topDocs((page - 1) * limit, limit);
+
+        final List<T> foundCategories = new ArrayList<>(hits.scoreDocs.length);
+        for (ScoreDoc scoreDoc : hits.scoreDocs) {
+            foundCategories.add(documentConverter.apply(indexSearcher.doc(scoreDoc.doc)));
+        }
+        final QueryResult<T> queryResult = getQueryResult(foundCategories, hits.totalHits.value);
+        return queryResult;
     }
 
 
