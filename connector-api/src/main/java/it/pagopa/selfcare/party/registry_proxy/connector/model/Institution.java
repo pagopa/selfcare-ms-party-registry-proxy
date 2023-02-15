@@ -39,7 +39,9 @@ public interface Institution {
         DIGITAL_ADDRESS("digitalAddress"),
         ADDRESS("address"),
         ZIP_CODE("zipCode"),
-        ORIGIN("origin");
+        ORIGIN("origin"),
+
+        DESCRIPTIONFULL("descriptionfull");
 
         private final String name;
 

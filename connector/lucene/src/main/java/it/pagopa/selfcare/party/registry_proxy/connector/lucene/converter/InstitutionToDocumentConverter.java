@@ -27,6 +27,12 @@ public class InstitutionToDocumentConverter implements Function<Institution, Doc
             doc.add(new StoredField(ADDRESS.toString(), institution.getAddress()));
             doc.add(new StoredField(ZIP_CODE.toString(), institution.getZipCode()));
             doc.add(new StoredField(ORIGIN.toString(), institution.getOrigin().toString()));
+            String category = "";
+            if (institution.getCategory().equals("L6") || institution.getCategory().equals("L4") || institution.getCategory().equals("L45")){
+                category = " " + institution.getCategory();
+            }
+            doc.add(new SortedDocValuesField(DESCRIPTIONFULL.toString(), new BytesRef(institution.getDescription() + category)));
+            doc.add(new TextField(DESCRIPTIONFULL.toString(), institution.getDescription() + category, Field.Store.YES));
             if (institution.getO() != null) {
                 doc.add(new StoredField(O.toString(), institution.getO()));
             }
