@@ -1,6 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.reader;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryFilter;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchField;
@@ -16,6 +17,7 @@ import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.springframework.util.Assert;
 
+import java.nio.file.DirectoryStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -69,7 +71,7 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
 
     @SneakyThrows
     @Override
-    public QueryResult<T> fullTextSearch(SearchField field, String value, SearchField filter, List<String> categories, int page, int limit) {
+    public QueryResult<T> fullTextSearch(SearchField field, String value, SearchField filter, String categories, int page, int limit) {
         log.trace("fullTextSearch start");
         log.debug("fullTextSearch field = {}, value = {}, page = {}, limit = {}", field, value, page, limit);
         Assert.notNull(field, FIELD_IS_REQUIRED);
@@ -80,21 +82,40 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
         final IndexSearcher indexSearcher = new IndexSearcher(reader);
         final TopScoreDocCollector collector = TopScoreDocCollector.create(reader.numDocs(), Integer.MAX_VALUE);
 
-        BooleanQuery.Builder booleanQueryBuilder = new BooleanQuery.Builder();
-        Query query1 = new TermQuery(new Term(field.toString(), "value"));
-        Query query2 = new TermQuery(new Term(filter.toString(), categories.get(0)));
-        booleanQueryBuilder.add(query1, BooleanClause.Occur.MUST);
-        booleanQueryBuilder.add(query2, BooleanClause.Occur.SHOULD);
+
+       /* BooleanQuery.Builder booleanQuery = new BooleanQuery.Builder();
+        Query query1 = new TermQuery(new Term(field.toString(), value));
+        // Query query2 = new TermQuery(new Term(filter.toString(), categories));
+        booleanQuery.add(query1, BooleanClause.Occur.SHOULD);
+        // booleanQuery.add(query2, BooleanClause.Occur.SHOULD);
         // Use BooleanClause.Occur.MUST instead of BooleanClause.Occur.SHOULD
         // for AND queries
-        final TopDocs hits = indexSearcher.search(booleanQueryBuilder.build(), 15);
+        TopDocs hits = indexSearcher.search(booleanQuery.build(), 50); */
 
 
+        QueryParser queryParser = new QueryParser(field.toString(), analyzer);
+        // <default field> is the field that QueryParser will search if you don't
+        // prefix it with a field.
+        String special = field.toString() + ":" + value + " AND " + filter.toString() + ":" + categories;
 
-      /*  final QueryParser parser = new QueryParser(field.toString(), analyzer);
-        parser.setPhraseSlop(4);
-        indexSearcher.search(parser.parse(value), collector);
-        final TopDocs hits = collector.topDocs((page - 1) * limit, limit); */
+        indexSearcher.search(queryParser.parse(special), collector);
+        final TopDocs hits = collector.topDocs((page - 1) * limit, limit);
+
+        //final QueryParser parser = new QueryParser(field.toString(), analyzer);
+        //final QueryParser filterParser = new QueryParser(filter.toString(), analyzer);
+        //parser.setPhraseSlop(4);
+
+        //BooleanQuery.Builder booleanQuery = new BooleanQuery.Builder();
+        //Query query1 = parser.parse(value);
+        //Query query2 = filterParser.parse(categories);
+        //booleanQuery.add(query2, BooleanClause.Occur.SHOULD);
+        //booleanQuery.add(query1, BooleanClause.Occur.SHOULD);
+        // Use BooleanClause.Occur.MUST instead of BooleanClause.Occur.SHOULD
+        // for AND queries
+        //TopDocs hits = indexSearcher.search(booleanQuery.build(), 50);
+
+        //indexSearcher.search(parser.parse(value), collector);
+        //final TopDocs hits = collector.topDocs((page - 1) * limit, limit);
 
         final List<T> foundCategories = new ArrayList<>(hits.scoreDocs.length);
         for (ScoreDoc scoreDoc : hits.scoreDocs) {
@@ -107,6 +128,51 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
         return queryResult;
     }
 
+  /*  @SneakyThrows
+    @Override
+    public QueryResult<Institution> fullTextSearch(SearchField field, String value, SearchField filter, String categories, int page, int limit) {
+        log.trace("fullTextSearch start");
+        log.debug("fullTextSearch field = {}, value = {}, page = {}, limit = {}", field, value, page, limit);
+        Assert.notNull(field, FIELD_IS_REQUIRED);
+        Assert.notNull(value, VALUE_IS_REQUIRED);
+        Assert.isTrue(page > 0, "A page number must be great than 0");
+        Assert.isTrue(limit > 0, "A limit result must be great than or equal to 1");
+        final DirectoryReader reader = directoryReaderFactory.create();
+        final IndexSearcher indexSearcher = new IndexSearcher(reader);
+        final TopScoreDocCollector collector = TopScoreDocCollector.create(reader.numDocs(), Integer.MAX_VALUE);
+
+        BooleanQuery.Builder booleanQueryBuilder = new BooleanQuery.Builder();
+        TermQuery query2 = new TermQuery(new Term(filter.toString(), categories));
+        booleanQueryBuilder.add(query2, BooleanClause.Occur.FILTER);
+        // Use BooleanClause.Occur.MUST instead of BooleanClause.Occur.SHOULD
+        // for AND queries
+        final TopDocs hits = indexSearcher.search(booleanQueryBuilder.build(), 15);
+
+
+        final QueryParser parser = new QueryParser(field.toString(), analyzer);
+        parser.setPhraseSlop(4);
+
+        indexSearcher.search(parser.parse(value), collector);
+        final TopDocs hits = collector.topDocs((page - 1) * limit, limit);
+
+        final List<Institution> foundCategories = new ArrayList<>(hits.scoreDocs.length);
+        final List<Institution> foundCategoriesFiltered = new ArrayList<>(hits.scoreDocs.length);
+        for (ScoreDoc scoreDoc : hits.scoreDocs) {
+            foundCategories.add((Institution) documentConverter.apply(indexSearcher.doc(scoreDoc.doc)));
+
+        }
+        for(Institution i : foundCategories){
+            if(i.getCategory().equals(categories)){
+                foundCategoriesFiltered.add(i);
+            }
+        }
+
+        final QueryResult<Institution> queryResult = getQueryResultFiltered(foundCategoriesFiltered, hits.totalHits.value);
+        log.debug("fullTextSearch result = {}", queryResult);
+        log.trace("fullTextSearch end");
+        return queryResult;
+    }
+*/
 
     @SneakyThrows
     @Override
@@ -169,5 +235,7 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
 
 
     protected abstract QueryResult<T> getQueryResult(List<T> items, long totalHits);
+
+
 
 }

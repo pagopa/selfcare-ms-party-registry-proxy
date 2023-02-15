@@ -11,7 +11,7 @@ public interface InstitutionService {
 
     QueryResult<Institution> search(Optional<String> searchText, int page, int limit);
 
-    QueryResult<Institution> search(Optional<String> searchText, Optional<List<String>> categories, int page, int limit);
+    QueryResult<Institution> search(Optional<String> searchText, String categories, int page, int limit);
 
     Institution findById(String id, Optional<Origin> origin);
 

@@ -43,10 +43,9 @@ class InstitutionServiceImpl implements InstitutionService {
     }
 
     @Override
-    public QueryResult<Institution> search(Optional<String> searchText, Optional<List<String>> filterCategories, int page, int limit) {
+    public QueryResult<Institution> search(Optional<String> searchText, String categories, int page, int limit) {
         log.trace("search start");
         log.debug("search searchText = {}, page = {}, limit = {}", searchText, page, limit);
-        final List<String> categories= filterCategories.stream().collect(Collectors.toList());
         final QueryResult<Institution> queryResult = searchText.map(text -> indexSearchService.fullTextSearch(Field.DESCRIPTION, text, Field.CATEGORY, categories, page, limit))
                 .orElseGet(() -> indexSearchService.findAll(page, limit));
         log.debug("search result = {}", queryResult);
