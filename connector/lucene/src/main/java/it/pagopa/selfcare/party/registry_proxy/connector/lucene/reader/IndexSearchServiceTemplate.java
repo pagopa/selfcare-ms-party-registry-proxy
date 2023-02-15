@@ -1,6 +1,9 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.reader;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.InstitutionEntity;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.InstitutionQueryResult;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryFilter;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchField;
@@ -18,6 +21,7 @@ import org.springframework.util.Assert;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
@@ -93,9 +97,12 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
         }
 
         final QueryResult<T> queryResult = getQueryResult(foundCategories, hits.totalHits.value);
-        log.debug("fullTextSearch result = {}", queryResult);
+        InstitutionQueryResult queryResultFiltered = new InstitutionQueryResult();
+        queryResultFiltered.setItems((List<Institution>) queryResult.getItems().stream().filter(item -> ((InstitutionEntity) item).getCategory().equals("L6") || ((InstitutionEntity) item).getCategory().equals("L4") || ((InstitutionEntity) item).getCategory().equals("L45")).collect(Collectors.toList()));
+        queryResultFiltered.setTotalHits(queryResult.getTotalHits());
+        log.debug("fullTextSearch result = {}", queryResultFiltered);
         log.trace("fullTextSearch end");
-        return queryResult;
+        return (QueryResult<T>) queryResultFiltered;
     }
 
 
