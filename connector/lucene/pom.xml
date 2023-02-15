@@ -29,5 +29,4 @@
             <artifactId>lucene-memory</artifactId>
         </dependency>
     </dependencies>
-
 </project>

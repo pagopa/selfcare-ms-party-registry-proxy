@@ -1,6 +1,9 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.reader;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.InstitutionEntity;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.InstitutionQueryResult;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryFilter;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchField;
@@ -18,6 +21,7 @@ import org.springframework.util.Assert;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
@@ -64,6 +68,41 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
         log.debug("fullTextSearch result = {}", queryResult);
         log.trace("fullTextSearch end");
         return queryResult;
+    }
+
+    @SneakyThrows
+    @Override
+    public QueryResult<T> fullTextSearch(SearchField field, String value, SearchField filter, String categories, int page, int limit) {
+        log.trace("fullTextSearch start");
+        log.debug("fullTextSearch field = {}, value = {}, filter = {}, categories = {}, page = {}, limit = {}", field, value, filter, categories, page, limit);
+        Assert.notNull(field, FIELD_IS_REQUIRED);
+        Assert.notNull(value, VALUE_IS_REQUIRED);
+        Assert.notNull(filter, FIELD_IS_REQUIRED);
+        Assert.notNull(categories, VALUE_IS_REQUIRED);
+        Assert.isTrue(page > 0, "A page number must be great than 0");
+        Assert.isTrue(limit > 0, "A limit result must be great than or equal to 1");
+        final DirectoryReader reader = directoryReaderFactory.create();
+        final IndexSearcher indexSearcher = new IndexSearcher(reader);
+        final TopScoreDocCollector collector = TopScoreDocCollector.create(reader.numDocs(), Integer.MAX_VALUE);
+
+       // FUNZIONA ABBASTANZA (Da rivedere)
+        final QueryParser parser = new QueryParser(field.toString(), analyzer);
+        parser.setPhraseSlop(4);
+        indexSearcher.search(parser.parse(value + " AND (L6 OR L4 OR L45)"), collector);
+        final TopDocs hits = collector.topDocs((page - 1) * limit, limit);
+
+        final List<T> foundCategories = new ArrayList<>(hits.scoreDocs.length);
+        for (ScoreDoc scoreDoc : hits.scoreDocs) {
+            foundCategories.add(documentConverter.apply(indexSearcher.doc(scoreDoc.doc)));
+        }
+
+        final QueryResult<T> queryResult = getQueryResult(foundCategories, hits.totalHits.value);
+        InstitutionQueryResult queryResultFiltered = new InstitutionQueryResult();
+        queryResultFiltered.setItems((List<Institution>) queryResult.getItems().stream().filter(item -> ((InstitutionEntity) item).getCategory().equals("L6") || ((InstitutionEntity) item).getCategory().equals("L4") || ((InstitutionEntity) item).getCategory().equals("L45")).collect(Collectors.toList()));
+        queryResultFiltered.setTotalHits(queryResult.getTotalHits());
+        log.debug("fullTextSearch result = {}", queryResultFiltered);
+        log.trace("fullTextSearch end");
+        return (QueryResult<T>) queryResultFiltered;
     }
 
 
@@ -128,5 +167,7 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
 
 
     protected abstract QueryResult<T> getQueryResult(List<T> items, long totalHits);
+
+
 
 }
