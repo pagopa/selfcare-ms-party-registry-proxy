@@ -51,7 +51,7 @@ public class InstitutionController {
                                        @RequestParam(value = "limit", required = false, defaultValue = "10")
                                        Integer limit,
                                        @ApiParam(value = "${swagger.model.*.categories}")
-                                       @RequestParam(value = "categories", required = false)
+                                       @RequestParam(value = "categories", required = false, defaultValue = "")
                                        String categories) {
         log.trace("search start");
         log.debug("search search = {}, page = {}, limit = {}", search, page, limit);
