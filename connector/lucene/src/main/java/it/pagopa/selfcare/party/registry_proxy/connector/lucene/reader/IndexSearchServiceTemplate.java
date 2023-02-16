@@ -114,8 +114,8 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
 
         //PhraseQuery phraseQuery = new PhraseQuery("category", "L6");
         //bq.add(phraseQuery, BooleanClause.Occur.SHOULD);
-        bq.add(cparser.parse("L6"), BooleanClause.Occur.MUST);
-        bq.add(parser.parse(value), BooleanClause.Occur.SHOULD);x
+        bq.add(cparser.parse("L6 OR L4 OR l45"), BooleanClause.Occur.MUST);
+        bq.add(parser.parse(value), BooleanClause.Occur.SHOULD);
         indexSearcher.search(bq.build(), collector);
         final TopDocs hits = collector.topDocs((page - 1) * limit, limit);
 
