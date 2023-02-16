@@ -17,6 +17,7 @@ public class InstitutionEntity implements Institution {
     private String taxCode;
     private String category;
     private String description;
+    private String descriptionfull;
     private String digitalAddress;
     private String address;
     private String zipCode;
