@@ -1,7 +1,9 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.client;
 
-import it.pagopa.selfcare.mscore.model.nationalregistries.NationalRegistriesAddressRequest;
-import it.pagopa.selfcare.mscore.model.nationalregistries.NationalRegistriesAddressResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressRequest;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.AdELegalOKDto;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.AdELegalRequestBodyDto;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.GetAddressRegistroImpreseOKDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,5 +16,9 @@ public interface NationalRegistriesRestClient {
 
     @PostMapping(value = "${rest-client.national-registries.getLegalAddress.path}", consumes = APPLICATION_JSON_VALUE)
     @ResponseBody
-    NationalRegistriesAddressResponse getLegalAddress(@RequestBody NationalRegistriesAddressRequest nationalRegistriesAddressRequest);
+    GetAddressRegistroImpreseOKDto getLegalAddress(@RequestBody LegalAddressRequest legalAddressRequest);
+
+    @PostMapping(value = "${rest-client.national-registries.verifyLegal.path}", consumes = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    AdELegalOKDto verifyLegal(AdELegalRequestBodyDto request);
 }

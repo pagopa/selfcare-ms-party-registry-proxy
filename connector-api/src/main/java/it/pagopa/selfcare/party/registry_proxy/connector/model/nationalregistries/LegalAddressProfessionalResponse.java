@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class NationalRegistriesProfessionalResponse {
+public class LegalAddressProfessionalResponse {
 
   @JsonProperty("description")
   private String description;

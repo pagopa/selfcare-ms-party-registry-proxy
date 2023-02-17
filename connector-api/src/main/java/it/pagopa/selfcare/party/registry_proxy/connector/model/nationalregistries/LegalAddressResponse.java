@@ -7,7 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 @Data
-public class NationalRegistriesAddressResponse {
+public class LegalAddressResponse {
 
   @JsonProperty("dateTimeExtraction")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -17,7 +17,7 @@ public class NationalRegistriesAddressResponse {
   private String taxId;
 
   @JsonProperty("professionalAddress")
-  private NationalRegistriesProfessionalResponse professionalAddress;
+  private LegalAddressProfessionalResponse professionalAddress;
 
 }
 

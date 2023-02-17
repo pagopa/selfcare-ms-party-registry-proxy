@@ -4,8 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class NationalRegistriesAddressRequest {
+public class LegalAddressFilter {
 
-    @JsonProperty("filter")
-    private NationalRegistriesAddressFilter filter;
+    @JsonProperty("taxId")
+    private String taxId;
+
 }

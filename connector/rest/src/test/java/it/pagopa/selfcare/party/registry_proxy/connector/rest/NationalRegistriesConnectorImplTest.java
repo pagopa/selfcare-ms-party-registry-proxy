@@ -1,14 +1,21 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
-import it.pagopa.selfcare.mscore.exception.ResourceNotFoundException;
-import it.pagopa.selfcare.mscore.model.NationalRegistriesProfessionalAddress;
-import it.pagopa.selfcare.mscore.model.nationalregistries.NationalRegistriesAddressResponse;
-import it.pagopa.selfcare.mscore.model.nationalregistries.NationalRegistriesProfessionalResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressRequest;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressProfessionalResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.VerifyLegalResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.NationalRegistriesRestClient;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.AdELegalOKDto;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.AdELegalRequestBodyDto;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.AdEResultCodeEnum;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.AdEResultDetailEnum;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.GetAddressRegistroImpreseOKDto;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ProfessionalAddressDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
@@ -17,15 +24,19 @@ import java.time.ZoneId;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+@ContextConfiguration(classes = {NationalRegistriesConnectorImpl.class})
 @ExtendWith(SpringExtension.class)
 class NationalRegistriesConnectorImplTest {
-    @InjectMocks
+    @Autowired
     private NationalRegistriesConnectorImpl nationalRegistriesConnectorImpl;
 
-    @Mock
+    @MockBean
     private NationalRegistriesRestClient nationalRegistriesRestClient;
 
     /**
@@ -33,28 +44,25 @@ class NationalRegistriesConnectorImplTest {
      */
     @Test
     void testGetLegalAddress() {
-        NationalRegistriesProfessionalResponse nationalRegistriesProfessionalResponse = new NationalRegistriesProfessionalResponse();
-        nationalRegistriesProfessionalResponse.setAddress("42 Main St");
-        nationalRegistriesProfessionalResponse.setDescription("The characteristics of someone or something");
-        nationalRegistriesProfessionalResponse.setMunicipality("Municipality");
-        nationalRegistriesProfessionalResponse.setProvince("Province");
-        nationalRegistriesProfessionalResponse.setZip("21654");
+        ProfessionalAddressDto legalAddressProfessionalResponse = new ProfessionalAddressDto();
+        legalAddressProfessionalResponse.setAddress("42 Main St");
+        legalAddressProfessionalResponse.setDescription("The characteristics of someone or something");
+        legalAddressProfessionalResponse.setMunicipality("Municipality");
+        legalAddressProfessionalResponse.setProvince("Province");
+        legalAddressProfessionalResponse.setZip("21654");
 
-        NationalRegistriesAddressResponse nationalRegistriesAddressResponse = new NationalRegistriesAddressResponse();
+        GetAddressRegistroImpreseOKDto legalAddressResponse = new GetAddressRegistroImpreseOKDto();
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
-        nationalRegistriesAddressResponse
+        legalAddressResponse
                 .setDateTimeExtraction(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        nationalRegistriesAddressResponse.setProfessionalAddress(nationalRegistriesProfessionalResponse);
-        nationalRegistriesAddressResponse.setTaxId("42");
+        legalAddressResponse.setProfessionalAddress(legalAddressProfessionalResponse);
+        legalAddressResponse.setTaxId("42");
         when(nationalRegistriesRestClient.getLegalAddress(any()))
-                .thenReturn(nationalRegistriesAddressResponse);
-        it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.NationalRegistriesProfessionalResponse actualLegalAddress = nationalRegistriesConnectorImpl
+                .thenReturn(legalAddressResponse);
+        LegalAddressResponse actualLegalAddress = nationalRegistriesConnectorImpl
                 .getLegalAddress("Tax Code");
-        assertEquals("42 Main St", actualLegalAddress.getAddress());
-        assertEquals("21654", actualLegalAddress.getZip());
-        assertEquals("Province", actualLegalAddress.getProvince());
-        assertEquals("Municipality", actualLegalAddress.getMunicipality());
-        assertEquals("The characteristics of someone or something", actualLegalAddress.getDescription());
+        assertEquals("42 Main St", actualLegalAddress.getProfessionalAddress().getAddress());
+        assertEquals("21654", actualLegalAddress.getProfessionalAddress().getZip());
         verify(nationalRegistriesRestClient).getLegalAddress(any());
     }
 
@@ -62,24 +70,49 @@ class NationalRegistriesConnectorImplTest {
      * Method under test: {@link NationalRegistriesConnectorImpl#getLegalAddress(String)}
      */
     @Test
-    void testGetLegalAddress2() {
-        NationalRegistriesAddressResponse nationalRegistriesAddressResponse = new NationalRegistriesAddressResponse();
-        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
-        nationalRegistriesAddressResponse
-                .setDateTimeExtraction(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        nationalRegistriesAddressResponse.setProfessionalAddress(null);
-        nationalRegistriesAddressResponse.setTaxId("42");
+    void testGetLegalAddress4() {
+        ProfessionalAddressDto professionalAddressDto = new ProfessionalAddressDto();
+        professionalAddressDto.setAddress("42 Main St");
+        professionalAddressDto.setDescription("The characteristics of someone or something");
+        professionalAddressDto.setMunicipality("Municipality");
+        professionalAddressDto.setProvince("Province");
+        professionalAddressDto.setZip("21654");
 
-        when(nationalRegistriesRestClient.getLegalAddress(any())).thenReturn(nationalRegistriesAddressResponse);
-        assertThrows(ResourceNotFoundException.class, () -> nationalRegistriesConnectorImpl.getLegalAddress("Tax Code"));
-        verify(nationalRegistriesRestClient).getLegalAddress(any());
+        GetAddressRegistroImpreseOKDto getAddressRegistroImpreseOKDto = new GetAddressRegistroImpreseOKDto();
+        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
+        Date fromResult = Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant());
+        getAddressRegistroImpreseOKDto.setDateTimeExtraction(fromResult);
+        getAddressRegistroImpreseOKDto.setProfessionalAddress(professionalAddressDto);
+        getAddressRegistroImpreseOKDto.setTaxId("42");
+        when(nationalRegistriesRestClient.getLegalAddress((LegalAddressRequest) any()))
+                .thenReturn(getAddressRegistroImpreseOKDto);
+        LegalAddressResponse actualLegalAddress = nationalRegistriesConnectorImpl.getLegalAddress("Tax Code");
+        assertSame(fromResult, actualLegalAddress.getDateTimeExtraction());
+        assertEquals("42", actualLegalAddress.getTaxId());
+        LegalAddressProfessionalResponse professionalAddress = actualLegalAddress.getProfessionalAddress();
+        assertEquals("42 Main St", professionalAddress.getAddress());
+        assertEquals("21654", professionalAddress.getZip());
+        assertEquals("Province", professionalAddress.getProvince());
+        assertEquals("Municipality", professionalAddress.getMunicipality());
+        assertEquals("The characteristics of someone or something", professionalAddress.getDescription());
+        verify(nationalRegistriesRestClient).getLegalAddress((LegalAddressRequest) any());
     }
 
+    /**
+     * Method under test: {@link NationalRegistriesConnectorImpl#verifyLegal(String, String)}
+     */
     @Test
-    void testGetLegalAddress3() {
-        when(nationalRegistriesRestClient.getLegalAddress(any())).thenReturn(null);
-        assertThrows(ResourceNotFoundException.class, () -> nationalRegistriesConnectorImpl.getLegalAddress("Tax Code"));
-        verify(nationalRegistriesRestClient).getLegalAddress(any());
+    void testVerifyLegal() {
+        AdELegalOKDto adELegalOKDto = new AdELegalOKDto();
+        adELegalOKDto.setResultCode(AdEResultCodeEnum._00);
+        adELegalOKDto.setResultDetail(AdEResultDetailEnum.XX00);
+        adELegalOKDto.setVerificationResult(true);
+        when(nationalRegistriesRestClient.verifyLegal((AdELegalRequestBodyDto) any())).thenReturn(adELegalOKDto);
+        VerifyLegalResponse actualVerifyLegalResult = nationalRegistriesConnectorImpl.verifyLegal("42", "42");
+        assertEquals("00", actualVerifyLegalResult.getVerifyLegalResultCode());
+        assertTrue(actualVerifyLegalResult.isVerificationResult());
+        assertEquals("XX00", actualVerifyLegalResult.getVerifyLegalResultDetail());
+        verify(nationalRegistriesRestClient).verifyLegal((AdELegalRequestBodyDto) any());
     }
 }
 

@@ -9,7 +9,7 @@ public class MaskDataUtils {
 
     public static String maskInformation(String dataBuffered){
         Pattern elencoCf = Pattern.compile("(\"elencoCf\")\\s*:\\s*\\[\"(.*?)\"");
-        Pattern patternTaxId = Pattern.compile("(\"taxId\"|\"legalTaxId\"|\"businessTaxId\")\\s*:\\s*\"(.*?)\"");
+        Pattern patternTaxId = Pattern.compile("(\"taxId\"|\"legalTaxId\"|\"businessTaxId\"|\"vatNumber\")\\s*:\\s*\"(.*?)\"");
         Pattern patternAddress = Pattern.compile("(\"description\"|\"at\"|\"address\"|\"zip\"|\"municipality\"|\"municipalityDetails\"|\"province\"|\"foreignState\"|\"codiceStato\"|\"descrizioneStato\"|\"descrizioneLocalita\"|\"denominazione\"|\"numeroCivico\"|\"digitalAddress\")\\s*:\\s*\"(.*?)\"");
         Pattern patternIdentity = Pattern.compile("(\"pecProfessionista\"|\"cf\"|\"codFiscale\"|\"codiceFiscale\"|\"cognome\"|\"nome\"|\"sesso\"|\"dataNascita\")\\s*:\\s*\"(.*?)\"");
         Pattern patternAccessToken = Pattern.compile("(\"access_token\")\\s*:\\s*\"(.*?)\"");

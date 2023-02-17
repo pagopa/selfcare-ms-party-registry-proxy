@@ -1,17 +1,11 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
-import it.pagopa.selfcare.mscore.exception.ResourceNotFoundException;
-import it.pagopa.selfcare.mscore.model.NationalRegistriesProfessionalAddress;
-import it.pagopa.selfcare.mscore.model.nationalregistries.NationalRegistriesAddressFilter;
-import it.pagopa.selfcare.mscore.model.nationalregistries.NationalRegistriesAddressRequest;
-import it.pagopa.selfcare.mscore.model.nationalregistries.NationalRegistriesAddressResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.NationalRegistriesConnector;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.NationalRegistriesProfessionalResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.NationalRegistriesRestClient;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import static it.pagopa.selfcare.mscore.constant.CustomErrorEnum.CREATE_INSTITUTION_NOT_FOUND;
 
 @Slf4j
 @Service
@@ -24,32 +18,57 @@ public class NationalRegistriesConnectorImpl implements NationalRegistriesConnec
     }
 
     @Override
-    public NationalRegistriesProfessionalResponse getLegalAddress(String taxCode) {
-        NationalRegistriesAddressRequest nationalRegistriesAddressRequest = createRequest(taxCode);
-        NationalRegistriesAddressResponse response = nationalRegistriesRestClient.getLegalAddress(nationalRegistriesAddressRequest);
-        if (response == null || response.getProfessionalAddress() == null) {
-            throw new ResourceNotFoundException(String.format(CREATE_INSTITUTION_NOT_FOUND.getMessage(), taxCode), CREATE_INSTITUTION_NOT_FOUND.getCode());
-        }
-        return toNationalRegistriesProfessionalResponse(response);
+    public LegalAddressResponse getLegalAddress(String taxCode) {
+        LegalAddressRequest legalAddressRequest = createRequest(taxCode);
+        return toLegalAddressResponse(nationalRegistriesRestClient.getLegalAddress(legalAddressRequest));
     }
 
-    private NationalRegistriesProfessionalResponse toNationalRegistriesProfessionalResponse(NationalRegistriesAddressResponse response) {
-        NationalRegistriesProfessionalResponse result = new NationalRegistriesProfessionalResponse();
-        if (response.getProfessionalAddress() != null) {
-            result.setAddress(response.getProfessionalAddress().getAddress());
-            result.setZip(response.getProfessionalAddress().getZip());
-            result.setDescription(response.getProfessionalAddress().getDescription());
-            result.setMunicipality(response.getProfessionalAddress().getMunicipality());
-            result.setProvince(response.getProfessionalAddress().getProvince());
-        }
-        return result;
+    @Override
+    public VerifyLegalResponse verifyLegal(String taxId, String vatNumber) {
+        AdELegalRequestBodyDto request = createRequest(taxId, vatNumber);
+        return toVerifyLegalResponse(nationalRegistriesRestClient.verifyLegal(request));
     }
 
-    private NationalRegistriesAddressRequest createRequest(String taxCode) {
-        NationalRegistriesAddressRequest nationalRegistriesAddressRequest = new NationalRegistriesAddressRequest();
-        NationalRegistriesAddressFilter filter = new NationalRegistriesAddressFilter();
+    private LegalAddressResponse toLegalAddressResponse(GetAddressRegistroImpreseOKDto legalAddress) {
+        LegalAddressResponse legalAddressResponse = new LegalAddressResponse();
+        legalAddressResponse.setTaxId(legalAddress.getTaxId());
+        legalAddressResponse.setProfessionalAddress(toProfessionalAddress(legalAddress.getProfessionalAddress()));
+        legalAddressResponse.setDateTimeExtraction(legalAddress.getDateTimeExtraction());
+        return legalAddressResponse;
+    }
+
+    private LegalAddressProfessionalResponse toProfessionalAddress(ProfessionalAddressDto professionalAddress) {
+        LegalAddressProfessionalResponse legalAddressProfessionalResponse = new LegalAddressProfessionalResponse();
+        legalAddressProfessionalResponse.setAddress(professionalAddress.getAddress());
+        legalAddressProfessionalResponse.setZip(professionalAddress.getZip());
+        legalAddressProfessionalResponse.setProvince(professionalAddress.getProvince());
+        legalAddressProfessionalResponse.setMunicipality(professionalAddress.getMunicipality());
+        legalAddressProfessionalResponse.setDescription(professionalAddress.getDescription());
+        return legalAddressProfessionalResponse;
+    }
+
+    private VerifyLegalResponse toVerifyLegalResponse(AdELegalOKDto adELegalOKDto) {
+        VerifyLegalResponse verifyLegalResponse = new VerifyLegalResponse();
+        verifyLegalResponse.setVerificationResult(adELegalOKDto.getVerificationResult());
+        verifyLegalResponse.setVerifyLegalResultDetail(adELegalOKDto.getResultDetail().getValue());
+        verifyLegalResponse.setVerifyLegalResultCode(adELegalOKDto.getResultCode().getValue());
+        return verifyLegalResponse;
+    }
+
+    private LegalAddressRequest createRequest(String taxCode) {
+        LegalAddressRequest legalAddressRequest = new LegalAddressRequest();
+        LegalAddressFilter filter = new LegalAddressFilter();
         filter.setTaxId(taxCode);
-        nationalRegistriesAddressRequest.setFilter(filter);
-        return nationalRegistriesAddressRequest;
+        legalAddressRequest.setFilter(filter);
+        return legalAddressRequest;
+    }
+
+    private AdELegalRequestBodyDto createRequest(String taxCode, String vatNumber) {
+        AdELegalRequestBodyDto requestBodyDto = new AdELegalRequestBodyDto();
+        AdELegalRequestBodyFilterDto filter = new AdELegalRequestBodyFilterDto();
+        filter.setTaxId(taxCode);
+        filter.setVatNumber(vatNumber);
+        requestBodyDto.setFilter(filter);
+        return requestBodyDto;
     }
 }
