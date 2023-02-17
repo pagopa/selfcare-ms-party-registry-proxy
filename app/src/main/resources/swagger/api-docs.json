@@ -304,6 +304,15 @@
             "type" : "integer",
             "format" : "int32"
           }
+        }, {
+          "name" : "categories",
+          "in" : "query",
+          "description" : "Filter from origin category",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "string"
+          }
         } ],
         "responses" : {
           "200" : {
