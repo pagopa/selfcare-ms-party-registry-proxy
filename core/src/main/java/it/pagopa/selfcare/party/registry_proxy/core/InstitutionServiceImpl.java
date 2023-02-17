@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -46,7 +47,7 @@ class InstitutionServiceImpl implements InstitutionService {
     public QueryResult<Institution> search(Optional<String> searchText, String categories, int page, int limit) {
         log.trace("search start");
         log.debug("search searchText = {}, page = {}, limit = {}", searchText, page, limit);
-        final QueryResult<Institution> queryResult = indexSearchService.fullTextSearch(Field.DESCRIPTIONFULL, searchText.orElseThrow(), Field.CATEGORY, categories, page, limit);
+        final QueryResult<Institution> queryResult = indexSearchService.fullTextSearch(Field.DESCRIPTION, searchText.orElseThrow(), Field.CATEGORY, categories, page, limit);
         log.debug("search result = {}", queryResult);
         log.trace("search end");
         return queryResult;
@@ -65,6 +66,36 @@ class InstitutionServiceImpl implements InstitutionService {
                     .filter(institution -> institution.getOrigin().equals(orig))
                     .collect(Collectors.toList()))
                     .orElseGet(institutionsSupplier);
+            if (institutions.isEmpty()) {
+                throw new ResourceNotFoundException();
+            } else if (institutions.size() > 1) {
+                throw new TooManyResourceFoundException();
+            } else {
+                final Institution institution = institutions.get(0);
+                log.debug("findById result = {}", institution);
+                log.trace("findById end");
+                return institution;
+            }
+        }
+    }
+
+    @Override
+    public Institution findById(String id, Optional<Origin> origin, String categories) {
+        log.trace("findById start");
+        log.debug("findById id = {}, origin = {}", id, origin);
+        if (origin.map(Origin.INFOCAMERE::equals).orElse(false)) {
+            throw new RuntimeException("Not implemented yet");//TODO: onboarding privati
+        } else {
+            final Supplier<List<Institution>> institutionsSupplier = () -> indexSearchService.findById(Field.ID, id);
+            final List<Institution> institutions = origin.map(orig -> institutionsSupplier.get().stream()
+                            .filter(institution -> institution.getOrigin().equals(orig) &&
+                                    institution.getCategory().equals(categories.replace(",L4,L45", "")) ||
+                                    institution.getCategory().equals(categories.replace("L6,", "").replace(",L45","")) ||
+                                    institution.getCategory().equals(categories.replace("L6,L4,", ""))
+                            )
+                    .collect(Collectors.toList()))
+                    .orElseGet(institutionsSupplier);
+
             if (institutions.isEmpty()) {
                 throw new ResourceNotFoundException();
             } else if (institutions.size() > 1) {
