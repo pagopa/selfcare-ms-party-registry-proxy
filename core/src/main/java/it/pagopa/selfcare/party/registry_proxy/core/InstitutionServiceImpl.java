@@ -11,9 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-
-
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -47,9 +44,11 @@ class InstitutionServiceImpl implements InstitutionService {
     @Override
     public QueryResult<Institution> search(Optional<String> searchText, String categories, int page, int limit) {
         log.trace("search start");
-        log.debug("search searchText = {}, page = {}, limit = {}", searchText, page, limit);
+        log.debug("search searchText = {}, categories = {}, page = {}, limit = {}", searchText, categories, page, limit);
 
-        final QueryResult<Institution> queryResult = indexSearchService.fullTextSearch(Field.DESCRIPTION, searchText.orElseThrow(), Field.CATEGORY, categories, page, limit);
+        final QueryResult<Institution> queryResult = searchText.map(text -> indexSearchService.fullTextSearch(Field.DESCRIPTION, searchText.orElseThrow(), Field.CATEGORY, categories, page, limit))
+                .orElseGet(() -> indexSearchService.findAll(page, limit));
+        
 
         log.debug("search result = {}", queryResult);
         log.trace("search end");

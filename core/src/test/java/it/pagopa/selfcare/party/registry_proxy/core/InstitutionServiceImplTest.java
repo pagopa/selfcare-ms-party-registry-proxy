@@ -69,12 +69,52 @@ class InstitutionServiceImplTest {
         verifyNoMoreInteractions(indexSearchService);
     }
 
+    @Test
+    void search_filtered_emptySearchText() {
+        // given
+        final Optional<String> searchText = Optional.empty();
+        final int page = 0;
+        final int limit = 0;
+        final String categories = "cat1,cat2,cat3";
+        final DummyInstitutionQueryResult queryResultMock = new DummyInstitutionQueryResult();
+        when(indexSearchService.findAll(anyInt(), anyInt()))
+                .thenReturn(queryResultMock);
+        // when
+        final QueryResult<Institution> queryResult = institutionService.search(searchText, categories, page, limit);
+        // then
+        assertSame(queryResultMock, queryResult);
+        verify(indexSearchService, times(1))
+                .findAll(page, limit);
+        verifyNoMoreInteractions(indexSearchService);
+    }
+
+
+    @Test
+    void search_filtered_notEmptySearchText() {
+        // given
+        final Optional<String> searchText = Optional.of("pippo");
+        final int page = 0;
+        final int limit = 0;
+        final String categories = "cat1,cat2,cat3";
+
+        final DummyInstitutionQueryResult queryResultMock = new DummyInstitutionQueryResult();
+        when(indexSearchService.fullTextSearch(any(), anyString(), any(), anyString(), anyInt(), anyInt()))
+                .thenReturn(queryResultMock);
+        // when
+        final QueryResult<Institution> queryResult = institutionService.search(searchText, categories, page, limit);
+        // then
+        assertSame(queryResultMock, queryResult);
+        verify(indexSearchService, times(1))
+                .fullTextSearch(Field.DESCRIPTION, searchText.get(), Field.CATEGORY, categories, page, limit);
+        verifyNoMoreInteractions(indexSearchService);
+    }
+
 
     @Test
     void findById_infocamere() {
         // given
         final String id = "pippo";
-        final String categories = "cat1,cat2,cat3";
+
         final List<String> categoriesMatcher = List.of("cat1", "cat2", "cat3");
         final Optional<Origin> origin = Optional.of(Origin.INFOCAMERE);
         // when
@@ -89,7 +129,7 @@ class InstitutionServiceImplTest {
     void findById_ResourceNotFound() {
         // given
         final String id = "pippo";
-        final String categories = "cat1,cat2,cat3";
+
         final List<String> categoriesMatcher = List.of("cat1", "cat2", "cat3");
         final Optional<Origin> origin = Optional.of(Origin.MOCK);
         when(indexSearchService.findById(any(), anyString()))
@@ -108,7 +148,7 @@ class InstitutionServiceImplTest {
     void findById_TooManyResourceFound() {
         // given
         final String id = "pippo";
-        final String categories = "cat1,cat2,cat3";
+        
         final List<String> categoriesMatcher = List.of("cat1", "cat2", "cat3");
         final Optional<Origin> origin = Optional.empty();
         final DummyInstitution institution = new DummyInstitution();
@@ -123,28 +163,6 @@ class InstitutionServiceImplTest {
         verifyNoMoreInteractions(indexSearchService);
     }
 
-
-    @Test
-    void findById_not_found() {
-        // given
-        final String id = "pippo";
-        final String categories = "cat1,cat2,cat3";
-        final List<String> categoriesMatcher = List.of("cat1", "cat2", "cat3");
-        final Optional<Origin> origin = Optional.of(Origin.IPA);
-        final DummyInstitution institution = mockInstance(new DummyInstitution(), "setOrigin");
-        institution.setOrigin(origin.get());
-        institution.setCategory(categories);
-        when(indexSearchService.findById(any(), anyString()))
-                .thenReturn(List.of(institution));
-        // when
-        Executable executable = () -> institutionService.findById(id, origin, categoriesMatcher);
-
-        // then
-       assertThrows(ResourceNotFoundException.class, executable);
-        verify(indexSearchService, times(1))
-                .findById(Field.ID, id);
-        verifyNoMoreInteractions(indexSearchService);
-    }
 
     @Test
     void findById_filtered_found() {
