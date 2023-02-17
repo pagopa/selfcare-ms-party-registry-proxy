@@ -8,6 +8,7 @@ import it.pagopa.selfcare.party.registry_proxy.core.NationalRegistriesService;
 import it.pagopa.selfcare.party.registry_proxy.web.model.LegalAddressResponse;
 import it.pagopa.selfcare.party.registry_proxy.web.model.LegalVerificationResult;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.NationalRegistriesMapper;
+import it.pagopa.selfcare.party.registry_proxy.web.utils.RequestValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,6 +32,7 @@ public class NationalRegistriesController {
             notes = "${swagger.api.national-registries.legal-address}")
     @GetMapping("/legal-address")
     public ResponseEntity<LegalAddressResponse> legalAddress(@RequestParam(value = "taxId") String taxId) {
+        RequestValidator.validateTaxId(taxId);
         LegalAddressProfessionalResponse response = nationalRegistriesService.getLegalAddress(taxId);
         return ResponseEntity.ok().body(NationalRegistriesMapper.toResource(response));
     }
@@ -41,6 +43,7 @@ public class NationalRegistriesController {
     @GetMapping("/verify-legal")
     public ResponseEntity<LegalVerificationResult> verifyLegal(@RequestParam(value = "taxId") String taxId,
                                                                @RequestParam(value = "vatNumber") String vatNumber) {
+        RequestValidator.validateTaxIdAndVatNumber(taxId, vatNumber);
         VerifyLegalResponse response = nationalRegistriesService.verifyLegal(taxId, vatNumber);
         return ResponseEntity.ok().body(NationalRegistriesMapper.toResult(response));
     }

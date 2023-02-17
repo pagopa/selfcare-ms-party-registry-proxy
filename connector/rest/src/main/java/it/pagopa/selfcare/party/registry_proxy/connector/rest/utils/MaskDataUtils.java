@@ -3,22 +3,24 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MaskDataUtils {
+public final class MaskDataUtils {
+    private static final Pattern elencoCf = Pattern.compile("(\"elencoCf\")\\s*:\\s*\\[\"(.*?)\"");
+    private static final Pattern patternTaxId = Pattern.compile("(\"taxId\"|\"legalTaxId\"|\"businessTaxId\"|\"vatNumber\")\\s*:\\s*\"(.*?)\"");
+    private static final Pattern patternAddress = Pattern.compile("(\"description\"|\"at\"|\"address\"|\"zip\"|\"municipality\"|\"municipalityDetails\"|\"province\"|\"foreignState\"|\"codiceStato\"|\"descrizioneStato\"|\"descrizioneLocalita\"|\"denominazione\"|\"numeroCivico\"|\"digitalAddress\")\\s*:\\s*\"(.*?)\"");
+    private static final Pattern patternIdentity = Pattern.compile("(\"pecProfessionista\"|\"cf\"|\"codFiscale\"|\"codiceFiscale\"|\"cognome\"|\"nome\"|\"sesso\"|\"dataNascita\")\\s*:\\s*\"(.*?)\"");
+    private static final Pattern patternAccessToken = Pattern.compile("(\"access_token\")\\s*:\\s*\"(.*?)\"");
+    private static final Pattern patternTaxIdQueryParams = Pattern.compile("(taxId|vatNumber)=(.{0,16})");
 
     private MaskDataUtils(){}
 
     public static String maskInformation(String dataBuffered){
-        Pattern elencoCf = Pattern.compile("(\"elencoCf\")\\s*:\\s*\\[\"(.*?)\"");
-        Pattern patternTaxId = Pattern.compile("(\"taxId\"|\"legalTaxId\"|\"businessTaxId\"|\"vatNumber\")\\s*:\\s*\"(.*?)\"");
-        Pattern patternAddress = Pattern.compile("(\"description\"|\"at\"|\"address\"|\"zip\"|\"municipality\"|\"municipalityDetails\"|\"province\"|\"foreignState\"|\"codiceStato\"|\"descrizioneStato\"|\"descrizioneLocalita\"|\"denominazione\"|\"numeroCivico\"|\"digitalAddress\")\\s*:\\s*\"(.*?)\"");
-        Pattern patternIdentity = Pattern.compile("(\"pecProfessionista\"|\"cf\"|\"codFiscale\"|\"codiceFiscale\"|\"cognome\"|\"nome\"|\"sesso\"|\"dataNascita\")\\s*:\\s*\"(.*?)\"");
-        Pattern patternAccessToken = Pattern.compile("(\"access_token\")\\s*:\\s*\"(.*?)\"");
 
         dataBuffered = maskMatcher(elencoCf, dataBuffered);
         dataBuffered = maskMatcher(patternTaxId, dataBuffered);
         dataBuffered = maskMatcher(patternAddress, dataBuffered);
         dataBuffered = maskMatcher(patternIdentity, dataBuffered);
         dataBuffered = maskMatcher(patternAccessToken, dataBuffered);
+        dataBuffered = maskMatcher(patternTaxIdQueryParams, dataBuffered);
 
         return dataBuffered;
     }
@@ -29,7 +31,7 @@ public class MaskDataUtils {
             String toBeMasked = matcher.group(2);
             String valueMasked = mask(toBeMasked);
             if(!toBeMasked.isBlank()){
-                dataBuffered = dataBuffered.replace("\""+toBeMasked+"\"","\""+valueMasked+"\"");
+                dataBuffered = dataBuffered.replace(toBeMasked, valueMasked);
             }
         }
         return dataBuffered;
@@ -66,14 +68,16 @@ public class MaskDataUtils {
         int end = strText.length()-3;
         String maskChar = String.valueOf('*');
 
-        if(strText.equals(""))
+        if(strText.equals("")){
             return "";
+        }
         if(strText.length() < 4){
             end = strText.length();
         }
         int maskLength = end - start;
-        if(maskLength == 0)
+        if(maskLength == 0) {
             return maskChar;
+        }
         String sbMaskString = maskChar.repeat(Math.max(0, maskLength));
         return strText.substring(0, start)
                 + sbMaskString

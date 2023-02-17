@@ -37,9 +37,9 @@ class NationalRegistriesControllerTest {
         legalAddressProfessionalResponse.setMunicipality("Municipality");
         legalAddressProfessionalResponse.setProvince("Province");
         legalAddressProfessionalResponse.setZip("21654");
-        when(nationalRegistriesService.getLegalAddress((String) any())).thenReturn(legalAddressProfessionalResponse);
+        when(nationalRegistriesService.getLegalAddress(any())).thenReturn(legalAddressProfessionalResponse);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/v1/national-registries/legal-address")
-                .param("taxId", "foo");
+                .param("taxId", "CIACIA80A01H501X");
         MockMvcBuilders.standaloneSetup(nationalRegistriesController)
                 .build()
                 .perform(requestBuilder)
@@ -58,10 +58,10 @@ class NationalRegistriesControllerTest {
         verifyLegalResponse.setVerificationResult(true);
         verifyLegalResponse.setVerifyLegalResultCode("Verify Legal Result Code");
         verifyLegalResponse.setVerifyLegalResultDetail("Verify Legal Result Detail");
-        when(nationalRegistriesService.verifyLegal((String) any(), (String) any())).thenReturn(verifyLegalResponse);
+        when(nationalRegistriesService.verifyLegal(any(), any())).thenReturn(verifyLegalResponse);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/v1/national-registries/verify-legal")
-                .param("taxId", "foo")
-                .param("vatNumber", "foo");
+                .param("taxId", "CIACIA80A01H501X")
+                .param("vatNumber", "CIACIA80A01H501X");
         MockMvcBuilders.standaloneSetup(nationalRegistriesController)
                 .build()
                 .perform(requestBuilder)
@@ -84,9 +84,9 @@ class NationalRegistriesControllerTest {
         legalAddressProfessionalResponse.setMunicipality("");
         legalAddressProfessionalResponse.setProvince("Province");
         legalAddressProfessionalResponse.setZip("21654");
-        when(nationalRegistriesService.getLegalAddress((String) any())).thenReturn(legalAddressProfessionalResponse);
+        when(nationalRegistriesService.getLegalAddress(any())).thenReturn(legalAddressProfessionalResponse);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/v1/national-registries/legal-address")
-                .param("taxId", "foo");
+                .param("taxId", "CIACIA80A01H501X");
         MockMvcBuilders.standaloneSetup(nationalRegistriesController)
                 .build()
                 .perform(requestBuilder)
@@ -107,9 +107,9 @@ class NationalRegistriesControllerTest {
         legalAddressProfessionalResponse.setMunicipality("Municipality");
         legalAddressProfessionalResponse.setProvince("");
         legalAddressProfessionalResponse.setZip("21654");
-        when(nationalRegistriesService.getLegalAddress((String) any())).thenReturn(legalAddressProfessionalResponse);
+        when(nationalRegistriesService.getLegalAddress(any())).thenReturn(legalAddressProfessionalResponse);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/v1/national-registries/legal-address")
-                .param("taxId", "foo");
+                .param("taxId", "CIACIA80A01H501X");
         MockMvcBuilders.standaloneSetup(nationalRegistriesController)
                 .build()
                 .perform(requestBuilder)
