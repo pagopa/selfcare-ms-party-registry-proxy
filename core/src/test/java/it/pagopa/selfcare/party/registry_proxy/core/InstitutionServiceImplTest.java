@@ -136,4 +136,24 @@ class InstitutionServiceImplTest {
         verifyNoMoreInteractions(indexSearchService);
     }
 
+    @Test
+    void findById_filtered_found() {
+        // given
+        final String id = "pippo";
+        final List<String> categories = List.of("cat1", "cat2");
+        final Optional<Origin> origin = Optional.of(Origin.IPA);
+        final DummyInstitution institution = mockInstance(new DummyInstitution(), "setOrigin");
+        institution.setOrigin(origin.get());
+        institution.setCategory("cat1");
+        when(indexSearchService.findById(any(), anyString()))
+                .thenReturn(List.of(institution));
+        // when
+        final Institution result = institutionService.findById(id, origin, categories);
+        // then
+        assertSame(institution, result);
+        verify(indexSearchService, times(1))
+                .findById(Field.ID, id);
+        verifyNoMoreInteractions(indexSearchService);
+    }
+
 }

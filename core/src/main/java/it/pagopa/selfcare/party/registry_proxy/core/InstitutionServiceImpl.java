@@ -84,7 +84,7 @@ class InstitutionServiceImpl implements InstitutionService {
     }
 
     @Override
-    public Institution findById(String id, Optional<Origin> origin, String categories) {
+    public Institution findById(String id, Optional<Origin> origin, List<String> categories) {
         log.trace("findById start");
         log.debug("findById id = {}, origin = {}", id, origin);
         if (origin.map(Origin.INFOCAMERE::equals).orElse(false)) {
@@ -93,10 +93,8 @@ class InstitutionServiceImpl implements InstitutionService {
             final Supplier<List<Institution>> institutionsSupplier = () -> indexSearchService.findById(Field.ID, id);
             final List<Institution> institutions = origin.map(orig -> institutionsSupplier.get().stream()
                             .filter(institution -> institution.getOrigin().equals(orig) &&
-                                    institution.getCategory().equals(categories.replace(",L4,L45", "")) ||
-                                    institution.getCategory().equals(categories.replace("L6,", "").replace(",L45","")) ||
-                                    institution.getCategory().equals(categories.replace("L6,L4,", ""))
-                            )
+                                    (categories.isEmpty() || categories.contains(institution.getCategory()))
+                                    )
                     .collect(Collectors.toList()))
                     .orElseGet(institutionsSupplier);
 

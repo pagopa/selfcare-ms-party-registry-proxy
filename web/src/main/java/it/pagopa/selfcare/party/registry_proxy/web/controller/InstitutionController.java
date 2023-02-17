@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -54,13 +55,13 @@ public class InstitutionController {
                                        @RequestParam(value = "limit", required = false, defaultValue = "10")
                                        Integer limit,
                                        @ApiParam(value = "${swagger.model.*.categories}")
-                                       @RequestParam(value = "categories", required = false, defaultValue = "")
+                                       @RequestParam(value = "categories", required = false)
                                        String categories) {
         log.trace("search start");
         log.debug("search search = {}, page = {}, limit = {}", search, page, limit);
 
 
-        final QueryResult<Institution> result = categories.isEmpty() ? institutionService.search(search, page, limit)
+        final QueryResult<Institution> result = categories == null ? institutionService.search(search, page, limit)
                 : institutionService.search(search, categories, page, limit);
 
         final InstitutionsResource institutionsResource = InstitutionsMapper.toResource(result.getItems().stream()
@@ -82,13 +83,14 @@ public class InstitutionController {
                                                @ApiParam("${swagger.model.*.origin}")
                                                @RequestParam(value = "origin", required = false) Optional<Origin> origin,
                                                @ApiParam(value = "${swagger.model.*.categories}")
-                                               @RequestParam(value = "categories", required = false, defaultValue = "")
-                                               String categories) {
+                                               @RequestParam(value = "categories", required = false)
+                                               Optional<String> categories) {
         log.trace("findInstitution start");
         log.debug("findInstitution id = {}, origin = {}", id, origin, categories);
         final InstitutionResource institutionResource = categories.isEmpty()
                 ? InstitutionMapper.toResource(institutionService.findById(id, origin))
-                : InstitutionMapper.toResource(institutionService.findById(id, origin, categories));
+                : InstitutionMapper.toResource(institutionService.findById(id, origin, Arrays.stream(categories.get().split(","))
+                .collect(Collectors.toList())));
         log.debug("findInstitution result = {}", institutionResource);
         log.trace("findInstitution end");
         return institutionResource;
