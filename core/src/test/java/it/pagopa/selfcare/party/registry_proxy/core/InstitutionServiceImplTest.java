@@ -125,7 +125,7 @@ class InstitutionServiceImplTest {
 
 
     @Test
-    void findById_found() {
+    void findById_not_found() {
         // given
         final String id = "pippo";
         final String categories = "cat1,cat2,cat3";
@@ -133,12 +133,14 @@ class InstitutionServiceImplTest {
         final Optional<Origin> origin = Optional.of(Origin.IPA);
         final DummyInstitution institution = mockInstance(new DummyInstitution(), "setOrigin");
         institution.setOrigin(origin.get());
+        institution.setCategory(categories);
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of(institution));
         // when
-        final Institution result = institutionService.findById(id, origin, categoriesMatcher);
+        Executable executable = () -> institutionService.findById(id, origin, categoriesMatcher);
+
         // then
-        assertSame(institution, result);
+       assertThrows(ResourceNotFoundException.class, executable);
         verify(indexSearchService, times(1))
                 .findById(Field.ID, id);
         verifyNoMoreInteractions(indexSearchService);
