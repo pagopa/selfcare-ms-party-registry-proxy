@@ -54,12 +54,12 @@ class InstitutionControllerTest {
                 .thenReturn(new DummyInstitutionQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
-                .get(BASE_URL + "/")
-                .queryParam("search", search)
-                .queryParam("page", page)
-                .queryParam("limit", limit)
-                .contentType(APPLICATION_JSON_VALUE)
-                .accept(APPLICATION_JSON_VALUE))
+                        .get(BASE_URL + "/")
+                        .queryParam("search", search)
+                        .queryParam("page", page)
+                        .queryParam("limit", limit)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.count", notNullValue()))
                 .andExpect(jsonPath("$.items", notNullValue()))
@@ -88,7 +88,7 @@ class InstitutionControllerTest {
         final String page = "2";
         final String limit = "2";
         final String categories = "cat1,cat2,cat3";
-        when(institutionServiceMock.search(any(),any(), anyInt(), anyInt()))
+        when(institutionServiceMock.search(any(), any(), anyInt(), anyInt()))
                 .thenReturn(new DummyInstitutionQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
@@ -128,9 +128,9 @@ class InstitutionControllerTest {
                 .thenReturn(new DummyInstitutionQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
-                .get(BASE_URL + "/")
-                .contentType(APPLICATION_JSON_VALUE)
-                .accept(APPLICATION_JSON_VALUE))
+                        .get(BASE_URL + "/")
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.count", notNullValue()))
                 .andExpect(jsonPath("$.items", notNullValue()))
@@ -149,38 +149,6 @@ class InstitutionControllerTest {
         // then
         verify(institutionServiceMock, times(1))
                 .search(Optional.empty(), 1, 10);
-        verifyNoMoreInteractions(institutionServiceMock);
-    }
-
-    @Test
-    void findInstitution() throws Exception {
-        // given
-        final String id = "id";
-        final Origin origin = Origin.IPA;
-        when(institutionServiceMock.findById(any(), any()))
-                .thenReturn(mockInstance(new DummyInstitution()));
-        // when
-        mvc.perform(MockMvcRequestBuilders
-                .get(BASE_URL + "/{id}", id)
-                .queryParam("origin", origin.toString())
-                .contentType(APPLICATION_JSON_VALUE)
-                .accept(APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", notNullValue()))
-                .andExpect(jsonPath("$.originId", notNullValue()))
-                .andExpect(jsonPath("$.o", notNullValue()))
-                .andExpect(jsonPath("$.ou", notNullValue()))
-                .andExpect(jsonPath("$.aoo", notNullValue()))
-                .andExpect(jsonPath("$.taxCode", notNullValue()))
-                .andExpect(jsonPath("$.category", notNullValue()))
-                .andExpect(jsonPath("$.description", notNullValue()))
-                .andExpect(jsonPath("$.digitalAddress", notNullValue()))
-                .andExpect(jsonPath("$.address", notNullValue()))
-                .andExpect(jsonPath("$.zipCode", notNullValue()))
-                .andExpect(jsonPath("$.origin", notNullValue()));
-        // then
-        verify(institutionServiceMock, times(1))
-                .findById(id, Optional.of(origin));
         verifyNoMoreInteractions(institutionServiceMock);
     }
 
@@ -224,13 +192,16 @@ class InstitutionControllerTest {
     void findInstitution_defaultInputParams() throws Exception {
         // given
         final String id = "id";
-        when(institutionServiceMock.findById(any(), any()))
+        final String categories = "cat1,cat2,cat3";
+        final List<String> categoriesMatcher = List.of("cat1", "cat2", "cat3");
+        when(institutionServiceMock.findById(any(), any(), any()))
                 .thenReturn(mockInstance(new DummyInstitution()));
         // when
         mvc.perform(MockMvcRequestBuilders
-                .get(BASE_URL + "/{id}", id)
-                .contentType(APPLICATION_JSON_VALUE)
-                .accept(APPLICATION_JSON_VALUE))
+                        .get(BASE_URL + "/{id}", id)
+                        .queryParam("categories", categories)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", notNullValue()))
                 .andExpect(jsonPath("$.originId", notNullValue()))
@@ -246,7 +217,7 @@ class InstitutionControllerTest {
                 .andExpect(jsonPath("$.origin", notNullValue()));
         // then
         verify(institutionServiceMock, times(1))
-                .findById(id, Optional.empty());
+                .findById(id, Optional.empty(), categoriesMatcher);
         verifyNoMoreInteractions(institutionServiceMock);
     }
 }

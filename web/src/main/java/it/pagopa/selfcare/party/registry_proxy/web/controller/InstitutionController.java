@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 
-import java.util.ArrayList;
+
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -87,9 +87,7 @@ public class InstitutionController {
                                                Optional<String> categories) {
         log.trace("findInstitution start");
         log.debug("findInstitution id = {}, origin = {}", id, origin, categories);
-        final InstitutionResource institutionResource = categories.isEmpty()
-                ? InstitutionMapper.toResource(institutionService.findById(id, origin))
-                : InstitutionMapper.toResource(institutionService.findById(id, origin, Arrays.stream(categories.get().split(","))
+        final InstitutionResource institutionResource = InstitutionMapper.toResource(institutionService.findById(id, origin, Arrays.stream(categories.get().split(","))
                 .collect(Collectors.toList())));
         log.debug("findInstitution result = {}", institutionResource);
         log.trace("findInstitution end");
