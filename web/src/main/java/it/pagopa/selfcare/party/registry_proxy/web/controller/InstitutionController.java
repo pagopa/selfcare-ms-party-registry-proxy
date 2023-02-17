@@ -17,12 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-
-
-
-
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -87,10 +84,13 @@ public class InstitutionController {
                                                @RequestParam(value = "categories", required = false)
                                                Optional<String> categories) {
         log.trace("findInstitution start");
-        log.debug("findInstitution id = {}, origin = {}", id, origin, categories);
+        log.debug("findInstitution id = {}, origin = {}, categories = {}", id, origin, categories);
+        List<String> categoriesList = new ArrayList<>();
+        if (categories.isPresent()) {
+            categoriesList = Arrays.stream(categories.get().split(",")).collect(Collectors.toList());
+        }
+        final InstitutionResource institutionResource = InstitutionMapper.toResource(institutionService.findById(id, origin, categoriesList));
 
-        final InstitutionResource institutionResource = InstitutionMapper.toResource(institutionService.findById(id, origin, Arrays.stream(categories.get().split(","))
-                .collect(Collectors.toList())));
         log.debug("findInstitution result = {}", institutionResource);
         log.trace("findInstitution end");
         return institutionResource;

@@ -16,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -192,14 +193,12 @@ class InstitutionControllerTest {
     void findInstitution_defaultInputParams() throws Exception {
         // given
         final String id = "id";
-        final String categories = "cat1,cat2,cat3";
-        final List<String> categoriesMatcher = List.of("cat1", "cat2", "cat3");
+        final List<String> categoriesMatcher = Collections.emptyList();
         when(institutionServiceMock.findById(any(), any(), any()))
                 .thenReturn(mockInstance(new DummyInstitution()));
         // when
         mvc.perform(MockMvcRequestBuilders
                         .get(BASE_URL + "/{id}", id)
-                        .queryParam("categories", categories)
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
