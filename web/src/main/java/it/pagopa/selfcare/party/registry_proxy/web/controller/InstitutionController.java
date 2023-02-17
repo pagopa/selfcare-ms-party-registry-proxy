@@ -18,7 +18,9 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 
+
 import java.util.ArrayList;
+
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -57,8 +59,10 @@ public class InstitutionController {
         log.trace("search start");
         log.debug("search search = {}, page = {}, limit = {}", search, page, limit);
 
+
         final QueryResult<Institution> result = categories.isEmpty() ? institutionService.search(search, page, limit)
                 : institutionService.search(search, categories, page, limit);
+
         final InstitutionsResource institutionsResource = InstitutionsMapper.toResource(result.getItems().stream()
                         .map(InstitutionMapper::toResource)
                         .collect(Collectors.toList()),

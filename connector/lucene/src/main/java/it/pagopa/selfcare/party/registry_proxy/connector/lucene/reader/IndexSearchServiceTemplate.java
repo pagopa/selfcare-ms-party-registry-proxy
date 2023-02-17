@@ -86,7 +86,9 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
         final TopScoreDocCollector collector = TopScoreDocCollector.create(reader.numDocs(), Integer.MAX_VALUE);
 
        // FUNZIONA ABBASTANZA (Da rivedere)
+
         /*final QueryParser parser = new QueryParser(field.toString(), analyzer);
+
         parser.setPhraseSlop(4);
         indexSearcher.search(parser.parse(value + " AND (L6 OR L4 OR L45)"), collector);
         final TopDocs hits = collector.topDocs((page - 1) * limit, limit);
@@ -102,6 +104,7 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
         queryResultFiltered.setTotalHits(queryResult.getTotalHits());
         log.debug("fullTextSearch result = {}", queryResultFiltered);
         log.trace("fullTextSearch end");
+
         return (QueryResult<T>) queryResultFiltered;*/
 
 
@@ -125,6 +128,7 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
         }
         final QueryResult<T> queryResult = getQueryResult(foundCategories, hits.totalHits.value);
         return queryResult;
+
     }
 
 
