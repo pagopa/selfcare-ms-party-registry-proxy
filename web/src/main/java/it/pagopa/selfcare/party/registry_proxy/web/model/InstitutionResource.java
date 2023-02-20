@@ -9,6 +9,7 @@ import lombok.Data;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 
 @Data
 public class InstitutionResource implements Institution {
@@ -65,5 +66,6 @@ public class InstitutionResource implements Institution {
     @JsonProperty(required = true)
     @NotNull
     private Origin origin;
+
 
 }
