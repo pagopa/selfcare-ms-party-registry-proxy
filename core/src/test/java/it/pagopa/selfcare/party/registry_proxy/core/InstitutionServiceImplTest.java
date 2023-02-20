@@ -183,7 +183,6 @@ class InstitutionServiceImplTest {
         verifyNoMoreInteractions(indexSearchService);
     }
 
-
     @Test
     void findById_TooManyResourceFound() {
         // given
