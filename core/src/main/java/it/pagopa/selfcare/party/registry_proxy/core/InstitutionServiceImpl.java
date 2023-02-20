@@ -67,7 +67,7 @@ class InstitutionServiceImpl implements InstitutionService {
             final Supplier<List<Institution>> institutionsSupplier = () -> indexSearchService.findById(Field.ID, id);
             final List<Institution> institutions = origin.map(orig -> institutionsSupplier.get().stream()
                             .filter(institution -> institution.getOrigin().equals(orig) &&
-                                     categories.contains(institution.getCategory())
+                                            (categories.isEmpty() || categories.contains(institution.getCategory()))
                                     )
                     .collect(Collectors.toList()))
                     .orElseGet(categories.size() > 0 ? new Supplier<List<Institution>>() {
