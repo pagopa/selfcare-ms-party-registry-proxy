@@ -16,6 +16,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static it.pagopa.selfcare.commons.utils.TestUtils.mockInstance;
@@ -53,12 +55,12 @@ class InstitutionControllerTest {
                 .thenReturn(new DummyInstitutionQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
-                .get(BASE_URL + "/")
-                .queryParam("search", search)
-                .queryParam("page", page)
-                .queryParam("limit", limit)
-                .contentType(APPLICATION_JSON_VALUE)
-                .accept(APPLICATION_JSON_VALUE))
+                        .get(BASE_URL + "/")
+                        .queryParam("search", search)
+                        .queryParam("page", page)
+                        .queryParam("limit", limit)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.count", notNullValue()))
                 .andExpect(jsonPath("$.items", notNullValue()))
@@ -80,6 +82,45 @@ class InstitutionControllerTest {
         verifyNoMoreInteractions(institutionServiceMock);
     }
 
+    @Test
+    void searchFiltered() throws Exception {
+        // given
+        final String search = "search";
+        final String page = "2";
+        final String limit = "2";
+        final String categories = "cat1,cat2,cat3";
+        when(institutionServiceMock.search(any(), any(), anyInt(), anyInt()))
+                .thenReturn(new DummyInstitutionQueryResult());
+        // when
+        mvc.perform(MockMvcRequestBuilders
+                        .get(BASE_URL + "/")
+                        .queryParam("search", search)
+                        .queryParam("page", page)
+                        .queryParam("limit", limit)
+                        .queryParam("categories", categories)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .accept(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count", notNullValue()))
+                .andExpect(jsonPath("$.items", notNullValue()))
+                .andExpect(jsonPath("$.items[0].id", notNullValue()))
+                .andExpect(jsonPath("$.items[0].originId", notNullValue()))
+                .andExpect(jsonPath("$.items[0].o", notNullValue()))
+                .andExpect(jsonPath("$.items[0].ou", notNullValue()))
+                .andExpect(jsonPath("$.items[0].aoo", notNullValue()))
+                .andExpect(jsonPath("$.items[0].taxCode", notNullValue()))
+                .andExpect(jsonPath("$.items[0].category", notNullValue()))
+                .andExpect(jsonPath("$.items[0].description", notNullValue()))
+                .andExpect(jsonPath("$.items[0].digitalAddress", notNullValue()))
+                .andExpect(jsonPath("$.items[0].address", notNullValue()))
+                .andExpect(jsonPath("$.items[0].zipCode", notNullValue()))
+                .andExpect(jsonPath("$.items[0].origin", notNullValue()));
+        // then
+        verify(institutionServiceMock, times(1))
+                .search(Optional.of(search), categories, Integer.parseInt(page), Integer.parseInt(limit));
+        verifyNoMoreInteractions(institutionServiceMock);
+    }
+
 
     @Test
     void search_defaultInputParams() throws Exception {
@@ -88,9 +129,9 @@ class InstitutionControllerTest {
                 .thenReturn(new DummyInstitutionQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
-                .get(BASE_URL + "/")
-                .contentType(APPLICATION_JSON_VALUE)
-                .accept(APPLICATION_JSON_VALUE))
+                        .get(BASE_URL + "/")
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.count", notNullValue()))
                 .andExpect(jsonPath("$.items", notNullValue()))
@@ -112,19 +153,23 @@ class InstitutionControllerTest {
         verifyNoMoreInteractions(institutionServiceMock);
     }
 
+
     @Test
-    void findInstitution() throws Exception {
+    void findInstitutionFiltered() throws Exception {
         // given
         final String id = "id";
         final Origin origin = Origin.IPA;
-        when(institutionServiceMock.findById(any(), any()))
+        final String categories = "cat1,cat2,cat3";
+        final List<String> categoriesMatcher = List.of("cat1", "cat2", "cat3");
+        when(institutionServiceMock.findById(any(), any(), any()))
                 .thenReturn(mockInstance(new DummyInstitution()));
         // when
         mvc.perform(MockMvcRequestBuilders
-                .get(BASE_URL + "/{id}", id)
-                .queryParam("origin", origin.toString())
-                .contentType(APPLICATION_JSON_VALUE)
-                .accept(APPLICATION_JSON_VALUE))
+                        .get(BASE_URL + "/{id}", id)
+                        .queryParam("origin", origin.toString())
+                        .queryParam("categories", categories)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", notNullValue()))
                 .andExpect(jsonPath("$.originId", notNullValue()))
@@ -140,22 +185,22 @@ class InstitutionControllerTest {
                 .andExpect(jsonPath("$.origin", notNullValue()));
         // then
         verify(institutionServiceMock, times(1))
-                .findById(id, Optional.of(origin));
+                .findById(id, Optional.of(origin), categoriesMatcher);
         verifyNoMoreInteractions(institutionServiceMock);
     }
-
 
     @Test
     void findInstitution_defaultInputParams() throws Exception {
         // given
         final String id = "id";
-        when(institutionServiceMock.findById(any(), any()))
+        final List<String> categoriesMatcher = Collections.emptyList();
+        when(institutionServiceMock.findById(any(), any(), any()))
                 .thenReturn(mockInstance(new DummyInstitution()));
         // when
         mvc.perform(MockMvcRequestBuilders
-                .get(BASE_URL + "/{id}", id)
-                .contentType(APPLICATION_JSON_VALUE)
-                .accept(APPLICATION_JSON_VALUE))
+                        .get(BASE_URL + "/{id}", id)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", notNullValue()))
                 .andExpect(jsonPath("$.originId", notNullValue()))
@@ -171,7 +216,7 @@ class InstitutionControllerTest {
                 .andExpect(jsonPath("$.origin", notNullValue()));
         // then
         verify(institutionServiceMock, times(1))
-                .findById(id, Optional.empty());
+                .findById(id, Optional.empty(), categoriesMatcher);
         verifyNoMoreInteractions(institutionServiceMock);
     }
 }

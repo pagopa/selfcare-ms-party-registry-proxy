@@ -22,7 +22,7 @@ public class InstitutionToDocumentConverter implements Function<Institution, Doc
             doc.add(new SortedDocValuesField(DESCRIPTION.toString(), new BytesRef(institution.getDescription())));
             doc.add(new TextField(DESCRIPTION.toString(), institution.getDescription(), Field.Store.YES));
             doc.add(new StoredField(TAX_CODE.toString(), institution.getTaxCode()));
-            doc.add(new StoredField(CATEGORY.toString(), institution.getCategory()));
+            doc.add(new TextField(CATEGORY.toString(), institution.getCategory(), Field.Store.YES));
             doc.add(new StoredField(DIGITAL_ADDRESS.toString(), institution.getDigitalAddress()));
             doc.add(new StoredField(ADDRESS.toString(), institution.getAddress()));
             doc.add(new StoredField(ZIP_CODE.toString(), institution.getZipCode()));
