@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -69,7 +70,12 @@ class InstitutionServiceImpl implements InstitutionService {
                                      categories.contains(institution.getCategory())
                                     )
                     .collect(Collectors.toList()))
-                    .orElseGet(institutionsSupplier);
+                    .orElseGet(categories.size() > 0 ? new Supplier<List<Institution>>() {
+                        @Override
+                        public List<Institution> get() {
+                            return new ArrayList<>();
+                        }
+                    } : institutionsSupplier);
 
             if (institutions.isEmpty()) {
                 throw new ResourceNotFoundException();
