@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -184,13 +185,54 @@ class InstitutionServiceImplTest {
     }
 
     @Test
+    void findById_ResourceNotFound4() {
+        // given
+        final String id = "pippo";
+        final List<String> categories = Collections.emptyList();
+        final Optional<Origin> origin = Optional.of(Origin.IPA);
+        final DummyInstitution institution = mockInstance(new DummyInstitution());
+        institution.setOrigin(Origin.MOCK);
+        institution.setCategory("cat3");
+        when(indexSearchService.findById(any(), anyString()))
+                .thenReturn(List.of(institution));
+        // when
+        final Executable executable = () -> institutionService.findById(id, origin, categories);
+        // then
+        assertThrows(ResourceNotFoundException.class, executable);
+        verify(indexSearchService, times(1))
+                .findById(Field.ID, id);
+        verifyNoMoreInteractions(indexSearchService);
+    }
+
+    @Test
+    void findById_emptyCategories() {
+        // given
+        final String id = "pippo";
+        final List<String> categories = Collections.emptyList();
+        final Optional<Origin> origin = Optional.of(Origin.IPA);
+        final DummyInstitution institution = mockInstance(new DummyInstitution());
+        institution.setOrigin(origin.get());
+        institution.setCategory("cat3");
+        when(indexSearchService.findById(any(), anyString()))
+                .thenReturn(List.of(institution));
+        // when
+        final Institution result = institutionService.findById(id, origin, categories);
+        // then
+        assertSame(institution, result);
+        verify(indexSearchService, times(1))
+                .findById(Field.ID, id);
+        verifyNoMoreInteractions(indexSearchService);
+
+    }
+
+    @Test
     void findById_TooManyResourceFound() {
         // given
         final String id = "pippo";
 
-        final List<String> categoriesMatcher = List.of("cat1", "cat2", "cat3");
+        final List<String> categoriesMatcher = Collections.emptyList();
         final Optional<Origin> origin = Optional.empty();
-        final DummyInstitution institution = new DummyInstitution();
+        final DummyInstitution institution = mockInstance(new DummyInstitution());
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of(institution, institution));
         // when
