@@ -17,7 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -51,12 +53,15 @@ public class InstitutionController {
                                        @RequestParam(value = "limit", required = false, defaultValue = "10")
                                        Integer limit,
                                        @ApiParam(value = "${swagger.model.*.categories}")
-                                       @RequestParam(value = "categories", required = false, defaultValue = "")
+                                       @RequestParam(value = "categories", required = false)
                                        String categories) {
         log.trace("search start");
         log.debug("search search = {}, page = {}, limit = {}", search, page, limit);
 
-        final QueryResult<Institution> result = categories.isEmpty() ? institutionService.search(search, page, limit) : institutionService.search(search, categories, page, limit);
+
+        final QueryResult<Institution> result = categories == null ? institutionService.search(search, page, limit)
+                : institutionService.search(search, categories, page, limit);
+
         final InstitutionsResource institutionsResource = InstitutionsMapper.toResource(result.getItems().stream()
                         .map(InstitutionMapper::toResource)
                         .collect(Collectors.toList()),
@@ -74,10 +79,18 @@ public class InstitutionController {
     public InstitutionResource findInstitution(@ApiParam("${swagger.api.institution.findInstitution.param.id}")
                                                @PathVariable("id") String id,
                                                @ApiParam("${swagger.model.*.origin}")
-                                               @RequestParam(value = "origin", required = false) Optional<Origin> origin) {
+                                               @RequestParam(value = "origin", required = false) Optional<Origin> origin,
+                                               @ApiParam(value = "${swagger.model.*.categories}")
+                                               @RequestParam(value = "categories", required = false)
+                                               Optional<String> categories) {
         log.trace("findInstitution start");
-        log.debug("findInstitution id = {}, origin = {}", id, origin);
-        final InstitutionResource institutionResource = InstitutionMapper.toResource(institutionService.findById(id, origin));
+        log.debug("findInstitution id = {}, origin = {}, categories = {}", id, origin, categories);
+        List<String> categoriesList = new ArrayList<>();
+        if (categories.isPresent()) {
+            categoriesList = Arrays.stream(categories.get().split(",")).collect(Collectors.toList());
+        }
+        final InstitutionResource institutionResource = InstitutionMapper.toResource(institutionService.findById(id, origin, categoriesList));
+
         log.debug("findInstitution result = {}", institutionResource);
         log.trace("findInstitution end");
         return institutionResource;

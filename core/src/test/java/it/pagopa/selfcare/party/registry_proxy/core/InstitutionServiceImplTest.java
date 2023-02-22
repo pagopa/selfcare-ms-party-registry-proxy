@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,14 +70,56 @@ class InstitutionServiceImplTest {
         verifyNoMoreInteractions(indexSearchService);
     }
 
+    @Test
+    void search_filtered_emptySearchText() {
+        // given
+        final Optional<String> searchText = Optional.empty();
+        final int page = 0;
+        final int limit = 0;
+        final String categories = "cat1,cat2,cat3";
+        final DummyInstitutionQueryResult queryResultMock = new DummyInstitutionQueryResult();
+        when(indexSearchService.findAll(anyInt(), anyInt()))
+                .thenReturn(queryResultMock);
+        // when
+        final QueryResult<Institution> queryResult = institutionService.search(searchText, categories, page, limit);
+        // then
+        assertSame(queryResultMock, queryResult);
+        verify(indexSearchService, times(1))
+                .findAll(page, limit);
+        verifyNoMoreInteractions(indexSearchService);
+    }
+
+
+    @Test
+    void search_filtered_notEmptySearchText() {
+        // given
+        final Optional<String> searchText = Optional.of("pippo");
+        final int page = 0;
+        final int limit = 0;
+        final String categories = "cat1,cat2,cat3";
+
+        final DummyInstitutionQueryResult queryResultMock = new DummyInstitutionQueryResult();
+        when(indexSearchService.fullTextSearch(any(), anyString(), any(), anyString(), anyInt(), anyInt()))
+                .thenReturn(queryResultMock);
+        // when
+        final QueryResult<Institution> queryResult = institutionService.search(searchText, categories, page, limit);
+        // then
+        assertSame(queryResultMock, queryResult);
+        verify(indexSearchService, times(1))
+                .fullTextSearch(Field.DESCRIPTION, searchText.get(), Field.CATEGORY, categories, page, limit);
+        verifyNoMoreInteractions(indexSearchService);
+    }
+
 
     @Test
     void findById_infocamere() {
         // given
         final String id = "pippo";
+
+        final List<String> categoriesMatcher = List.of("cat1", "cat2", "cat3");
         final Optional<Origin> origin = Optional.of(Origin.INFOCAMERE);
         // when
-        final Executable executable = () -> institutionService.findById(id, origin);
+        final Executable executable = () -> institutionService.findById(id, origin, categoriesMatcher);
         // then
         assertThrows(RuntimeException.class, executable);
         verifyNoInteractions(indexSearchService);
@@ -84,14 +127,16 @@ class InstitutionServiceImplTest {
 
 
     @Test
-    void findById_ResourceNotFound() {
+    void findById_ResourceNotFound1() {
         // given
         final String id = "pippo";
+
+        final List<String> categoriesMatcher = List.of("cat1", "cat2", "cat3");
         final Optional<Origin> origin = Optional.of(Origin.MOCK);
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of());
         // when
-        final Executable executable = () -> institutionService.findById(id, origin);
+        final Executable executable = () -> institutionService.findById(id, origin, categoriesMatcher);
         // then
         assertThrows(ResourceNotFoundException.class, executable);
         verify(indexSearchService, times(1))
@@ -99,17 +144,99 @@ class InstitutionServiceImplTest {
         verifyNoMoreInteractions(indexSearchService);
     }
 
+    @Test
+    void findById_ResourceNotFound2() {
+        // given
+        final String id = "pippo";
+        final List<String> categories = List.of("cat1", "cat2");
+        final Optional<Origin> origin = Optional.of(Origin.IPA);
+        final DummyInstitution institution = mockInstance(new DummyInstitution());
+        institution.setOrigin(Origin.MOCK);
+        institution.setCategory("cat1");
+        when(indexSearchService.findById(any(), anyString()))
+                .thenReturn(List.of(institution));
+        // when
+        final Executable executable = () -> institutionService.findById(id, origin, categories);
+        // then
+        assertThrows(ResourceNotFoundException.class, executable);
+        verify(indexSearchService, times(1))
+                .findById(Field.ID, id);
+        verifyNoMoreInteractions(indexSearchService);
+    }
+
+    @Test
+    void findById_ResourceNotFound3() {
+        // given
+        final String id = "pippo";
+        final List<String> categories = List.of("cat1", "cat2");
+        final Optional<Origin> origin = Optional.of(Origin.IPA);
+        final DummyInstitution institution = mockInstance(new DummyInstitution());
+        institution.setOrigin(origin.get());
+        institution.setCategory("cat3");
+        when(indexSearchService.findById(any(), anyString()))
+                .thenReturn(List.of(institution));
+        // when
+        final Executable executable = () -> institutionService.findById(id, origin, categories);
+        // then
+        assertThrows(ResourceNotFoundException.class, executable);
+        verify(indexSearchService, times(1))
+                .findById(Field.ID, id);
+        verifyNoMoreInteractions(indexSearchService);
+    }
+
+    @Test
+    void findById_ResourceNotFound4() {
+        // given
+        final String id = "pippo";
+        final List<String> categories = Collections.emptyList();
+        final Optional<Origin> origin = Optional.of(Origin.IPA);
+        final DummyInstitution institution = mockInstance(new DummyInstitution());
+        institution.setOrigin(Origin.MOCK);
+        institution.setCategory("cat3");
+        when(indexSearchService.findById(any(), anyString()))
+                .thenReturn(List.of(institution));
+        // when
+        final Executable executable = () -> institutionService.findById(id, origin, categories);
+        // then
+        assertThrows(ResourceNotFoundException.class, executable);
+        verify(indexSearchService, times(1))
+                .findById(Field.ID, id);
+        verifyNoMoreInteractions(indexSearchService);
+    }
+
+    @Test
+    void findById_emptyCategories() {
+        // given
+        final String id = "pippo";
+        final List<String> categories = Collections.emptyList();
+        final Optional<Origin> origin = Optional.of(Origin.IPA);
+        final DummyInstitution institution = mockInstance(new DummyInstitution());
+        institution.setOrigin(origin.get());
+        institution.setCategory("cat3");
+        when(indexSearchService.findById(any(), anyString()))
+                .thenReturn(List.of(institution));
+        // when
+        final Institution result = institutionService.findById(id, origin, categories);
+        // then
+        assertSame(institution, result);
+        verify(indexSearchService, times(1))
+                .findById(Field.ID, id);
+        verifyNoMoreInteractions(indexSearchService);
+
+    }
 
     @Test
     void findById_TooManyResourceFound() {
         // given
         final String id = "pippo";
+
+        final List<String> categoriesMatcher = Collections.emptyList();
         final Optional<Origin> origin = Optional.empty();
-        final DummyInstitution institution = new DummyInstitution();
+        final DummyInstitution institution = mockInstance(new DummyInstitution());
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of(institution, institution));
         // when
-        final Executable executable = () -> institutionService.findById(id, origin);
+        final Executable executable = () -> institutionService.findById(id, origin, categoriesMatcher);
         // then
         assertThrows(TooManyResourceFoundException.class, executable);
         verify(indexSearchService, times(1))
@@ -119,16 +246,18 @@ class InstitutionServiceImplTest {
 
 
     @Test
-    void findById_found() {
+    void findById_filtered_found() {
         // given
         final String id = "pippo";
+        final List<String> categories = List.of("cat1", "cat2");
         final Optional<Origin> origin = Optional.of(Origin.IPA);
-        final DummyInstitution institution = mockInstance(new DummyInstitution(), "setOrigin");
+        final DummyInstitution institution = mockInstance(new DummyInstitution());
         institution.setOrigin(origin.get());
+        institution.setCategory("cat1");
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of(institution));
         // when
-        final Institution result = institutionService.findById(id, origin);
+        final Institution result = institutionService.findById(id, origin, categories);
         // then
         assertSame(institution, result);
         verify(indexSearchService, times(1))
