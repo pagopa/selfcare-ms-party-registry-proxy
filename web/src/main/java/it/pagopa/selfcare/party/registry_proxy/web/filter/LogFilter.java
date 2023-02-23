@@ -35,12 +35,16 @@ public class LogFilter implements Filter {
         Long endTime = System.currentTimeMillis() - startTime;
         String requestBody = this.getContentAsString(requestCacheWrapperObject.getContentAsByteArray(), request.getCharacterEncoding());
         String responseBody = this.getContentAsString(responseCacheWrapperObject.getContentAsByteArray(), response.getCharacterEncoding());
-        log.info("Request from URI : {} - method: {} - timelapse: {}ms - Request body {} - Response body {}", httpUri, httpMethod, endTime, MaskDataUtils.maskInformation(requestBody), MaskDataUtils.maskInformation(responseBody));
+        String queryParams = requestCacheWrapperObject.getQueryString() != null ? requestCacheWrapperObject.getQueryString() : "";
+        log.info("Request from URI : {} - method: {} - timelapse: {}ms - Query params {} - Request body {} - Response body {}", httpUri, httpMethod, endTime, MaskDataUtils.maskInformation(queryParams), MaskDataUtils.maskInformation(requestBody), MaskDataUtils.maskInformation(responseBody));
         responseCacheWrapperObject.copyBodyToResponse();
     }
 
     private String getContentAsString(byte[] buf, String charsetName) {
-        if (buf == null || buf.length == 0) return "";
+        if (buf == null || buf.length == 0) {
+            return "";
+        }
+
         try {
             String content = new String(buf, charsetName);
             return content.substring(0, Math.min(MAX_LENGTH_CONTENT, content.length()));
