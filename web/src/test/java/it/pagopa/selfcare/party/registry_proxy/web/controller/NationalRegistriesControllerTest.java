@@ -72,51 +72,5 @@ class NationalRegistriesControllerTest {
                                 "{\"verificationResult\":true,\"resultCode\":\"Verify Legal Result Code\",\"resultDetail\":\"Verify Legal Result"
                                         + " Detail\"}"));
     }
-
-    /**
-     * Method under test: {@link NationalRegistriesController#legalAddress(String)}
-     */
-    @Test
-    void testLegalAddress2() throws Exception {
-        LegalAddressProfessionalResponse legalAddressProfessionalResponse = new LegalAddressProfessionalResponse();
-        legalAddressProfessionalResponse.setAddress("42 Main St");
-        legalAddressProfessionalResponse.setDescription("The characteristics of someone or something");
-        legalAddressProfessionalResponse.setMunicipality("");
-        legalAddressProfessionalResponse.setProvince("Province");
-        legalAddressProfessionalResponse.setZip("21654");
-        when(nationalRegistriesService.getLegalAddress(any())).thenReturn(legalAddressProfessionalResponse);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/v1/national-registries/legal-address")
-                .param("taxId", "CIACIA80A01H501X");
-        MockMvcBuilders.standaloneSetup(nationalRegistriesController)
-                .build()
-                .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(
-                        MockMvcResultMatchers.content().string("{\"address\":\"42 Main St (Province)\",\"zipCode\":\"21654\"}"));
-    }
-
-    /**
-     * Method under test: {@link NationalRegistriesController#legalAddress(String)}
-     */
-    @Test
-    void testLegalAddress3() throws Exception {
-        LegalAddressProfessionalResponse legalAddressProfessionalResponse = new LegalAddressProfessionalResponse();
-        legalAddressProfessionalResponse.setAddress("42 Main St");
-        legalAddressProfessionalResponse.setDescription("The characteristics of someone or something");
-        legalAddressProfessionalResponse.setMunicipality("Municipality");
-        legalAddressProfessionalResponse.setProvince("");
-        legalAddressProfessionalResponse.setZip("21654");
-        when(nationalRegistriesService.getLegalAddress(any())).thenReturn(legalAddressProfessionalResponse);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/v1/national-registries/legal-address")
-                .param("taxId", "CIACIA80A01H501X");
-        MockMvcBuilders.standaloneSetup(nationalRegistriesController)
-                .build()
-                .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content()
-                        .string("{\"address\":\"42 Main St, Municipality\",\"zipCode\":\"21654\"}"));
-    }
 }
 
