@@ -17,7 +17,7 @@ autoscaling:
 configEnvSpecific:
   JAVA_TOOL_OPTIONS: "-javaagent:/applicationinsights-agent.jar"
   APPLICATIONINSIGHTS_INSTRUMENTATION_LOGGING_LEVEL: "OFF"
-  MS_PARTY_REGISTRY_PROXY_LOG_LEVEL: "INFO"
+  MS_PARTY_REGISTRY_PROXY_LOG_LEVEL: "DEBUG"
   MOCK_OPEN_DATA_ENABLED: "true"
   MOCK_OPEN_DATA_URL: "https://selcdcheckoutsa.z6.web.core.windows.net/resources"
   MOCK_OPEN_DATA_INSTITUTION_ENDPOINT: "/institutions-open-data-mock.csv"
