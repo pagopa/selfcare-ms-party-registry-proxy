@@ -22,6 +22,7 @@ class InfoCamereServiceImpl implements InfoCamereService {
         log.info("institutionsByLegalTaxId for legalTaxId: {}", MaskDataUtils.maskString(legalTaxId));
         Businesses response = this.infoCamereConnector.institutionsByLegalTaxId(legalTaxId);
         if(checkIfResponseIsInfoCamereNotFoundError(response)) {
+            log.info("institutions not found for legalTaxId: {}",MaskDataUtils.maskString(legalTaxId));
             return createOkResponse(legalTaxId);
         }
 
