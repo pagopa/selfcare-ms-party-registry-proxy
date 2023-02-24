@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
@@ -36,6 +37,21 @@ class InfoCamereServiceImplTest {
         when(infoCamereConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
 
         assertSame(businesses, infoCamereServiceImpl.institutionsByLegalTaxId("42"));
+        verify(infoCamereConnector).institutionsByLegalTaxId(any());
+    }
+
+    /**
+     * Method under test: {@link InfoCamereServiceImpl#institutionsByLegalTaxId(String)}
+     */
+    @Test
+    void testInstitutionsByLegalTaxIdNotFound() {
+        Businesses businesses = new Businesses();
+        businesses.setAppName("infocamere");
+        when(infoCamereConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
+
+        Businesses response = infoCamereServiceImpl.institutionsByLegalTaxId("42");
+        assertEquals(response.getLegalTaxId(), "42");
+        assertEquals(response.getBusinesses().size(), 0);
         verify(infoCamereConnector).institutionsByLegalTaxId(any());
     }
 }
