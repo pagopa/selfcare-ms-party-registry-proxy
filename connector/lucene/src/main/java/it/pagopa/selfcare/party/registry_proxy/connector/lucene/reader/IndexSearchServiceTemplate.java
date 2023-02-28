@@ -86,8 +86,8 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
         Query allDcs = new MatchAllDocsQuery();
         BooleanQuery.Builder bq = new BooleanQuery.Builder();
         Query query = parser.parse(value);
-        bq.add(allDcs, BooleanClause.Occur.SHOULD);
 
+        bq.add(allDcs, BooleanClause.Occur.SHOULD);
         bq.add(cparser.parse(categories.replace(",", " OR ")), BooleanClause.Occur.MUST);
         bq.add(query, BooleanClause.Occur.SHOULD);
         indexSearcher.search(parser.parse(bq.build().toString()), collector);
