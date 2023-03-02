@@ -41,12 +41,12 @@ class InfoCamereControllerTest {
     void testInstitutionsByLegalTaxId() throws Exception {
         Businesses businesses = new Businesses();
         businesses.setBusinesses(new ArrayList<>());
-        businesses.setLegalTaxId("42");
+        businesses.setLegalTaxId("CIACIA80A01H501X");
         businesses.setRequestDateTime("2020-03-01");
         when(infoCamereService.institutionsByLegalTaxId(any())).thenReturn(businesses);
 
         GetInstitutionsByLegalFilterDto getInstitutionsByLegalFilterDto = new GetInstitutionsByLegalFilterDto();
-        getInstitutionsByLegalFilterDto.setLegalTaxId("42");
+        getInstitutionsByLegalFilterDto.setLegalTaxId("CIACIA80A01H501X");
 
         GetInstitutionsByLegalDto getInstitutionsByLegalDto = new GetInstitutionsByLegalDto();
         getInstitutionsByLegalDto.setFilter(getInstitutionsByLegalFilterDto);
@@ -60,7 +60,7 @@ class InfoCamereControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
-                        .string("{\"requestDateTime\":\"2020-03-01\",\"legalTaxId\":\"42\",\"businesses\":[]}"));
+                        .string("{\"requestDateTime\":\"2020-03-01\",\"legalTaxId\":\"CIACIA80A01H501X\",\"businesses\":[]}"));
     }
 }
 

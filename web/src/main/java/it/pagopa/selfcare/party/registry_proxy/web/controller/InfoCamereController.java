@@ -6,6 +6,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Busine
 import it.pagopa.selfcare.party.registry_proxy.core.InfoCamereService;
 import it.pagopa.selfcare.party.registry_proxy.web.model.*;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.BusinessesMapper;
+import it.pagopa.selfcare.party.registry_proxy.web.utils.RequestValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,7 @@ public class InfoCamereController {
             notes = "${swagger.api.info-camere.institutions.notes}")
     @PostMapping("/institutions")
     public ResponseEntity<BusinessesResource> institutionsByLegalTaxId(@RequestBody GetInstitutionsByLegalDto getInstitutionsByLegalDto) {
+        RequestValidator.validateTaxId(getInstitutionsByLegalDto.getFilter().getLegalTaxId());
         Businesses businesses = infoCamereService.institutionsByLegalTaxId(getInstitutionsByLegalDto.getFilter().getLegalTaxId());
         return ResponseEntity.ok().body(BusinessesMapper.toResource(businesses));
     }
