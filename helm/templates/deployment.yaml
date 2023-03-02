@@ -43,6 +43,8 @@ spec:
                 name: cdn-storage
             - secretRef:
                 name: infocamere-service-secrets
+            - secretRef:
+                name: national-registry-secrets
             - configMapRef:
                 name: jwt
             - configMapRef:
@@ -51,6 +53,8 @@ spec:
                 name: {{ include "this.fullname" . }}
             - configMapRef:
                 name: infocamere-service
+            - configMapRef:
+                name: national-registries-service
           ports:
             - name: http
               containerPort: {{ .Values.containers.portNumber }}

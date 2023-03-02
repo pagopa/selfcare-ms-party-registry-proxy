@@ -82,14 +82,15 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
         final TopScoreDocCollector collector = TopScoreDocCollector.create(reader.numDocs(), Integer.MAX_VALUE);
         final QueryParser parser = new QueryParser(field.toString(), analyzer);
         final QueryParser cparser = new QueryParser(filter.toString(), analyzer);
-
+        parser.setPhraseSlop(4);
         Query allDcs = new MatchAllDocsQuery();
         BooleanQuery.Builder bq = new BooleanQuery.Builder();
-        bq.add(allDcs, BooleanClause.Occur.SHOULD);
+        Query query = parser.parse(value);
 
+        bq.add(allDcs, BooleanClause.Occur.SHOULD);
         bq.add(cparser.parse(categories.replace(",", " OR ")), BooleanClause.Occur.MUST);
-        bq.add(parser.parse(value), BooleanClause.Occur.SHOULD);
-        indexSearcher.search(bq.build(), collector);
+        bq.add(query, BooleanClause.Occur.SHOULD);
+        indexSearcher.search(parser.parse(bq.build().toString()), collector);
         final TopDocs hits = collector.topDocs((page - 1) * limit, limit);
 
         final List<T> foundCategories = new ArrayList<>(hits.scoreDocs.length);

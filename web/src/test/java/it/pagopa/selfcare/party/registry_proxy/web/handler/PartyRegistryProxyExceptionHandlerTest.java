@@ -3,12 +3,14 @@ package it.pagopa.selfcare.party.registry_proxy.web.handler;
 import feign.FeignException;
 import it.pagopa.selfcare.commons.web.model.Problem;
 import it.pagopa.selfcare.party.registry_proxy.core.exception.ResourceNotFoundException;
+import it.pagopa.selfcare.party.registry_proxy.web.exception.ValidationFailedException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -33,6 +35,23 @@ class PartyRegistryProxyExceptionHandlerTest {
         assertEquals(NOT_FOUND.value(), responseEntity.getBody().getStatus());
     }
 
+    /**
+     * Method under test: {@link PartyRegistryProxyExceptionHandler#handleValidationFailedException(ValidationFailedException)}
+     */
+    @Test
+    void testHandleValidationFailedException() {
+        PartyRegistryProxyExceptionHandler partyRegistryProxyExceptionHandler = new PartyRegistryProxyExceptionHandler();
+        ResponseEntity<Problem> actualHandleValidationFailedExceptionResult = partyRegistryProxyExceptionHandler
+                .handleValidationFailedException(new ValidationFailedException("An error occurred"));
+        assertTrue(actualHandleValidationFailedExceptionResult.hasBody());
+        assertEquals(1, actualHandleValidationFailedExceptionResult.getHeaders().size());
+        assertEquals(400, actualHandleValidationFailedExceptionResult.getStatusCodeValue());
+        Problem body = actualHandleValidationFailedExceptionResult.getBody();
+        assert body != null;
+        assertEquals(400, body.getStatus());
+        assertEquals("An error occurred", body.getDetail());
+        assertEquals("Bad Request", body.getTitle());
+    }
 
     @Test
     void handleResourceFoundException() {
