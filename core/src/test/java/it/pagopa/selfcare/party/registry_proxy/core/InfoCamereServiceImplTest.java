@@ -47,9 +47,51 @@ class InfoCamereServiceImplTest {
     void testInstitutionsByLegalTaxIdNotFound() {
         Businesses businesses = new Businesses();
         businesses.setCode("WSPA_ERR_04");
+        when(infoCamereConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
+
+        Businesses response = infoCamereServiceImpl.institutionsByLegalTaxId("42");
+        assertEquals("42", response.getLegalTaxId());
+        assertEquals(0, response.getBusinesses().size());
+        verify(infoCamereConnector).institutionsByLegalTaxId(any());
+    }
+
+    /**
+     * Method under test: {@link InfoCamereServiceImpl#institutionsByLegalTaxId(String)}
+     */
+    @Test
+    void testInstitutionsByLegalTaxIdNotFound2() {
+        Businesses businesses = new Businesses();
         businesses.setDescription("LR Not found");
+        when(infoCamereConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
+
+        Businesses response = infoCamereServiceImpl.institutionsByLegalTaxId("42");
+        assertEquals("42", response.getLegalTaxId());
+        assertEquals(0, response.getBusinesses().size());
+        verify(infoCamereConnector).institutionsByLegalTaxId(any());
+    }
+
+    /**
+     * Method under test: {@link InfoCamereServiceImpl#institutionsByLegalTaxId(String)}
+     */
+    @Test
+    void testInstitutionsByLegalTaxIdNotFound3() {
+        Businesses businesses = new Businesses();
         businesses.setAppName("wspa-lrpf");
-        businesses.setTimestamp("2023-03-10T15:40:01.598877+01:00");
+        when(infoCamereConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
+
+        Businesses response = infoCamereServiceImpl.institutionsByLegalTaxId("42");
+        assertEquals("42", response.getLegalTaxId());
+        assertEquals(0, response.getBusinesses().size());
+        verify(infoCamereConnector).institutionsByLegalTaxId(any());
+    }
+
+    /**
+     * Method under test: {@link InfoCamereServiceImpl#institutionsByLegalTaxId(String)}
+     */
+    @Test
+    void testInstitutionsByLegalTaxIdNotFound4() {
+        Businesses businesses = new Businesses();
+        businesses.setTimestamp("2023-01-27T17:38:18.774");
         when(infoCamereConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
 
         Businesses response = infoCamereServiceImpl.institutionsByLegalTaxId("42");
