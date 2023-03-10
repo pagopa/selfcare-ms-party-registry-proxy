@@ -6,6 +6,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.MaskDataUtil
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 
 @Slf4j
@@ -42,6 +43,7 @@ class InfoCamereServiceImpl implements InfoCamereService {
         Businesses newResponse = new Businesses();
         newResponse.setLegalTaxId(legalTaxId);
         newResponse.setBusinesses(new ArrayList<>());
+        newResponse.setRequestDateTime(OffsetDateTime.now().toString());
         return newResponse;
     }
 
