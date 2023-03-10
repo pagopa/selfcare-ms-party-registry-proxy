@@ -46,12 +46,14 @@ class InfoCamereServiceImplTest {
     @Test
     void testInstitutionsByLegalTaxIdNotFound() {
         Businesses businesses = new Businesses();
-        businesses.setAppName("infocamere");
+        businesses.setCode("WSPA_ERR_04");
+        businesses.setDescription("LR Not found");
+        businesses.setAppName("wspa-lrpf");
         when(infoCamereConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
 
         Businesses response = infoCamereServiceImpl.institutionsByLegalTaxId("42");
-        assertEquals(response.getLegalTaxId(), "42");
-        assertEquals(response.getBusinesses().size(), 0);
+        assertEquals("42", response.getLegalTaxId());
+        assertEquals(0, response.getBusinesses().size());
         verify(infoCamereConnector).institutionsByLegalTaxId(any());
     }
 }
