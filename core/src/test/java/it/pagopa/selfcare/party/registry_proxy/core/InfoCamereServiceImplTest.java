@@ -49,6 +49,7 @@ class InfoCamereServiceImplTest {
         businesses.setCode("WSPA_ERR_04");
         businesses.setDescription("LR Not found");
         businesses.setAppName("wspa-lrpf");
+        businesses.setTimestamp("2023-03-10T15:40:01.598877+01:00");
         when(infoCamereConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
 
         Businesses response = infoCamereServiceImpl.institutionsByLegalTaxId("42");
