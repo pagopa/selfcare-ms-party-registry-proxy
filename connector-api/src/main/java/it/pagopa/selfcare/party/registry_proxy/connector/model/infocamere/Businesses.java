@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class Businesses {
+public class Businesses extends InfoCamereCommonError {
     @JsonProperty("dataOraEstrazione")
     private String requestDateTime;
     @JsonProperty("cfPersona")

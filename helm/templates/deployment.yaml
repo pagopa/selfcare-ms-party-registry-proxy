@@ -55,6 +55,8 @@ spec:
                 name: infocamere-service
             - configMapRef:
                 name: national-registries-service
+            - configMapRef:
+                name: inner-service-url
           ports:
             - name: http
               containerPort: {{ .Values.containers.portNumber }}

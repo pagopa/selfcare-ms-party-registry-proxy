@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
@@ -36,6 +37,66 @@ class InfoCamereServiceImplTest {
         when(infoCamereConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
 
         assertSame(businesses, infoCamereServiceImpl.institutionsByLegalTaxId("42"));
+        verify(infoCamereConnector).institutionsByLegalTaxId(any());
+    }
+
+    /**
+     * Method under test: {@link InfoCamereServiceImpl#institutionsByLegalTaxId(String)}
+     */
+    @Test
+    void testInstitutionsByLegalTaxIdNotFound() {
+        Businesses businesses = new Businesses();
+        businesses.setCode("WSPA_ERR_04");
+        when(infoCamereConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
+
+        Businesses response = infoCamereServiceImpl.institutionsByLegalTaxId("42");
+        assertEquals("42", response.getLegalTaxId());
+        assertEquals(0, response.getBusinesses().size());
+        verify(infoCamereConnector).institutionsByLegalTaxId(any());
+    }
+
+    /**
+     * Method under test: {@link InfoCamereServiceImpl#institutionsByLegalTaxId(String)}
+     */
+    @Test
+    void testInstitutionsByLegalTaxIdNotFound2() {
+        Businesses businesses = new Businesses();
+        businesses.setDescription("LR Not found");
+        when(infoCamereConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
+
+        Businesses response = infoCamereServiceImpl.institutionsByLegalTaxId("42");
+        assertEquals("42", response.getLegalTaxId());
+        assertEquals(0, response.getBusinesses().size());
+        verify(infoCamereConnector).institutionsByLegalTaxId(any());
+    }
+
+    /**
+     * Method under test: {@link InfoCamereServiceImpl#institutionsByLegalTaxId(String)}
+     */
+    @Test
+    void testInstitutionsByLegalTaxIdNotFound3() {
+        Businesses businesses = new Businesses();
+        businesses.setAppName("wspa-lrpf");
+        when(infoCamereConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
+
+        Businesses response = infoCamereServiceImpl.institutionsByLegalTaxId("42");
+        assertEquals("42", response.getLegalTaxId());
+        assertEquals(0, response.getBusinesses().size());
+        verify(infoCamereConnector).institutionsByLegalTaxId(any());
+    }
+
+    /**
+     * Method under test: {@link InfoCamereServiceImpl#institutionsByLegalTaxId(String)}
+     */
+    @Test
+    void testInstitutionsByLegalTaxIdNotFound4() {
+        Businesses businesses = new Businesses();
+        businesses.setTimestamp("2023-01-27T17:38:18.774");
+        when(infoCamereConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
+
+        Businesses response = infoCamereServiceImpl.institutionsByLegalTaxId("42");
+        assertEquals("42", response.getLegalTaxId());
+        assertEquals(0, response.getBusinesses().size());
         verify(infoCamereConnector).institutionsByLegalTaxId(any());
     }
 }
