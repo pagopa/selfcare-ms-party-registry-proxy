@@ -52,10 +52,6 @@ spec:
             - configMapRef:
                 name: {{ include "this.fullname" . }}
             - configMapRef:
-                name: infocamere-service
-            - configMapRef:
-                name: national-registries-service
-            - configMapRef:
                 name: inner-service-url
           ports:
             - name: http
