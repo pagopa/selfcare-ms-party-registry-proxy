@@ -1,0 +1,23 @@
+image:
+  repository: selcuacr.azurecr.io/selfcaremspartyregistryproxy
+  tag: 0.0.1-SNAPSHOT
+
+ingress:
+  annotations:
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://uat.selfcare.pagopa.it,http://localhost:3000"
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+configEnvSpecific:
+  JAVA_TOOL_OPTIONS: "-javaagent:/applicationinsights-agent.jar"
+  APPLICATIONINSIGHTS_INSTRUMENTATION_LOGGING_LEVEL: "OFF"
+  MS_PARTY_REGISTRY_PROXY_LOG_LEVEL: "DEBUG"
+  MOCK_OPEN_DATA_ENABLED: "true"
+  MOCK_OPEN_DATA_URL: "https://selcucheckoutsa.z6.web.core.windows.net/resources"
+  MOCK_OPEN_DATA_INSTITUTION_ENDPOINT: "/institutions-open-data-mock.csv"
+  MOCK_OPEN_DATA_CATEGORY_ENDPOINT: "/categories-open-data-mock.csv"
