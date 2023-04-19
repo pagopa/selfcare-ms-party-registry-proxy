@@ -6,6 +6,9 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.MaskDataUtil
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+
 @Slf4j
 @Service
 class InfoCamereServiceImpl implements InfoCamereService {
@@ -18,7 +21,30 @@ class InfoCamereServiceImpl implements InfoCamereService {
     @Override
     public Businesses institutionsByLegalTaxId(String legalTaxId) {
         log.info("institutionsByLegalTaxId for legalTaxId: {}", MaskDataUtils.maskString(legalTaxId));
-        return this.infoCamereConnector.institutionsByLegalTaxId(legalTaxId);
+        Businesses response = this.infoCamereConnector.institutionsByLegalTaxId(legalTaxId);
+        if(checkIfResponseIsInfoCamereNotFoundError(response)) {
+            log.info("institutions not found for legalTaxId: {}",MaskDataUtils.maskString(legalTaxId));
+            return createOkResponse(legalTaxId);
+        }
+
+        return response;
+    }
+
+    private boolean checkIfResponseIsInfoCamereNotFoundError(Businesses response) {
+        return (
+                response.getCode() != null && !"".equals(response.getCode())
+                || response.getDescription() != null && !"".equals(response.getDescription())
+                || response.getTimestamp() != null && !"".equals(response.getTimestamp())
+                || response.getAppName() != null && !"".equals(response.getAppName())
+        );
+    }
+
+    private Businesses createOkResponse(String legalTaxId) {
+        Businesses newResponse = new Businesses();
+        newResponse.setLegalTaxId(legalTaxId);
+        newResponse.setBusinesses(new ArrayList<>());
+        newResponse.setRequestDateTime(OffsetDateTime.now().toString());
+        return newResponse;
     }
 
 }
