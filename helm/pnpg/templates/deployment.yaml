@@ -53,6 +53,8 @@ spec:
                 name: {{ include "this.fullname" . }}
             - configMapRef:
                 name: inner-service-url
+            - configMapRef:
+                name: infocamere-service
           ports:
             - name: http
               containerPort: {{ .Values.containers.portNumber }}
