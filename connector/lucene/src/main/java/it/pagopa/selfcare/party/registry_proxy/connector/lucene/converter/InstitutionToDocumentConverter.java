@@ -4,6 +4,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.document.*;
 import org.apache.lucene.util.BytesRef;
+import org.springframework.util.StringUtils;
 
 import java.util.function.Function;
 
@@ -27,6 +28,11 @@ public class InstitutionToDocumentConverter implements Function<Institution, Doc
             doc.add(new StoredField(ADDRESS.toString(), institution.getAddress()));
             doc.add(new StoredField(ZIP_CODE.toString(), institution.getZipCode()));
             doc.add(new StoredField(ORIGIN.toString(), institution.getOrigin().toString()));
+
+            if(StringUtils.hasText(institution.getIstatCode())) {
+                doc.add(new StoredField(ISTAT_CODE.toString(), institution.getIstatCode()));
+            }
+
             String category = "";
             if (institution.getCategory().equals("L6") || institution.getCategory().equals("L4") || institution.getCategory().equals("L45")){
                 category = " " + institution.getCategory();

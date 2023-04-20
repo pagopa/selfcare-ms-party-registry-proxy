@@ -28,6 +28,8 @@ public abstract class IPAOpenDataTemplate implements Institution {
     private String address;
     @CsvBindByName(column = "CAP")
     private String zipCode;
+    @CsvBindByName(column = "Codice_ISTAT")
+    private String istatCode;
 
 
     @Override
