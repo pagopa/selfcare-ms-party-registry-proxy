@@ -740,6 +740,10 @@
             "type" : "string",
             "description" : "Semantic id to recognize a party between origins (or externalId)"
           },
+          "istatCode" : {
+            "type" : "string",
+            "description" : "Institution Istat Code"
+          },
           "o" : {
             "type" : "string",
             "description" : "o"

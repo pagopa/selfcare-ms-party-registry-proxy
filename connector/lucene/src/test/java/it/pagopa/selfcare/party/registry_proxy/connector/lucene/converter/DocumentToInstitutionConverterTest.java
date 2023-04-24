@@ -53,6 +53,7 @@ class DocumentToInstitutionConverterTest {
         assertEquals(input.get(Field.ADDRESS.toString()), output.getAddress());
         assertEquals(input.get(Field.ZIP_CODE.toString()), output.getZipCode());
         assertEquals(input.get(Field.ORIGIN.toString()), output.getOrigin().toString());
+        assertEquals(input.get(Field.ISTAT_CODE.toString()), output.getIstatCode().toString());
         checkNotNullFields(output, Arrays.stream(Field.values())
                 .map(Field::toString)
                 .toArray(String[]::new));
