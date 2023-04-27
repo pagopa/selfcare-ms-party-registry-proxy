@@ -52,11 +52,9 @@ spec:
             - configMapRef:
                 name: {{ include "this.fullname" . }}
             - configMapRef:
-                name: infocamere-service
-            - configMapRef:
-                name: national-registries-service
-            - configMapRef:
                 name: inner-service-url
+            - configMapRef:
+                name: infocamere-service
           ports:
             - name: http
               containerPort: {{ .Values.containers.portNumber }}
