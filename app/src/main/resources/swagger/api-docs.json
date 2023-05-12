@@ -20,6 +20,9 @@
     }
   } ],
   "tags" : [ {
+    "name" : "GeographicTaxonomies",
+    "description" : "Geographic Taxonomies Controller"
+  }, {
     "name" : "category",
     "description" : "Category operations"
   }, {
@@ -160,6 +163,100 @@
               "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/CategoryResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/geotaxonomies" : {
+      "get" : {
+        "tags" : [ "GeographicTaxonomies" ],
+        "summary" : "retrieves the geographic taxonomies",
+        "description" : "retrieves the geographic taxonomies",
+        "operationId" : "retrieveGeoTaxonomiesByDescriptionUsingGET",
+        "parameters" : [ {
+          "name" : "description",
+          "in" : "query",
+          "description" : "filter geotaxonomies, with given description prefix",
+          "required" : true,
+          "style" : "form",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "identifies the page 0-based index, default to 0",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "identifies the number of entries in a page, default to 10",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/GeographicTaxonomies"
+                  }
                 }
               }
             }
@@ -688,6 +785,39 @@
             "type" : "string",
             "description" : "Describes which is the source of data",
             "enum" : [ "INFOCAMERE", "IPA", "static" ]
+          }
+        }
+      },
+      "GeographicTaxonomies" : {
+        "title" : "GeographicTaxonomies",
+        "type" : "object",
+        "properties" : {
+          "country" : {
+            "type" : "string"
+          },
+          "country_abbreviation" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "enabled" : {
+            "type" : "boolean"
+          },
+          "geotax_id" : {
+            "type" : "string"
+          },
+          "istat_code" : {
+            "type" : "string"
+          },
+          "province_abbreviation" : {
+            "type" : "string"
+          },
+          "province_id" : {
+            "type" : "string"
+          },
+          "region_id" : {
+            "type" : "string"
           }
         }
       },
