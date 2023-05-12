@@ -14,7 +14,7 @@ public interface GeoTaxonomiesRestClient {
     @GetMapping(value = "${rest-client.geo-taxonomies.getByDescription.path}", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     GeographicTaxonomiesResponse getExtByDescription(@RequestParam(value = "description") String description,
-                                                     @RequestParam(value = "offset") String offset,
-                                                     @RequestParam(value = "limit") String limit);
+                                                     @RequestParam(value = "offset") Integer offset,
+                                                     @RequestParam(value = "limit") Integer limit);
 
 }

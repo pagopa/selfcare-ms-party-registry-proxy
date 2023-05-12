@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface GeographicTaxonomiesService {
 
-    List<GeographicTaxonomies> retrieveGeoTaxonomiesByDescription(String description, String offset, String limit);
+    List<GeographicTaxonomies> retrieveGeoTaxonomiesByDescription(String description, Integer offset, Integer limit);
 
 }

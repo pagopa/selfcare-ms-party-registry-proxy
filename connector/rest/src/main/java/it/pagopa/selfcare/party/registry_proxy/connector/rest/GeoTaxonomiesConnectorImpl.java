@@ -26,7 +26,7 @@ public class GeoTaxonomiesConnectorImpl implements GeoTaxonomiesConnector {
 
 
     @Override
-    public List<GeographicTaxonomies> getExtByDescription(String description, String offset, String limit) {
+    public List<GeographicTaxonomies> getExtByDescription(String description, Integer offset, Integer limit) {
         log.debug(LogUtils.CONFIDENTIAL_MARKER, "getExtByDescription description = {}", description);
         Assert.hasText(description, "Description is required");
         GeographicTaxonomiesResponse result = restClient.getExtByDescription(description, offset, limit);

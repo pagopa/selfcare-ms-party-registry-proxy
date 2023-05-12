@@ -19,7 +19,7 @@ public class GeographicTaxonomiesServiceImpl implements GeographicTaxonomiesServ
 
 
     @Override
-    public List<GeographicTaxonomies> retrieveGeoTaxonomiesByDescription(String description, String offset, String limit) {
+    public List<GeographicTaxonomies> retrieveGeoTaxonomiesByDescription(String description, Integer offset, Integer limit) {
         Assert.hasText(description, "Description is required");
         return geoTaxonomiesConnector.getExtByDescription(description, offset, limit);
     }

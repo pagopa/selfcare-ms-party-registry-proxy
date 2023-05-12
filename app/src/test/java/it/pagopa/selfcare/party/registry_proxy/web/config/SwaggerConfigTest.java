@@ -45,6 +45,9 @@ class SwaggerConfigTest {
     @MockBean
     private NationalRegistriesService nationalRegistriesService;
 
+    @MockBean
+    private GeographicTaxonomiesService geographicTaxonomiesService;
+
     @Autowired
     WebApplicationContext context;
 

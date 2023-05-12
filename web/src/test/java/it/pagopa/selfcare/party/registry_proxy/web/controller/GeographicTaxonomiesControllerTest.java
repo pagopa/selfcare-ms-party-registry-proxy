@@ -41,8 +41,8 @@ public class GeographicTaxonomiesControllerTest {
 
         //given
         String description = "Roma";
-        String offset = "0";
-        String limit = "10";
+        int offset = 0;
+        int limit = 10;
         List<GeographicTaxonomies> geographicTaxonomies = new ArrayList<>();
         GeographicTaxonomies geographicTaxonomy = new GeographicTaxonomies();
         geographicTaxonomy.setDescription(description);
@@ -75,7 +75,7 @@ public class GeographicTaxonomiesControllerTest {
 
         //then
         verify(geographicTaxonomiesService, times(1))
-                .retrieveGeoTaxonomiesByDescription(anyString(), anyString(), anyString());
+                .retrieveGeoTaxonomiesByDescription(anyString(), any(), any());
         verifyNoMoreInteractions(geographicTaxonomiesService);
 
     }

@@ -235,7 +235,8 @@
           "required" : false,
           "style" : "form",
           "schema" : {
-            "type" : "string"
+            "type" : "integer",
+            "format" : "int32"
           }
         }, {
           "name" : "limit",
@@ -244,7 +245,8 @@
           "required" : false,
           "style" : "form",
           "schema" : {
-            "type" : "string"
+            "type" : "integer",
+            "format" : "int32"
           }
         } ],
         "responses" : {

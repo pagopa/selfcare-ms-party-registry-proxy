@@ -62,10 +62,10 @@ class GeoTaxonomiesConnectorImplTest {
         geographicTaxonomies.setIstatCode("null");
         geographicTaxonomiesList.add(geographicTaxonomies);
 
-        when(geoTaxonomiesRestClient.getExtByDescription(anyString(),anyString(),anyString())).thenReturn(geographicTaxonomiesResponse);
+        when(geoTaxonomiesRestClient.getExtByDescription(anyString(),any(),any())).thenReturn(geographicTaxonomiesResponse);
 
         //when
-        geographicTaxonomiesList = geoTaxonomiesConnectorImpl.getExtByDescription(description, "0", "10");
+        geographicTaxonomiesList = geoTaxonomiesConnectorImpl.getExtByDescription(description, 0, 10);
 
         //then
         assertNotNull(geographicTaxonomiesList);
@@ -82,7 +82,7 @@ class GeoTaxonomiesConnectorImplTest {
         assertEquals(geographicTaxonomyResponse.getCountryAbbreviation(), geographicTaxonomy.getCountryAbbreviation());
 
         verify(geoTaxonomiesRestClient, times(1))
-                .getExtByDescription(anyString(),anyString(),anyString());
+                .getExtByDescription(anyString(),any(),any());
         verifyNoMoreInteractions(geoTaxonomiesRestClient);
 
     }
@@ -107,10 +107,10 @@ class GeoTaxonomiesConnectorImplTest {
         geographicTaxonomyResponseList.add(geographicTaxonomyResponse);
         geographicTaxonomiesResponse.setGeographicTaxonomiesResponse(geographicTaxonomyResponseList);
 
-        when(geoTaxonomiesRestClient.getExtByDescription(anyString(),anyString(),anyString())).thenReturn(geographicTaxonomiesResponse);
+        when(geoTaxonomiesRestClient.getExtByDescription(anyString(),any(),any())).thenReturn(geographicTaxonomiesResponse);
 
         //when
-        Executable executable = () -> geoTaxonomiesConnectorImpl.getExtByDescription(description, "0", "10");
+        Executable executable = () -> geoTaxonomiesConnectorImpl.getExtByDescription(description, 0, 10);
 
         //then
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);

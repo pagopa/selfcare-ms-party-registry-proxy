@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface GeoTaxonomiesConnector {
 
-    List<GeographicTaxonomies> getExtByDescription(String description, String offset, String limit);
+    List<GeographicTaxonomies> getExtByDescription(String description, Integer offset, Integer limit);
 }

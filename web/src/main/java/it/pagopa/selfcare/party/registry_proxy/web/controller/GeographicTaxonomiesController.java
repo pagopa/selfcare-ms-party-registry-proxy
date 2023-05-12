@@ -44,9 +44,9 @@ public class GeographicTaxonomiesController {
     public ResponseEntity<List<GeographicTaxonomies>> retrieveGeoTaxonomiesByDescription(@ApiParam("${swagger.api.geotaxonomies.model.description}")
                                                                                          @RequestParam(value = "description") String description,
                                                                                          @ApiParam("${swagger.api.geotaxonomies.model.offset}")
-                                                                                         @RequestParam(value = "offset", required = false) String offset,
+                                                                                         @RequestParam(value = "offset", required = false) Integer offset,
                                                                                          @ApiParam("${swagger.api.geotaxonomies.model.limit}")
-                                                                                         @RequestParam(value = "limit", required = false) String limit) {
+                                                                                         @RequestParam(value = "limit", required = false) Integer limit) {
 
         CustomExceptionMessage.setCustomMessage(RETRIEVE_GEO_TAXONOMIES_ERROR);
         List<GeographicTaxonomies> list = geographicTaxonomiesService.retrieveGeoTaxonomiesByDescription(description, offset, limit);

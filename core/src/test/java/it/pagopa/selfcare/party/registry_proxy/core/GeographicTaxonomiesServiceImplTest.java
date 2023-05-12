@@ -30,7 +30,7 @@ public class GeographicTaxonomiesServiceImplTest {
 
 
     /**
-     * Method under test: {@link GeographicTaxonomiesServiceImpl#retrieveGeoTaxonomiesByDescription(String,String,String)}
+     * Method under test: {@link GeographicTaxonomiesServiceImpl#retrieveGeoTaxonomiesByDescription(String,Integer,Integer)}
      */
 
     @Test
@@ -50,10 +50,10 @@ public class GeographicTaxonomiesServiceImplTest {
         geographicTaxonomy.setCountryAbbreviation("IT");
         geographicTaxonomy.setIstatCode("null");
         geographicTaxonomiesList.add(geographicTaxonomy);
-        when(geoTaxonomiesConnector.getExtByDescription(any(),any(),any())).thenReturn(geographicTaxonomiesList);
+        when(geoTaxonomiesConnector.getExtByDescription(anyString(),any(),any())).thenReturn(geographicTaxonomiesList);
 
         //when
-        geographicTaxonomiesList = geographicTaxonomiesService.retrieveGeoTaxonomiesByDescription(description, "0", "10");
+        geographicTaxonomiesList = geographicTaxonomiesService.retrieveGeoTaxonomiesByDescription(description, 0, 10);
 
 
         //then
@@ -85,7 +85,7 @@ public class GeographicTaxonomiesServiceImplTest {
         when(geoTaxonomiesConnector.getExtByDescription(any(), any(), any())).thenReturn(geographicTaxonomiesList);
 
         //when
-        Executable executable = () -> geographicTaxonomiesService.retrieveGeoTaxonomiesByDescription(description, "0", "10");
+        Executable executable = () -> geographicTaxonomiesService.retrieveGeoTaxonomiesByDescription(description, 0, 10);
 
         //then
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
