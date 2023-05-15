@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class GeographicTaxonomies {
+public class GeographicTaxonomy {
     @JsonProperty("geotax_id")
     private String geotaxId; //REQUIRED
     private String description;

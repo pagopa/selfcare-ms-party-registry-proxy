@@ -2,7 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.core;
 
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.GeoTaxonomiesConnector;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.GeographicTaxonomies;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.GeographicTaxonomy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
@@ -38,8 +38,8 @@ public class GeographicTaxonomiesServiceImplTest {
 
         //given
         String description = "Roma";
-        List<GeographicTaxonomies> geographicTaxonomiesList = new ArrayList<>();
-        GeographicTaxonomies geographicTaxonomy = new GeographicTaxonomies();
+        List<GeographicTaxonomy> geographicTaxonomiesList = new ArrayList<>();
+        GeographicTaxonomy geographicTaxonomy = new GeographicTaxonomy();
         geographicTaxonomy.setDescription(description);
         geographicTaxonomy.setGeotaxId("058");
         geographicTaxonomy.setEnabled(true);
@@ -70,8 +70,8 @@ public class GeographicTaxonomiesServiceImplTest {
 
         //given
         String description = null;
-        List<GeographicTaxonomies> geographicTaxonomiesList = new ArrayList<>();
-        GeographicTaxonomies geographicTaxonomy = new GeographicTaxonomies();
+        List<GeographicTaxonomy> geographicTaxonomiesList = new ArrayList<>();
+        GeographicTaxonomy geographicTaxonomy = new GeographicTaxonomy();
         geographicTaxonomy.setDescription(description);
         geographicTaxonomy.setGeotaxId("058");
         geographicTaxonomy.setEnabled(true);

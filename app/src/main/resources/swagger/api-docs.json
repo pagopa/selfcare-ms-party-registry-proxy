@@ -213,16 +213,16 @@
         } ]
       }
     },
-    "/geotaxonomies" : {
+    "/v1/geotaxonomies" : {
       "get" : {
         "tags" : [ "GeographicTaxonomies" ],
-        "summary" : "retrieves the geographic taxonomies",
-        "description" : "retrieves the geographic taxonomies",
+        "summary" : "retrieves the geographic taxonomies by description",
+        "description" : "retrieves the geographic taxonomies by description",
         "operationId" : "retrieveGeoTaxonomiesByDescriptionUsingGET",
         "parameters" : [ {
           "name" : "description",
           "in" : "query",
-          "description" : "filter geotaxonomies, with given description prefix",
+          "description" : "geographic taxonomy description",
           "required" : true,
           "style" : "form",
           "schema" : {
@@ -253,11 +253,11 @@
           "200" : {
             "description" : "OK",
             "content" : {
-              "*/*" : {
+              "application/json" : {
                 "schema" : {
                   "type" : "array",
                   "items" : {
-                    "$ref" : "#/components/schemas/GeographicTaxonomies"
+                    "$ref" : "#/components/schemas/GeographicTaxonomyResource"
                   }
                 }
               }
@@ -790,36 +790,46 @@
           }
         }
       },
-      "GeographicTaxonomies" : {
-        "title" : "GeographicTaxonomies",
+      "GeographicTaxonomyResource" : {
+        "title" : "GeographicTaxonomyResource",
         "type" : "object",
         "properties" : {
           "country" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Geographic taxonomy country"
           },
           "country_abbreviation" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Geographic taxonomy country abbreviation"
           },
           "description" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Geographic taxonomy description"
           },
           "enabled" : {
-            "type" : "boolean"
+            "type" : "boolean",
+            "description" : "Geographic taxonomy enabled",
+            "example" : false
           },
           "geotax_id" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Geographic taxonomy unique identifier "
           },
           "istat_code" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Geographic taxonomy istat code"
           },
           "province_abbreviation" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Geographic taxonomy province abbreviation"
           },
           "province_id" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Geographic taxonomy province unique identifier"
           },
           "region_id" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Geographic taxonomy region unique identifier"
           }
         }
       },

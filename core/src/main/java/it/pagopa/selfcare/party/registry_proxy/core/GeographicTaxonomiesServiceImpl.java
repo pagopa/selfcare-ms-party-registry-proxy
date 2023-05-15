@@ -2,7 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.core;
 
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.GeoTaxonomiesConnector;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.GeographicTaxonomies;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.GeographicTaxonomy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -19,7 +19,7 @@ public class GeographicTaxonomiesServiceImpl implements GeographicTaxonomiesServ
 
 
     @Override
-    public List<GeographicTaxonomies> retrieveGeoTaxonomiesByDescription(String description, Integer offset, Integer limit) {
+    public List<GeographicTaxonomy> retrieveGeoTaxonomiesByDescription(String description, Integer offset, Integer limit) {
         Assert.hasText(description, "Description is required");
         return geoTaxonomiesConnector.getExtByDescription(description, offset, limit);
     }

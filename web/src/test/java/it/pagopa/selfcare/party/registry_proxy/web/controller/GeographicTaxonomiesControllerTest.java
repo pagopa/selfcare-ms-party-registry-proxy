@@ -1,7 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 
-import it.pagopa.selfcare.party.registry_proxy.connector.model.GeographicTaxonomies;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.GeographicTaxonomy;
 import it.pagopa.selfcare.party.registry_proxy.core.GeographicTaxonomiesService;
 import it.pagopa.selfcare.party.registry_proxy.web.config.WebTestConfig;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = {GeographicTaxonomiesController.class, WebTestConfig.class})
 @WebMvcTest(value = {GeographicTaxonomiesController.class}, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 public class GeographicTaxonomiesControllerTest {
-    private static final String BASE_URL = "/geotaxonomies";
+    private static final String BASE_URL = "/v1/geotaxonomies";
 
     @Autowired
     protected MockMvc mvc;
@@ -43,8 +43,8 @@ public class GeographicTaxonomiesControllerTest {
         String description = "Roma";
         int offset = 0;
         int limit = 10;
-        List<GeographicTaxonomies> geographicTaxonomies = new ArrayList<>();
-        GeographicTaxonomies geographicTaxonomy = new GeographicTaxonomies();
+        List<GeographicTaxonomy> geographicTaxonomies = new ArrayList<>();
+        GeographicTaxonomy geographicTaxonomy = new GeographicTaxonomy();
         geographicTaxonomy.setDescription(description);
         geographicTaxonomy.setGeotaxId("058");
         geographicTaxonomy.setEnabled(true);
