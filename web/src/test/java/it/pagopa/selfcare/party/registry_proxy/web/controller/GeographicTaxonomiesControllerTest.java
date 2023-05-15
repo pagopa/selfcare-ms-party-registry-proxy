@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = {GeographicTaxonomiesController.class, WebTestConfig.class})
 @WebMvcTest(value = {GeographicTaxonomiesController.class}, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 public class GeographicTaxonomiesControllerTest {
-    private static final String BASE_URL = "/geotaxonomies";
+    private static final String BASE_URL = "/v1/geotaxonomies";
 
     @Autowired
     protected MockMvc mvc;

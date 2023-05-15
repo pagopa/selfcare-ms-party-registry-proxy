@@ -213,7 +213,7 @@
         } ]
       }
     },
-    "/geotaxonomies" : {
+    "/v1/geotaxonomies" : {
       "get" : {
         "tags" : [ "GeographicTaxonomies" ],
         "summary" : "retrieves the geographic taxonomies",
@@ -253,7 +253,7 @@
           "200" : {
             "description" : "OK",
             "content" : {
-              "*/*" : {
+              "application/json" : {
                 "schema" : {
                   "type" : "array",
                   "items" : {
