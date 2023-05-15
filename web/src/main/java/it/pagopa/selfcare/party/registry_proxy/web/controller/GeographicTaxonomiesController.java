@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.GeographicTaxonomy;
 import it.pagopa.selfcare.party.registry_proxy.core.GeographicTaxonomiesService;
+import it.pagopa.selfcare.party.registry_proxy.web.model.GeographicTaxonomyResource;
+import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.GeographicTaxonomyMapper;
 import it.pagopa.selfcare.party.registry_proxy.web.utils.CustomExceptionMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -42,16 +44,16 @@ public class GeographicTaxonomiesController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomiesByDescription}", notes = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomiesByDescription}")
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<GeographicTaxonomy>> retrieveGeoTaxonomiesByDescription(@ApiParam("${swagger.api.geotaxonomy.model.description}")
+    public ResponseEntity<List<GeographicTaxonomyResource>> retrieveGeoTaxonomiesByDescription(@ApiParam("${swagger.api.geotaxonomy.model.description}")
                                                                                          @RequestParam(value = "description") String description,
-                                                                                       @ApiParam("${swagger.api.geotaxonomy.model.offset}")
+                                                                                               @ApiParam("${swagger.api.geotaxonomy.model.offset}")
                                                                                          @RequestParam(value = "offset", required = false) Integer offset,
-                                                                                       @ApiParam("${swagger.api.geotaxonomy.model.limit}")
+                                                                                               @ApiParam("${swagger.api.geotaxonomy.model.limit}")
                                                                                          @RequestParam(value = "limit", required = false) Integer limit) {
 
         CustomExceptionMessage.setCustomMessage(RETRIEVE_GEO_TAXONOMIES_ERROR);
-        List<GeographicTaxonomy> list = geographicTaxonomiesService.retrieveGeoTaxonomiesByDescription(description, offset, limit);
-        return ResponseEntity.ok(list);
+        List<GeographicTaxonomy> geographicTaxonomyList = geographicTaxonomiesService.retrieveGeoTaxonomiesByDescription(description, offset, limit);
+        return ResponseEntity.ok().body(GeographicTaxonomyMapper.toResource(geographicTaxonomyList));
     }
 
 }
