@@ -2,7 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
 
 
-import it.pagopa.selfcare.party.registry_proxy.connector.model.GeographicTaxonomies;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.GeographicTaxonomy;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.GeoTaxonomiesRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.geotaxonomy.GeographicTaxonomiesResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.geotaxonomy.GeographicTaxonomyResponse;
@@ -49,8 +49,8 @@ class GeoTaxonomiesConnectorImplTest {
         geographicTaxonomyResponseList.add(geographicTaxonomyResponse);
         geographicTaxonomiesResponse.setGeographicTaxonomiesResponse(geographicTaxonomyResponseList);
 
-        List<GeographicTaxonomies> geographicTaxonomiesList = new ArrayList<>();
-        GeographicTaxonomies geographicTaxonomies = new GeographicTaxonomies();
+        List<GeographicTaxonomy> geographicTaxonomiesList = new ArrayList<>();
+        GeographicTaxonomy geographicTaxonomies = new GeographicTaxonomy();
         geographicTaxonomies.setDescription(description);
         geographicTaxonomies.setGeotaxId("058");
         geographicTaxonomies.setEnabled(true);
@@ -71,7 +71,7 @@ class GeoTaxonomiesConnectorImplTest {
         assertNotNull(geographicTaxonomiesList);
         assertNotNull(geographicTaxonomiesList.getClass());
         assertEquals(1, geographicTaxonomiesList.size());
-        GeographicTaxonomies geographicTaxonomy = geographicTaxonomiesList.iterator().next();
+        GeographicTaxonomy geographicTaxonomy = geographicTaxonomiesList.iterator().next();
         assertEquals(geographicTaxonomyResponse.getDescription(), geographicTaxonomy.getDescription());
         assertEquals(geographicTaxonomyResponse.getIstatCode(), geographicTaxonomy.getIstatCode());
         assertEquals(geographicTaxonomyResponse.getProvinceId(), geographicTaxonomy.getProvinceId());

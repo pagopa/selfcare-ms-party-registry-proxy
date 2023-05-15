@@ -2,7 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
 import it.pagopa.selfcare.commons.base.logging.LogUtils;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.GeoTaxonomiesConnector;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.GeographicTaxonomies;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.GeographicTaxonomy;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.GeoTaxonomiesRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.geotaxonomy.GeographicTaxonomiesResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.geotaxonomy.GeographicTaxonomyResponse;
@@ -26,7 +26,7 @@ public class GeoTaxonomiesConnectorImpl implements GeoTaxonomiesConnector {
 
 
     @Override
-    public List<GeographicTaxonomies> getExtByDescription(String description, Integer offset, Integer limit) {
+    public List<GeographicTaxonomy> getExtByDescription(String description, Integer offset, Integer limit) {
         log.debug(LogUtils.CONFIDENTIAL_MARKER, "getExtByDescription description = {}", description);
         Assert.hasText(description, "Description is required");
         GeographicTaxonomiesResponse result = restClient.getExtByDescription(description, offset, limit);
@@ -35,21 +35,21 @@ public class GeoTaxonomiesConnectorImpl implements GeoTaxonomiesConnector {
     }
 
 
-    private List<GeographicTaxonomies> toGeoTaxonomiesList(List<GeographicTaxonomyResponse> result) {
-        List<GeographicTaxonomies> geographicTaxonomiesList = new ArrayList<>();
+    private List<GeographicTaxonomy> toGeoTaxonomiesList(List<GeographicTaxonomyResponse> result) {
+        List<GeographicTaxonomy> geographicTaxonomyList = new ArrayList<>();
         for(GeographicTaxonomyResponse geoTaxonomiesResult : result) {
-            GeographicTaxonomies geographicTaxonomies = new GeographicTaxonomies();
-            geographicTaxonomies.setDescription(geoTaxonomiesResult.getDescription());
-            geographicTaxonomies.setGeotaxId(geoTaxonomiesResult.getGeotaxId());
-            geographicTaxonomies.setEnabled(geoTaxonomiesResult.isEnabled());
-            geographicTaxonomies.setRegionId(geoTaxonomiesResult.getRegionId());
-            geographicTaxonomies.setProvinceId(geoTaxonomiesResult.getProvinceId());
-            geographicTaxonomies.setProvinceAbbreviation(geoTaxonomiesResult.getProvinceAbbreviation());
-            geographicTaxonomies.setCountry(geoTaxonomiesResult.getCountry());
-            geographicTaxonomies.setCountryAbbreviation(geoTaxonomiesResult.getCountryAbbreviation());
-            geographicTaxonomies.setIstatCode(geoTaxonomiesResult.getIstatCode());
-            geographicTaxonomiesList.add(geographicTaxonomies);
+            GeographicTaxonomy geographicTaxonomy = new GeographicTaxonomy();
+            geographicTaxonomy.setDescription(geoTaxonomiesResult.getDescription());
+            geographicTaxonomy.setGeotaxId(geoTaxonomiesResult.getGeotaxId());
+            geographicTaxonomy.setEnabled(geoTaxonomiesResult.isEnabled());
+            geographicTaxonomy.setRegionId(geoTaxonomiesResult.getRegionId());
+            geographicTaxonomy.setProvinceId(geoTaxonomiesResult.getProvinceId());
+            geographicTaxonomy.setProvinceAbbreviation(geoTaxonomiesResult.getProvinceAbbreviation());
+            geographicTaxonomy.setCountry(geoTaxonomiesResult.getCountry());
+            geographicTaxonomy.setCountryAbbreviation(geoTaxonomiesResult.getCountryAbbreviation());
+            geographicTaxonomy.setIstatCode(geoTaxonomiesResult.getIstatCode());
+            geographicTaxonomyList.add(geographicTaxonomy);
         }
-        return geographicTaxonomiesList;
+        return geographicTaxonomyList;
     }
 }

@@ -1,7 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 
-import it.pagopa.selfcare.party.registry_proxy.connector.model.GeographicTaxonomies;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.GeographicTaxonomy;
 import it.pagopa.selfcare.party.registry_proxy.core.GeographicTaxonomiesService;
 import it.pagopa.selfcare.party.registry_proxy.web.config.WebTestConfig;
 import org.junit.jupiter.api.Test;
@@ -43,8 +43,8 @@ public class GeographicTaxonomiesControllerTest {
         String description = "Roma";
         int offset = 0;
         int limit = 10;
-        List<GeographicTaxonomies> geographicTaxonomies = new ArrayList<>();
-        GeographicTaxonomies geographicTaxonomy = new GeographicTaxonomies();
+        List<GeographicTaxonomy> geographicTaxonomies = new ArrayList<>();
+        GeographicTaxonomy geographicTaxonomy = new GeographicTaxonomy();
         geographicTaxonomy.setDescription(description);
         geographicTaxonomy.setGeotaxId("058");
         geographicTaxonomy.setEnabled(true);
