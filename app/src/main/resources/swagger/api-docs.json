@@ -794,6 +794,10 @@
         "title" : "GeographicTaxonomyResource",
         "type" : "object",
         "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "Geographic taxonomy unique identifier "
+          },
           "country" : {
             "type" : "string",
             "description" : "Geographic taxonomy country"
@@ -802,7 +806,7 @@
             "type" : "string",
             "description" : "Geographic taxonomy country abbreviation"
           },
-          "description" : {
+          "desc" : {
             "type" : "string",
             "description" : "Geographic taxonomy description"
           },
@@ -810,10 +814,6 @@
             "type" : "boolean",
             "description" : "Geographic taxonomy enabled",
             "example" : false
-          },
-          "geotax_id" : {
-            "type" : "string",
-            "description" : "Geographic taxonomy unique identifier "
           },
           "istat_code" : {
             "type" : "string",
