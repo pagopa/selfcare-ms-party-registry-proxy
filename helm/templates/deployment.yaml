@@ -44,7 +44,11 @@ spec:
             - secretRef:
                 name: infocamere-service-secrets
             - secretRef:
+<<<<<<< HEAD
                 name: geotaxonomy-secrets
+=======
+                name: national-registry-secrets
+>>>>>>> origin/release-uat
             - configMapRef:
                 name: jwt
             - configMapRef:
