@@ -7,8 +7,9 @@ import lombok.Data;
 @Data
 public class GeographicTaxonomyResource {
     @ApiModelProperty(value = "${swagger.geographicTaxonomy.model.geotaxId}")
-    @JsonProperty("geotax_id")
+    @JsonProperty("code")
     private String geotaxId; //REQUIRED
+    @JsonProperty("desc")
     @ApiModelProperty(value = "${swagger.geographicTaxonomy.model.description}")
     private String description;
     @ApiModelProperty(value = "${swagger.geographicTaxonomy.model.istatCode}")
