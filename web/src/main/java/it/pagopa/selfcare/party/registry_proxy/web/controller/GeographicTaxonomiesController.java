@@ -8,11 +8,9 @@ import it.pagopa.selfcare.party.registry_proxy.core.GeographicTaxonomiesService;
 import it.pagopa.selfcare.party.registry_proxy.web.utils.CustomExceptionMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,6 +19,7 @@ import static it.pagopa.selfcare.party.registry_proxy.connector.constant.Generic
 
 @Slf4j
 @RestController
+@RequestMapping(value = "/v1/geotaxonomies", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(tags = "GeographicTaxonomies")
 public class GeographicTaxonomiesController {
 
@@ -34,13 +33,15 @@ public class GeographicTaxonomiesController {
      * The function returns geographic taxonomies
      *
      * @param description String
+     * @param offset Integer
+     * @param limit Integer
      * @return List
      * * Code: 200, Message: successful operation, DataType: GeographicTaxonomies
      * * Code: 404, Message: GeographicTaxonomies not found, DataType: Problem
      */
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "${swagger.api.external.geotaxonomies.description}", notes = "${swagger.api.external.geotaxonomies.description}")
-    @GetMapping(value = "/geotaxonomies")
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<GeographicTaxonomies>> retrieveGeoTaxonomiesByDescription(@ApiParam("${swagger.api.geotaxonomies.model.description}")
                                                                                          @RequestParam(value = "description") String description,
                                                                                          @ApiParam("${swagger.api.geotaxonomies.model.offset}")
