@@ -21,6 +21,7 @@ public class InstitutionMapper {
             institutionResource.setAddress(institution.getAddress());
             institutionResource.setZipCode(institution.getZipCode());
             institutionResource.setOrigin(institution.getOrigin());
+            institutionResource.setIstatCode(institution.getIstatCode());
         }
         return institutionResource;
     }

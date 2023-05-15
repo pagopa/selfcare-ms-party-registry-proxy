@@ -20,6 +20,9 @@
     }
   } ],
   "tags" : [ {
+    "name" : "GeographicTaxonomies",
+    "description" : "Geographic Taxonomies Controller"
+  }, {
     "name" : "category",
     "description" : "Category operations"
   }, {
@@ -160,6 +163,102 @@
               "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/CategoryResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/v1/geotaxonomies" : {
+      "get" : {
+        "tags" : [ "GeographicTaxonomies" ],
+        "summary" : "retrieves the geographic taxonomies by description",
+        "description" : "retrieves the geographic taxonomies by description",
+        "operationId" : "retrieveGeoTaxonomiesByDescriptionUsingGET",
+        "parameters" : [ {
+          "name" : "description",
+          "in" : "query",
+          "description" : "geographic taxonomy description",
+          "required" : true,
+          "style" : "form",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "identifies the page 0-based index, default to 0",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "identifies the number of entries in a page, default to 10",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/GeographicTaxonomyResource"
+                  }
                 }
               }
             }
@@ -691,6 +790,49 @@
           }
         }
       },
+      "GeographicTaxonomyResource" : {
+        "title" : "GeographicTaxonomyResource",
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "Geographic taxonomy unique identifier "
+          },
+          "country" : {
+            "type" : "string",
+            "description" : "Geographic taxonomy country"
+          },
+          "country_abbreviation" : {
+            "type" : "string",
+            "description" : "Geographic taxonomy country abbreviation"
+          },
+          "desc" : {
+            "type" : "string",
+            "description" : "Geographic taxonomy description"
+          },
+          "enabled" : {
+            "type" : "boolean",
+            "description" : "Geographic taxonomy enabled",
+            "example" : false
+          },
+          "istat_code" : {
+            "type" : "string",
+            "description" : "Geographic taxonomy istat code"
+          },
+          "province_abbreviation" : {
+            "type" : "string",
+            "description" : "Geographic taxonomy province abbreviation"
+          },
+          "province_id" : {
+            "type" : "string",
+            "description" : "Geographic taxonomy province unique identifier"
+          },
+          "region_id" : {
+            "type" : "string",
+            "description" : "Geographic taxonomy region unique identifier"
+          }
+        }
+      },
       "GetInstitutionsByLegalDto" : {
         "title" : "GetInstitutionsByLegalDto",
         "type" : "object",
@@ -739,6 +881,10 @@
           "id" : {
             "type" : "string",
             "description" : "Semantic id to recognize a party between origins (or externalId)"
+          },
+          "istatCode" : {
+            "type" : "string",
+            "description" : "Institution Istat Code"
           },
           "o" : {
             "type" : "string",

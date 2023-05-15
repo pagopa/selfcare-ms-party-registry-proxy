@@ -43,8 +43,6 @@ spec:
                 name: cdn-storage
             - secretRef:
                 name: infocamere-service-secrets
-            - secretRef:
-                name: national-registry-secrets
             - configMapRef:
                 name: jwt
             - configMapRef:

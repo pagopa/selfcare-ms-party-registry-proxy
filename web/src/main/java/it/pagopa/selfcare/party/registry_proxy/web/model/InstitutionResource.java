@@ -67,5 +67,8 @@ public class InstitutionResource implements Institution {
     @NotNull
     private Origin origin;
 
+    @ApiModelProperty(value = "${swagger.model.institution.istatCode}")
+    private String istatCode;
+
 
 }
