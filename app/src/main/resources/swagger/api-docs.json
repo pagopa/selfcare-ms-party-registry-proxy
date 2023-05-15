@@ -216,13 +216,13 @@
     "/v1/geotaxonomies" : {
       "get" : {
         "tags" : [ "GeographicTaxonomies" ],
-        "summary" : "retrieves the geographic taxonomies",
-        "description" : "retrieves the geographic taxonomies",
+        "summary" : "retrieves the geographic taxonomies by description",
+        "description" : "retrieves the geographic taxonomies by description",
         "operationId" : "retrieveGeoTaxonomiesByDescriptionUsingGET",
         "parameters" : [ {
           "name" : "description",
           "in" : "query",
-          "description" : "filter geotaxonomies, with given description prefix",
+          "description" : "geographic taxonomy description",
           "required" : true,
           "style" : "form",
           "schema" : {
@@ -257,7 +257,7 @@
                 "schema" : {
                   "type" : "array",
                   "items" : {
-                    "$ref" : "#/components/schemas/GeographicTaxonomies"
+                    "$ref" : "#/components/schemas/GeographicTaxonomy"
                   }
                 }
               }
@@ -790,8 +790,8 @@
           }
         }
       },
-      "GeographicTaxonomies" : {
-        "title" : "GeographicTaxonomies",
+      "GeographicTaxonomy" : {
+        "title" : "GeographicTaxonomy",
         "type" : "object",
         "properties" : {
           "country" : {
