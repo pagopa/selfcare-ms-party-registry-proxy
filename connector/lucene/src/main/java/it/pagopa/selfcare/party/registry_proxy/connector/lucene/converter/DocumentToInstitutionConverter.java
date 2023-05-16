@@ -30,6 +30,7 @@ public class DocumentToInstitutionConverter implements Function<Document, Instit
             institution.setAddress(document.get(ADDRESS.toString()));
             institution.setZipCode(document.get(ZIP_CODE.toString()));
             institution.setOrigin(Origin.fromValue(document.get(ORIGIN.toString())));
+            institution.setIstatCode(document.get(ISTAT_CODE.toString()));
         }
         return institution;
     }

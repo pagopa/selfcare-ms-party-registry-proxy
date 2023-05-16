@@ -85,5 +85,10 @@ public class DummyInstitution implements Institution {
         return dummyEntity.getOrigin();
     }
 
+    @Override
+    public String getIstatCode() {
+        return dummyEntity.getIstatCode();
+    }
+
 
 }

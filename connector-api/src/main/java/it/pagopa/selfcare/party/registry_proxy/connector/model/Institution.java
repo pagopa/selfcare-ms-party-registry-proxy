@@ -25,6 +25,7 @@ public interface Institution {
     String getZipCode();
 
     Origin getOrigin();
+    String getIstatCode();
 
 
     enum Field implements SearchField {
@@ -41,7 +42,8 @@ public interface Institution {
         ZIP_CODE("zipCode"),
         ORIGIN("origin"),
 
-        DESCRIPTIONFULL("descriptionfull");
+        DESCRIPTIONFULL("descriptionfull"),
+        ISTAT_CODE("istatCode");
 
         private final String name;
 
