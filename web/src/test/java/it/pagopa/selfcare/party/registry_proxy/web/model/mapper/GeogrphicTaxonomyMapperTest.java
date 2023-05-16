@@ -15,11 +15,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class GeogrphicTaxonomyMapperTest {
     @Test
-    void toResource_null() {
+    void toResourceList_null() {
         //given
         final List<GeographicTaxonomy> geographicTaxonomyList = null;
         //when
-        final List<GeographicTaxonomyResource> geographicTaxonomyResourceList = GeographicTaxonomyMapper.toResource(geographicTaxonomyList);
+        final List<GeographicTaxonomyResource> geographicTaxonomyResourceList = GeographicTaxonomyMapper.toResourceList(geographicTaxonomyList);
         //then
         for(GeographicTaxonomyResource geographicTaxonomyResource : geographicTaxonomyResourceList) {
             assertNull(geographicTaxonomyResource);
@@ -27,13 +27,13 @@ public class GeogrphicTaxonomyMapperTest {
     }
 
     @Test
-    void toResource_null2() {
+    void toResourceList_null2() {
         //given
         final List<GeographicTaxonomy> geographicTaxonomyList = mockInstance(new ArrayList<>());
         GeographicTaxonomy geographicTaxonomy = null;
         geographicTaxonomyList.add(geographicTaxonomy);
         //when
-        final List<GeographicTaxonomyResource> geographicTaxonomyResourceList = GeographicTaxonomyMapper.toResource(geographicTaxonomyList);
+        final List<GeographicTaxonomyResource> geographicTaxonomyResourceList = GeographicTaxonomyMapper.toResourceList(geographicTaxonomyList);
         //then
         for(GeographicTaxonomyResource geographicTaxonomyResource : geographicTaxonomyResourceList) {
             assertNull(geographicTaxonomyResource);
@@ -42,7 +42,7 @@ public class GeogrphicTaxonomyMapperTest {
 
 
     @Test
-    void toResource() {
+    void toResourceList() {
         //given
         String description = "Roma";
         final List<GeographicTaxonomy> geographicTaxonomyList = mockInstance(new ArrayList<>());
@@ -59,9 +59,43 @@ public class GeogrphicTaxonomyMapperTest {
         geographicTaxonomyList.add(geographicTaxonomy);
 
         //when
-        final List<GeographicTaxonomyResource> geographicTaxonomyResourceList = GeographicTaxonomyMapper.toResource(geographicTaxonomyList);
+        final List<GeographicTaxonomyResource> geographicTaxonomyResourceList = GeographicTaxonomyMapper.toResourceList(geographicTaxonomyList);
         //then
         assertNotNull(geographicTaxonomyResourceList);
         reflectionEqualsByName(geographicTaxonomyList, geographicTaxonomyResourceList);
+    }
+
+    @Test
+    void toResource() {
+        //given
+        String code = "058";
+        GeographicTaxonomy geographicTaxonomy = new GeographicTaxonomy();
+        geographicTaxonomy.setDescription("Roma");
+        geographicTaxonomy.setGeotaxId(code);
+        geographicTaxonomy.setEnabled(true);
+        geographicTaxonomy.setRegionId("12");
+        geographicTaxonomy.setProvinceId("058");
+        geographicTaxonomy.setProvinceAbbreviation("RM");
+        geographicTaxonomy.setCountry("100");
+        geographicTaxonomy.setCountryAbbreviation("IT");
+        geographicTaxonomy.setIstatCode("null");
+
+        //when
+        final GeographicTaxonomyResource geographicTaxonomyResource = GeographicTaxonomyMapper.toResource(geographicTaxonomy);
+        //then
+        assertNotNull(geographicTaxonomyResource);
+        reflectionEqualsByName(geographicTaxonomy, geographicTaxonomyResource);
+    }
+
+    @Test
+    void toResource_null() {
+        //given
+        GeographicTaxonomy geographicTaxonomy = null;
+
+
+        //when
+        final GeographicTaxonomyResource geographicTaxonomyResource = GeographicTaxonomyMapper.toResource(geographicTaxonomy);
+        //then
+        assertNull(geographicTaxonomyResource);
     }
 }

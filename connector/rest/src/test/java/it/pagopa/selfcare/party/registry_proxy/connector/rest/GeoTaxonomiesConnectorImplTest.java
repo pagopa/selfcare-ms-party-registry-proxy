@@ -118,6 +118,83 @@ class GeoTaxonomiesConnectorImplTest {
         Mockito.verifyNoInteractions(geoTaxonomiesRestClient);
 
     }
+@Test
+    void testGetExtCode() {
+
+        //given
+        String code = "058";
+        GeographicTaxonomyResponse geographicTaxonomyResponse = new GeographicTaxonomyResponse();
+        geographicTaxonomyResponse.setDescription("Roma");
+        geographicTaxonomyResponse.setGeotaxId(code);
+        geographicTaxonomyResponse.setEnabled(true);
+        geographicTaxonomyResponse.setRegionId("12");
+        geographicTaxonomyResponse.setProvinceId("058");
+        geographicTaxonomyResponse.setProvinceAbbreviation("RM");
+        geographicTaxonomyResponse.setCountry("100");
+        geographicTaxonomyResponse.setCountryAbbreviation("IT");
+        geographicTaxonomyResponse.setIstatCode("null");
+
+        GeographicTaxonomy geographicTaxonomy = new GeographicTaxonomy();
+        geographicTaxonomy.setDescription("Roma");
+        geographicTaxonomy.setGeotaxId(code);
+        geographicTaxonomy.setEnabled(true);
+        geographicTaxonomy.setRegionId("12");
+        geographicTaxonomy.setProvinceId("058");
+        geographicTaxonomy.setProvinceAbbreviation("RM");
+        geographicTaxonomy.setCountry("100");
+        geographicTaxonomy.setCountryAbbreviation("IT");
+        geographicTaxonomy.setIstatCode("null");
+
+
+        when(geoTaxonomiesRestClient.getExtByCode(anyString())).thenReturn(geographicTaxonomyResponse);
+
+        //when
+        geographicTaxonomy = geoTaxonomiesConnectorImpl.getExtByCode(code);
+
+        //then
+        assertNotNull(geographicTaxonomy);
+        assertEquals(geographicTaxonomyResponse.getDescription(), geographicTaxonomy.getDescription());
+        assertEquals(geographicTaxonomyResponse.getIstatCode(), geographicTaxonomy.getIstatCode());
+        assertEquals(geographicTaxonomyResponse.getProvinceId(), geographicTaxonomy.getProvinceId());
+        assertEquals(geographicTaxonomyResponse.getProvinceAbbreviation(), geographicTaxonomy.getProvinceAbbreviation());
+        assertEquals(geographicTaxonomyResponse.getRegionId(), geographicTaxonomy.getRegionId());
+        assertEquals(geographicTaxonomyResponse.getGeotaxId(), geographicTaxonomy.getGeotaxId());
+        assertEquals(geographicTaxonomyResponse.getCountry(), geographicTaxonomy.getCountry());
+        assertEquals(geographicTaxonomyResponse.getCountryAbbreviation(), geographicTaxonomy.getCountryAbbreviation());
+
+        verify(geoTaxonomiesRestClient, times(1))
+                .getExtByCode(anyString());
+        verifyNoMoreInteractions(geoTaxonomiesRestClient);
+
+    }
+
+    @Test
+    void testGetExtByCode_nullCode() {
+
+        //given
+        String code = null;
+        GeographicTaxonomyResponse geographicTaxonomyResponse = new GeographicTaxonomyResponse();
+        geographicTaxonomyResponse.setDescription("Roma");
+        geographicTaxonomyResponse.setGeotaxId(code);
+        geographicTaxonomyResponse.setEnabled(true);
+        geographicTaxonomyResponse.setRegionId("12");
+        geographicTaxonomyResponse.setProvinceId("058");
+        geographicTaxonomyResponse.setProvinceAbbreviation("RM");
+        geographicTaxonomyResponse.setCountry("100");
+        geographicTaxonomyResponse.setCountryAbbreviation("IT");
+        geographicTaxonomyResponse.setIstatCode("null");
+
+        when(geoTaxonomiesRestClient.getExtByCode(anyString())).thenReturn(geographicTaxonomyResponse);
+
+        //when
+        Executable executable = () -> geoTaxonomiesConnectorImpl.getExtByCode(code);
+
+        //then
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
+        assertEquals("Code is required", e.getMessage());
+        Mockito.verifyNoInteractions(geoTaxonomiesRestClient);
+
+    }
 
 
 }

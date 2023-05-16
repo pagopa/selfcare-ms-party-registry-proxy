@@ -309,6 +309,79 @@
         } ]
       }
     },
+    "/v1/geotaxonomy/{geotaxId}" : {
+      "get" : {
+        "tags" : [ "GeographicTaxonomies" ],
+        "summary" : "retrieves the geographic taxonomy by code",
+        "description" : "retrieves the geographic taxonomy by code",
+        "operationId" : "retrieveGeoTaxonomiesByCodeUsingGET",
+        "parameters" : [ {
+          "name" : "geotaxId",
+          "in" : "path",
+          "description" : "Geographic taxonomy unique identifier ",
+          "required" : true,
+          "style" : "simple",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GeographicTaxonomyResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
     "/v1/info-camere/institutions" : {
       "post" : {
         "tags" : [ "infocamere" ],

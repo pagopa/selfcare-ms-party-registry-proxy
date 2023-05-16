@@ -10,14 +10,14 @@ import java.util.List;
 
 @Slf4j
 public class GeographicTaxonomyMapper {
-    public static List<GeographicTaxonomyResource> toResource(List<GeographicTaxonomy> geographicTaxonomyList) {
+    public static List<GeographicTaxonomyResource> toResourceList(List<GeographicTaxonomy> geographicTaxonomyList) {
         log.trace("toResource start");
         log.debug("toResource entity = {}", geographicTaxonomyList);
         List<GeographicTaxonomyResource> geographicTaxonomyResourceList = new ArrayList<>();
         GeographicTaxonomyResource geographicTaxonomyResource = null;
         if (geographicTaxonomyList != null) {
             for (GeographicTaxonomy geographicTaxonomy : geographicTaxonomyList) {
-                if(geographicTaxonomy != null) {
+                if (geographicTaxonomy != null) {
                     geographicTaxonomyResource = new GeographicTaxonomyResource();
                     geographicTaxonomyResource.setDescription(geographicTaxonomy.getDescription());
                     geographicTaxonomyResource.setGeotaxId(geographicTaxonomy.getGeotaxId());
@@ -38,4 +38,28 @@ public class GeographicTaxonomyMapper {
         }
         return geographicTaxonomyResourceList;
     }
+
+
+    public static GeographicTaxonomyResource toResource(GeographicTaxonomy geographicTaxonomy) {
+        log.trace("toResource start");
+        log.debug("toResource entity = {}", geographicTaxonomy);
+        GeographicTaxonomyResource geographicTaxonomyResource = null;
+        if (geographicTaxonomy != null) {
+            geographicTaxonomyResource = new GeographicTaxonomyResource();
+            geographicTaxonomyResource.setDescription(geographicTaxonomy.getDescription());
+            geographicTaxonomyResource.setGeotaxId(geographicTaxonomy.getGeotaxId());
+            geographicTaxonomyResource.setEnabled(geographicTaxonomy.isEnabled());
+            geographicTaxonomyResource.setRegionId(geographicTaxonomy.getRegionId());
+            geographicTaxonomyResource.setProvinceId(geographicTaxonomy.getProvinceId());
+            geographicTaxonomyResource.setProvinceAbbreviation(geographicTaxonomy.getProvinceAbbreviation());
+            geographicTaxonomyResource.setCountry(geographicTaxonomy.getCountry());
+            geographicTaxonomyResource.setCountryAbbreviation(geographicTaxonomy.getCountryAbbreviation());
+            geographicTaxonomyResource.setIstatCode(geographicTaxonomy.getIstatCode());
+        }
+        log.debug("toResource result = {}", geographicTaxonomyResource);
+        log.trace("toResource end");
+
+        return geographicTaxonomyResource;
+    }
 }
+

@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = {GeographicTaxonomiesController.class, WebTestConfig.class})
 @WebMvcTest(value = {GeographicTaxonomiesController.class}, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 public class GeographicTaxonomiesControllerTest {
-    private static final String BASE_URL = "/v1/geotaxonomies";
+    private static final String BASE_URL = "/v1";
 
     @Autowired
     protected MockMvc mvc;
@@ -60,7 +60,7 @@ public class GeographicTaxonomiesControllerTest {
 
         //when
         mvc.perform(MockMvcRequestBuilders
-                        .get(BASE_URL + "?description={description}&offset={offset}&limit={limit}", description, offset, limit)
+                        .get(BASE_URL + "/geotaxonomies?description={description}&offset={offset}&limit={limit}", description, offset, limit)
                         .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].desc", notNullValue()))
@@ -76,6 +76,47 @@ public class GeographicTaxonomiesControllerTest {
         //then
         verify(geographicTaxonomiesService, times(1))
                 .retrieveGeoTaxonomiesByDescription(anyString(), any(), any());
+        verifyNoMoreInteractions(geographicTaxonomiesService);
+
+    }
+
+    @Test
+    void retrieveGeoTaxonomiesByCode() throws Exception {
+
+        //given
+        String code = "058";
+        List<GeographicTaxonomy> geographicTaxonomies = new ArrayList<>();
+        GeographicTaxonomy geographicTaxonomy = new GeographicTaxonomy();
+        geographicTaxonomy.setDescription("Roma");
+        geographicTaxonomy.setGeotaxId(code);
+        geographicTaxonomy.setEnabled(true);
+        geographicTaxonomy.setRegionId("12");
+        geographicTaxonomy.setProvinceId("058");
+        geographicTaxonomy.setProvinceAbbreviation("RM");
+        geographicTaxonomy.setCountry("100");
+        geographicTaxonomy.setCountryAbbreviation("IT");
+        geographicTaxonomy.setIstatCode("null");
+        when(geographicTaxonomiesService.retriveGeoTaxonomyByCode(code)).thenReturn(geographicTaxonomy);
+
+
+        //when
+        mvc.perform(MockMvcRequestBuilders
+                        .get(BASE_URL + "/geotaxonomy/{code}", code)
+                        .contentType(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.desc", notNullValue()))
+                .andExpect(jsonPath("$.istat_code", notNullValue()))
+                .andExpect(jsonPath("$.province_id", notNullValue()))
+                .andExpect(jsonPath("$.province_abbreviation", notNullValue()))
+                .andExpect(jsonPath("$.region_id", notNullValue()))
+                .andExpect(jsonPath("$.code", notNullValue()))
+                .andExpect(jsonPath("$.enabled", notNullValue() ))
+                .andExpect(jsonPath("$.country", notNullValue()))
+                .andExpect(jsonPath("$.country_abbreviation", notNullValue()));
+
+        //then
+        verify(geographicTaxonomiesService, times(1))
+                .retriveGeoTaxonomyByCode(anyString());
         verifyNoMoreInteractions(geographicTaxonomiesService);
 
     }
