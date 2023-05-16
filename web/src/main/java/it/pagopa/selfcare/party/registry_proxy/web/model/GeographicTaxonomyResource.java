@@ -9,6 +9,7 @@ public class GeographicTaxonomyResource {
     @ApiModelProperty(value = "${swagger.geographicTaxonomy.model.geotaxId}")
     @JsonProperty("code")
     private String geotaxId; //REQUIRED
+    @JsonProperty("desc")
     @ApiModelProperty(value = "${swagger.geographicTaxonomy.model.description}")
     @JsonProperty("desc")
     private String description;
