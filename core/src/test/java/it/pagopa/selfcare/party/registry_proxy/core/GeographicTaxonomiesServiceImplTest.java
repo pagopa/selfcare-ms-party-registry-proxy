@@ -117,7 +117,7 @@ public class GeographicTaxonomiesServiceImplTest {
         //then
         assertNotNull(geographicTaxonomy);
         verify(geoTaxonomiesConnector, times(1))
-                .getExtByCode(any());
+                .getExtByCode(code);
         verifyNoMoreInteractions(geoTaxonomiesConnector);
     }
 

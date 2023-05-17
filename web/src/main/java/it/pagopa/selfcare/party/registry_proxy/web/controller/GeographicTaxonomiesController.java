@@ -22,7 +22,7 @@ import static it.pagopa.selfcare.party.registry_proxy.connector.constant.Generic
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/v1", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v1/geotaxonomies", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(tags = "GeographicTaxonomies")
 public class GeographicTaxonomiesController {
 
@@ -44,7 +44,7 @@ public class GeographicTaxonomiesController {
      */
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomiesByDescription}", notes = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomiesByDescription}")
-    @GetMapping(value = "/geotaxonomies", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<GeographicTaxonomyResource>> retrieveGeoTaxonomiesByDescription(@ApiParam("${swagger.api.geotaxonomy.model.description}")
                                                                                                @RequestParam(value = "description") String description,
                                                                                                @ApiParam("${swagger.api.geotaxonomy.model.offset}")

@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = {GeographicTaxonomiesController.class, WebTestConfig.class})
 @WebMvcTest(value = {GeographicTaxonomiesController.class}, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 public class GeographicTaxonomiesControllerTest {
-    private static final String BASE_URL = "/v1";
+    private static final String BASE_URL = "/v1/geotaxonomies";
 
     @Autowired
     protected MockMvc mvc;
@@ -60,7 +60,7 @@ public class GeographicTaxonomiesControllerTest {
 
         //when
         mvc.perform(MockMvcRequestBuilders
-                        .get(BASE_URL + "/geotaxonomies?description={description}&offset={offset}&limit={limit}", description, offset, limit)
+                        .get(BASE_URL + "?description={description}&offset={offset}&limit={limit}", description, offset, limit)
                         .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].desc", notNullValue()))
