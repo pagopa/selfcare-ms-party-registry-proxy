@@ -79,4 +79,45 @@ public class GeographicTaxonomiesControllerTest {
         verifyNoMoreInteractions(geographicTaxonomiesService);
 
     }
+
+    @Test
+    void retrieveGeoTaxonomiesByCode() throws Exception {
+
+        //given
+        String code = "058";
+        List<GeographicTaxonomy> geographicTaxonomies = new ArrayList<>();
+        GeographicTaxonomy geographicTaxonomy = new GeographicTaxonomy();
+        geographicTaxonomy.setDescription("Roma");
+        geographicTaxonomy.setGeotaxId(code);
+        geographicTaxonomy.setEnabled(true);
+        geographicTaxonomy.setRegionId("12");
+        geographicTaxonomy.setProvinceId("058");
+        geographicTaxonomy.setProvinceAbbreviation("RM");
+        geographicTaxonomy.setCountry("100");
+        geographicTaxonomy.setCountryAbbreviation("IT");
+        geographicTaxonomy.setIstatCode("null");
+        when(geographicTaxonomiesService.retriveGeoTaxonomyByCode(code)).thenReturn(geographicTaxonomy);
+
+
+        //when
+        mvc.perform(MockMvcRequestBuilders
+                        .get(BASE_URL + "/{code}", code)
+                        .contentType(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.desc", notNullValue()))
+                .andExpect(jsonPath("$.istat_code", notNullValue()))
+                .andExpect(jsonPath("$.province_id", notNullValue()))
+                .andExpect(jsonPath("$.province_abbreviation", notNullValue()))
+                .andExpect(jsonPath("$.region_id", notNullValue()))
+                .andExpect(jsonPath("$.code", notNullValue()))
+                .andExpect(jsonPath("$.enabled", notNullValue() ))
+                .andExpect(jsonPath("$.country", notNullValue()))
+                .andExpect(jsonPath("$.country_abbreviation", notNullValue()));
+
+        //then
+        verify(geographicTaxonomiesService, times(1))
+                .retriveGeoTaxonomyByCode(anyString());
+        verifyNoMoreInteractions(geographicTaxonomiesService);
+
+    }
 }
