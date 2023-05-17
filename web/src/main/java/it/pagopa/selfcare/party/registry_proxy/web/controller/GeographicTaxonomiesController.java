@@ -68,7 +68,7 @@ public class GeographicTaxonomiesController {
      */
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomyByCode}", notes = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomyByCode}")
-    @GetMapping(value = "/geotaxonomy/{geotaxId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{geotaxId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public GeographicTaxonomyResource retrieveGeoTaxonomiesByCode(@ApiParam("${swagger.geographicTaxonomy.model.geotaxId}")
                                                                   @PathVariable("geotaxId") String code) {
 

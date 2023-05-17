@@ -101,7 +101,7 @@ public class GeographicTaxonomiesControllerTest {
 
         //when
         mvc.perform(MockMvcRequestBuilders
-                        .get(BASE_URL + "/geotaxonomy/{code}", code)
+                        .get(BASE_URL + "/{code}", code)
                         .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.desc", notNullValue()))
