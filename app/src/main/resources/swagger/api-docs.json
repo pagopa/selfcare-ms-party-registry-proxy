@@ -309,7 +309,7 @@
         } ]
       }
     },
-    "/v1/geotaxonomy/{geotaxId}" : {
+    "/v1/geotaxonomies/{geotaxId}" : {
       "get" : {
         "tags" : [ "GeographicTaxonomies" ],
         "summary" : "retrieves the geographic taxonomy by code",
