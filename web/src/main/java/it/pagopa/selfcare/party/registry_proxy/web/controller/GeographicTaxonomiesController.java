@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static it.pagopa.selfcare.party.registry_proxy.connector.constant.GenericError.RETRIEVE_GEO_TAXONOMIES_ERROR;
 import static it.pagopa.selfcare.party.registry_proxy.connector.constant.GenericError.RETRIEVE_GEO_TAXONOMY_ERROR;
@@ -54,7 +55,9 @@ public class GeographicTaxonomiesController {
 
         CustomExceptionMessage.setCustomMessage(RETRIEVE_GEO_TAXONOMIES_ERROR);
         List<GeographicTaxonomy> geographicTaxonomyList = geographicTaxonomiesService.retrieveGeoTaxonomiesByDescription(description, offset, limit);
-        return ResponseEntity.ok().body(GeographicTaxonomyMapper.toResourceList(geographicTaxonomyList));
+        List<GeographicTaxonomyResource> result = geographicTaxonomyList.stream().map(GeographicTaxonomyMapper::toResource).collect(Collectors.toList());
+        log.debug("result = {}", result);
+        return ResponseEntity.ok().body(result);
     }
 
 
@@ -74,6 +77,7 @@ public class GeographicTaxonomiesController {
 
         CustomExceptionMessage.setCustomMessage(RETRIEVE_GEO_TAXONOMY_ERROR);
         GeographicTaxonomy geographicTaxonomy = geographicTaxonomiesService.retriveGeoTaxonomyByCode(code);
+        log.debug("result = {}", geographicTaxonomy);
         return GeographicTaxonomyMapper.toResource(geographicTaxonomy);
     }
 
