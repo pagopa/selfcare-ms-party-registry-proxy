@@ -36,7 +36,7 @@
     "description" : "National Registries Controller"
   } ],
   "paths" : {
-    "/v1/categories" : {
+    "/categories" : {
       "get" : {
         "tags" : [ "category" ],
         "summary" : "Get all categories",
@@ -130,7 +130,7 @@
         } ]
       }
     },
-    "/v1/origins/{origin}/categories/{code}" : {
+    "/origins/{origin}/categories/{code}" : {
       "get" : {
         "tags" : [ "category" ],
         "summary" : "Get a category",
@@ -213,7 +213,7 @@
         } ]
       }
     },
-    "/v1/geotaxonomies" : {
+    "/geotaxonomies" : {
       "get" : {
         "tags" : [ "GeographicTaxonomies" ],
         "summary" : "retrieves the geographic taxonomies by description",
@@ -309,7 +309,7 @@
         } ]
       }
     },
-    "/v1/geotaxonomies/{geotaxId}" : {
+    "/geotaxonomies/{geotaxId}" : {
       "get" : {
         "tags" : [ "GeographicTaxonomies" ],
         "summary" : "retrieves the geographic taxonomy by code",
@@ -382,7 +382,7 @@
         } ]
       }
     },
-    "/v1/info-camere/institutions" : {
+    "/info-camere/institutions" : {
       "post" : {
         "tags" : [ "infocamere" ],
         "summary" : "Get institutions by legal tax id",
@@ -444,7 +444,7 @@
         } ]
       }
     },
-    "/v1/institutions" : {
+    "/institutions" : {
       "get" : {
         "tags" : [ "institution" ],
         "summary" : "Search institutions",
@@ -546,7 +546,7 @@
         } ]
       }
     },
-    "/v1/institutions/{id}" : {
+    "/institutions/{id}" : {
       "get" : {
         "tags" : [ "institution" ],
         "summary" : "Find institution by ID",
@@ -638,7 +638,7 @@
         } ]
       }
     },
-    "/v1/national-registries/legal-address" : {
+    "/national-registries/legal-address" : {
       "get" : {
         "tags" : [ "nationalRegistries" ],
         "summary" : "Retrieve data from AdE and InfoCamere",
@@ -711,7 +711,7 @@
         } ]
       }
     },
-    "/v1/national-registries/verify-legal" : {
+    "/national-registries/verify-legal" : {
       "get" : {
         "tags" : [ "nationalRegistries" ],
         "summary" : "Retrieve data from AdE and InfoCamere",

@@ -23,7 +23,7 @@ import static it.pagopa.selfcare.party.registry_proxy.connector.constant.Generic
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/v1/geotaxonomies", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/geotaxonomies", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(tags = "GeographicTaxonomies")
 public class GeographicTaxonomiesController {
 

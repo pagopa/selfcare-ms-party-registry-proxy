@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/v1/national-registries", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/national-registries", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(tags = "nationalRegistries")
 public class NationalRegistriesController {
 
