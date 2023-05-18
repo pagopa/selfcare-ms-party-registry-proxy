@@ -16,4 +16,12 @@ public interface MockOpenDataRestClient extends OpenDataRestClient {
     @ResponseBody
     String retrieveCategories();
 
+    @GetMapping(value = "${rest-client.mock-open-data.retrieveAOOs.path}", produces = MediaType.TEXT_PLAIN_VALUE)
+    @ResponseBody
+    String retrieveAOOs();
+
+    @GetMapping(value = "${rest-client.mock-open-data.retrieveUOs.path}", produces = MediaType.TEXT_PLAIN_VALUE)
+    @ResponseBody
+    String retrieveUOs();
+
 }

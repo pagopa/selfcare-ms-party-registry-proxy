@@ -23,6 +23,9 @@
     "name" : "GeographicTaxonomies",
     "description" : "Geographic Taxonomies Controller"
   }, {
+    "name" : "aoo",
+    "description" : "AOO Controller"
+  }, {
     "name" : "category",
     "description" : "Category operations"
   }, {
@@ -34,8 +37,188 @@
   }, {
     "name" : "nationalRegistries",
     "description" : "National Registries Controller"
+  }, {
+    "name" : "uo",
+    "description" : "UO Controller"
   } ],
   "paths" : {
+    "/v1/aoos" : {
+      "get" : {
+        "tags" : [ "aoo" ],
+        "summary" : "Get all aoos",
+        "description" : "Returns the aoos list",
+        "operationId" : "findAOOsUsingGET",
+        "parameters" : [ {
+          "name" : "origin",
+          "in" : "query",
+          "description" : "Describes which is the source of data",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "page",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "limit",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AOOsResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/v1/origins/{origin}/aoos/{codiceUniAoo}" : {
+      "get" : {
+        "tags" : [ "aoo" ],
+        "summary" : "${swagger.api.category.findAOO.summary}",
+        "description" : "${swagger.api.category.findAOO.notes}",
+        "operationId" : "findAOOUsingGET",
+        "parameters" : [ {
+          "name" : "origin",
+          "in" : "path",
+          "description" : "Describes which is the source of data",
+          "required" : true,
+          "style" : "simple",
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+          }
+        }, {
+          "name" : "codiceUniAoo",
+          "in" : "path",
+          "description" : "codiceUniAoo",
+          "required" : true,
+          "style" : "simple",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AOOResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
     "/v1/categories" : {
       "get" : {
         "tags" : [ "category" ],
@@ -477,7 +660,7 @@
       "get" : {
         "tags" : [ "institution" ],
         "summary" : "Find institution by ID",
-        "description" : "Returns a single institution. If 'origin' param is filled, the ID to find is treated as 'originId' ($ref: '#/components/schemas/Institution'); otherwise is treated as 'id' ($ref: '#/components/schemas/Institution') ",
+        "description" : "Returns a single institution. If 'origin' param is filled, the ID to find is treated as 'originId' ($ref: '#/components/schemas/Institution'); otherwise is treated as 'id' ($ref: '#/components/schemas/Institution')",
         "operationId" : "findInstitutionUsingGET",
         "parameters" : [ {
           "name" : "id",
@@ -719,10 +902,240 @@
           "bearerAuth" : [ "global" ]
         } ]
       }
+    },
+    "/v1/origins/{origin}/uos/{codiceUniUo}" : {
+      "get" : {
+        "tags" : [ "uo" ],
+        "summary" : "Get an uo",
+        "description" : "Returns an uo",
+        "operationId" : "findUOUsingGET",
+        "parameters" : [ {
+          "name" : "origin",
+          "in" : "path",
+          "description" : "Describes which is the source of data",
+          "required" : true,
+          "style" : "simple",
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+          }
+        }, {
+          "name" : "codiceUniUo",
+          "in" : "path",
+          "description" : "${swagger.mode.uo.codiceUniUo}",
+          "required" : true,
+          "style" : "simple",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UOResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/v1/uos" : {
+      "get" : {
+        "tags" : [ "uo" ],
+        "summary" : "Get all uos",
+        "description" : "Returns the uos list",
+        "operationId" : "findUOsUsingGET",
+        "parameters" : [ {
+          "name" : "origin",
+          "in" : "query",
+          "description" : "Describes which is the source of data",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "page",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "limit",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UOsResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
     }
   },
   "components" : {
     "schemas" : {
+      "AOOResource" : {
+        "title" : "AOOResource",
+        "required" : [ "codAoo", "codiceFiscaleEnte", "codiceIpa", "codiceUniAoo", "denominazioneAoo", "denominazioneEnte", "mail1", "origin" ],
+        "type" : "object",
+        "properties" : {
+          "codAoo" : {
+            "type" : "string"
+          },
+          "codiceFiscaleEnte" : {
+            "type" : "string"
+          },
+          "codiceIpa" : {
+            "type" : "string"
+          },
+          "codiceUniAoo" : {
+            "type" : "string"
+          },
+          "denominazioneAoo" : {
+            "type" : "string"
+          },
+          "denominazioneEnte" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "mail1" : {
+            "type" : "string"
+          },
+          "origin" : {
+            "type" : "string",
+            "description" : "Describes which is the source of data",
+            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+          }
+        }
+      },
+      "AOOsResource" : {
+        "title" : "AOOsResource",
+        "required" : [ "count", "items" ],
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AOOResource"
+            }
+          }
+        }
+      },
       "BusinessResource" : {
         "title" : "BusinessResource",
         "type" : "object",
@@ -796,7 +1209,7 @@
         "properties" : {
           "code" : {
             "type" : "string",
-            "description" : "Geographic taxonomy unique identifier "
+            "description" : "Geographic taxonomy unique identifier"
           },
           "country" : {
             "type" : "string",
@@ -1008,6 +1421,62 @@
           }
         },
         "description" : "A \"problem detail\" as a way to carry machine-readable details of errors (https://datatracker.ietf.org/doc/html/rfc7807)"
+      },
+      "UOResource" : {
+        "title" : "UOResource",
+        "required" : [ "codiceFiscaleEnte", "codiceIpa", "codiceUniAoo", "denominazioneEnte", "descrizioneUo", "mail1", "origin" ],
+        "type" : "object",
+        "properties" : {
+          "codiceFiscaleEnte" : {
+            "type" : "string"
+          },
+          "codiceIpa" : {
+            "type" : "string"
+          },
+          "codiceUniAoo" : {
+            "type" : "string"
+          },
+          "codiceUniUo" : {
+            "type" : "string"
+          },
+          "codiceUniUoPadre" : {
+            "type" : "string"
+          },
+          "denominazioneEnte" : {
+            "type" : "string"
+          },
+          "descrizioneUo" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "mail1" : {
+            "type" : "string"
+          },
+          "origin" : {
+            "type" : "string",
+            "description" : "Describes which is the source of data",
+            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+          }
+        }
+      },
+      "UOsResource" : {
+        "title" : "UOsResource",
+        "required" : [ "count", "items" ],
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/UOResource"
+            }
+          }
+        }
       }
     },
     "securitySchemes" : {
