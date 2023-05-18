@@ -21,12 +21,20 @@ volumes:
     emptyDir: {}
   - name: institutions-index-volume
     emptyDir: {}
+  - name: aoos-index-volume
+    emptyDir: { }
+  - name: uos-index-volume
+    emptyDir: { }
 
 volumeMounts:
   - name: categories-index-volume
     mountPath: /opt/docker/index/categories
   - name: institutions-index-volume
     mountPath: /opt/docker/index/institutions
+  - name: aoos-index-volume
+    mountPath: /opt/docker/index/aoos
+  - name: uos-index-volume
+    mountPath: /opt/docker/index/uos
 
 containers:
   portNumber: 8080
@@ -100,5 +108,9 @@ config:
   IPA_OPEN_DATA_URL: "https://indicepa.gov.it/ipa-dati/datastore/dump"
   IPA_OPEN_DATA_INSTITUTION_ENDPOINT: "/d09adf99-dc10-4349-8c53-27b1e5aa97b6"
   IPA_OPEN_DATA_CATEGORY_ENDPOINT: "/84ebb2e7-0e61-427b-a1dd-ab8bb2a84f07"
+  IPA_OPEN_DATA_AOOS_ENDPOINT: "/cdaded04-f84e-4193-a720-47d6d5f422aa"
+  IPA_OPEN_DATA_UOS_ENDPOINT:  "/b0aa1f6c-f135-4c8a-b416-396fed4e1a5d"
   LUCENE_INDEX_INSTITUTIONS_FOLDER: "index/institutions"
   LUCENE_INDEX_CATEGORIES_FOLDER: "index/categories"
+  LUCENE_INDEX_AOOS_FOLDER: "index/aoos"
+  LUCENE_INDEX_UOS_FOLDER: "index/uos"
