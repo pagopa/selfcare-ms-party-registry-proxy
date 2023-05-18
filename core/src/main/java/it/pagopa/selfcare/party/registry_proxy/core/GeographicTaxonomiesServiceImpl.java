@@ -24,6 +24,10 @@ public class GeographicTaxonomiesServiceImpl implements GeographicTaxonomiesServ
         return geoTaxonomiesConnector.getExtByDescription(description, offset, limit);
     }
 
-
+    @Override
+    public GeographicTaxonomy retriveGeoTaxonomyByCode(String code) {
+        Assert.hasText(code, "Code is required");
+        return geoTaxonomiesConnector.getExtByCode(code);
+    }
 
 }

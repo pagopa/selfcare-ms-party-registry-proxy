@@ -34,6 +34,29 @@ public class GeoTaxonomiesConnectorImpl implements GeoTaxonomiesConnector {
         return toGeoTaxonomiesList(result.getGeographicTaxonomiesResponse());
     }
 
+    @Override
+    public GeographicTaxonomy getExtByCode(String code) {
+        log.debug(LogUtils.CONFIDENTIAL_MARKER, "getExtByCode code = {}", code);
+        Assert.hasText(code, "Code is required");
+        GeographicTaxonomyResponse result = restClient.getExtByCode(code);
+        log.debug(LogUtils.CONFIDENTIAL_MARKER, "getExtByCode result = {}", result);
+        return toGeoTaxonomy(result);
+    }
+
+    private GeographicTaxonomy toGeoTaxonomy(GeographicTaxonomyResponse geographicTaxonomyResponse) {
+        GeographicTaxonomy geographicTaxonomy = new GeographicTaxonomy();
+        geographicTaxonomy.setDescription(geographicTaxonomyResponse.getDescription());
+        geographicTaxonomy.setGeotaxId(geographicTaxonomyResponse.getGeotaxId());
+        geographicTaxonomy.setEnabled(geographicTaxonomyResponse.isEnabled());
+        geographicTaxonomy.setRegionId(geographicTaxonomyResponse.getRegionId());
+        geographicTaxonomy.setProvinceId(geographicTaxonomyResponse.getProvinceId());
+        geographicTaxonomy.setProvinceAbbreviation(geographicTaxonomyResponse.getProvinceAbbreviation());
+        geographicTaxonomy.setCountry(geographicTaxonomyResponse.getCountry());
+        geographicTaxonomy.setCountryAbbreviation(geographicTaxonomyResponse.getCountryAbbreviation());
+        geographicTaxonomy.setIstatCode(geographicTaxonomyResponse.getIstatCode());
+        return geographicTaxonomy;
+    }
+
 
     private List<GeographicTaxonomy> toGeoTaxonomiesList(List<GeographicTaxonomyResponse> result) {
         List<GeographicTaxonomy> geographicTaxonomyList = new ArrayList<>();

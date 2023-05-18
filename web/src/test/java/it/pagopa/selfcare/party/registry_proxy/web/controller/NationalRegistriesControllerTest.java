@@ -1,8 +1,5 @@
 package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.when;
-
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressProfessionalResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.VerifyLegalResponse;
 import it.pagopa.selfcare.party.registry_proxy.core.NationalRegistriesService;
@@ -16,6 +13,9 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = {NationalRegistriesController.class})
 @ExtendWith(SpringExtension.class)
@@ -38,7 +38,7 @@ class NationalRegistriesControllerTest {
         legalAddressProfessionalResponse.setProvince("Province");
         legalAddressProfessionalResponse.setZip("21654");
         when(nationalRegistriesService.getLegalAddress(any())).thenReturn(legalAddressProfessionalResponse);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/v1/national-registries/legal-address")
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/national-registries/legal-address")
                 .param("taxId", "CIACIA80A01H501X");
         MockMvcBuilders.standaloneSetup(nationalRegistriesController)
                 .build()
@@ -59,7 +59,7 @@ class NationalRegistriesControllerTest {
         verifyLegalResponse.setVerifyLegalResultCode("Verify Legal Result Code");
         verifyLegalResponse.setVerifyLegalResultDetail("Verify Legal Result Detail");
         when(nationalRegistriesService.verifyLegal(any(), any())).thenReturn(verifyLegalResponse);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/v1/national-registries/verify-legal")
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/national-registries/verify-legal")
                 .param("taxId", "CIACIA80A01H501X")
                 .param("vatNumber", "CIACIA80A01H501X");
         MockMvcBuilders.standaloneSetup(nationalRegistriesController)

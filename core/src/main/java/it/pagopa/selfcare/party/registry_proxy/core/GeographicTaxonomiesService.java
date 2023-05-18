@@ -8,4 +8,6 @@ public interface GeographicTaxonomiesService {
 
     List<GeographicTaxonomy> retrieveGeoTaxonomiesByDescription(String description, Integer offset, Integer limit);
 
+    GeographicTaxonomy retriveGeoTaxonomyByCode(String code);
+
 }

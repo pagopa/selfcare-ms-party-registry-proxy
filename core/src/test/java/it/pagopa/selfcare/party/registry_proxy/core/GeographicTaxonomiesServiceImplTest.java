@@ -93,4 +93,58 @@ public class GeographicTaxonomiesServiceImplTest {
         Mockito.verifyNoInteractions(geoTaxonomiesConnector);
     }
 
+    @Test
+    void retrieveGeoTaxonomiesByCode() {
+
+        //given
+        String code = "058";
+        GeographicTaxonomy geographicTaxonomy = new GeographicTaxonomy();
+        geographicTaxonomy.setDescription("Roma");
+        geographicTaxonomy.setGeotaxId(code);
+        geographicTaxonomy.setEnabled(true);
+        geographicTaxonomy.setRegionId("12");
+        geographicTaxonomy.setProvinceId("058");
+        geographicTaxonomy.setProvinceAbbreviation("RM");
+        geographicTaxonomy.setCountry("100");
+        geographicTaxonomy.setCountryAbbreviation("IT");
+        geographicTaxonomy.setIstatCode("null");
+        when(geoTaxonomiesConnector.getExtByCode(anyString())).thenReturn(geographicTaxonomy);
+
+        //when
+        geographicTaxonomy = geographicTaxonomiesService.retriveGeoTaxonomyByCode(code);
+
+
+        //then
+        assertNotNull(geographicTaxonomy);
+        verify(geoTaxonomiesConnector, times(1))
+                .getExtByCode(code);
+        verifyNoMoreInteractions(geoTaxonomiesConnector);
+    }
+
+    @Test
+    void retrieveGeoTaxonomiesByCode_nullCode() {
+
+        //given
+        String code = null;
+        GeographicTaxonomy geographicTaxonomy = new GeographicTaxonomy();
+        geographicTaxonomy.setDescription("Roma");
+        geographicTaxonomy.setGeotaxId(code);
+        geographicTaxonomy.setEnabled(true);
+        geographicTaxonomy.setRegionId("12");
+        geographicTaxonomy.setProvinceId("058");
+        geographicTaxonomy.setProvinceAbbreviation("RM");
+        geographicTaxonomy.setCountry("100");
+        geographicTaxonomy.setCountryAbbreviation("IT");
+        geographicTaxonomy.setIstatCode("null");
+        when(geoTaxonomiesConnector.getExtByCode(anyString())).thenReturn(geographicTaxonomy);
+
+        //when
+        Executable executable = () -> geographicTaxonomiesService.retriveGeoTaxonomyByCode(code);
+
+        //then
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
+        assertEquals("Code is required", e.getMessage());
+        Mockito.verifyNoInteractions(geoTaxonomiesConnector);
+    }
+
 }
