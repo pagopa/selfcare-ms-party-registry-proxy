@@ -46,8 +46,6 @@ public class UOResource implements UO {
     private String descrizioneUo;
 
     @ApiModelProperty(value = "${swagger.model.uo.mail1}", required = true)
-    @JsonProperty(required = true)
-    @NotBlank
     private String mail1;
 
     @ApiModelProperty(value = "${swagger.model.*.origin}", required = true)
