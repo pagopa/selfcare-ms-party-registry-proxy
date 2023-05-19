@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = {UOController.class, WebTestConfig.class, PartyRegistryProxyExceptionHandler.class})
 class UOControllerTest {
 
-    private static final String BASE_URL = "/v1";
+    private static final String BASE_URL = "";
 
     @Autowired
     protected MockMvc mvc;
