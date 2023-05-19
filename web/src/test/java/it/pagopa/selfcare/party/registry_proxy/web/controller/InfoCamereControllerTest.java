@@ -3,25 +3,20 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.core.InfoCamereService;
-
 import it.pagopa.selfcare.party.registry_proxy.web.model.GetInstitutionsByLegalDto;
 import it.pagopa.selfcare.party.registry_proxy.web.model.GetInstitutionsByLegalFilterDto;
-
-
-import java.util.ArrayList;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.ArrayList;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
@@ -51,7 +46,7 @@ class InfoCamereControllerTest {
         GetInstitutionsByLegalDto getInstitutionsByLegalDto = new GetInstitutionsByLegalDto();
         getInstitutionsByLegalDto.setFilter(getInstitutionsByLegalFilterDto);
         String content = (new ObjectMapper()).writeValueAsString(getInstitutionsByLegalDto);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/v1/info-camere/institutions")
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/info-camere/institutions")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
         MockMvcBuilders.standaloneSetup(infoCamereController)

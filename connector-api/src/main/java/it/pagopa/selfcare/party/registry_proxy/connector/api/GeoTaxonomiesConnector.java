@@ -8,4 +8,6 @@ import java.util.List;
 public interface GeoTaxonomiesConnector {
 
     List<GeographicTaxonomy> getExtByDescription(String description, Integer offset, Integer limit);
+
+    GeographicTaxonomy getExtByCode(String code);
 }
