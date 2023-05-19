@@ -27,7 +27,6 @@ class UOIndexSearchService extends IndexSearchServiceTemplate<UO> {
         final UOQueryResult queryResult = new UOQueryResult();
         queryResult.setItems(items);
         queryResult.setTotalHits(totalHits);
-
         return queryResult;
     }
 

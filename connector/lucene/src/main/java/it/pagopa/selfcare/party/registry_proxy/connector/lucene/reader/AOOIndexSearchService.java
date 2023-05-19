@@ -27,7 +27,6 @@ class AOOIndexSearchService extends IndexSearchServiceTemplate<AOO> {
         final AOOQueryResult queryResult = new AOOQueryResult();
         queryResult.setItems(items);
         queryResult.setTotalHits(totalHits);
-
         return queryResult;
     }
 

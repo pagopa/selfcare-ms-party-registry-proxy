@@ -39,14 +39,14 @@ class InstitutionServiceImplTest {
         final int limit = 0;
 
         final DummyInstitutionQueryResult queryResultMock = new DummyInstitutionQueryResult();
-        when(indexSearchService.findAll(anyInt(), anyInt()))
+        when(indexSearchService.findAll(anyInt(), anyInt(), anyString()))
                 .thenReturn(queryResultMock);
         // when
         final QueryResult<Institution> queryResult = institutionService.search(searchText, page, limit);
         // then
         assertSame(queryResultMock, queryResult);
         verify(indexSearchService, times(1))
-                .findAll(page, limit);
+                .findAll(page, limit, Entity.INSTITUTION.toString());
         verifyNoMoreInteractions(indexSearchService);
     }
 
@@ -78,14 +78,14 @@ class InstitutionServiceImplTest {
         final int limit = 0;
         final String categories = "cat1,cat2,cat3";
         final DummyInstitutionQueryResult queryResultMock = new DummyInstitutionQueryResult();
-        when(indexSearchService.findAll(anyInt(), anyInt()))
+        when(indexSearchService.findAll(anyInt(), anyInt(), anyString()))
                 .thenReturn(queryResultMock);
         // when
         final QueryResult<Institution> queryResult = institutionService.search(searchText, categories, page, limit);
         // then
         assertSame(queryResultMock, queryResult);
         verify(indexSearchService, times(1))
-                .findAll(page, limit);
+                .findAll(page, limit, Entity.INSTITUTION.toString());
         verifyNoMoreInteractions(indexSearchService);
     }
 

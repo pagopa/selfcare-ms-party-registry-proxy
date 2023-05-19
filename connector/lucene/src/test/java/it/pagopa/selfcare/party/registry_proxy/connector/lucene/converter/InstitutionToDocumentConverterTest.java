@@ -60,7 +60,7 @@ class InstitutionToDocumentConverterTest {
         final Set<String> fieldValues = Arrays.stream(Field.values())
                 .map(Field::toString)
                 .collect(Collectors.toSet());
-        assertEquals(0, output.getFields().stream()
+        assertEquals(1, output.getFields().stream()
                 .filter(field -> !fieldValues.contains(field.name()))
                 .count());
     }
@@ -90,7 +90,7 @@ class InstitutionToDocumentConverterTest {
         final Set<String> fieldValues = Arrays.stream(Field.values())
                 .map(Field::toString)
                 .collect(Collectors.toSet());
-        assertEquals(0, output.getFields().stream()
+        assertEquals(1, output.getFields().stream()
                 .filter(field -> !fieldValues.contains(field.name()))
                 .count());
     }

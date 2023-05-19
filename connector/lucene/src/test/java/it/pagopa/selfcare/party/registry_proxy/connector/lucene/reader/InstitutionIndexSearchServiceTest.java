@@ -7,11 +7,8 @@ import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.Institutio
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.writer.DummyInstitutionIndexWriterFactory;
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.writer.DummyInstitutionIndexWriterService;
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.writer.IndexWriterFactory;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution.Field;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryFilter;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchField;
 import org.apache.lucene.store.Directory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -88,7 +85,7 @@ class InstitutionIndexSearchServiceTest {
         final int page = 1;
         final int limit = 10;
         // when
-        final QueryResult<Institution> queryResult = indexSearchService.findAll(page, limit);
+        final QueryResult<Institution> queryResult = indexSearchService.findAll(page, limit, Entity.INSTITUTION.toString());
         // then
         assertNotNull(queryResult);
         assertEquals(2, queryResult.getTotalHits());
@@ -107,7 +104,7 @@ class InstitutionIndexSearchServiceTest {
         filter.setField(Field.ID);
         filter.setValue(institutions.get(0).getId());
         // when
-        final QueryResult<Institution> queryResult = indexSearchService.findAll(page, limit, filter);
+        final QueryResult<Institution> queryResult = indexSearchService.findAll(page, limit, Entity.INSTITUTION.toString(), filter);
         // then
         assertNotNull(queryResult);
         assertEquals(1, queryResult.getTotalHits());

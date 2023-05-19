@@ -13,8 +13,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @Qualifier("aooTokenAnalyzer")
-public class AOOTokenAnalyzer extends Analyzer {//TODO: there is no need to use a standard analyzer because the search is always "by id"
-
+public class AOOTokenAnalyzer extends Analyzer {
 
     public AOOTokenAnalyzer() {
         log.trace("Initializing {}", AOOTokenAnalyzer.class.getSimpleName());

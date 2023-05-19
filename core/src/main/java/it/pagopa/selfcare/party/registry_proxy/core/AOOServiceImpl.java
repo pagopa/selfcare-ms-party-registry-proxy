@@ -1,10 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.AOO;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryFilter;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
 import it.pagopa.selfcare.party.registry_proxy.core.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.core.exception.TooManyResourceFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +19,6 @@ class AOOServiceImpl implements AOOService {
 
     private final IndexSearchService<AOO> indexSearchService;
 
-
     @Autowired
     AOOServiceImpl(IndexSearchService<AOO> indexSearchService) {
         log.trace("Initializing {}", AOOServiceImpl.class.getSimpleName());
@@ -39,9 +35,9 @@ class AOOServiceImpl implements AOOService {
             final QueryFilter queryFilter = new QueryFilter();
             queryFilter.setField(AOO.Field.ORIGIN);
             queryFilter.setValue(origin.get().toString());
-            queryResult = indexSearchService.findAll(page, limit, queryFilter);
+            queryResult = indexSearchService.findAll(page, limit, Entity.AOO.toString(),queryFilter);
         } else {
-            queryResult = indexSearchService.findAll(page, limit);
+            queryResult = indexSearchService.findAll(page, limit, Entity.AOO.toString());
         }
         log.debug("search result = {}", queryResult);
         log.trace("search end");
