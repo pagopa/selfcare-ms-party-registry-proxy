@@ -4,6 +4,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.lucene.converter.UOToDo
 import it.pagopa.selfcare.party.registry_proxy.connector.model.UO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -11,8 +12,8 @@ import org.springframework.stereotype.Service;
 class UOIndexWriterService extends IndexWriterServiceTemplate<UO> {
 
 
-    @Autowired //TO-DO generalizzare l'indexWriterFactory
-    public UOIndexWriterService(UOIndexWriterFactory uoIndexWriterFactory) {
+    @Autowired
+    public UOIndexWriterService(@Qualifier("uoIndexWriterFactory") IndexWriterFactory uoIndexWriterFactory) {
         super(uoIndexWriterFactory, new UOToDocumentConverter());
     }
 

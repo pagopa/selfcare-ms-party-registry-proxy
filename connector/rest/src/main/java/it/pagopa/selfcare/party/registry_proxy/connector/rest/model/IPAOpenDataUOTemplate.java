@@ -1,7 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.model;
 
 import com.opencsv.bean.CsvBindByName;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.UO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

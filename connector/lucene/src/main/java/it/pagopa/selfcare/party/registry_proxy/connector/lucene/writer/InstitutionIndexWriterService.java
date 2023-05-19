@@ -4,6 +4,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.lucene.converter.Instit
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -12,7 +13,7 @@ class InstitutionIndexWriterService extends IndexWriterServiceTemplate<Instituti
 
 
     @Autowired
-    public InstitutionIndexWriterService(IndexWriterFactory institutionIndexWriterFactory) {
+    public InstitutionIndexWriterService(@Qualifier("institutionIndexWriterFactory") IndexWriterFactory institutionIndexWriterFactory) {
         super(institutionIndexWriterFactory, new InstitutionToDocumentConverter());
     }
 

@@ -4,6 +4,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.lucene.converter.Catego
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Category;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -12,7 +13,7 @@ class CategoryIndexWriterService extends IndexWriterServiceTemplate<Category> {
 
 
     @Autowired
-    public CategoryIndexWriterService(IndexWriterFactory categoryIndexWriterFactory) {
+    public CategoryIndexWriterService(@Qualifier("categoryIndexWriterFactory") IndexWriterFactory categoryIndexWriterFactory) {
         super(categoryIndexWriterFactory, new CategoryToDocumentConverter());
     }
 
