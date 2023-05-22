@@ -1,7 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
 import it.pagopa.selfcare.party.registry_proxy.core.UOService;
 import it.pagopa.selfcare.party.registry_proxy.web.config.WebTestConfig;
 import it.pagopa.selfcare.party.registry_proxy.web.handler.PartyRegistryProxyExceptionHandler;
@@ -16,7 +15,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.Optional;
 
 import static it.pagopa.selfcare.commons.utils.TestUtils.mockInstance;
 import static org.hamcrest.Matchers.notNullValue;
@@ -46,18 +44,18 @@ class UOControllerTest {
     @Test
     void findUOs_defaultInputParams() throws Exception {
         // given
-        when(uoServiceMock.search(any(), anyInt(), anyInt()))
+        when(uoServiceMock.findAll(anyInt(), anyInt()))
                 .thenReturn(new DummyUOQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
-                .get(BASE_URL + "/uos")
+                .get(BASE_URL + "/uo")
                 .contentType(APPLICATION_JSON_VALUE)
                 .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items", notNullValue()));
         // then
         verify(uoServiceMock, times(1))
-                .search(Optional.empty(), 1, 10);
+                .findAll( 1, 10);
         verifyNoMoreInteractions(uoServiceMock);
     }
 
@@ -65,15 +63,13 @@ class UOControllerTest {
     @Test
     void findUOs() throws Exception {
         // given
-        final Origin origin = Origin.MOCK;
         final String page = "2";
         final String limit = "2";
-        when(uoServiceMock.search(any(), anyInt(), anyInt()))
+        when(uoServiceMock.findAll(anyInt(), anyInt()))
                 .thenReturn(new DummyUOQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
-                .get(BASE_URL + "/uos")
-                .queryParam("origin", origin.toString())
+                .get(BASE_URL + "/uo")
                 .queryParam("page", page)
                 .queryParam("limit", limit)
                 .contentType(APPLICATION_JSON_VALUE)
@@ -82,26 +78,25 @@ class UOControllerTest {
                 .andExpect(jsonPath("$.items", notNullValue()));
         // then
         verify(uoServiceMock, times(1))
-                .search(Optional.of(origin), Integer.parseInt(page), Integer.parseInt(limit));
+                .findAll(Integer.parseInt(page), Integer.parseInt(limit));
         verifyNoMoreInteractions(uoServiceMock);
     }
 
     @Test
     void findUO() throws Exception {
         // given
-        final Origin origin = Origin.IPA;
         final String code = "code";
-        when(uoServiceMock.findById(any(), any()))
+        when(uoServiceMock.findByUnicode(any()))
                 .thenReturn(mockInstance(new DummyUO()));
         // when
         mvc.perform(MockMvcRequestBuilders
-                .get(BASE_URL + "/origins/{origin}/uos/{codiceUniUo}", origin, code)
+                .get(BASE_URL + "/uo/{codiceUniUo}", code)
                 .contentType(APPLICATION_JSON_VALUE)
                 .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
         // then
         verify(uoServiceMock, times(1))
-                .findById(code, origin);
+                .findByUnicode(code);
         verifyNoMoreInteractions(uoServiceMock);
     }
 

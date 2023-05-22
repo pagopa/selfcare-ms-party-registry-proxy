@@ -2,7 +2,13 @@ package it.pagopa.selfcare.party.registry_proxy.web.model.mapper;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.model.AOO;
 import it.pagopa.selfcare.party.registry_proxy.web.model.AOOResource;
+import it.pagopa.selfcare.party.registry_proxy.web.model.AOOsResource;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+import java.util.List;
+
+@NoArgsConstructor(access = AccessLevel.NONE)
 public class AOOMapper {
 
     public static AOOResource toResource(AOO aoo) {
@@ -20,6 +26,16 @@ public class AOOMapper {
             aooResource.setMail1(aoo.getMail1());
         }
         return aooResource;
+    }
+
+    public static AOOsResource toResource(List<AOOResource> aooList, long count) {
+        AOOsResource aoosResource = null;
+        if (aooList != null) {
+            aoosResource = new AOOsResource();
+            aoosResource.setItems(aooList);
+            aoosResource.setCount(count);
+        }
+        return aoosResource;
     }
 
 }

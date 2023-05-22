@@ -26,7 +26,7 @@ public class DocumentToUOConverter implements Function<Document, UO> {
             entity.setCodiceUniUo(document.get(CODICE_UNI_UO.toString()));
             entity.setCodiceUniUoPadre(document.get(CODICE_UNI_UO_PADRE.toString()));
             entity.setMail1(document.get(MAIL1.toString()));
-            entity.setDescrizioneUo(document.get(DENOMINAZIONE_ENTE.toString()));
+            entity.setDescrizioneUo(document.get(DESCRIZIONE_UO.toString()));
         }
         return entity;
     }

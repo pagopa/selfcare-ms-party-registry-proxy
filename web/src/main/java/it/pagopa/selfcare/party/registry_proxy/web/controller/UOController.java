@@ -3,26 +3,23 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.UO;
 import it.pagopa.selfcare.party.registry_proxy.core.UOService;
 import it.pagopa.selfcare.party.registry_proxy.web.model.UOResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.UOsResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.UOMapper;
-import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.UOsMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "uo", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(tags = "uo")
 public class UOController {
 
@@ -36,44 +33,40 @@ public class UOController {
     }
 
 
-    @GetMapping("uos")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.uo.findUOs.summary}",
-            notes = "${swagger.api.uo.findUOs.notes}")
-    public UOsResource findUOs(@ApiParam("${swagger.model.*.origin}")
-                                             @RequestParam(value = "origin", required = false) Optional<Origin> origin,
-                               @ApiParam(value = "${swagger.model.*.page}")
-                                             @RequestParam(value = "page", required = false, defaultValue = "1")
-                                                     Integer page,
+    @ApiOperation(value = "${swagger.api.uo.findAll.summary}",
+            notes = "${swagger.api.uo.findAll.notes}")
+    public UOsResource findAll(@ApiParam(value = "${swagger.model.*.page}")
+                               @RequestParam(value = "page", required = false, defaultValue = "1")
+                               Integer page,
                                @ApiParam(value = "${swagger.model.*.limit}")
-                                             @RequestParam(value = "limit", required = false, defaultValue = "10")
-                                                     Integer limit) {
-        log.trace("findUOs start");
-        log.debug("findUOs origin = {}, page = {}, limit = {}", origin, page, limit);
-        final QueryResult<UO> result = uoService.search(origin, page, limit);
-        final UOsResource uosResource = UOsMapper.toResource(result.getItems().stream()
-                .map(UOMapper::toResource)
-                .collect(Collectors.toList()),
+                               @RequestParam(value = "limit", required = false, defaultValue = "10")
+                               Integer limit) {
+        log.trace("find all UO start");
+        log.debug("find all UO, page = {}, limit = {}", page, limit);
+        final QueryResult<UO> result = uoService.findAll(page, limit);
+        final UOsResource uosResource = UOMapper.toResource(result.getItems().stream()
+                        .map(UOMapper::toResource)
+                        .collect(Collectors.toList()),
                 result.getTotalHits());
-        log.debug("findUOs result = {}", uosResource);
-        log.trace("findUOs end");
+        log.debug("find all UO result = {}", uosResource);
+        log.trace("find all UO end");
         return uosResource;
     }
 
 
-    @GetMapping("origins/{origin}/uos/{codiceUniUo}")
+    @GetMapping("/{codiceUniAoo}")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.uo.findUO.summary}",
-            notes = "${swagger.api.uo.findUO.notes}")
-    public UOResource findUO(@ApiParam("${swagger.model.*.origin}")
-                                         @PathVariable("origin") Origin origin,
-                              @ApiParam("${swagger.mode.uo.codiceUniUo}")
-                                         @PathVariable("codiceUniUo") String codiceUniUo) {
-        log.trace("findUO start");
-        log.debug("findUO origin = {}, codiceUniUo = {}", origin, codiceUniUo);
-        final UOResource uoResource = UOMapper.toResource(uoService.findById(codiceUniUo, origin));
-        log.debug("findUO result = {}", uoResource);
-        log.trace("findUO end");
+    @ApiOperation(value = "${swagger.api.uo.findBy.summary}",
+            notes = "${swagger.api.uo.findBy.notes}")
+    public UOResource findByUnicode(@ApiParam("${swagger.mode.uo.codiceUniUo}")
+                                    @PathVariable("codiceUniAoo") String codiceUniUo) {
+        log.trace("find UO start");
+        log.debug("find UO = {}", codiceUniUo);
+        final UOResource uoResource = UOMapper.toResource(uoService.findByUnicode(codiceUniUo));
+        log.debug("find UO result = {}", uoResource);
+        log.trace("find UO end");
         return uoResource;
     }
 

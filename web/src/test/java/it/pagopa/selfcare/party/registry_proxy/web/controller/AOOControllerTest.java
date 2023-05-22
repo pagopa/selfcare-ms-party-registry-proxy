@@ -1,7 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
 import it.pagopa.selfcare.party.registry_proxy.core.AOOService;
 import it.pagopa.selfcare.party.registry_proxy.web.config.WebTestConfig;
 import it.pagopa.selfcare.party.registry_proxy.web.handler.PartyRegistryProxyExceptionHandler;
@@ -16,7 +15,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.Optional;
 
 import static it.pagopa.selfcare.commons.utils.TestUtils.mockInstance;
 import static org.hamcrest.Matchers.notNullValue;
@@ -46,18 +44,18 @@ class AOOControllerTest {
     @Test
     void findAOOs_defaultInputParams() throws Exception {
         // given
-        when(aooServiceMock.search(any(), anyInt(), anyInt()))
+        when(aooServiceMock.findAll(anyInt(), anyInt()))
                 .thenReturn(new DummyAOOQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
-                .get(BASE_URL + "/aoos")
+                .get(BASE_URL + "/aoo")
                 .contentType(APPLICATION_JSON_VALUE)
                 .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items", notNullValue()));
         // then
         verify(aooServiceMock, times(1))
-                .search(Optional.empty(), 1, 10);
+                .findAll(1, 10);
         verifyNoMoreInteractions(aooServiceMock);
     }
 
@@ -65,15 +63,13 @@ class AOOControllerTest {
     @Test
     void findAOOs() throws Exception {
         // given
-        final Origin origin = Origin.MOCK;
         final String page = "2";
         final String limit = "2";
-        when(aooServiceMock.search(any(), anyInt(), anyInt()))
+        when(aooServiceMock.findAll(anyInt(), anyInt()))
                 .thenReturn(new DummyAOOQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
-                .get(BASE_URL + "/aoos")
-                .queryParam("origin", origin.toString())
+                .get(BASE_URL + "/aoo")
                 .queryParam("page", page)
                 .queryParam("limit", limit)
                 .contentType(APPLICATION_JSON_VALUE)
@@ -82,26 +78,25 @@ class AOOControllerTest {
                 .andExpect(jsonPath("$.items", notNullValue()));
         // then
         verify(aooServiceMock, times(1))
-                .search(Optional.of(origin), Integer.parseInt(page), Integer.parseInt(limit));
+                .findAll(Integer.parseInt(page), Integer.parseInt(limit));
         verifyNoMoreInteractions(aooServiceMock);
     }
 
     @Test
     void findAOO() throws Exception {
         // given
-        final Origin origin = Origin.IPA;
         final String code = "code";
-        when(aooServiceMock.findById(any(), any()))
+        when(aooServiceMock.findByUnicode(any()))
                 .thenReturn(mockInstance(new DummyAOO()));
         // when
         mvc.perform(MockMvcRequestBuilders
-                .get(BASE_URL + "/origins/{origin}/aoos/{codiceUniAoo}", origin, code)
+                .get(BASE_URL + "/aoo/{codiceUniAoo}", code)
                 .contentType(APPLICATION_JSON_VALUE)
                 .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
         // then
         verify(aooServiceMock, times(1))
-                .findById(code, origin);
+                .findByUnicode(code);
         verifyNoMoreInteractions(aooServiceMock);
     }
 

@@ -12,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -31,7 +30,6 @@ class AOOServiceImplTest {
     @Test
     void search_emptyOrigin() {
         // given
-        final Optional<Origin> origin = Optional.empty();
         final int page = 0;
         final int limit = 0;
 
@@ -39,7 +37,7 @@ class AOOServiceImplTest {
         when(indexSearchService.findAll(anyInt(), anyInt(), anyString()))
                 .thenReturn(queryResultMock);
         // when
-        final QueryResult<AOO> queryResult = aooService.search(origin, page, limit);
+        final QueryResult<AOO> queryResult = aooService.findAll(page, limit);
         // then
         assertSame(queryResultMock, queryResult);
         verify(indexSearchService, times(1))
@@ -51,14 +49,13 @@ class AOOServiceImplTest {
     @Test
     void search_notEmptyOrigin() {
         // given
-        final Optional<Origin> origin = Optional.of(Origin.IPA);
         final int page = 0;
         final int limit = 0;
         final DummyAOOQueryResult queryResultMock = new DummyAOOQueryResult();
         when(indexSearchService.findAll(anyInt(), anyInt(), any(), any()))
                 .thenReturn(queryResultMock);
         // when
-        final QueryResult<AOO> queryResult = aooService.search(origin, page, limit);
+        final QueryResult<AOO> queryResult = aooService.findAll(page, limit);
         // then
         assertSame(queryResultMock, queryResult);
     }
@@ -67,9 +64,8 @@ class AOOServiceImplTest {
     void findById_ipa() {
         // given
         final String id = "pippo";
-        final Origin origin = Origin.IPA;
         // when
-        final Executable executable = () -> aooService.findById(id, origin);
+        final Executable executable = () -> aooService.findByUnicode(id);
         // then
         assertThrows(RuntimeException.class, executable);
     }
@@ -79,11 +75,10 @@ class AOOServiceImplTest {
     void findById_ResourceNotFound() {
         // given
         final String id = "pippo";
-        final Origin origin = Origin.MOCK;
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of());
         // when
-        final Executable executable = () -> aooService.findById(id, origin);
+        final Executable executable = () -> aooService.findByUnicode(id);
         // then
         assertThrows(ResourceNotFoundException.class, executable);
     }
@@ -93,12 +88,11 @@ class AOOServiceImplTest {
     void findById_TooManyResourceFound() {
         // given
         final String id = "pippo";
-        final Origin origin = Origin.MOCK;
         final DummyAOO aoo = new DummyAOO();
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of(aoo, aoo));
         // when
-        final Executable executable = () -> aooService.findById(id, origin);
+        final Executable executable = () -> aooService.findByUnicode(id);
         // then
         assertThrows(TooManyResourceFoundException.class, executable);
     }
@@ -108,12 +102,11 @@ class AOOServiceImplTest {
     void findById_found() {
         // given
         final String id = "pippo";
-        final Origin origin = Origin.IPA;
         final DummyAOO AOO = new DummyAOO();
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of(AOO));
         // when
-        final AOO result = aooService.findById(id, origin);
+        final AOO result = aooService.findByUnicode(id);
         // then
         assertSame(AOO, result);
     }

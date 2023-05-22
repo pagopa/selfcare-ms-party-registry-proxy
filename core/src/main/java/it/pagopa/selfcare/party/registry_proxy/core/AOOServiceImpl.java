@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
-import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.createId;
 
 @Slf4j
 @Service
@@ -27,43 +25,31 @@ class AOOServiceImpl implements AOOService {
 
 
     @Override
-    public QueryResult<AOO> search(Optional<Origin> origin, int page, int limit) {
-        log.trace("search start");
-        log.debug("search origin = {}, page = {}, limit = {}", origin, page, limit);
+    public QueryResult<AOO> findAll(int page, int limit) {
+        log.trace("find all AOO start");
+        log.debug("find all AOO all with page = {}, limit = {}", page, limit);
         final QueryResult<AOO> queryResult;
-        if (origin.isPresent()) {
-            final QueryFilter queryFilter = new QueryFilter();
-            queryFilter.setField(AOO.Field.ORIGIN);
-            queryFilter.setValue(origin.get().toString());
-            queryResult = indexSearchService.findAll(page, limit, Entity.AOO.toString(),queryFilter);
-        } else {
-            queryResult = indexSearchService.findAll(page, limit, Entity.AOO.toString());
-        }
-        log.debug("search result = {}", queryResult);
-        log.trace("search end");
+        queryResult = indexSearchService.findAll(page, limit, Entity.AOO.toString());
+        log.debug("find all AOO result = {}", queryResult);
+        log.trace("find all AOO end");
         return queryResult;
     }
 
 
     @Override
-    public AOO findById(String id, Origin origin) {
-        log.trace("findById start");
-        log.debug("findById id = {}, origin = {}", id, origin);
-        if (Origin.INFOCAMERE.equals(origin)) {
-            throw new RuntimeException("Data source not found");//FIXME: there is no AOO...choose the right exception to throw
+    public AOO findByUnicode(String codiceUniAOO) {
+        log.trace("find AOO by CodiceUniAOO start");
+        log.debug("find AOO by CodiceUniAOO = {}", codiceUniAOO);
+        final List<AOO> aooList = indexSearchService.findById(AOO.Field.CODICE_UNI_AOO, codiceUniAOO);
+        if (aooList.isEmpty()) {
+            throw new ResourceNotFoundException();
+        } else if (aooList.size() > 1) {
+            throw new TooManyResourceFoundException();
         } else {
-            final List<AOO> aoos = indexSearchService.findById(AOO.Field.ID, createId(origin,id));
-            if (aoos.isEmpty()) {
-                throw new ResourceNotFoundException();
-            } else if (aoos.size() > 1) {
-                throw new TooManyResourceFoundException();
-            } else {
-                final AOO aoo = aoos.get(0);
-                log.debug("findById result = {}", aoo);
-                log.trace("findById end");
-                return aoo;
-            }
+            final AOO aoo = aooList.get(0);
+            log.debug("find AOO by CodiceUniAOO result = {}", aoo);
+            log.trace("find AOO by CodiceUniAOO end");
+            return aoo;
         }
     }
-
 }

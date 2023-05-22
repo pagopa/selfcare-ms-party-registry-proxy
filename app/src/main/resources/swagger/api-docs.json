@@ -42,23 +42,13 @@
     "description" : "UO Controller"
   } ],
   "paths" : {
-    "/aoos" : {
+    "/aoo" : {
       "get" : {
         "tags" : [ "aoo" ],
-        "summary" : "Get all aoos",
-        "description" : "Returns the aoos list",
-        "operationId" : "findAOOsUsingGET",
+        "summary" : "Retrieve all AOO from IPA",
+        "description" : "Returns the AOO list",
+        "operationId" : "findAllUsingGET",
         "parameters" : [ {
-          "name" : "origin",
-          "in" : "query",
-          "description" : "Describes which is the source of data",
-          "required" : false,
-          "style" : "form",
-          "schema" : {
-            "type" : "string",
-            "enum" : [ "INFOCAMERE", "IPA", "static" ]
-          }
-        }, {
           "name" : "page",
           "in" : "query",
           "description" : "page",
@@ -136,26 +126,16 @@
         } ]
       }
     },
-    "/origins/{origin}/aoos/{codiceUniAoo}" : {
+    "/aoo/{codiceUniAoo}" : {
       "get" : {
         "tags" : [ "aoo" ],
-        "summary" : "${swagger.api.category.findAOO.summary}",
-        "description" : "${swagger.api.category.findAOO.notes}",
-        "operationId" : "findAOOUsingGET",
+        "summary" : "Retrieve an AOO given its code",
+        "description" : "Returns an AOO",
+        "operationId" : "findByUnicodeUsingGET",
         "parameters" : [ {
-          "name" : "origin",
-          "in" : "path",
-          "description" : "Describes which is the source of data",
-          "required" : true,
-          "style" : "simple",
-          "schema" : {
-            "type" : "string",
-            "enum" : [ "INFOCAMERE", "IPA", "static" ]
-          }
-        }, {
           "name" : "codiceUniAoo",
           "in" : "path",
-          "description" : "codiceUniAoo",
+          "description" : "AOO unique identifier, the same of Id",
           "required" : true,
           "style" : "simple",
           "schema" : {
@@ -976,106 +956,13 @@
         } ]
       }
     },
-    "/origins/{origin}/uos/{codiceUniUo}" : {
+    "/uo" : {
       "get" : {
         "tags" : [ "uo" ],
-        "summary" : "Get an uo",
-        "description" : "Returns an uo",
-        "operationId" : "findUOUsingGET",
+        "summary" : "Retrieve all UO from IPA",
+        "description" : "Returns the UO list",
+        "operationId" : "findAllUsingGET_1",
         "parameters" : [ {
-          "name" : "origin",
-          "in" : "path",
-          "description" : "Describes which is the source of data",
-          "required" : true,
-          "style" : "simple",
-          "schema" : {
-            "type" : "string",
-            "enum" : [ "INFOCAMERE", "IPA", "static" ]
-          }
-        }, {
-          "name" : "codiceUniUo",
-          "in" : "path",
-          "description" : "${swagger.mode.uo.codiceUniUo}",
-          "required" : true,
-          "style" : "simple",
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/UOResource"
-                }
-              }
-            }
-          },
-          "400" : {
-            "description" : "Bad Request",
-            "content" : {
-              "application/problem+json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Problem"
-                }
-              }
-            }
-          },
-          "401" : {
-            "description" : "Unauthorized",
-            "content" : {
-              "application/problem+json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Problem"
-                }
-              }
-            }
-          },
-          "404" : {
-            "description" : "Not Found",
-            "content" : {
-              "application/problem+json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Problem"
-                }
-              }
-            }
-          },
-          "500" : {
-            "description" : "Internal Server Error",
-            "content" : {
-              "application/problem+json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Problem"
-                }
-              }
-            }
-          }
-        },
-        "security" : [ {
-          "bearerAuth" : [ "global" ]
-        } ]
-      }
-    },
-    "/uos" : {
-      "get" : {
-        "tags" : [ "uo" ],
-        "summary" : "Get all uos",
-        "description" : "Returns the uos list",
-        "operationId" : "findUOsUsingGET",
-        "parameters" : [ {
-          "name" : "origin",
-          "in" : "query",
-          "description" : "Describes which is the source of data",
-          "required" : false,
-          "style" : "form",
-          "schema" : {
-            "type" : "string",
-            "enum" : [ "INFOCAMERE", "IPA", "static" ]
-          }
-        }, {
           "name" : "page",
           "in" : "query",
           "description" : "page",
@@ -1152,6 +1039,79 @@
           "bearerAuth" : [ "global" ]
         } ]
       }
+    },
+    "/uo/{codiceUniAoo}" : {
+      "get" : {
+        "tags" : [ "uo" ],
+        "summary" : "Retrieve a UO given its code",
+        "description" : "Returns a UO",
+        "operationId" : "findByUnicodeUsingGET_1",
+        "parameters" : [ {
+          "name" : "codiceUniAoo",
+          "in" : "path",
+          "description" : "${swagger.mode.uo.codiceUniUo}",
+          "required" : true,
+          "style" : "simple",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UOResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
     }
   },
   "components" : {
@@ -1162,28 +1122,35 @@
         "type" : "object",
         "properties" : {
           "codAoo" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "${swagger.model.aoo.codAoo}"
           },
           "codiceFiscaleEnte" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "${swagger.model.aoo.codiceFiscaleEnte}"
           },
           "codiceIpa" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "${swagger.model.aoo.codiceIpa}"
           },
           "codiceUniAoo" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO unique identifier, the same of Id"
           },
           "denominazioneAoo" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "${swagger.model.aoo.denominazioneAoo}"
           },
           "denominazioneEnte" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "${swagger.model.aoo.denominazioneEnte}"
           },
           "id" : {
             "type" : "string"
           },
           "mail1" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "${swagger.model.aoo.mail1}"
           },
           "origin" : {
             "type" : "string",
@@ -1199,10 +1166,12 @@
         "properties" : {
           "count" : {
             "type" : "integer",
+            "description" : "${swagger.model.aoos.totalCount}",
             "format" : "int64"
           },
           "items" : {
             "type" : "array",
+            "description" : "${swagger.model.aoos.items}",
             "items" : {
               "$ref" : "#/components/schemas/AOOResource"
             }
@@ -1501,31 +1470,39 @@
         "type" : "object",
         "properties" : {
           "codiceFiscaleEnte" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "${swagger.model.uo.codiceFiscaleEnte}"
           },
           "codiceIpa" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "${swagger.model.uo.codiceIpa}"
           },
           "codiceUniAoo" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "${swagger.model.uo.codiceUniAoo}"
           },
           "codiceUniUo" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO unique identifier"
           },
           "codiceUniUoPadre" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "${swagger.model.uo.codiceUniUoPadre}"
           },
           "denominazioneEnte" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "${swagger.model.uo.denominazioneEnte}"
           },
           "descrizioneUo" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "${swagger.model.uo.descrizioneUo}"
           },
           "id" : {
             "type" : "string"
           },
           "mail1" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "${swagger.model.uo.mail1}"
           },
           "origin" : {
             "type" : "string",
@@ -1541,10 +1518,12 @@
         "properties" : {
           "count" : {
             "type" : "integer",
+            "description" : "${swagger.model.uos.totalCount}",
             "format" : "int64"
           },
           "items" : {
             "type" : "array",
+            "description" : "${swagger.model.uos.items}",
             "items" : {
               "$ref" : "#/components/schemas/UOResource"
             }

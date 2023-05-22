@@ -12,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -31,7 +30,6 @@ class UOServiceImplTest {
     @Test
     void search_emptyOrigin() {
         // given
-        final Optional<Origin> origin = Optional.empty();
         final int page = 0;
         final int limit = 0;
 
@@ -39,7 +37,7 @@ class UOServiceImplTest {
         when(indexSearchService.findAll(anyInt(), anyInt(), anyString()))
                 .thenReturn(queryResultMock);
         // when
-        final QueryResult<UO> queryResult = uoService.search(origin, page, limit);
+        final QueryResult<UO> queryResult = uoService.findAll(page, limit);
         // then
         assertSame(queryResultMock, queryResult);
         verify(indexSearchService, times(1))
@@ -50,15 +48,13 @@ class UOServiceImplTest {
 
     @Test
     void search_notEmptyOrigin() {
-        // given
-        final Optional<Origin> origin = Optional.of(Origin.IPA);
         final int page = 0;
         final int limit = 0;
         final DummyUOQueryResult queryResultMock = new DummyUOQueryResult();
         when(indexSearchService.findAll(anyInt(), anyInt(), any(), any()))
                 .thenReturn(queryResultMock);
         // when
-        final QueryResult<UO> queryResult = uoService.search(origin, page, limit);
+        final QueryResult<UO> queryResult = uoService.findAll(page, limit);
         // then
         assertSame(queryResultMock, queryResult);
     }
@@ -67,9 +63,8 @@ class UOServiceImplTest {
     void findById_ipa() {
         // given
         final String id = "pippo";
-        final Origin origin = Origin.IPA;
         // when
-        final Executable executable = () -> uoService.findById(id, origin);
+        final Executable executable = () -> uoService.findByUnicode(id);
         // then
         assertThrows(RuntimeException.class, executable);
     }
@@ -79,11 +74,10 @@ class UOServiceImplTest {
     void findById_ResourceNotFound() {
         // given
         final String id = "pippo";
-        final Origin origin = Origin.MOCK;
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of());
         // when
-        final Executable executable = () -> uoService.findById(id, origin);
+        final Executable executable = () -> uoService.findByUnicode(id);
         // then
         assertThrows(ResourceNotFoundException.class, executable);
     }
@@ -93,12 +87,11 @@ class UOServiceImplTest {
     void findById_TooManyResourceFound() {
         // given
         final String id = "pippo";
-        final Origin origin = Origin.MOCK;
         final DummyUO UO = new DummyUO();
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of(UO, UO));
         // when
-        final Executable executable = () -> uoService.findById(id, origin);
+        final Executable executable = () -> uoService.findByUnicode(id);
         // then
         assertThrows(TooManyResourceFoundException.class, executable);
     }
@@ -108,12 +101,11 @@ class UOServiceImplTest {
     void findById_found() {
         // given
         final String id = "pippo";
-        final Origin origin = Origin.IPA;
         final DummyUO UO = new DummyUO();
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of(UO));
         // when
-        final UO result = uoService.findById(id, origin);
+        final UO result = uoService.findByUnicode(id);
         // then
         assertSame(UO, result);
     }

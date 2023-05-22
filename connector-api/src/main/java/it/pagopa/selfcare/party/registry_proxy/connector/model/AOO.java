@@ -3,7 +3,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.model;
 public interface AOO {
 
     default String getId() {
-        return createId(getOrigin(), getCodiceUniAoo());
+        return getCodiceUniAoo();
     }
     String getCodiceIpa();
 
@@ -44,10 +44,6 @@ public interface AOO {
             return name;
         }
 
-    }
-
-    static String createId(Origin origin, String codiceUniAoo) {
-        return origin + "_AOO_" + codiceUniAoo;
     }
 
 }
