@@ -16,4 +16,11 @@ public interface IPAOpenDataRestClient extends OpenDataRestClient {
     @ResponseBody
     String retrieveCategories();
 
+    @GetMapping(value = "${rest-client.ipa-open-data.retrieveAOOs.path}", produces = MediaType.TEXT_PLAIN_VALUE)
+    @ResponseBody
+    String retrieveAOOs();
+
+    @GetMapping(value = "${rest-client.ipa-open-data.retrieveUOs.path}", produces = MediaType.TEXT_PLAIN_VALUE)
+    @ResponseBody
+    String retrieveUOs();
 }

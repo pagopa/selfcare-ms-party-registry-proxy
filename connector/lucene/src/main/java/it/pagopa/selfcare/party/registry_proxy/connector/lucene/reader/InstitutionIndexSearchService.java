@@ -27,7 +27,6 @@ class InstitutionIndexSearchService extends IndexSearchServiceTemplate<Instituti
         final InstitutionQueryResult queryResult = new InstitutionQueryResult();
         queryResult.setItems(items);
         queryResult.setTotalHits(totalHits);
-
         return queryResult;
     }
 

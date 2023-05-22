@@ -1,5 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.converter;
 
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Entity;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.document.*;
@@ -18,6 +19,7 @@ public class InstitutionToDocumentConverter implements Function<Institution, Doc
         Document doc = null;
         if (institution != null) {
             doc = new Document();
+            doc.add(new StringField(Entity.ENTITY_TYPE.toString(), Entity.INSTITUTION.toString(), Field.Store.YES));
             doc.add(new StringField(ID.toString(), institution.getId(), Field.Store.YES));
             doc.add(new StoredField(ORIGIN_ID.toString(), institution.getOriginId()));
             doc.add(new SortedDocValuesField(DESCRIPTION.toString(), new BytesRef(institution.getDescription())));

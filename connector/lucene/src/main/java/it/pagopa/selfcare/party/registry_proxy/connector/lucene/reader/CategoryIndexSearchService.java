@@ -30,7 +30,6 @@ class CategoryIndexSearchService extends IndexSearchServiceTemplate<Category> {
         final CategoryQueryResult queryResult = new CategoryQueryResult();
         queryResult.setItems(items);
         queryResult.setTotalHits(totalHits);
-
         return queryResult;
     }
 
@@ -38,7 +37,6 @@ class CategoryIndexSearchService extends IndexSearchServiceTemplate<Category> {
         final InstitutionQueryResult queryResult = new InstitutionQueryResult();
         queryResult.setItems(items);
         queryResult.setTotalHits(totalHits);
-
         return queryResult;
     }
 

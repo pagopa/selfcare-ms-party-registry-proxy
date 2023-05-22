@@ -1,6 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Entity;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution.Field;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
@@ -23,7 +24,6 @@ class InstitutionServiceImpl implements InstitutionService {
 
     private final IndexSearchService<Institution> indexSearchService;
 
-
     @Autowired
     InstitutionServiceImpl(IndexSearchService<Institution> indexSearchService) {
         log.trace("Initializing {}", InstitutionServiceImpl.class.getSimpleName());
@@ -36,7 +36,7 @@ class InstitutionServiceImpl implements InstitutionService {
         log.trace("search start");
         log.debug("search searchText = {}, page = {}, limit = {}", searchText, page, limit);
         final QueryResult<Institution> queryResult = searchText.map(text -> indexSearchService.fullTextSearch(Field.DESCRIPTION, text, page, limit))
-                .orElseGet(() -> indexSearchService.findAll(page, limit));
+                .orElseGet(() -> indexSearchService.findAll(page, limit, Entity.INSTITUTION.toString()));
         log.debug("search result = {}", queryResult);
         log.trace("search end");
         return queryResult;
@@ -46,9 +46,8 @@ class InstitutionServiceImpl implements InstitutionService {
     public QueryResult<Institution> search(Optional<String> searchText, String categories, int page, int limit) {
         log.trace("search start");
         log.debug("search searchText = {}, categories = {}, page = {}, limit = {}", searchText, categories, page, limit);
-
         final QueryResult<Institution> queryResult = searchText.map(text -> indexSearchService.fullTextSearch(Field.DESCRIPTION, searchText.orElseThrow(), Field.CATEGORY, categories, page, limit))
-                .orElseGet(() -> indexSearchService.findAll(page, limit));
+                .orElseGet(() -> indexSearchService.findAll(page, limit, Entity.INSTITUTION.toString()));
         
 
         log.debug("search result = {}", queryResult);

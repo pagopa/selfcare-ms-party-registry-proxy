@@ -2,8 +2,10 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.MockOpenDataRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.OpenDataMockEnabledCondition;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.MockOpenDataAOO;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.MockOpenDataCategory;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.MockOpenDataInstitution;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.MockOpenDataUO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Conditional;
@@ -33,4 +35,13 @@ class MockOpenDataConnector extends OpenDataConnectorTemplate {
         return MockOpenDataCategory.class;
     }
 
+    @Override
+    protected Class<MockOpenDataAOO> getAOOType() {
+        return MockOpenDataAOO.class;
+    }
+
+    @Override
+    protected Class<MockOpenDataUO> getUOType() {
+        return MockOpenDataUO.class;
+    }
 }
