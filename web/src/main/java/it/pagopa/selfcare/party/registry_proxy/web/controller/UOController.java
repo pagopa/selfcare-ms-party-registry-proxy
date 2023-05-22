@@ -10,7 +10,6 @@ import it.pagopa.selfcare.party.registry_proxy.web.model.UOResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.UOsResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.UOMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +25,6 @@ public class UOController {
     private final UOService uoService;
 
 
-    @Autowired
     public UOController(UOService uoService) {
         log.trace("Initializing {}", UOController.class.getSimpleName());
         this.uoService = uoService;

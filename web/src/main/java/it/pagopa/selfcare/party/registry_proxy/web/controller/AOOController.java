@@ -10,7 +10,6 @@ import it.pagopa.selfcare.party.registry_proxy.web.model.AOOResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.AOOsResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.AOOMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +24,6 @@ public class AOOController {
 
     private final AOOService aooService;
 
-    @Autowired
     public AOOController(AOOService aooService) {
         log.trace("Initializing {}", AOOController.class.getSimpleName());
         this.aooService = aooService;
@@ -55,7 +53,7 @@ public class AOOController {
     }
 
 
-    @GetMapping("{codiceUniAoo}")
+    @GetMapping("/{codiceUniAoo}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "${swagger.api.aoo.findBy.summary}",
             notes = "${swagger.api.aoo.findBy.notes}")

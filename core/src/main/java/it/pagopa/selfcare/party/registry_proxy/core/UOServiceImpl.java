@@ -1,11 +1,12 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Entity;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.UO;
 import it.pagopa.selfcare.party.registry_proxy.core.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.core.exception.TooManyResourceFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +17,6 @@ class UOServiceImpl implements UOService {
 
     private final IndexSearchService<UO> indexSearchService;
 
-
-    @Autowired
     UOServiceImpl(IndexSearchService<UO> indexSearchService) {
         log.trace("Initializing {}", UOServiceImpl.class.getSimpleName());
         this.indexSearchService = indexSearchService;
@@ -47,11 +46,10 @@ class UOServiceImpl implements UOService {
             throw new ResourceNotFoundException();
         } else if (uoList.size() > 1) {
             throw new TooManyResourceFoundException();
-        } else {
-            final UO uo = uoList.get(0);
-            log.debug("find UO By CodiceUniUO result = {}", uo);
-            log.trace("find UO By CodiceUniUO end");
-            return uo;
         }
+        final UO uo = uoList.get(0);
+        log.debug("find UO By CodiceUniUO result = {}", uo);
+        log.trace("find UO By CodiceUniUO end");
+        return uo;
     }
 }
