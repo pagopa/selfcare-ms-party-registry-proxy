@@ -6,4 +6,8 @@ public interface OpenDataRestClient {
 
     String retrieveCategories();
 
+    String retrieveAOOs();
+
+    String retrieveUOs();
+
 }

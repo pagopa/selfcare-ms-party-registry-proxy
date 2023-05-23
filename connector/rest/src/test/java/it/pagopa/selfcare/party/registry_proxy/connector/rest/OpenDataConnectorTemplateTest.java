@@ -1,8 +1,10 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.OpenDataConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.AOO;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Category;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.UO;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.OpenDataRestClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.ResourceUtils;
@@ -65,6 +67,59 @@ abstract class OpenDataConnectorTemplateTest {
         assertNotNull(categories.get(0).getOrigin());
         verify(getOpenDataRestClientMock(), times(1))
                 .retrieveCategories();
+        verifyNoMoreInteractions(getOpenDataRestClientMock());
+    }
+
+    @Test
+    void getAOOs() throws IOException {
+        // given
+        final String resourceLocation = "classpath:aoos-open-data.csv";
+        final String csvContent = new String(Files.readAllBytes(ResourceUtils.getFile(resourceLocation).toPath()));
+        when(getOpenDataRestClientMock().retrieveAOOs())
+                .thenReturn(csvContent);
+        // when
+        final List<? extends AOO> aoos = getOpenDataConnector().getAOOs();
+        // then
+        assertNotNull(aoos);
+        assertEquals(1, aoos.size());
+        assertNotNull(aoos.get(0).getCodAoo());
+        assertNotNull(aoos.get(0).getDenominazioneAoo());
+        assertNotNull(aoos.get(0).getDenominazioneEnte());
+        assertNotNull(aoos.get(0).getMail1());
+        assertNotNull(aoos.get(0).getOrigin());
+        assertNotNull(aoos.get(0).getCodiceIpa());
+        assertNotNull(aoos.get(0).getCodiceFiscaleEnte());
+        assertNotNull(aoos.get(0).getCodiceUniAoo());
+
+        verify(getOpenDataRestClientMock(), times(1))
+                .retrieveAOOs();
+        verifyNoMoreInteractions(getOpenDataRestClientMock());
+    }
+
+    @Test
+    void getUOs() throws IOException {
+        // given
+        final String resourceLocation = "classpath:uos-open-data.csv";
+        final String csvContent = new String(Files.readAllBytes(ResourceUtils.getFile(resourceLocation).toPath()));
+        when(getOpenDataRestClientMock().retrieveUOs())
+                .thenReturn(csvContent);
+        // when
+        final List<? extends UO> uos = getOpenDataConnector().getUOs();
+        // then
+        assertNotNull(uos);
+        assertEquals(1, uos.size());
+        assertNotNull(uos.get(0).getCodiceIpa());
+        assertNotNull(uos.get(0).getCodiceFiscaleEnte());
+        assertNotNull(uos.get(0).getCodiceUniUo());
+        assertNotNull(uos.get(0).getCodiceUniUoPadre());
+        assertNotNull(uos.get(0).getCodiceUniAoo());
+        assertNotNull(uos.get(0).getOrigin());
+        assertNotNull(uos.get(0).getDescrizioneUo());
+        assertNotNull(uos.get(0).getDenominazioneEnte());
+
+
+        verify(getOpenDataRestClientMock(), times(1))
+                .retrieveUOs();
         verifyNoMoreInteractions(getOpenDataRestClientMock());
     }
 

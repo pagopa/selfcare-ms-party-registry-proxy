@@ -24,7 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
                 "logging.level.it.pagopa.selfcare.party.registry_proxy.connector.rest=DEBUG",
                 "spring.application.name=selc-party-registry-proxy-connector-rest",
                 "IPA_OPEN_DATA_INSTITUTION_ENDPOINT=/institutions",
-                "IPA_OPEN_DATA_CATEGORY_ENDPOINT=/categories"
+                "IPA_OPEN_DATA_CATEGORY_ENDPOINT=/categories",
+                "IPA_OPEN_DATA_AOOS_ENDPOINT=/aoos",
+                "IPA_OPEN_DATA_UOS_ENDPOINT=/uos"
         })
 @ContextConfiguration(
         initializers = IPAOpenDataRestClientTest.RandomPortInitializer.class,

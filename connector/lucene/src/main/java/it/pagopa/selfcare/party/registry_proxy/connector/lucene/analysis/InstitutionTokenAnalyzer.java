@@ -8,10 +8,12 @@ import org.apache.lucene.analysis.it.ItalianAnalyzer;
 import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilter;
 import org.apache.lucene.analysis.ngram.NGramTokenFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@Qualifier("institutionTokenAnalyzer")
 public class InstitutionTokenAnalyzer extends Analyzer {
 
     public InstitutionTokenAnalyzer() {
