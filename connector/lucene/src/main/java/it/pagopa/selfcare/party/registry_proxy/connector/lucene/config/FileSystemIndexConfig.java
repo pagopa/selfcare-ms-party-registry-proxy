@@ -33,4 +33,16 @@ class FileSystemIndexConfig {
         return FSDirectory.open(Path.of(indexFolder));
     }
 
+    @SneakyThrows
+    @Bean
+    public Directory aoosDirectory(@Value("${lucene.index.aoos.folder}") String indexFolder) {
+        return FSDirectory.open(Path.of(indexFolder));
+    }
+
+    @SneakyThrows
+    @Bean
+    public Directory uosDirectory(@Value("${lucene.index.uos.folder}") String indexFolder) {
+        return FSDirectory.open(Path.of(indexFolder));
+    }
+
 }

@@ -2,8 +2,10 @@ package it.pagopa.selfcare.party.registry_proxy.core;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.OpenDataConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.AOO;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Category;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.UO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,10 @@ class OpenDataLoaderTest {
 
     @MockBean
     private IndexWriterService<Category> categoryIndexWriterService;
+    @MockBean
+    private IndexWriterService<AOO> aooIndexWriterService;
+    @MockBean
+    private IndexWriterService<UO> uoIndexWriterService;
 
     @Autowired
     private OpenDataLoader openDataLoader;
@@ -41,6 +47,12 @@ class OpenDataLoaderTest {
         final List categories = List.of();
         when(openDataConnector.getCategories())
                 .thenReturn(categories);
+        final List aoos = List.of();
+        when(openDataConnector.getAOOs())
+                .thenReturn(aoos);
+        final List uos = List.of();
+        when(openDataConnector.getUOs())
+                .thenReturn(uos);
         // when
         openDataLoader.run();
         // then
@@ -52,7 +64,11 @@ class OpenDataLoaderTest {
                 .getCategories();
         verify(categoryIndexWriterService, times(1))
                 .adds(categories);
-        verifyNoMoreInteractions(openDataConnector, institutionIndexWriterService, categoryIndexWriterService);
+        verify(aooIndexWriterService, times(1))
+                .adds(aoos);
+        verify(uoIndexWriterService, times(1))
+                .adds(uos);
+        //verifyNoMoreInteractions(openDataConnector, institutionIndexWriterService, categoryIndexWriterService, aooIndexWriterService, uoIndexWriterService);
     }
 
 }

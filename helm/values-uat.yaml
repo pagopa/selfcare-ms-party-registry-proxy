@@ -21,3 +21,5 @@ configEnvSpecific:
   MOCK_OPEN_DATA_URL: "https://selcucheckoutsa.z6.web.core.windows.net/resources"
   MOCK_OPEN_DATA_INSTITUTION_ENDPOINT: "/institutions-open-data-mock.csv"
   MOCK_OPEN_DATA_CATEGORY_ENDPOINT: "/categories-open-data-mock.csv"
+  MOCK_OPEN_DATA_AOO_ENDPOINT: "/aoo-open-data-mock.csv"
+  MOCK_OPEN_DATA_UO_ENDPOINT: "/uo-open-data-mock.csv"

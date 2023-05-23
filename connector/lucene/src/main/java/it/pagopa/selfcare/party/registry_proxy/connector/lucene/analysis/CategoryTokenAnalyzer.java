@@ -7,10 +7,12 @@ import org.apache.lucene.analysis.it.ItalianAnalyzer;
 import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilter;
 import org.apache.lucene.analysis.ngram.NGramTokenFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@Qualifier("categoryTokenAnalyzer")
 public class CategoryTokenAnalyzer extends Analyzer {//TODO: there is no need to use a standard analyzer because the search is always "by id"
 
 
