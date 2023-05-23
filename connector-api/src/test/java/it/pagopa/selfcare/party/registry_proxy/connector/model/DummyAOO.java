@@ -15,4 +15,19 @@ public class DummyAOO implements AOO {
     private String codAoo;
     private Origin origin;
 
+    private String dataIstituzione;
+    private String nomeResponsabile;
+    private String cognomeResponsabile;
+    private String mailResponsabile;
+    private String telefonoResponsabile;
+    private String codiceComuneISTAT;
+    private String codiceCatastaleComune;
+    private String CAP;
+    private String indirizzo;
+    private String telefono;
+    private String fax;
+    private String tipoMail1;
+    private String protocolloInformatico;
+    private String URIProtocolloInformatico;
+    private String dataAggiornamento;
 }

@@ -6,17 +6,26 @@ public interface AOO {
         return getCodiceUniAoo();
     }
     String getCodiceIpa();
-
     String getDenominazioneEnte();
-
     String getCodiceFiscaleEnte();
-
     String getCodiceUniAoo();
-
     String getDenominazioneAoo();
-
+    String getDataIstituzione();
+    String getNomeResponsabile();
+    String getCognomeResponsabile();
+    String getMailResponsabile();
+    String getTelefonoResponsabile();
+    String getCodiceComuneISTAT();
+    String getCodiceCatastaleComune();
+    String getCAP();
+    String getIndirizzo();
+    String getTelefono();
+    String getFax();
     String getMail1();
-
+    String getTipoMail1();
+    String getProtocolloInformatico();
+    String getURIProtocolloInformatico();
+    String getDataAggiornamento();
     String getCodAoo();
 
     Origin getOrigin();
@@ -29,7 +38,22 @@ public interface AOO {
         CODICE_FISCALE_ENTE("codiceFiscaleEnte"),
         CODICE_UNI_AOO("codiceUniAoo"),
         DENOMINAZIONE_AOO("denominazioneAoo"),
+        DATA_ISTITUTIONE("dataIstituzione"),
+        NOME_RESPONSABILE("nomeResponsabile"),
+        COGNOME_RESPONSABILE("cognomeResponsabile"),
+        MAIL_RESPONSABILE("mailResponsabile"),
+        TELEFONO_RESPONSABILE("telefonoResponsabile"),
+        CODICE_COMUNE_ISTAT("codiceComuneISTAT"),
+        CODICE_CATASTALE_COMUNE("codiceCatastaleComune"),
+        CAP("CAP"),
+        INDIRIZZO("indirizzo"),
+        TELEFONO("telefono"),
+        FAX("fax"),
         MAIL1("mail1"),
+        TIPO_MAIL1("tipoMail1"),
+        PROTOCOLLO_INFORMATICO("protocolloInformatico"),
+        URI_PROTOCOLLO_INFORMATICO("URIProtocolloInformatico"),
+        DATA_AGGIORNAMENTO("dataAggiornamento"),
         COD_AOO("codAoo"),
         ORIGIN("origin");
 
