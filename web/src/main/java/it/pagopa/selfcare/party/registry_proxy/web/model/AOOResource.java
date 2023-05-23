@@ -1,5 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.web.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.AOO;
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class AOOResource implements AOO {
 
     private String id;
