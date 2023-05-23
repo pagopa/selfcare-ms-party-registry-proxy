@@ -75,4 +75,77 @@ public class DummyUO implements UO {
         return dummyEntity.getOrigin();
     }
 
+
+
+    @Override
+    public String getDataIstituzione() {
+        return dummyEntity.getDataIstituzione();
+    }
+
+    @Override
+    public String getNomeResponsabile() {
+        return dummyEntity.getNomeResponsabile();
+    }
+
+    @Override
+    public String getCognomeResponsabile() {
+        return dummyEntity.getCognomeResponsabile();
+    }
+
+    @Override
+    public String getMailResponsabile() {
+        return dummyEntity.getMailResponsabile();
+    }
+
+    @Override
+    public String getTelefonoResponsabile() {
+        return dummyEntity.getTelefonoResponsabile();
+    }
+
+    @Override
+    public String getCodiceComuneISTAT() {
+        return dummyEntity.getCodiceComuneISTAT();
+    }
+
+    @Override
+    public String getCodiceCatastaleComune() {
+        return dummyEntity.getCodiceCatastaleComune();
+    }
+
+    @Override
+    public String getCAP() {
+        return dummyEntity.getCAP();
+    }
+
+    @Override
+    public String getIndirizzo() {
+        return dummyEntity.getIndirizzo();
+    }
+
+    @Override
+    public String getTelefono() {
+        return dummyEntity.getTelefono();
+    }
+
+    @Override
+    public String getFax() {
+        return dummyEntity.getFax();
+    }
+
+    @Override
+    public String getTipoMail1() {
+        return dummyEntity.getTipoMail1();
+    }
+
+    @Override
+    public String getUrl() {
+        return dummyEntity.getUrl();
+    }
+
+
+    @Override
+    public String getDataAggiornamento() {
+        return dummyEntity.getDataAggiornamento();
+    }
+
 }

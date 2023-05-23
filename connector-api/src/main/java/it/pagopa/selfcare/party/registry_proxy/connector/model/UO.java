@@ -7,21 +7,30 @@ public interface UO {
     }
 
     String getCodiceIpa();
-
     String getDenominazioneEnte();
-
     String getCodiceFiscaleEnte();
-
     String getCodiceUniUo();
-
     String getCodiceUniUoPadre();
-
     String getCodiceUniAoo();
-
     String getDescrizioneUo();
-
     String getMail1();
     Origin getOrigin();
+
+
+    String getDataIstituzione();
+    String getNomeResponsabile();
+    String getCognomeResponsabile();
+    String getMailResponsabile();
+    String getTelefonoResponsabile();
+    String getCodiceComuneISTAT();
+    String getCodiceCatastaleComune();
+    String getCAP();
+    String getIndirizzo();
+    String getTelefono();
+    String getFax();
+    String getTipoMail1();
+    String getUrl();
+    String getDataAggiornamento();
 
 
     enum Field implements SearchField {
@@ -34,7 +43,22 @@ public interface UO {
         CODICE_UNI_AOO("codiceUniAoo"),
         DESCRIZIONE_UO("descrizioneUo"),
         MAIL1("mail1"),
-        ORIGIN("origin");
+        ORIGIN("origin"),
+
+        DATA_ISTITUTIONE("dataIstituzione"),
+        NOME_RESPONSABILE("nomeResponsabile"),
+        COGNOME_RESPONSABILE("cognomeResponsabile"),
+        MAIL_RESPONSABILE("mailResponsabile"),
+        TELEFONO_RESPONSABILE("telefonoResponsabile"),
+        CODICE_COMUNE_ISTAT("codiceComuneISTAT"),
+        CODICE_CATASTALE_COMUNE("codiceCatastaleComune"),
+        CAP("CAP"),
+        INDIRIZZO("indirizzo"),
+        TELEFONO("telefono"),
+        FAX("fax"),
+        TIPO_MAIL1("tipoMail1"),
+        URL("url"),
+        DATA_AGGIORNAMENTO("dataAggiornamento");
 
         private final String name;
 

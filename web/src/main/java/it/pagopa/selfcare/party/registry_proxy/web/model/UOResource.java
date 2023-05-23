@@ -52,4 +52,46 @@ public class UOResource implements UO {
     @JsonProperty(required = true)
     @NotNull
     private Origin origin;
+
+    @ApiModelProperty(value = "${swagger.model.uo.dataInstituzione}", required = true)
+    private String dataIstituzione;
+
+    @ApiModelProperty(value = "${swagger.model.uo.nomeResponsabile}", required = true)
+    private String nomeResponsabile;
+
+    @ApiModelProperty(value = "${swagger.model.uo.cognomeResponsabile}", required = true)
+    private String cognomeResponsabile;
+
+    @ApiModelProperty(value = "${swagger.model.uo.mailResponsabile}", required = true)
+    private String mailResponsabile;
+
+    @ApiModelProperty(value = "${swagger.model.uo.telefonoResponsabile}", required = true)
+    private String telefonoResponsabile;
+
+    @ApiModelProperty(value = "${swagger.model.uo.codiceComuneISTAT}", required = true)
+    private String codiceComuneISTAT;
+
+    @ApiModelProperty(value = "${swagger.model.uo.codiceCatastaleComune}", required = true)
+    private String codiceCatastaleComune;
+
+    @ApiModelProperty(value = "${swagger.model.uo.CAP}", required = true)
+    private String CAP;
+
+    @ApiModelProperty(value = "${swagger.model.uo.indirizzo}", required = true)
+    private String indirizzo;
+
+    @ApiModelProperty(value = "${swagger.model.uo.telefono}", required = true)
+    private String telefono;
+
+    @ApiModelProperty(value = "${swagger.model.uo.fax}", required = true)
+    private String fax;
+
+    @ApiModelProperty(value = "${swagger.model.uo.tipoMail1}", required = true)
+    private String tipoMail1;
+
+    @ApiModelProperty(value = "${swagger.model.uo.url}", required = true)
+    private String url;
+
+    @ApiModelProperty(value = "${swagger.model.uo.dataAggiornamento}", required = true)
+    private String dataAggiornamento;
 }

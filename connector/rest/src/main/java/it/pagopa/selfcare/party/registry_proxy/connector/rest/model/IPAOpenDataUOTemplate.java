@@ -26,5 +26,34 @@ public abstract class IPAOpenDataUOTemplate implements UO {
     @CsvBindByName(column = "Mail1")
     private String mail1;
 
+    @CsvBindByName(column = "Data_istituzione")
+    private String dataIstituzione;
+    @CsvBindByName(column = "Nome_responsabile")
+    private String nomeResponsabile;
+    @CsvBindByName(column = "Cognome_responsabile")
+    private String cognomeResponsabile;
+    @CsvBindByName(column = "Mail_responsabile")
+    private String mailResponsabile;
+    @CsvBindByName(column = "Telefono_responsabile")
+    private String telefonoResponsabile;
+    @CsvBindByName(column = "Codice_comune_ISTAT")
+    private String codiceComuneISTAT;
+    @CsvBindByName(column = "Codice_catastale_comune")
+    private String codiceCatastaleComune;
+    @CsvBindByName(column = "CAP")
+    private String CAP;
+    @CsvBindByName(column = "Indirizzo")
+    private String indirizzo;
+    @CsvBindByName(column = "Telefono")
+    private String telefono;
+    @CsvBindByName(column = "Fax")
+    private String fax;
+    @CsvBindByName(column = "Tipo_Mail1")
+    private String tipoMail1;
+    @CsvBindByName(column = "Url")
+    private String url;
+    @CsvBindByName(column = "Data_aggiornamento")
+    private String dataAggiornamento;
+
 
 }

@@ -15,6 +15,7 @@ public class AOOEntity implements AOO {
     private String denominazioneAoo;
     private String mail1;
     private String codAoo;
+
     private String dataIstituzione;
     private String nomeResponsabile;
     private String cognomeResponsabile;
