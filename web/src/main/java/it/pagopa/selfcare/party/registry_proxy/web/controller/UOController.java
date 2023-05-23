@@ -54,12 +54,12 @@ public class UOController {
     }
 
 
-    @GetMapping("/{codiceUniAoo}")
+    @GetMapping("/{codiceUniUo}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "${swagger.api.uo.findBy.summary}",
             notes = "${swagger.api.uo.findBy.notes}")
     public UOResource findByUnicode(@ApiParam("${swagger.mode.uo.codiceUniUo}")
-                                    @PathVariable("codiceUniAoo") String codiceUniUo) {
+                                    @PathVariable("codiceUniUo") String codiceUniUo) {
         log.trace("find UO start");
         log.debug("find UO = {}", codiceUniUo);
         final UOResource uoResource = UOMapper.toResource(uoService.findByUnicode(codiceUniUo));
