@@ -61,7 +61,6 @@ public interface UO {
         TIPO_MAIL1("tipoMail1"),
         URL("url"),
         DATA_AGGIORNAMENTO("dataAggiornamento");
-        ORIGIN("origin");
 
         private final String name;
 
