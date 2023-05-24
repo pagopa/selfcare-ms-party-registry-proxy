@@ -26,6 +26,22 @@ public class DocumentToAOOConverter implements Function<Document, AOO> {
             entity.setDenominazioneAoo(document.get(DENOMINAZIONE_AOO.toString()));
             entity.setMail1(document.get(MAIL1.toString()));
             entity.setCodAoo(document.get(COD_AOO.toString()));
+
+            entity.setDataIstituzione(document.get(DATA_ISTITUTIONE.toString()));
+            entity.setNomeResponsabile(document.get(NOME_RESPONSABILE.toString()));
+            entity.setCognomeResponsabile(document.get(COGNOME_RESPONSABILE.toString()));
+            entity.setMailResponsabile(document.get(MAIL_RESPONSABILE.toString()));
+            entity.setTelefonoResponsabile(document.get(TELEFONO_RESPONSABILE.toString()));
+            entity.setCodiceComuneISTAT(document.get(CODICE_COMUNE_ISTAT.toString()));
+            entity.setCodiceCatastaleComune(document.get(CODICE_CATASTALE_COMUNE.toString()));
+            entity.setCAP(document.get(CAP.toString()));
+            entity.setIndirizzo(document.get(INDIRIZZO.toString()));
+            entity.setTelefono(document.get(TELEFONO.toString()));
+            entity.setFax(document.get(FAX.toString()));
+            entity.setTipoMail1(document.get(TIPO_MAIL1.toString()));
+            entity.setProtocolloInformatico(document.get(PROTOCOLLO_INFORMATICO.toString()));
+            entity.setURIProtocolloInformatico(document.get(URI_PROTOCOLLO_INFORMATICO.toString()));
+            entity.setDataAggiornamento(document.get(DATA_AGGIORNAMENTO.toString()));
         }
         return entity;
     }

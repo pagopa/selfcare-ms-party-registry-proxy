@@ -1040,14 +1040,14 @@
         } ]
       }
     },
-    "/uo/{codiceUniUo}" : {
+    "/uo/{codiceUniAoo}" : {
       "get" : {
         "tags" : [ "uo" ],
         "summary" : "Retrieve a UO given its code",
         "description" : "Returns a UO",
         "operationId" : "findByUnicodeUsingGET_1",
         "parameters" : [ {
-          "name" : "codiceUniUo",
+          "name" : "codiceUniAoo",
           "in" : "path",
           "description" : "${swagger.mode.uo.codiceUniUo}",
           "required" : true,
@@ -1118,12 +1118,23 @@
     "schemas" : {
       "AOOResource" : {
         "title" : "AOOResource",
-        "required" : [ "codAoo", "codiceFiscaleEnte", "codiceIpa", "codiceUniAoo", "denominazioneAoo", "denominazioneEnte", "mail1", "origin" ],
+        "required" : [ "codAoo", "codiceCatastaleComune", "codiceComuneISTAT", "codiceFiscaleEnte", "codiceIpa", "codiceUniAoo", "cognomeResponsabile", "dataAggiornamento", "dataIstituzione", "denominazioneAoo", "denominazioneEnte", "fax", "indirizzo", "mail1", "mailResponsabile", "nomeResponsabile", "origin", "protocolloInformatico", "telefono", "telefonoResponsabile", "tipoMail1" ],
         "type" : "object",
         "properties" : {
+          "cap" : {
+            "type" : "string"
+          },
           "codAoo" : {
             "type" : "string",
             "description" : "${swagger.model.aoo.codAoo}"
+          },
+          "codiceCatastaleComune" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.codiceCatastaleComune}"
+          },
+          "codiceComuneISTAT" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.codiceComuneISTAT}"
           },
           "codiceFiscaleEnte" : {
             "type" : "string",
@@ -1137,6 +1148,18 @@
             "type" : "string",
             "description" : "AOO unique identifier, the same of Id"
           },
+          "cognomeResponsabile" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.cognomeResponsabile}"
+          },
+          "dataAggiornamento" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.dataAggiornamento}"
+          },
+          "dataIstituzione" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.dataInstituzione}"
+          },
           "denominazioneAoo" : {
             "type" : "string",
             "description" : "${swagger.model.aoo.denominazioneAoo}"
@@ -1145,17 +1168,52 @@
             "type" : "string",
             "description" : "${swagger.model.aoo.denominazioneEnte}"
           },
+          "fax" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.fax}"
+          },
           "id" : {
             "type" : "string"
+          },
+          "indirizzo" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.indirizzo}"
           },
           "mail1" : {
             "type" : "string",
             "description" : "${swagger.model.aoo.mail1}"
           },
+          "mailResponsabile" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.mailResponsabile}"
+          },
+          "nomeResponsabile" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.nomeResponsabile}"
+          },
           "origin" : {
             "type" : "string",
             "description" : "Describes which is the source of data",
             "enum" : [ "INFOCAMERE", "IPA", "static" ]
+          },
+          "protocolloInformatico" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.protocolloInformatico}"
+          },
+          "telefono" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.telefono}"
+          },
+          "telefonoResponsabile" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.telefonoResponsabile}"
+          },
+          "tipoMail1" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.tipoMail1}"
+          },
+          "uriprotocolloInformatico" : {
+            "type" : "string"
           }
         }
       },
@@ -1466,9 +1524,20 @@
       },
       "UOResource" : {
         "title" : "UOResource",
-        "required" : [ "codiceFiscaleEnte", "codiceIpa", "codiceUniAoo", "denominazioneEnte", "descrizioneUo", "mail1", "origin" ],
+        "required" : [ "codiceCatastaleComune", "codiceComuneISTAT", "codiceFiscaleEnte", "codiceIpa", "codiceUniAoo", "cognomeResponsabile", "dataAggiornamento", "dataIstituzione", "denominazioneEnte", "descrizioneUo", "fax", "indirizzo", "mail1", "mailResponsabile", "nomeResponsabile", "origin", "telefono", "telefonoResponsabile", "tipoMail1", "url" ],
         "type" : "object",
         "properties" : {
+          "cap" : {
+            "type" : "string"
+          },
+          "codiceCatastaleComune" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.codiceCatastaleComune}"
+          },
+          "codiceComuneISTAT" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.codiceComuneISTAT}"
+          },
           "codiceFiscaleEnte" : {
             "type" : "string",
             "description" : "${swagger.model.uo.codiceFiscaleEnte}"
@@ -1489,6 +1558,18 @@
             "type" : "string",
             "description" : "${swagger.model.uo.codiceUniUoPadre}"
           },
+          "cognomeResponsabile" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.cognomeResponsabile}"
+          },
+          "dataAggiornamento" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.dataAggiornamento}"
+          },
+          "dataIstituzione" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.dataInstituzione}"
+          },
           "denominazioneEnte" : {
             "type" : "string",
             "description" : "${swagger.model.uo.denominazioneEnte}"
@@ -1497,17 +1578,49 @@
             "type" : "string",
             "description" : "${swagger.model.uo.descrizioneUo}"
           },
+          "fax" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.fax}"
+          },
           "id" : {
             "type" : "string"
+          },
+          "indirizzo" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.indirizzo}"
           },
           "mail1" : {
             "type" : "string",
             "description" : "${swagger.model.uo.mail1}"
           },
+          "mailResponsabile" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.mailResponsabile}"
+          },
+          "nomeResponsabile" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.nomeResponsabile}"
+          },
           "origin" : {
             "type" : "string",
             "description" : "Describes which is the source of data",
             "enum" : [ "INFOCAMERE", "IPA", "static" ]
+          },
+          "telefono" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.telefono}"
+          },
+          "telefonoResponsabile" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.telefonoResponsabile}"
+          },
+          "tipoMail1" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.tipoMail1}"
+          },
+          "url" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.url}"
           }
         }
       },

@@ -46,7 +46,7 @@ class UOToDocumentConverterTest {
         final Set<String> fieldValues = Arrays.stream(Field.values())
                 .map(Field::toString)
                 .collect(Collectors.toSet());
-        assertEquals(9, output.getFields().stream()
+        assertEquals(23, output.getFields().stream()
                 .filter(field -> !fieldValues.contains(field.name()))
                 .count());
     }
@@ -64,7 +64,7 @@ class UOToDocumentConverterTest {
         final Set<String> fieldValues = Arrays.stream(Field.values())
                 .map(Field::toString)
                 .collect(Collectors.toSet());
-        assertEquals(9, output.getFields().stream()
+        assertEquals(23, output.getFields().stream()
                 .filter(field -> !fieldValues.contains(field.name()))
                 .count());
     }

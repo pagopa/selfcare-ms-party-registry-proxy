@@ -24,6 +24,22 @@ public class AOOMapper {
             aooResource.setDenominazioneAoo(aoo.getDenominazioneAoo());
             aooResource.setOrigin(aoo.getOrigin());
             aooResource.setMail1(aoo.getMail1());
+
+            aooResource.setDataIstituzione(aoo.getDataIstituzione());
+            aooResource.setNomeResponsabile(aoo.getNomeResponsabile());
+            aooResource.setCognomeResponsabile(aoo.getCognomeResponsabile());
+            aooResource.setMailResponsabile(aoo.getMailResponsabile());
+            aooResource.setTelefonoResponsabile(aoo.getTelefonoResponsabile());
+            aooResource.setCodiceComuneISTAT(aoo.getCodiceComuneISTAT());
+            aooResource.setCodiceCatastaleComune(aoo.getCodiceCatastaleComune());
+            aooResource.setCAP(aoo.getCAP());
+            aooResource.setIndirizzo(aoo.getIndirizzo());
+            aooResource.setTelefono(aoo.getTelefono());
+            aooResource.setFax(aoo.getFax());
+            aooResource.setTipoMail1(aoo.getTipoMail1());
+            aooResource.setProtocolloInformatico(aoo.getProtocolloInformatico());
+            aooResource.setURIProtocolloInformatico(aoo.getURIProtocolloInformatico());
+            aooResource.setDataAggiornamento(aoo.getDataAggiornamento());
         }
         return aooResource;
     }
