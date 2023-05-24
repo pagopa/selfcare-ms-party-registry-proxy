@@ -26,6 +26,17 @@ public interface AOO {
     String getProtocolloInformatico();
     String getURIProtocolloInformatico();
     String getDataAggiornamento();
+
+    String getDenominazioneEnte();
+
+    String getCodiceFiscaleEnte();
+
+    String getCodiceUniAoo();
+
+    String getDenominazioneAoo();
+
+    String getMail1();
+
     String getCodAoo();
 
     Origin getOrigin();

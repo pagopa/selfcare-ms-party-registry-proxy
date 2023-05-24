@@ -7,12 +7,14 @@ public interface UO {
     }
 
     String getCodiceIpa();
+
     String getDenominazioneEnte();
     String getCodiceFiscaleEnte();
     String getCodiceUniUo();
     String getCodiceUniUoPadre();
     String getCodiceUniAoo();
     String getDescrizioneUo();
+
     String getMail1();
     Origin getOrigin();
 
@@ -59,6 +61,7 @@ public interface UO {
         TIPO_MAIL1("tipoMail1"),
         URL("url"),
         DATA_AGGIORNAMENTO("dataAggiornamento");
+        ORIGIN("origin");
 
         private final String name;
 

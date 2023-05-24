@@ -28,6 +28,7 @@ public class UOToDocumentConverter implements Function<UO, Document> {
             doc.add(new StringField(CODICE_UNI_UO_PADRE.toString(), uo.getCodiceUniUoPadre(), Field.Store.YES));
             doc.add(new StringField(CODICE_UNI_AOO.toString(), uo.getCodiceUniAoo(), Field.Store.YES));
             doc.add(new StringField(ORIGIN.toString(), uo.getOrigin().toString(), Field.Store.YES));
+
             doc.add(new StringField(DENOMINAZIONE_ENTE.toString(), uo.getDenominazioneEnte(), Field.Store.YES));
             doc.add(new StringField(DESCRIZIONE_UO.toString(), uo.getDescrizioneUo(), Field.Store.YES));
             doc.add(new StringField(MAIL1.toString(), uo.getMail1(), Field.Store.YES));
