@@ -17,4 +17,18 @@ public class UOEntity implements UO {
     private String descrizioneUo;
     private String mail1;
 
+    private String dataIstituzione;
+    private String nomeResponsabile;
+    private String cognomeResponsabile;
+    private String mailResponsabile;
+    private String telefonoResponsabile;
+    private String codiceComuneISTAT;
+    private String codiceCatastaleComune;
+    private String CAP;
+    private String indirizzo;
+    private String telefono;
+    private String fax;
+    private String tipoMail1;
+    private String url;
+    private String dataAggiornamento;
 }

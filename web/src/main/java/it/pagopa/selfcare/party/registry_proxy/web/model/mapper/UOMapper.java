@@ -25,6 +25,21 @@ public class UOMapper {
             uoResource.setDenominazioneEnte(uo.getDenominazioneEnte());
             uoResource.setDescrizioneUo(uo.getDescrizioneUo());
             uoResource.setMail1(uo.getMail1());
+
+            uoResource.setDataIstituzione(uo.getDataIstituzione());
+            uoResource.setNomeResponsabile(uo.getNomeResponsabile());
+            uoResource.setCognomeResponsabile(uo.getCognomeResponsabile());
+            uoResource.setMailResponsabile(uo.getMailResponsabile());
+            uoResource.setTelefonoResponsabile(uo.getTelefonoResponsabile());
+            uoResource.setCodiceComuneISTAT(uo.getCodiceComuneISTAT());
+            uoResource.setCodiceCatastaleComune(uo.getCodiceCatastaleComune());
+            uoResource.setCAP(uo.getCAP());
+            uoResource.setIndirizzo(uo.getIndirizzo());
+            uoResource.setTelefono(uo.getTelefono());
+            uoResource.setFax(uo.getFax());
+            uoResource.setTipoMail1(uo.getTipoMail1());
+            uoResource.setUrl(uo.getUrl());
+            uoResource.setDataAggiornamento(uo.getDataAggiornamento());
         }
         return uoResource;
     }

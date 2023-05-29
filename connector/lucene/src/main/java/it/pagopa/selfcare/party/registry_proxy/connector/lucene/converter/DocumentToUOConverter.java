@@ -27,6 +27,21 @@ public class DocumentToUOConverter implements Function<Document, UO> {
             entity.setCodiceUniUoPadre(document.get(CODICE_UNI_UO_PADRE.toString()));
             entity.setMail1(document.get(MAIL1.toString()));
             entity.setDescrizioneUo(document.get(DESCRIZIONE_UO.toString()));
+
+            entity.setDataIstituzione(document.get(DATA_ISTITUTIONE.toString()));
+            entity.setNomeResponsabile(document.get(NOME_RESPONSABILE.toString()));
+            entity.setCognomeResponsabile(document.get(COGNOME_RESPONSABILE.toString()));
+            entity.setMailResponsabile(document.get(MAIL_RESPONSABILE.toString()));
+            entity.setTelefonoResponsabile(document.get(TELEFONO_RESPONSABILE.toString()));
+            entity.setCodiceComuneISTAT(document.get(CODICE_COMUNE_ISTAT.toString()));
+            entity.setCodiceCatastaleComune(document.get(CODICE_CATASTALE_COMUNE.toString()));
+            entity.setCAP(document.get(CAP.toString()));
+            entity.setIndirizzo(document.get(INDIRIZZO.toString()));
+            entity.setTelefono(document.get(TELEFONO.toString()));
+            entity.setFax(document.get(FAX.toString()));
+            entity.setTipoMail1(document.get(TIPO_MAIL1.toString()));
+            entity.setUrl(document.get(URL.toString()));
+            entity.setDataAggiornamento(document.get(DATA_AGGIORNAMENTO.toString()));
         }
         return entity;
     }
