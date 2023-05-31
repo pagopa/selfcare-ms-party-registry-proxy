@@ -85,7 +85,7 @@ class AOOControllerTest {
     @Test
     void findAOO() throws Exception {
         // given
-        final String code = "code";
+        final String code = "CODE";
         when(aooServiceMock.findByUnicode(any()))
                 .thenReturn(mockInstance(new DummyAOO()));
         // when

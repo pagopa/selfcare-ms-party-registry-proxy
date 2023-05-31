@@ -62,7 +62,7 @@ public class UOController {
                                     @PathVariable("codiceUniAoo") String codiceUniUo) {
         log.trace("find UO start");
         log.debug("find UO = {}", codiceUniUo);
-        final UOResource uoResource = UOMapper.toResource(uoService.findByUnicode(codiceUniUo));
+        final UOResource uoResource = UOMapper.toResource(uoService.findByUnicode(codiceUniUo.toUpperCase()));
         log.debug("find UO result = {}", uoResource);
         log.trace("find UO end");
         return uoResource;
