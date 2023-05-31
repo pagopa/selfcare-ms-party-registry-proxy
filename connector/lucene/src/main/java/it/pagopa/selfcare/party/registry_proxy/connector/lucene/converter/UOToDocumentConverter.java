@@ -21,7 +21,7 @@ public class UOToDocumentConverter implements Function<UO, Document> {
         if (uo != null) {
             doc = new Document();
             doc.add(new StringField(Entity.ENTITY_TYPE.toString(), Entity.UO.toString(), Field.Store.YES));
-            doc.add(new StringField(ID.toString(), uo.getId().toUpperCase(), Field.Store.YES));
+            doc.add(new StringField(ID.toString(), uo.getId() != null ? uo.getId().toUpperCase() : uo.getId(), Field.Store.YES));
             doc.add(new StringField(CODICE_IPA.toString(), uo.getCodiceIpa(), Field.Store.YES));
             doc.add(new StringField(CODICE_FISCALE_ENTE.toString(), uo.getCodiceFiscaleEnte(), Field.Store.YES));
             doc.add(new StringField(CODICE_UNI_UO.toString(), uo.getCodiceUniUo(), Field.Store.YES));

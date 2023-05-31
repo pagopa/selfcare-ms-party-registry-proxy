@@ -61,7 +61,7 @@ public class AOOController {
                                        @PathVariable("codiceUniAoo") String codiceUniAoo) {
         log.trace("find AOO start");
         log.debug("find AOO codiceUniAoo = {}", codiceUniAoo);
-        final AOOResource aooResource = AOOMapper.toResource(aooService.findByUnicode(codiceUniAoo.toUpperCase()));
+        final AOOResource aooResource = AOOMapper.toResource(aooService.findByUnicode(codiceUniAoo));
         log.debug("findAOO result = {}", aooResource);
         log.trace("findAOO end");
         return aooResource;
