@@ -38,8 +38,8 @@ class AOOServiceImpl implements AOOService {
     @Override
     public AOO findByUnicode(String codiceUniAOO) {
         log.trace("find AOO by CodiceUniAOO start");
-        log.debug("find AOO by CodiceUniAOO = {}", codiceUniAOO);
-        final List<AOO> aooList = indexSearchService.findById(AOO.Field.CODICE_UNI_AOO, codiceUniAOO);
+        log.debug("find AOO by CodiceUniAOO = {}", codiceUniAOO.toUpperCase());
+        final List<AOO> aooList = indexSearchService.findById(AOO.Field.CODICE_UNI_AOO, codiceUniAOO.toUpperCase());
         if (aooList.isEmpty()) {
             throw new ResourceNotFoundException();
         } else if (aooList.size() > 1) {
