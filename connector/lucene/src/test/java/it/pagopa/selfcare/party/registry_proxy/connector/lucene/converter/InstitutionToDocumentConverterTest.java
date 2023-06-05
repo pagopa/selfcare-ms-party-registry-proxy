@@ -56,10 +56,11 @@ class InstitutionToDocumentConverterTest {
         assertEquals(input.getAddress(), output.get(Field.ADDRESS.toString()));
         assertEquals(input.getZipCode(), output.get(Field.ZIP_CODE.toString()));
         assertEquals(input.getOrigin().toString(), output.get(Field.ORIGIN.toString()));
+        assertEquals(input.getIstatCode().toString(), output.get(Field.ISTAT_CODE.toString()));
         final Set<String> fieldValues = Arrays.stream(Field.values())
                 .map(Field::toString)
                 .collect(Collectors.toSet());
-        assertEquals(0, output.getFields().stream()
+        assertEquals(1, output.getFields().stream()
                 .filter(field -> !fieldValues.contains(field.name()))
                 .count());
     }
@@ -85,10 +86,11 @@ class InstitutionToDocumentConverterTest {
         assertEquals(input.getAddress(), output.get(Field.ADDRESS.toString()));
         assertEquals(input.getZipCode(), output.get(Field.ZIP_CODE.toString()));
         assertEquals(input.getOrigin().toString(), output.get(Field.ORIGIN.toString()));
+        assertEquals(input.getIstatCode(), output.get(Field.ISTAT_CODE.toString()));
         final Set<String> fieldValues = Arrays.stream(Field.values())
                 .map(Field::toString)
                 .collect(Collectors.toSet());
-        assertEquals(0, output.getFields().stream()
+        assertEquals(1, output.getFields().stream()
                 .filter(field -> !fieldValues.contains(field.name()))
                 .count());
     }

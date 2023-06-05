@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = {InstitutionController.class, WebTestConfig.class, PartyRegistryProxyExceptionHandler.class})
 class InstitutionControllerTest {
 
-    private static final String BASE_URL = "/v1/institutions";
+    private static final String BASE_URL = "/institutions";
 
     @Autowired
     protected MockMvc mvc;
@@ -75,7 +75,8 @@ class InstitutionControllerTest {
                 .andExpect(jsonPath("$.items[0].digitalAddress", notNullValue()))
                 .andExpect(jsonPath("$.items[0].address", notNullValue()))
                 .andExpect(jsonPath("$.items[0].zipCode", notNullValue()))
-                .andExpect(jsonPath("$.items[0].origin", notNullValue()));
+                .andExpect(jsonPath("$.items[0].origin", notNullValue()))
+                .andExpect(jsonPath("$.items[0].istatCode", notNullValue()));
         // then
         verify(institutionServiceMock, times(1))
                 .search(Optional.of(search), Integer.parseInt(page), Integer.parseInt(limit));
@@ -114,7 +115,8 @@ class InstitutionControllerTest {
                 .andExpect(jsonPath("$.items[0].digitalAddress", notNullValue()))
                 .andExpect(jsonPath("$.items[0].address", notNullValue()))
                 .andExpect(jsonPath("$.items[0].zipCode", notNullValue()))
-                .andExpect(jsonPath("$.items[0].origin", notNullValue()));
+                .andExpect(jsonPath("$.items[0].origin", notNullValue()))
+                .andExpect(jsonPath("$.items[0].istatCode", notNullValue()));
         // then
         verify(institutionServiceMock, times(1))
                 .search(Optional.of(search), categories, Integer.parseInt(page), Integer.parseInt(limit));
@@ -146,7 +148,8 @@ class InstitutionControllerTest {
                 .andExpect(jsonPath("$.items[0].digitalAddress", notNullValue()))
                 .andExpect(jsonPath("$.items[0].address", notNullValue()))
                 .andExpect(jsonPath("$.items[0].zipCode", notNullValue()))
-                .andExpect(jsonPath("$.items[0].origin", notNullValue()));
+                .andExpect(jsonPath("$.items[0].origin", notNullValue()))
+                .andExpect(jsonPath("$.items[0].istatCode", notNullValue()));
         // then
         verify(institutionServiceMock, times(1))
                 .search(Optional.empty(), 1, 10);
@@ -182,7 +185,8 @@ class InstitutionControllerTest {
                 .andExpect(jsonPath("$.digitalAddress", notNullValue()))
                 .andExpect(jsonPath("$.address", notNullValue()))
                 .andExpect(jsonPath("$.zipCode", notNullValue()))
-                .andExpect(jsonPath("$.origin", notNullValue()));
+                .andExpect(jsonPath("$.origin", notNullValue()))
+                .andExpect(jsonPath("$.istatCode", notNullValue()));
         // then
         verify(institutionServiceMock, times(1))
                 .findById(id, Optional.of(origin), categoriesMatcher);
@@ -213,7 +217,8 @@ class InstitutionControllerTest {
                 .andExpect(jsonPath("$.digitalAddress", notNullValue()))
                 .andExpect(jsonPath("$.address", notNullValue()))
                 .andExpect(jsonPath("$.zipCode", notNullValue()))
-                .andExpect(jsonPath("$.origin", notNullValue()));
+                .andExpect(jsonPath("$.origin", notNullValue()))
+                .andExpect(jsonPath("$.istatCode", notNullValue()));
         // then
         verify(institutionServiceMock, times(1))
                 .findById(id, Optional.empty(), categoriesMatcher);

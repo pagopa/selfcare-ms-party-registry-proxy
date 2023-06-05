@@ -18,4 +18,14 @@ public class InMemoryIndexConfig {
         return new RAMDirectory();
     }
 
+    @Bean
+    public Directory aoosDirectory() {
+        return new RAMDirectory();
+    }
+
+    @Bean
+    public Directory uosDirectory() {
+        return new RAMDirectory();
+    }
+
 }

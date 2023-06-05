@@ -1,6 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.reader;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Entity;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryFilter;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchField;
@@ -131,24 +132,27 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
 
     @SneakyThrows
     @Override
-    public QueryResult<T> findAll(int page, int limit, QueryFilter... filters) {
+    public QueryResult<T> findAll(int page, int limit, String entityType, QueryFilter... filters) {
         log.trace("findAll start");
         log.debug("findAll page = {}, limit = {}, filters = {}", page, limit, filters);
         final DirectoryReader reader = directoryReaderFactory.create();
         final IndexSearcher indexSearcher = new IndexSearcher(reader);
         final Query query;
-        if (filters == null || filters.length == 0) {
-            query = new MatchAllDocsQuery();
-        } else {
-            final BooleanQuery.Builder queryBuilder = new BooleanQuery.Builder();
+
+        final BooleanQuery.Builder queryBuilder = new BooleanQuery.Builder();
+        final TermQuery indexFilterQuery = new TermQuery(new Term(Entity.ENTITY_TYPE.toString(), entityType));
+        queryBuilder.add(indexFilterQuery, BooleanClause.Occur.MUST);
+
+        if (filters != null && filters.length != 0) {
             for (QueryFilter filter : filters) {
                 Assert.notNull(filter.getField(), FIELD_IS_REQUIRED);
                 Assert.notNull(filter.getValue(), VALUE_IS_REQUIRED);
                 final TermQuery termQuery = new TermQuery(new Term(filter.getField().toString(), filter.getValue()));
                 queryBuilder.add(termQuery, BooleanClause.Occur.MUST);
             }
-            query = queryBuilder.build();
         }
+        query = queryBuilder.build();
+
         final TopScoreDocCollector collector = TopScoreDocCollector.create(reader.numDocs(), reader.numDocs());
         indexSearcher.search(query, collector);
 
@@ -164,7 +168,6 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
         log.trace("findAll end");
         return queryResult;
     }
-
 
     protected abstract QueryResult<T> getQueryResult(List<T> items, long totalHits);
 

@@ -20,6 +20,12 @@
     }
   } ],
   "tags" : [ {
+    "name" : "GeographicTaxonomies",
+    "description" : "Geographic Taxonomies Controller"
+  }, {
+    "name" : "aoo",
+    "description" : "AOO Controller"
+  }, {
     "name" : "category",
     "description" : "Category operations"
   }, {
@@ -31,9 +37,169 @@
   }, {
     "name" : "nationalRegistries",
     "description" : "National Registries Controller"
+  }, {
+    "name" : "uo",
+    "description" : "UO Controller"
   } ],
   "paths" : {
-    "/v1/categories" : {
+    "/aoo" : {
+      "get" : {
+        "tags" : [ "aoo" ],
+        "summary" : "Retrieve all AOO from IPA",
+        "description" : "Returns the AOO list",
+        "operationId" : "findAllUsingGET",
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "description" : "page",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "limit",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AOOsResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/aoo/{codiceUniAoo}" : {
+      "get" : {
+        "tags" : [ "aoo" ],
+        "summary" : "Retrieve an AOO given its code",
+        "description" : "Returns an AOO",
+        "operationId" : "findByUnicodeUsingGET",
+        "parameters" : [ {
+          "name" : "codiceUniAoo",
+          "in" : "path",
+          "description" : "AOO unique identifier, the same of Id",
+          "required" : true,
+          "style" : "simple",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AOOResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/categories" : {
       "get" : {
         "tags" : [ "category" ],
         "summary" : "Get all categories",
@@ -127,7 +293,7 @@
         } ]
       }
     },
-    "/v1/origins/{origin}/categories/{code}" : {
+    "/origins/{origin}/categories/{code}" : {
       "get" : {
         "tags" : [ "category" ],
         "summary" : "Get a category",
@@ -210,7 +376,176 @@
         } ]
       }
     },
-    "/v1/info-camere/institutions" : {
+    "/geotaxonomies" : {
+      "get" : {
+        "tags" : [ "GeographicTaxonomies" ],
+        "summary" : "retrieves the geographic taxonomies by description",
+        "description" : "retrieves the geographic taxonomies by description",
+        "operationId" : "retrieveGeoTaxonomiesByDescriptionUsingGET",
+        "parameters" : [ {
+          "name" : "description",
+          "in" : "query",
+          "description" : "geographic taxonomy description",
+          "required" : true,
+          "style" : "form",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "identifies the page 0-based index, default to 0",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "identifies the number of entries in a page, default to 10",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/GeographicTaxonomyResource"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/geotaxonomies/{geotaxId}" : {
+      "get" : {
+        "tags" : [ "GeographicTaxonomies" ],
+        "summary" : "retrieves the geographic taxonomy by code",
+        "description" : "retrieves the geographic taxonomy by code",
+        "operationId" : "retrieveGeoTaxonomiesByCodeUsingGET",
+        "parameters" : [ {
+          "name" : "geotaxId",
+          "in" : "path",
+          "description" : "Geographic taxonomy unique identifier ",
+          "required" : true,
+          "style" : "simple",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GeographicTaxonomyResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/info-camere/institutions" : {
       "post" : {
         "tags" : [ "infocamere" ],
         "summary" : "Get institutions by legal tax id",
@@ -272,7 +607,7 @@
         } ]
       }
     },
-    "/v1/institutions" : {
+    "/institutions" : {
       "get" : {
         "tags" : [ "institution" ],
         "summary" : "Search institutions",
@@ -374,7 +709,7 @@
         } ]
       }
     },
-    "/v1/institutions/{id}" : {
+    "/institutions/{id}" : {
       "get" : {
         "tags" : [ "institution" ],
         "summary" : "Find institution by ID",
@@ -466,7 +801,7 @@
         } ]
       }
     },
-    "/v1/national-registries/legal-address" : {
+    "/national-registries/legal-address" : {
       "get" : {
         "tags" : [ "nationalRegistries" ],
         "summary" : "Retrieve data from AdE and InfoCamere",
@@ -539,7 +874,7 @@
         } ]
       }
     },
-    "/v1/national-registries/verify-legal" : {
+    "/national-registries/verify-legal" : {
       "get" : {
         "tags" : [ "nationalRegistries" ],
         "summary" : "Retrieve data from AdE and InfoCamere",
@@ -620,10 +955,287 @@
           "bearerAuth" : [ "global" ]
         } ]
       }
+    },
+    "/uo" : {
+      "get" : {
+        "tags" : [ "uo" ],
+        "summary" : "Retrieve all UO from IPA",
+        "description" : "Returns the UO list",
+        "operationId" : "findAllUsingGET_1",
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "description" : "page",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "limit",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UOsResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/uo/{codiceUniAoo}" : {
+      "get" : {
+        "tags" : [ "uo" ],
+        "summary" : "Retrieve a UO given its code",
+        "description" : "Returns a UO",
+        "operationId" : "findByUnicodeUsingGET_1",
+        "parameters" : [ {
+          "name" : "codiceUniAoo",
+          "in" : "path",
+          "description" : "${swagger.mode.uo.codiceUniUo}",
+          "required" : true,
+          "style" : "simple",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UOResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
     }
   },
   "components" : {
     "schemas" : {
+      "AOOResource" : {
+        "title" : "AOOResource",
+        "required" : [ "codAoo", "codiceCatastaleComune", "codiceComuneISTAT", "codiceFiscaleEnte", "codiceIpa", "codiceUniAoo", "cognomeResponsabile", "dataAggiornamento", "dataIstituzione", "denominazioneAoo", "denominazioneEnte", "fax", "indirizzo", "mail1", "mailResponsabile", "nomeResponsabile", "origin", "protocolloInformatico", "telefono", "telefonoResponsabile", "tipoMail1" ],
+        "type" : "object",
+        "properties" : {
+          "cap" : {
+            "type" : "string"
+          },
+          "codAoo" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.codAoo}"
+          },
+          "codiceCatastaleComune" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.codiceCatastaleComune}"
+          },
+          "codiceComuneISTAT" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.codiceComuneISTAT}"
+          },
+          "codiceFiscaleEnte" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.codiceFiscaleEnte}"
+          },
+          "codiceIpa" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.codiceIpa}"
+          },
+          "codiceUniAoo" : {
+            "type" : "string",
+            "description" : "AOO unique identifier, the same of Id"
+          },
+          "cognomeResponsabile" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.cognomeResponsabile}"
+          },
+          "dataAggiornamento" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.dataAggiornamento}"
+          },
+          "dataIstituzione" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.dataInstituzione}"
+          },
+          "denominazioneAoo" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.denominazioneAoo}"
+          },
+          "denominazioneEnte" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.denominazioneEnte}"
+          },
+          "fax" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.fax}"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "indirizzo" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.indirizzo}"
+          },
+          "mail1" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.mail1}"
+          },
+          "mailResponsabile" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.mailResponsabile}"
+          },
+          "nomeResponsabile" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.nomeResponsabile}"
+          },
+          "origin" : {
+            "type" : "string",
+            "description" : "Describes which is the source of data",
+            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+          },
+          "protocolloInformatico" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.protocolloInformatico}"
+          },
+          "telefono" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.telefono}"
+          },
+          "telefonoResponsabile" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.telefonoResponsabile}"
+          },
+          "tipoMail1" : {
+            "type" : "string",
+            "description" : "${swagger.model.aoo.tipoMail1}"
+          },
+          "uriprotocolloInformatico" : {
+            "type" : "string"
+          }
+        }
+      },
+      "AOOsResource" : {
+        "title" : "AOOsResource",
+        "required" : [ "count", "items" ],
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "description" : "${swagger.model.aoos.totalCount}",
+            "format" : "int64"
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "${swagger.model.aoos.items}",
+            "items" : {
+              "$ref" : "#/components/schemas/AOOResource"
+            }
+          }
+        }
+      },
       "BusinessResource" : {
         "title" : "BusinessResource",
         "type" : "object",
@@ -691,6 +1303,49 @@
           }
         }
       },
+      "GeographicTaxonomyResource" : {
+        "title" : "GeographicTaxonomyResource",
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "Geographic taxonomy unique identifier "
+          },
+          "country" : {
+            "type" : "string",
+            "description" : "Geographic taxonomy country"
+          },
+          "country_abbreviation" : {
+            "type" : "string",
+            "description" : "Geographic taxonomy country abbreviation"
+          },
+          "desc" : {
+            "type" : "string",
+            "description" : "Geographic taxonomy description"
+          },
+          "enabled" : {
+            "type" : "boolean",
+            "description" : "Geographic taxonomy enabled",
+            "example" : false
+          },
+          "istat_code" : {
+            "type" : "string",
+            "description" : "Geographic taxonomy istat code"
+          },
+          "province_abbreviation" : {
+            "type" : "string",
+            "description" : "Geographic taxonomy province abbreviation"
+          },
+          "province_id" : {
+            "type" : "string",
+            "description" : "Geographic taxonomy province unique identifier"
+          },
+          "region_id" : {
+            "type" : "string",
+            "description" : "Geographic taxonomy region unique identifier"
+          }
+        }
+      },
       "GetInstitutionsByLegalDto" : {
         "title" : "GetInstitutionsByLegalDto",
         "type" : "object",
@@ -739,6 +1394,10 @@
           "id" : {
             "type" : "string",
             "description" : "Semantic id to recognize a party between origins (or externalId)"
+          },
+          "istatCode" : {
+            "type" : "string",
+            "description" : "Institution Istat Code"
           },
           "o" : {
             "type" : "string",
@@ -862,6 +1521,127 @@
           }
         },
         "description" : "A \"problem detail\" as a way to carry machine-readable details of errors (https://datatracker.ietf.org/doc/html/rfc7807)"
+      },
+      "UOResource" : {
+        "title" : "UOResource",
+        "required" : [ "codiceCatastaleComune", "codiceComuneISTAT", "codiceFiscaleEnte", "codiceIpa", "codiceUniAoo", "cognomeResponsabile", "dataAggiornamento", "dataIstituzione", "denominazioneEnte", "descrizioneUo", "fax", "indirizzo", "mail1", "mailResponsabile", "nomeResponsabile", "origin", "telefono", "telefonoResponsabile", "tipoMail1", "url" ],
+        "type" : "object",
+        "properties" : {
+          "cap" : {
+            "type" : "string"
+          },
+          "codiceCatastaleComune" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.codiceCatastaleComune}"
+          },
+          "codiceComuneISTAT" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.codiceComuneISTAT}"
+          },
+          "codiceFiscaleEnte" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.codiceFiscaleEnte}"
+          },
+          "codiceIpa" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.codiceIpa}"
+          },
+          "codiceUniAoo" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.codiceUniAoo}"
+          },
+          "codiceUniUo" : {
+            "type" : "string",
+            "description" : "UO unique identifier"
+          },
+          "codiceUniUoPadre" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.codiceUniUoPadre}"
+          },
+          "cognomeResponsabile" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.cognomeResponsabile}"
+          },
+          "dataAggiornamento" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.dataAggiornamento}"
+          },
+          "dataIstituzione" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.dataInstituzione}"
+          },
+          "denominazioneEnte" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.denominazioneEnte}"
+          },
+          "descrizioneUo" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.descrizioneUo}"
+          },
+          "fax" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.fax}"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "indirizzo" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.indirizzo}"
+          },
+          "mail1" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.mail1}"
+          },
+          "mailResponsabile" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.mailResponsabile}"
+          },
+          "nomeResponsabile" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.nomeResponsabile}"
+          },
+          "origin" : {
+            "type" : "string",
+            "description" : "Describes which is the source of data",
+            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+          },
+          "telefono" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.telefono}"
+          },
+          "telefonoResponsabile" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.telefonoResponsabile}"
+          },
+          "tipoMail1" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.tipoMail1}"
+          },
+          "url" : {
+            "type" : "string",
+            "description" : "${swagger.model.uo.url}"
+          }
+        }
+      },
+      "UOsResource" : {
+        "title" : "UOsResource",
+        "required" : [ "count", "items" ],
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "description" : "${swagger.model.uos.totalCount}",
+            "format" : "int64"
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "${swagger.model.uos.items}",
+            "items" : {
+              "$ref" : "#/components/schemas/UOResource"
+            }
+          }
+        }
       }
     },
     "securitySchemes" : {

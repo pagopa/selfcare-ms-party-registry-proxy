@@ -4,7 +4,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.core.InfoCamereService;
-import it.pagopa.selfcare.party.registry_proxy.web.model.*;
+import it.pagopa.selfcare.party.registry_proxy.web.model.BusinessesResource;
+import it.pagopa.selfcare.party.registry_proxy.web.model.GetInstitutionsByLegalDto;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.BusinessesMapper;
 import it.pagopa.selfcare.party.registry_proxy.web.utils.RequestValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/v1/info-camere", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/info-camere", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(tags = "infocamere")
 public class InfoCamereController {
 

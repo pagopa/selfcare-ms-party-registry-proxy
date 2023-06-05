@@ -19,5 +19,6 @@ public class DummyInstitution implements Institution {
     private String address;
     private String zipCode;
     private Origin origin;
+    private String istatCode;
 
 }

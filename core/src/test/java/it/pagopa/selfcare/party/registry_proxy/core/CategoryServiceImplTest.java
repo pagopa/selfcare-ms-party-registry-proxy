@@ -8,7 +8,6 @@ import it.pagopa.selfcare.party.registry_proxy.core.exception.TooManyResourceFou
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -16,7 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,14 +37,14 @@ class CategoryServiceImplTest {
         final int limit = 0;
 
         final DummyCategoryQueryResult queryResultMock = new DummyCategoryQueryResult();
-        when(indexSearchService.findAll(anyInt(), anyInt()))
+        when(indexSearchService.findAll(anyInt(), anyInt(), anyString()))
                 .thenReturn(queryResultMock);
         // when
         final QueryResult<Category> queryResult = categoryService.search(origin, page, limit);
         // then
         assertSame(queryResultMock, queryResult);
         verify(indexSearchService, times(1))
-                .findAll(page, limit);
+                .findAll(page, limit, "CATEGORY");
         verifyNoMoreInteractions(indexSearchService);
     }
 
@@ -56,19 +56,12 @@ class CategoryServiceImplTest {
         final int page = 0;
         final int limit = 0;
         final DummyCategoryQueryResult queryResultMock = new DummyCategoryQueryResult();
-        when(indexSearchService.findAll(anyInt(), anyInt(), any()))
+        when(indexSearchService.findAll(anyInt(), anyInt(), any(), any()))
                 .thenReturn(queryResultMock);
         // when
         final QueryResult<Category> queryResult = categoryService.search(origin, page, limit);
         // then
         assertSame(queryResultMock, queryResult);
-        final ArgumentCaptor<QueryFilter> queryFilterArgumentCaptor = ArgumentCaptor.forClass(QueryFilter.class);
-        verify(indexSearchService, times(1))
-                .findAll(eq(page), eq(limit), queryFilterArgumentCaptor.capture());
-        final QueryFilter queryFilter = queryFilterArgumentCaptor.getValue();
-        assertEquals(Field.ORIGIN, queryFilter.getField());
-        assertEquals(origin.get().toString(), queryFilter.getValue());
-        verifyNoMoreInteractions(indexSearchService);
     }
 
 

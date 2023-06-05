@@ -1,9 +1,11 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.converter;
 
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Entity;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.document.*;
 import org.apache.lucene.util.BytesRef;
+import org.springframework.util.StringUtils;
 
 import java.util.function.Function;
 
@@ -17,6 +19,7 @@ public class InstitutionToDocumentConverter implements Function<Institution, Doc
         Document doc = null;
         if (institution != null) {
             doc = new Document();
+            doc.add(new StringField(Entity.ENTITY_TYPE.toString(), Entity.INSTITUTION.toString(), Field.Store.YES));
             doc.add(new StringField(ID.toString(), institution.getId(), Field.Store.YES));
             doc.add(new StoredField(ORIGIN_ID.toString(), institution.getOriginId()));
             doc.add(new SortedDocValuesField(DESCRIPTION.toString(), new BytesRef(institution.getDescription())));
@@ -27,6 +30,11 @@ public class InstitutionToDocumentConverter implements Function<Institution, Doc
             doc.add(new StoredField(ADDRESS.toString(), institution.getAddress()));
             doc.add(new StoredField(ZIP_CODE.toString(), institution.getZipCode()));
             doc.add(new StoredField(ORIGIN.toString(), institution.getOrigin().toString()));
+
+            if(StringUtils.hasText(institution.getIstatCode())) {
+                doc.add(new StoredField(ISTAT_CODE.toString(), institution.getIstatCode()));
+            }
+
             String category = "";
             if (institution.getCategory().equals("L6") || institution.getCategory().equals("L4") || institution.getCategory().equals("L45")){
                 category = " " + institution.getCategory();
