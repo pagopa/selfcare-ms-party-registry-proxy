@@ -12,7 +12,7 @@ ingress:
   hosts:
     - host: "uat01.pnpg.internal.uat.selfcare.pagopa.it"
       paths:
-        - path: /party-registry-proxy/(.*)
+        - path: /party-registry-proxy/v1/(.*)
           pathType: ImplementationSpecific
 
 autoscaling:
