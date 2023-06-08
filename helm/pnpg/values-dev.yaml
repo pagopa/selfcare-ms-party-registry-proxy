@@ -11,7 +11,7 @@ ingress:
   hosts:
     - host: "dev01.pnpg.internal.dev.selfcare.pagopa.it"
       paths:
-        - path: /party-registry-proxy/(.*)
+        - path: /party-registry-proxy/v1/(.*)
           pathType: ImplementationSpecific
 
 autoscaling:
