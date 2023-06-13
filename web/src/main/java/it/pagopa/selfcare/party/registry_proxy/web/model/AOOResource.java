@@ -74,7 +74,7 @@ public class AOOResource implements AOO {
     @ApiModelProperty(value = "${swagger.model.aoo.fax}", required = true)
     private String fax;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.tipoMail1}", required = true)
+    @ApiModelProperty(value = "${swagger.model.aoo.tipoMail1}")
     private String tipoMail1;
 
     @ApiModelProperty(value = "${swagger.model.aoo.protocolloInformatico}", required = true)
@@ -86,9 +86,7 @@ public class AOOResource implements AOO {
     @ApiModelProperty(value = "${swagger.model.aoo.dataAggiornamento}", required = true)
     private String dataAggiornamento;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.mail1}", required = true)
-    @JsonProperty(required = true)
-    @NotBlank
+    @ApiModelProperty(value = "${swagger.model.aoo.mail1}")
     private String mail1;
 
     @ApiModelProperty(value = "${swagger.model.aoo.codAoo}", required = true)
