@@ -40,8 +40,8 @@ class UOServiceImpl implements UOService {
     @Override
     public UO findByUnicode(String codiceUniUO) {
         log.trace("find UO By CodiceUniUO start");
-        log.debug("find UO By CodiceUniUO = {}", codiceUniUO);
-        final List<UO> uoList = indexSearchService.findById(UO.Field.CODICE_UNI_UO, codiceUniUO);
+        log.debug("find UO By CodiceUniUO = {}", codiceUniUO.toUpperCase());
+        final List<UO> uoList = indexSearchService.findById(UO.Field.CODICE_UNI_UO, codiceUniUO.toUpperCase());
         if (uoList.isEmpty()) {
             throw new ResourceNotFoundException();
         } else if (uoList.size() > 1) {

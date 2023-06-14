@@ -85,7 +85,7 @@ class UOControllerTest {
     @Test
     void findUO() throws Exception {
         // given
-        final String code = "code";
+        final String code = "CODE";
         when(uoServiceMock.findByUnicode(any()))
                 .thenReturn(mockInstance(new DummyUO()));
         // when
