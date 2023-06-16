@@ -19,7 +19,7 @@ public class NationalRegistriesConnectorImpl implements NationalRegistriesConnec
 
     @Override
     public LegalAddressResponse getLegalAddress(String taxCode) {
-        LegalAddressRequest legalAddressRequest = createRequest(taxCode);
+        LegalAddressRequest legalAddressRequest = createLegalAddressRequest(taxCode);
         return toLegalAddressResponse(nationalRegistriesRestClient.getLegalAddress(legalAddressRequest));
     }
 
@@ -28,6 +28,14 @@ public class NationalRegistriesConnectorImpl implements NationalRegistriesConnec
         AdELegalRequestBodyDto request = createRequest(taxId, vatNumber);
         return toVerifyLegalResponse(nationalRegistriesRestClient.verifyLegal(request));
     }
+
+    @Override
+    public Businesses institutionsByLegalTaxId(String legalTaxId) {
+        log.info("start institutionsByLegalTaxId");
+        LegalInstitutionsRequestBody request = createLegalInstitutionsRequest(legalTaxId);
+        return nationalRegistriesRestClient.getLegalInstitutions(request);
+    }
+
 
     private LegalAddressResponse toLegalAddressResponse(GetAddressRegistroImpreseOKDto legalAddress) {
         LegalAddressResponse legalAddressResponse = new LegalAddressResponse();
@@ -55,12 +63,20 @@ public class NationalRegistriesConnectorImpl implements NationalRegistriesConnec
         return verifyLegalResponse;
     }
 
-    private LegalAddressRequest createRequest(String taxCode) {
+    private LegalAddressRequest createLegalAddressRequest(String taxCode) {
         LegalAddressRequest legalAddressRequest = new LegalAddressRequest();
         LegalAddressFilter filter = new LegalAddressFilter();
         filter.setTaxId(taxCode);
         legalAddressRequest.setFilter(filter);
         return legalAddressRequest;
+    }
+
+    private LegalInstitutionsRequestBody createLegalInstitutionsRequest(String taxCode) {
+        LegalInstitutionsRequestBody legalInstitutionsRequest = new LegalInstitutionsRequestBody();
+        LegalInstutionsRequestBodyFilterDto filter = new LegalInstutionsRequestBodyFilterDto();
+        filter.setTaxId(taxCode);
+        legalInstitutionsRequest.setFilter(filter);
+        return legalInstitutionsRequest;
     }
 
     private AdELegalRequestBodyDto createRequest(String taxCode, String vatNumber) {

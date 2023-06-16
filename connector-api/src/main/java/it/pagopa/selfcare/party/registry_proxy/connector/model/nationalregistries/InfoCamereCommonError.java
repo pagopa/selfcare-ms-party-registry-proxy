@@ -1,4 +1,4 @@
-package it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere;
+package it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries;
 
 import lombok.Data;
 
