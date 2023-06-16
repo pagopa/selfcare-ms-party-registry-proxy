@@ -1118,7 +1118,7 @@
     "schemas" : {
       "AOOResource" : {
         "title" : "AOOResource",
-        "required" : [ "codAoo", "codiceCatastaleComune", "codiceComuneISTAT", "codiceFiscaleEnte", "codiceIpa", "codiceUniAoo", "cognomeResponsabile", "dataAggiornamento", "dataIstituzione", "denominazioneAoo", "denominazioneEnte", "fax", "indirizzo", "mail1", "mailResponsabile", "nomeResponsabile", "origin", "protocolloInformatico", "telefono", "telefonoResponsabile", "tipoMail1" ],
+        "required" : [ "codAoo", "codiceCatastaleComune", "codiceComuneISTAT", "codiceFiscaleEnte", "codiceIpa", "codiceUniAoo", "cognomeResponsabile", "dataAggiornamento", "dataIstituzione", "denominazioneAoo", "denominazioneEnte", "fax", "indirizzo", "mailResponsabile", "nomeResponsabile", "origin", "protocolloInformatico", "telefono", "telefonoResponsabile" ],
         "type" : "object",
         "properties" : {
           "cap" : {

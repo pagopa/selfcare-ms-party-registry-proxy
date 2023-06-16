@@ -1,10 +1,10 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.api.InfoCamereConnector;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
+import it.pagopa.selfcare.party.registry_proxy.connector.api.NationalRegistriesConnector;
 
 import java.util.ArrayList;
 
+import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.Businesses;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 class InfoCamereServiceImplTest {
     @Mock
-    private InfoCamereConnector infoCamereConnector;
+    private NationalRegistriesConnector nationalRegistriesConnector;
 
     @InjectMocks
     private InfoCamereServiceImpl infoCamereServiceImpl;
@@ -31,13 +31,13 @@ class InfoCamereServiceImplTest {
     @Test
     void testInstitutionsByLegalTaxId() {
         Businesses businesses = new Businesses();
-        businesses.setBusinesses(new ArrayList<>());
+        businesses.setBusinessList(new ArrayList<>());
         businesses.setLegalTaxId("42");
-        businesses.setRequestDateTime("2020-03-01");
-        when(infoCamereConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
+        businesses.setDateTimeExtraction("2020-03-01");
+        when(nationalRegistriesConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
 
         assertSame(businesses, infoCamereServiceImpl.institutionsByLegalTaxId("42"));
-        verify(infoCamereConnector).institutionsByLegalTaxId(any());
+        verify(nationalRegistriesConnector).institutionsByLegalTaxId(any());
     }
 
     /**
@@ -47,12 +47,12 @@ class InfoCamereServiceImplTest {
     void testInstitutionsByLegalTaxIdNotFound() {
         Businesses businesses = new Businesses();
         businesses.setCode("WSPA_ERR_04");
-        when(infoCamereConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
+        when(nationalRegistriesConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
 
         Businesses response = infoCamereServiceImpl.institutionsByLegalTaxId("42");
         assertEquals("42", response.getLegalTaxId());
-        assertEquals(0, response.getBusinesses().size());
-        verify(infoCamereConnector).institutionsByLegalTaxId(any());
+        assertEquals(0, response.getBusinessList().size());
+        verify(nationalRegistriesConnector).institutionsByLegalTaxId(any());
     }
 
     /**
@@ -62,12 +62,12 @@ class InfoCamereServiceImplTest {
     void testInstitutionsByLegalTaxIdNotFound2() {
         Businesses businesses = new Businesses();
         businesses.setDescription("LR Not found");
-        when(infoCamereConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
+        when(nationalRegistriesConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
 
         Businesses response = infoCamereServiceImpl.institutionsByLegalTaxId("42");
         assertEquals("42", response.getLegalTaxId());
-        assertEquals(0, response.getBusinesses().size());
-        verify(infoCamereConnector).institutionsByLegalTaxId(any());
+        assertEquals(0, response.getBusinessList().size());
+        verify(nationalRegistriesConnector).institutionsByLegalTaxId(any());
     }
 
     /**
@@ -77,12 +77,12 @@ class InfoCamereServiceImplTest {
     void testInstitutionsByLegalTaxIdNotFound3() {
         Businesses businesses = new Businesses();
         businesses.setAppName("wspa-lrpf");
-        when(infoCamereConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
+        when(nationalRegistriesConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
 
         Businesses response = infoCamereServiceImpl.institutionsByLegalTaxId("42");
         assertEquals("42", response.getLegalTaxId());
-        assertEquals(0, response.getBusinesses().size());
-        verify(infoCamereConnector).institutionsByLegalTaxId(any());
+        assertEquals(0, response.getBusinessList().size());
+        verify(nationalRegistriesConnector).institutionsByLegalTaxId(any());
     }
 
     /**
@@ -92,12 +92,12 @@ class InfoCamereServiceImplTest {
     void testInstitutionsByLegalTaxIdNotFound4() {
         Businesses businesses = new Businesses();
         businesses.setTimestamp("2023-01-27T17:38:18.774");
-        when(infoCamereConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
+        when(nationalRegistriesConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
 
         Businesses response = infoCamereServiceImpl.institutionsByLegalTaxId("42");
         assertEquals("42", response.getLegalTaxId());
-        assertEquals(0, response.getBusinesses().size());
-        verify(infoCamereConnector).institutionsByLegalTaxId(any());
+        assertEquals(0, response.getBusinessList().size());
+        verify(nationalRegistriesConnector).institutionsByLegalTaxId(any());
     }
 }
 

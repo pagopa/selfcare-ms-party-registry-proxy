@@ -1,9 +1,12 @@
 package it.pagopa.selfcare.party.registry_proxy.web.model.mapper;
 
 
-import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Business;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.Business;
 import it.pagopa.selfcare.party.registry_proxy.web.model.BusinessResource;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.NONE)
 public class BusinessMapper {
     public static BusinessResource toResource(Business business) {
         BusinessResource resource = null;

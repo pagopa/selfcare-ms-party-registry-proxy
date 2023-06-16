@@ -1,8 +1,8 @@
 package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
-import it.pagopa.selfcare.party.registry_proxy.core.InfoCamereService;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.Businesses;
+import it.pagopa.selfcare.party.registry_proxy.core.NationalRegistriesService;
 import it.pagopa.selfcare.party.registry_proxy.web.model.GetInstitutionsByLegalDto;
 import it.pagopa.selfcare.party.registry_proxy.web.model.GetInstitutionsByLegalFilterDto;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ class InfoCamereControllerTest {
     @InjectMocks
     private InfoCamereController infoCamereController;
     @Mock
-    private InfoCamereService infoCamereService;
+    private NationalRegistriesService nationalRegistriesService;
 
     /**
      * Method under test: {@link InfoCamereController#institutionsByLegalTaxId(GetInstitutionsByLegalDto)}
@@ -35,10 +35,10 @@ class InfoCamereControllerTest {
     @Test
     void testInstitutionsByLegalTaxId() throws Exception {
         Businesses businesses = new Businesses();
-        businesses.setBusinesses(new ArrayList<>());
+        businesses.setBusinessList(new ArrayList<>());
         businesses.setLegalTaxId("CIACIA80A01H501X");
-        businesses.setRequestDateTime("2020-03-01");
-        when(infoCamereService.institutionsByLegalTaxId(any())).thenReturn(businesses);
+        businesses.setDateTimeExtraction("2020-03-01");
+        when(nationalRegistriesService.institutionsByLegalTaxId(any())).thenReturn(businesses);
 
         GetInstitutionsByLegalFilterDto getInstitutionsByLegalFilterDto = new GetInstitutionsByLegalFilterDto();
         getInstitutionsByLegalFilterDto.setLegalTaxId("CIACIA80A01H501X");

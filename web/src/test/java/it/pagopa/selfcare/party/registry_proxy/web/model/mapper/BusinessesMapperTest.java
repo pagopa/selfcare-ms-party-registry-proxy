@@ -3,8 +3,8 @@ package it.pagopa.selfcare.party.registry_proxy.web.model.mapper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Business;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.Business;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.web.model.BusinessesResource;
 
 import java.util.ArrayList;
@@ -25,9 +25,9 @@ class BusinessesMapperTest {
     void testToResource2() {
         Businesses businesses = new Businesses();
         ArrayList<Business> businessList = new ArrayList<>();
-        businesses.setBusinesses(businessList);
+        businesses.setBusinessList(businessList);
         businesses.setLegalTaxId("42");
-        businesses.setRequestDateTime("2020-03-01");
+        businesses.setDateTimeExtraction("2020-03-01");
         BusinessesResource actualToResourceResult = BusinessesMapper.toResource(businesses);
         assertEquals("2020-03-01", actualToResourceResult.getRequestDateTime());
         assertEquals("42", actualToResourceResult.getLegalTaxId());
