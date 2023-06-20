@@ -141,6 +141,15 @@
           "schema" : {
             "type" : "string"
           }
+        }, {
+          "name" : "categories",
+          "in" : "query",
+          "description" : "${swagger.model.aoo.categories}",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "string"
+          }
         } ],
         "responses" : {
           "200" : {
@@ -1052,6 +1061,15 @@
           "description" : "${swagger.mode.uo.codiceUniUo}",
           "required" : true,
           "style" : "simple",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "categories",
+          "in" : "query",
+          "description" : "${swagger.model.uo.categories}",
+          "required" : false,
+          "style" : "form",
           "schema" : {
             "type" : "string"
           }

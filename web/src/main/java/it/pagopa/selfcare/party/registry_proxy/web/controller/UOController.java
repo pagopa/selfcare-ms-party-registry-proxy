@@ -14,6 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -59,10 +63,17 @@ public class UOController {
     @ApiOperation(value = "${swagger.api.uo.findBy.summary}",
             notes = "${swagger.api.uo.findBy.notes}")
     public UOResource findByUnicode(@ApiParam("${swagger.mode.uo.codiceUniUo}")
-                                    @PathVariable("codiceUniAoo") String codiceUniUo) {
+                                    @PathVariable("codiceUniAoo") String codiceUniUo,
+                                    @ApiParam(value = "${swagger.model.uo.categories}")
+                                    @RequestParam(value = "categories", required = false)
+                                    Optional<String> categories) {
         log.trace("find UO start");
         log.debug("find UO = {}", codiceUniUo);
-        final UOResource uoResource = UOMapper.toResource(uoService.findByUnicode(codiceUniUo));
+        List<String> categoriesList = new ArrayList<>();
+        if (categories.isPresent()) {
+            categoriesList = Arrays.stream(categories.get().split(",")).collect(Collectors.toList());
+        }
+        final UOResource uoResource = UOMapper.toResource(uoService.findByUnicode(codiceUniUo,categoriesList));
         log.debug("find UO result = {}", uoResource);
         log.trace("find UO end");
         return uoResource;

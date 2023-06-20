@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -260,6 +261,58 @@ class InstitutionServiceImplTest {
         final Institution result = institutionService.findById(id, origin, categories);
         // then
         assertSame(institution, result);
+        verify(indexSearchService, times(1))
+                .findById(Field.ID, id);
+        verifyNoMoreInteractions(indexSearchService);
+    }
+
+    @Test
+    void findById_filtered_found2() {
+        // given
+        final String id = "pippo";
+        final List<String> categories = List.of("cat1", "cat2");
+        final DummyInstitution institution = mockInstance(new DummyInstitution());
+        institution.setCategory("cat1");
+        when(indexSearchService.findById(any(), anyString()))
+                .thenReturn(List.of(institution));
+        // when
+        final Institution result = institutionService.findById(id, categories);
+        // then
+        assertSame(institution, result);
+        verify(indexSearchService, times(1))
+                .findById(Field.ID, id);
+        verifyNoMoreInteractions(indexSearchService);
+    }
+
+    @Test
+    void findById_TooManyResourceFound2() {
+        // given
+        final String id = "pippo";
+
+        final List<String> categoriesMatcher = Collections.emptyList();
+        final DummyInstitution institution = mockInstance(new DummyInstitution());
+        when(indexSearchService.findById(any(), anyString()))
+                .thenReturn(List.of(institution, institution));
+        // when
+        final Executable executable = () -> institutionService.findById(id, categoriesMatcher);
+        // then
+        assertThrows(TooManyResourceFoundException.class, executable);
+        verify(indexSearchService, times(1))
+                .findById(Field.ID, id);
+        verifyNoMoreInteractions(indexSearchService);
+    }
+
+    @Test
+    void findById_ResourceNotFound5() {
+        // given
+        final String id = "pippo";
+        final List<String> categories = Collections.emptyList();
+        when(indexSearchService.findById(any(), anyString()))
+                .thenReturn(new ArrayList<>());
+        // when
+        final Executable executable = () -> institutionService.findById(id, categories);
+        // then
+        assertThrows(ResourceNotFoundException.class, executable);
         verify(indexSearchService, times(1))
                 .findById(Field.ID, id);
         verifyNoMoreInteractions(indexSearchService);

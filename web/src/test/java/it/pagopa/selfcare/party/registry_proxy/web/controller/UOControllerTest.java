@@ -16,6 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 
+import java.util.ArrayList;
+
 import static it.pagopa.selfcare.commons.utils.TestUtils.mockInstance;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.any;
@@ -86,7 +88,7 @@ class UOControllerTest {
     void findUO() throws Exception {
         // given
         final String code = "CODE";
-        when(uoServiceMock.findByUnicode(any()))
+        when(uoServiceMock.findByUnicode(any(), any()))
                 .thenReturn(mockInstance(new DummyUO()));
         // when
         mvc.perform(MockMvcRequestBuilders
@@ -96,7 +98,7 @@ class UOControllerTest {
                 .andExpect(status().isOk());
         // then
         verify(uoServiceMock, times(1))
-                .findByUnicode(code);
+                .findByUnicode(code, new ArrayList<>());
         verifyNoMoreInteractions(uoServiceMock);
     }
 
