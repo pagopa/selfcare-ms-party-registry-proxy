@@ -12,12 +12,10 @@ import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.AOOMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -63,14 +61,14 @@ public class AOOController {
             notes = "${swagger.api.aoo.findBy.notes}")
     public AOOResource findByUnicode(@ApiParam("${swagger.model.aoo.codiceUniAoo}")
                                      @PathVariable("codiceUniAoo") String codiceUniAoo,
-                                     @ApiParam(value = "${swagger.model.aoo.categories}")
+                                     @ApiParam(value = "${swagger.model.*.categories}")
                                      @RequestParam(value = "categories", required = false)
-                                     Optional<String> categories) {
+                                     String categories) {
         log.trace("find AOO start");
         log.debug("find AOO codiceUniAoo = {}", codiceUniAoo);
-        List<String> categoriesList = new ArrayList<>();
-        if (categories.isPresent()) {
-            categoriesList = Arrays.stream(categories.get().split(",")).collect(Collectors.toList());
+        List<String> categoriesList = Collections.emptyList();
+        if (StringUtils.hasText(categories)) {
+            categoriesList = Arrays.stream(categories.split(",")).collect(Collectors.toList());
         }
         final AOOResource aooResource = AOOMapper.toResource(aooService.findByUnicode(codiceUniAoo,categoriesList));
         log.debug("findAOO result = {}", aooResource);

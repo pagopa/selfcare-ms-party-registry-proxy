@@ -276,7 +276,7 @@ class InstitutionServiceImplTest {
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of(institution));
         // when
-        final Institution result = institutionService.findById(id, categories);
+        final Institution result = institutionService.findById(id, Optional.empty(), categories);
         // then
         assertSame(institution, result);
         verify(indexSearchService, times(1))
@@ -294,7 +294,7 @@ class InstitutionServiceImplTest {
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of(institution, institution));
         // when
-        final Executable executable = () -> institutionService.findById(id, categoriesMatcher);
+        final Executable executable = () -> institutionService.findById(id, Optional.empty(), categoriesMatcher);
         // then
         assertThrows(TooManyResourceFoundException.class, executable);
         verify(indexSearchService, times(1))
@@ -310,7 +310,7 @@ class InstitutionServiceImplTest {
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(new ArrayList<>());
         // when
-        final Executable executable = () -> institutionService.findById(id, categories);
+        final Executable executable = () -> institutionService.findById(id, Optional.empty(), categories);
         // then
         assertThrows(ResourceNotFoundException.class, executable);
         verify(indexSearchService, times(1))

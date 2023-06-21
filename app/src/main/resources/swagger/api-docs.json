@@ -144,7 +144,7 @@
         }, {
           "name" : "categories",
           "in" : "query",
-          "description" : "${swagger.model.aoo.categories}",
+          "description" : "Filter from origin category",
           "required" : false,
           "style" : "form",
           "schema" : {
@@ -1058,7 +1058,7 @@
         "parameters" : [ {
           "name" : "codiceUniAoo",
           "in" : "path",
-          "description" : "${swagger.mode.uo.codiceUniUo}",
+          "description" : "UO unique identifier, the same of Id",
           "required" : true,
           "style" : "simple",
           "schema" : {
@@ -1067,7 +1067,7 @@
         }, {
           "name" : "categories",
           "in" : "query",
-          "description" : "${swagger.model.uo.categories}",
+          "description" : "Filter from origin category",
           "required" : false,
           "style" : "form",
           "schema" : {
@@ -1570,7 +1570,7 @@
           },
           "codiceUniUo" : {
             "type" : "string",
-            "description" : "UO unique identifier"
+            "description" : "UO unique identifier, the same of Id"
           },
           "codiceUniUoPadre" : {
             "type" : "string",

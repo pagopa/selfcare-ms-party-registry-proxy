@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -113,7 +114,7 @@ class UOServiceImplTest {
         categories.add("L4");
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of(UO));
-        when(institutionService.findById("cod", categories))
+        when(institutionService.findById("cod", Optional.of(Origin.IPA), categories))
                 .thenReturn(institution);
         // when
         final UO result = uoService.findByUnicode(id, categories);

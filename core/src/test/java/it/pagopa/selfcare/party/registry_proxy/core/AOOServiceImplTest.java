@@ -13,7 +13,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.Origin.IPA;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -108,13 +110,13 @@ class AOOServiceImplTest {
         final String id = "pippo";
         final DummyAOO AOO = new DummyAOO();
         AOO.setCodiceFiscaleEnte("cod");
-        AOO.setOrigin(Origin.IPA);
+        AOO.setOrigin(IPA);
         final Institution institution = new DummyInstitution();
-        ArrayList<String> categories = new ArrayList<>();
+        List<String> categories = new ArrayList<>();
         categories.add("L4");
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of(AOO));
-        when(institutionService.findById("cod", categories))
+        when(institutionService.findById("cod", Optional.of(IPA), categories))
                 .thenReturn(institution);
 
         // when

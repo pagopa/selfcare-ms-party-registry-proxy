@@ -1,16 +1,14 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.AOO;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Entity;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
 import it.pagopa.selfcare.party.registry_proxy.core.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.core.exception.TooManyResourceFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
@@ -51,7 +49,7 @@ class AOOServiceImpl implements AOOService {
         }
         final AOO aoo = aooList.get(0);
         if(!categoriesList.isEmpty()){
-            Institution institution = institutionService.findById(aoo.getCodiceFiscaleEnte(), categoriesList);
+           institutionService.findById(aoo.getCodiceFiscaleEnte(), Optional.of(Origin.IPA), categoriesList);
         }
         log.debug("find AOO by CodiceUniAOO result = {}", aoo);
         log.trace("find AOO by CodiceUniAOO end");

@@ -69,12 +69,7 @@ class InstitutionServiceImpl implements InstitutionService {
                                     (categories.isEmpty() || categories.contains(institution.getCategory()))
                             )
                             .collect(Collectors.toList()))
-                    .orElseGet(categories.size() > 0 ? new Supplier<List<Institution>>() {
-                        @Override
-                        public List<Institution> get() {
-                            return new ArrayList<>();
-                        }
-                    } : institutionsSupplier);
+                    .orElseGet(!categories.isEmpty() ? ArrayList::new : institutionsSupplier);
 
             if (institutions.isEmpty()) {
                 throw new ResourceNotFoundException();
@@ -86,28 +81,6 @@ class InstitutionServiceImpl implements InstitutionService {
                 log.trace("findById end");
                 return institution;
             }
-        }
-    }
-
-
-    @Override
-    public Institution findById(String id, List<String> categories) {
-        log.trace("findById start");
-        log.debug("findById id = {}", id);
-
-        final Supplier<List<Institution>> institutionsSupplier = () -> indexSearchService.findById(Field.ID, id);
-        final List<Institution> institutions = institutionsSupplier.get().stream()
-                .filter(institution -> (categories.isEmpty() || categories.contains(institution.getCategory())))
-                .collect(Collectors.toList());
-        if (institutions.isEmpty()) {
-            throw new ResourceNotFoundException();
-        } else if (institutions.size() > 1) {
-            throw new TooManyResourceFoundException();
-        } else {
-            final Institution institution = institutions.get(0);
-            log.debug("findById result = {}", institution);
-            log.trace("findById end");
-            return institution;
         }
     }
 }

@@ -1,16 +1,14 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Entity;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.UO;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
 import it.pagopa.selfcare.party.registry_proxy.core.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.core.exception.TooManyResourceFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -53,7 +51,7 @@ class UOServiceImpl implements UOService {
         }
         final UO uo = uoList.get(0);
         if(!categoriesList.isEmpty()){
-            Institution institution = institutionService.findById(uo.getCodiceFiscaleEnte(), categoriesList);
+            institutionService.findById(uo.getCodiceFiscaleEnte(), Optional.of(Origin.IPA), categoriesList);
         }
         log.debug("find UO By CodiceUniUO result = {}", uo);
         log.trace("find UO By CodiceUniUO end");

@@ -19,7 +19,4 @@ public interface InstitutionService {
 
     Institution findById(String id, Optional<Origin> origin, List<String> categories);
 
-    Institution findById(String id, List<String> categories);
-
-
 }
