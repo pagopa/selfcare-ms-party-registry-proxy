@@ -64,23 +64,25 @@ class InstitutionServiceImpl implements InstitutionService {
             throw new RuntimeException("Not implemented yet");//TODO: onboarding privati
         } else {
             final Supplier<List<Institution>> institutionsSupplier = () -> indexSearchService.findById(Field.ID, id);
-            final List<Institution> institutions = origin.map(orig -> institutionsSupplier.get().stream()
-                            .filter(institution -> institution.getOrigin().equals(orig) &&
-                                    (categories.isEmpty() || categories.contains(institution.getCategory()))
-                            )
-                            .collect(Collectors.toList()))
-                    .orElseGet(!categories.isEmpty() ? ArrayList::new : institutionsSupplier);
-
+            List<Institution> institutions;
+            if (origin.isPresent()) {
+                Origin orig = origin.get();
+                institutions = institutionsSupplier.get().stream()
+                        .filter(institution -> institution.getOrigin().equals(orig) &&
+                                (categories.isEmpty() || categories.contains(institution.getCategory())))
+                        .collect(Collectors.toList());
+            } else {
+                institutions = categories.isEmpty() ? new ArrayList<>() : institutionsSupplier.get();
+            }
             if (institutions.isEmpty()) {
                 throw new ResourceNotFoundException();
             } else if (institutions.size() > 1) {
                 throw new TooManyResourceFoundException();
-            } else {
-                final Institution institution = institutions.get(0);
-                log.debug("findById result = {}", institution);
-                log.trace("findById end");
-                return institution;
             }
+            final Institution institution = institutions.get(0);
+            log.debug("findById result = {}", institution);
+            log.trace("findById end");
+            return institution;
         }
     }
 }
