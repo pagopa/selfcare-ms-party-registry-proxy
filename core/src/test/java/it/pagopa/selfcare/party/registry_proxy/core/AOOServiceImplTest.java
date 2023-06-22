@@ -11,8 +11,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.Origin.IPA;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -22,6 +25,9 @@ class AOOServiceImplTest {
 
     @Mock
     private IndexSearchService<AOO> indexSearchService;
+
+    @Mock
+    private InstitutionService institutionService;
 
     @InjectMocks
     private AOOServiceImpl aooService;
@@ -65,7 +71,7 @@ class AOOServiceImplTest {
         // given
         final String id = "pippo";
         // when
-        final Executable executable = () -> aooService.findByUnicode(id);
+        final Executable executable = () -> aooService.findByUnicode(id, new ArrayList<>());
         // then
         assertThrows(RuntimeException.class, executable);
     }
@@ -78,7 +84,7 @@ class AOOServiceImplTest {
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of());
         // when
-        final Executable executable = () -> aooService.findByUnicode(id);
+        final Executable executable = () -> aooService.findByUnicode(id, new ArrayList<>());
         // then
         assertThrows(ResourceNotFoundException.class, executable);
     }
@@ -92,7 +98,7 @@ class AOOServiceImplTest {
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of(aoo, aoo));
         // when
-        final Executable executable = () -> aooService.findByUnicode(id);
+        final Executable executable = () -> aooService.findByUnicode(id, new ArrayList<>());
         // then
         assertThrows(TooManyResourceFoundException.class, executable);
     }
@@ -103,10 +109,18 @@ class AOOServiceImplTest {
         // given
         final String id = "pippo";
         final DummyAOO AOO = new DummyAOO();
+        AOO.setCodiceFiscaleEnte("cod");
+        AOO.setOrigin(IPA);
+        final Institution institution = new DummyInstitution();
+        List<String> categories = new ArrayList<>();
+        categories.add("L4");
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of(AOO));
+        when(institutionService.findById("cod", Optional.of(IPA), categories))
+                .thenReturn(institution);
+
         // when
-        final AOO result = aooService.findByUnicode(id);
+        final AOO result = aooService.findByUnicode(id, categories);
         // then
         assertSame(AOO, result);
     }

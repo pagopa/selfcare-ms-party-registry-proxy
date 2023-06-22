@@ -141,6 +141,15 @@
           "schema" : {
             "type" : "string"
           }
+        }, {
+          "name" : "categories",
+          "in" : "query",
+          "description" : "Filter from origin category",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "string"
+          }
         } ],
         "responses" : {
           "200" : {
@@ -1049,9 +1058,18 @@
         "parameters" : [ {
           "name" : "codiceUniAoo",
           "in" : "path",
-          "description" : "${swagger.mode.uo.codiceUniUo}",
+          "description" : "UO unique identifier, the same of Id",
           "required" : true,
           "style" : "simple",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "categories",
+          "in" : "query",
+          "description" : "Filter from origin category",
+          "required" : false,
+          "style" : "form",
           "schema" : {
             "type" : "string"
           }
@@ -1118,7 +1136,7 @@
     "schemas" : {
       "AOOResource" : {
         "title" : "AOOResource",
-        "required" : [ "codAoo", "codiceCatastaleComune", "codiceComuneISTAT", "codiceFiscaleEnte", "codiceIpa", "codiceUniAoo", "cognomeResponsabile", "dataAggiornamento", "dataIstituzione", "denominazioneAoo", "denominazioneEnte", "fax", "indirizzo", "mail1", "mailResponsabile", "nomeResponsabile", "origin", "protocolloInformatico", "telefono", "telefonoResponsabile", "tipoMail1" ],
+        "required" : [ "codAoo", "codiceCatastaleComune", "codiceComuneISTAT", "codiceFiscaleEnte", "codiceIpa", "codiceUniAoo", "cognomeResponsabile", "dataAggiornamento", "dataIstituzione", "denominazioneAoo", "denominazioneEnte", "fax", "indirizzo", "mailResponsabile", "nomeResponsabile", "origin", "protocolloInformatico", "telefono", "telefonoResponsabile" ],
         "type" : "object",
         "properties" : {
           "cap" : {
@@ -1552,7 +1570,7 @@
           },
           "codiceUniUo" : {
             "type" : "string",
-            "description" : "UO unique identifier"
+            "description" : "UO unique identifier, the same of Id"
           },
           "codiceUniUoPadre" : {
             "type" : "string",
