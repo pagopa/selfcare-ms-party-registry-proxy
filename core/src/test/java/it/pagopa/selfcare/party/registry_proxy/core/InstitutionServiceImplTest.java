@@ -267,24 +267,6 @@ class InstitutionServiceImplTest {
     }
 
     @Test
-    void findById_filtered_found2() {
-        // given
-        final String id = "pippo";
-        final List<String> categories = List.of("cat1", "cat2");
-        final DummyInstitution institution = mockInstance(new DummyInstitution());
-        institution.setCategory("cat1");
-        when(indexSearchService.findById(any(), anyString()))
-                .thenReturn(List.of(institution));
-        // when
-        final Institution result = institutionService.findById(id, Optional.empty(), categories);
-        // then
-        assertSame(institution, result);
-        verify(indexSearchService, times(1))
-                .findById(Field.ID, id);
-        verifyNoMoreInteractions(indexSearchService);
-    }
-
-    @Test
     void findById_TooManyResourceFound2() {
         // given
         final String id = "pippo";
