@@ -41,14 +41,14 @@ class AOOServiceImpl implements AOOService {
     public AOO findByUnicode(String codiceUniAOO, List<String> categoriesList) {
         log.trace("find AOO by CodiceUniAOO start");
         log.debug("find AOO by CodiceUniAOO = {} - categoriesList = {}", codiceUniAOO.toUpperCase(), categoriesList);
-        final List<AOO> aooList = indexSearchService.findById(AOO.Field.CODICE_UNI_AOO, codiceUniAOO.toUpperCase());
+        final List<AOO> aooList = indexSearchService.findById(AOO.Field.ID, codiceUniAOO.toUpperCase());
         if (aooList.isEmpty()) {
             throw new ResourceNotFoundException();
         } else if (aooList.size() > 1) {
             throw new TooManyResourceFoundException();
         }
         final AOO aoo = aooList.get(0);
-        if(!categoriesList.isEmpty()){
+        if(categoriesList != null && !categoriesList.isEmpty()){
            institutionService.findById(aoo.getCodiceFiscaleEnte(), Optional.of(Origin.IPA), categoriesList);
         }
         log.debug("find AOO by CodiceUniAOO result = {}", aoo);

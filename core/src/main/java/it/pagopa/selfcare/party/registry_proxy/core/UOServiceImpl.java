@@ -43,14 +43,14 @@ class UOServiceImpl implements UOService {
     public UO findByUnicode(String codiceUniUO, List<String> categoriesList) {
         log.trace("find UO By CodiceUniUO start");
         log.debug("find UO By CodiceUniUO = {} - categoriesList = {}", codiceUniUO.toUpperCase(), categoriesList);
-        final List<UO> uoList = indexSearchService.findById(UO.Field.CODICE_UNI_UO, codiceUniUO.toUpperCase());
+        final List<UO> uoList = indexSearchService.findById(UO.Field.ID, codiceUniUO.toUpperCase());
         if (uoList.isEmpty()) {
             throw new ResourceNotFoundException();
         } else if (uoList.size() > 1) {
             throw new TooManyResourceFoundException();
         }
         final UO uo = uoList.get(0);
-        if(!categoriesList.isEmpty()){
+        if(categoriesList != null && !categoriesList.isEmpty()){
             institutionService.findById(uo.getCodiceFiscaleEnte(), Optional.of(Origin.IPA), categoriesList);
         }
         log.debug("find UO By CodiceUniUO result = {}", uo);
