@@ -72,7 +72,7 @@ class InstitutionServiceImpl implements InstitutionService {
                                 (categories.isEmpty() || categories.contains(institution.getCategory())))
                         .collect(Collectors.toList());
             } else {
-                institutions = categories.isEmpty() ? new ArrayList<>() : institutionsSupplier.get();
+                institutions = !categories.isEmpty() ? new ArrayList<>() : institutionsSupplier.get();
             }
             if (institutions.isEmpty()) {
                 throw new ResourceNotFoundException();
