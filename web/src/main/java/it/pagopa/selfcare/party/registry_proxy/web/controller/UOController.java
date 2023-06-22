@@ -12,7 +12,6 @@ import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.UOMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -64,14 +63,10 @@ public class UOController {
                                     @PathVariable("codiceUniAoo") String codiceUniUo,
                                     @ApiParam(value = "${swagger.model.*.categories}")
                                     @RequestParam(value = "categories", required = false)
-                                    String categories) {
+                                    List<String> categories) {
         log.trace("find UO start");
         log.debug("find UO = {}", codiceUniUo);
-        List<String> categoriesList = Collections.emptyList();
-        if (StringUtils.hasText(categories)) {
-            categoriesList = Arrays.stream(categories.split(",")).collect(Collectors.toList());
-        }
-        final UOResource uoResource = UOMapper.toResource(uoService.findByUnicode(codiceUniUo,categoriesList));
+        final UOResource uoResource = UOMapper.toResource(uoService.findByUnicode(codiceUniUo,categories));
         log.debug("find UO result = {}", uoResource);
         log.trace("find UO end");
         return uoResource;

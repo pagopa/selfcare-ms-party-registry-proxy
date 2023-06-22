@@ -12,7 +12,6 @@ import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.AOOMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -63,14 +62,10 @@ public class AOOController {
                                      @PathVariable("codiceUniAoo") String codiceUniAoo,
                                      @ApiParam(value = "${swagger.model.*.categories}")
                                      @RequestParam(value = "categories", required = false)
-                                     String categories) {
+                                     List<String> categories) {
         log.trace("find AOO start");
         log.debug("find AOO codiceUniAoo = {}", codiceUniAoo);
-        List<String> categoriesList = Collections.emptyList();
-        if (StringUtils.hasText(categories)) {
-            categoriesList = Arrays.stream(categories.split(",")).collect(Collectors.toList());
-        }
-        final AOOResource aooResource = AOOMapper.toResource(aooService.findByUnicode(codiceUniAoo,categoriesList));
+        final AOOResource aooResource = AOOMapper.toResource(aooService.findByUnicode(codiceUniAoo,categories));
         log.debug("findAOO result = {}", aooResource);
         log.trace("findAOO end");
         return aooResource;
