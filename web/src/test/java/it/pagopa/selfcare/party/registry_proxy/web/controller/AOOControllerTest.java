@@ -15,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.ArrayList;
 
 import static it.pagopa.selfcare.commons.utils.TestUtils.mockInstance;
 import static org.hamcrest.Matchers.notNullValue;
@@ -86,7 +87,7 @@ class AOOControllerTest {
     void findAOO() throws Exception {
         // given
         final String code = "CODE";
-        when(aooServiceMock.findByUnicode(any()))
+        when(aooServiceMock.findByUnicode(any(), any()))
                 .thenReturn(mockInstance(new DummyAOO()));
         // when
         mvc.perform(MockMvcRequestBuilders
@@ -96,7 +97,7 @@ class AOOControllerTest {
                 .andExpect(status().isOk());
         // then
         verify(aooServiceMock, times(1))
-                .findByUnicode(code);
+                .findByUnicode(code, new ArrayList<>());
         verifyNoMoreInteractions(aooServiceMock);
     }
 

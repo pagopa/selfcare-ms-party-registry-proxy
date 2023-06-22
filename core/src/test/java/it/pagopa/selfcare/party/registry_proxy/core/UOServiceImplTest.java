@@ -11,7 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -22,6 +24,9 @@ class UOServiceImplTest {
 
     @Mock
     private IndexSearchService<UO> indexSearchService;
+
+    @Mock
+    private InstitutionService institutionService;
 
     @InjectMocks
     private UOServiceImpl uoService;
@@ -64,7 +69,7 @@ class UOServiceImplTest {
         // given
         final String id = "pippo";
         // when
-        final Executable executable = () -> uoService.findByUnicode(id);
+        final Executable executable = () -> uoService.findByUnicode(id, new ArrayList<>());
         // then
         assertThrows(RuntimeException.class, executable);
     }
@@ -77,7 +82,7 @@ class UOServiceImplTest {
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of());
         // when
-        final Executable executable = () -> uoService.findByUnicode(id);
+        final Executable executable = () -> uoService.findByUnicode(id, new ArrayList<>());
         // then
         assertThrows(ResourceNotFoundException.class, executable);
     }
@@ -91,7 +96,7 @@ class UOServiceImplTest {
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of(UO, UO));
         // when
-        final Executable executable = () -> uoService.findByUnicode(id);
+        final Executable executable = () -> uoService.findByUnicode(id, new ArrayList<>());
         // then
         assertThrows(TooManyResourceFoundException.class, executable);
     }
@@ -102,10 +107,17 @@ class UOServiceImplTest {
         // given
         final String id = "pippo";
         final DummyUO UO = new DummyUO();
+        UO.setCodiceFiscaleEnte("cod");
+        UO.setOrigin(Origin.IPA);
+        final Institution institution = new DummyInstitution();
+        ArrayList<String> categories = new ArrayList<>();
+        categories.add("L4");
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of(UO));
+        when(institutionService.findById("cod", Optional.of(Origin.IPA), categories))
+                .thenReturn(institution);
         // when
-        final UO result = uoService.findByUnicode(id);
+        final UO result = uoService.findByUnicode(id, categories);
         // then
         assertSame(UO, result);
     }

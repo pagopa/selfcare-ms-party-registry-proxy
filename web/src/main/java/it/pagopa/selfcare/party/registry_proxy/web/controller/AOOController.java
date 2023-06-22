@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -58,10 +59,13 @@ public class AOOController {
     @ApiOperation(value = "${swagger.api.aoo.findBy.summary}",
             notes = "${swagger.api.aoo.findBy.notes}")
     public AOOResource findByUnicode(@ApiParam("${swagger.model.aoo.codiceUniAoo}")
-                                       @PathVariable("codiceUniAoo") String codiceUniAoo) {
+                                     @PathVariable("codiceUniAoo") String codiceUniAoo,
+                                     @ApiParam(value = "${swagger.model.*.categories}")
+                                     @RequestParam(value = "categories", required = false)
+                                     List<String> categories) {
         log.trace("find AOO start");
         log.debug("find AOO codiceUniAoo = {}", codiceUniAoo);
-        final AOOResource aooResource = AOOMapper.toResource(aooService.findByUnicode(codiceUniAoo));
+        final AOOResource aooResource = AOOMapper.toResource(aooService.findByUnicode(codiceUniAoo,categories));
         log.debug("findAOO result = {}", aooResource);
         log.trace("findAOO end");
         return aooResource;

@@ -48,7 +48,7 @@ class InstitutionServiceImpl implements InstitutionService {
         log.debug("search searchText = {}, categories = {}, page = {}, limit = {}", searchText, categories, page, limit);
         final QueryResult<Institution> queryResult = searchText.map(text -> indexSearchService.fullTextSearch(Field.DESCRIPTION, searchText.orElseThrow(), Field.CATEGORY, categories, page, limit))
                 .orElseGet(() -> indexSearchService.findAll(page, limit, Entity.INSTITUTION.toString()));
-        
+
 
         log.debug("search result = {}", queryResult);
         log.trace("search end");
@@ -64,29 +64,25 @@ class InstitutionServiceImpl implements InstitutionService {
             throw new RuntimeException("Not implemented yet");//TODO: onboarding privati
         } else {
             final Supplier<List<Institution>> institutionsSupplier = () -> indexSearchService.findById(Field.ID, id);
-            final List<Institution> institutions = origin.map(orig -> institutionsSupplier.get().stream()
-                            .filter(institution -> institution.getOrigin().equals(orig) &&
-                                            (categories.isEmpty() || categories.contains(institution.getCategory()))
-                                    )
-                    .collect(Collectors.toList()))
-                    .orElseGet(categories.size() > 0 ? new Supplier<List<Institution>>() {
-                        @Override
-                        public List<Institution> get() {
-                            return new ArrayList<>();
-                        }
-                    } : institutionsSupplier);
-
+            List<Institution> institutions;
+            if (origin.isPresent()) {
+                Origin orig = origin.get();
+                institutions = institutionsSupplier.get().stream()
+                        .filter(institution -> institution.getOrigin().equals(orig) &&
+                                (categories.isEmpty() || categories.contains(institution.getCategory())))
+                        .collect(Collectors.toList());
+            } else {
+                institutions = categories.isEmpty() ? new ArrayList<>() : institutionsSupplier.get();
+            }
             if (institutions.isEmpty()) {
                 throw new ResourceNotFoundException();
             } else if (institutions.size() > 1) {
                 throw new TooManyResourceFoundException();
-            } else {
-                final Institution institution = institutions.get(0);
-                log.debug("findById result = {}", institution);
-                log.trace("findById end");
-                return institution;
             }
+            final Institution institution = institutions.get(0);
+            log.debug("findById result = {}", institution);
+            log.trace("findById end");
+            return institution;
         }
     }
-
 }
