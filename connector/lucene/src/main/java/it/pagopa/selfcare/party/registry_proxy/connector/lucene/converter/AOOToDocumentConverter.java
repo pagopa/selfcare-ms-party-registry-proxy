@@ -21,7 +21,7 @@ public class AOOToDocumentConverter implements Function<AOO, Document> {
         if (aoo != null) {
             doc = new Document();
             doc.add(new StringField(Entity.ENTITY_TYPE.toString(), Entity.AOO.toString(), Field.Store.YES));
-            doc.add(new StringField(ID.toString(), aoo.getId(), Field.Store.YES));
+            doc.add(new StringField(ID.toString(), aoo.getId() != null ? aoo.getId().toUpperCase() : aoo.getId(), Field.Store.YES));
             doc.add(new StringField(ORIGIN.toString(), aoo.getOrigin().toString(), Field.Store.YES));
             doc.add(new StringField(CODICE_IPA.toString(), aoo.getCodiceIpa(), Field.Store.YES));
             doc.add(new StringField(CODICE_FISCALE_ENTE.toString(), aoo.getCodiceFiscaleEnte(), Field.Store.YES));

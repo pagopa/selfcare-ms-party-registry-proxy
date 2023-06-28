@@ -2,8 +2,8 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.infocamere.Businesses;
-import it.pagopa.selfcare.party.registry_proxy.core.InfoCamereService;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.Businesses;
+import it.pagopa.selfcare.party.registry_proxy.core.NationalRegistriesService;
 import it.pagopa.selfcare.party.registry_proxy.web.model.BusinessesResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.GetInstitutionsByLegalDto;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.BusinessesMapper;
@@ -21,11 +21,12 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "infocamere")
 public class InfoCamereController {
 
-    private final InfoCamereService infoCamereService;
+    private final NationalRegistriesService nationalRegistriesService;
+
     @Autowired
-    public InfoCamereController(InfoCamereService infoCamereService) {
+    public InfoCamereController(NationalRegistriesService nationalRegistriesService) {
         log.trace("Initializing {}", InfoCamereController.class.getSimpleName());
-        this.infoCamereService = infoCamereService;
+        this.nationalRegistriesService = nationalRegistriesService;
     }
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "${swagger.api.info-camere.institutions.summary}",
@@ -33,7 +34,7 @@ public class InfoCamereController {
     @PostMapping("/institutions")
     public ResponseEntity<BusinessesResource> institutionsByLegalTaxId(@RequestBody GetInstitutionsByLegalDto getInstitutionsByLegalDto) {
         RequestValidator.validateTaxId(getInstitutionsByLegalDto.getFilter().getLegalTaxId());
-        Businesses businesses = infoCamereService.institutionsByLegalTaxId(getInstitutionsByLegalDto.getFilter().getLegalTaxId());
+        Businesses businesses = nationalRegistriesService.institutionsByLegalTaxId(getInstitutionsByLegalDto.getFilter().getLegalTaxId());
         return ResponseEntity.ok().body(BusinessesMapper.toResource(businesses));
     }
 }

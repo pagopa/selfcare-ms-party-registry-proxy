@@ -11,6 +11,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.NationalRegistriesConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressProfessionalResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.VerifyLegalResponse;
@@ -19,6 +20,7 @@ import it.pagopa.selfcare.party.registry_proxy.core.exception.ResourceNotFoundEx
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.junit.jupiter.api.Test;
@@ -102,6 +104,81 @@ class NationalRegistriesServiceImplTest {
                 .thenThrow(new ResourceNotFoundException());
         assertThrows(ResourceNotFoundException.class, () -> nationalRegistriesServiceImpl.verifyLegal("42", "42"));
         verify(nationalRegistriesConnector).verifyLegal(any(), any());
+    }
+
+    /**
+     * Method under test: {@link InfoCamereServiceImpl#institutionsByLegalTaxId(String)}
+     */
+    @Test
+    void testInstitutionsByLegalTaxId() {
+        Businesses businesses = new Businesses();
+        businesses.setBusinessList(new ArrayList<>());
+        businesses.setLegalTaxId("42");
+        businesses.setDateTimeExtraction("2020-03-01");
+        when(nationalRegistriesConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
+
+        assertSame(businesses, nationalRegistriesServiceImpl.institutionsByLegalTaxId("42"));
+        verify(nationalRegistriesConnector).institutionsByLegalTaxId(any());
+    }
+
+    /**
+     * Method under test: {@link InfoCamereServiceImpl#institutionsByLegalTaxId(String)}
+     */
+    @Test
+    void testInstitutionsByLegalTaxIdNotFound() {
+        Businesses businesses = new Businesses();
+        businesses.setCode("WSPA_ERR_04");
+        when(nationalRegistriesConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
+
+        Businesses response = nationalRegistriesServiceImpl.institutionsByLegalTaxId("42");
+        assertEquals("42", response.getLegalTaxId());
+        assertEquals(0, response.getBusinessList().size());
+        verify(nationalRegistriesConnector).institutionsByLegalTaxId(any());
+    }
+
+    /**
+     * Method under test: {@link InfoCamereServiceImpl#institutionsByLegalTaxId(String)}
+     */
+    @Test
+    void testInstitutionsByLegalTaxIdNotFound2() {
+        Businesses businesses = new Businesses();
+        businesses.setDescription("LR Not found");
+        when(nationalRegistriesConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
+
+        Businesses response = nationalRegistriesServiceImpl.institutionsByLegalTaxId("42");
+        assertEquals("42", response.getLegalTaxId());
+        assertEquals(0, response.getBusinessList().size());
+        verify(nationalRegistriesConnector).institutionsByLegalTaxId(any());
+    }
+
+    /**
+     * Method under test: {@link InfoCamereServiceImpl#institutionsByLegalTaxId(String)}
+     */
+    @Test
+    void testInstitutionsByLegalTaxIdNotFound3() {
+        Businesses businesses = new Businesses();
+        businesses.setAppName("wspa-lrpf");
+        when(nationalRegistriesConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
+
+        Businesses response = nationalRegistriesServiceImpl.institutionsByLegalTaxId("42");
+        assertEquals("42", response.getLegalTaxId());
+        assertEquals(0, response.getBusinessList().size());
+        verify(nationalRegistriesConnector).institutionsByLegalTaxId(any());
+    }
+
+    /**
+     * Method under test: {@link InfoCamereServiceImpl#institutionsByLegalTaxId(String)}
+     */
+    @Test
+    void testInstitutionsByLegalTaxIdNotFound4() {
+        Businesses businesses = new Businesses();
+        businesses.setTimestamp("2023-01-27T17:38:18.774");
+        when(nationalRegistriesConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
+
+        Businesses response = nationalRegistriesServiceImpl.institutionsByLegalTaxId("42");
+        assertEquals("42", response.getLegalTaxId());
+        assertEquals(0, response.getBusinessList().size());
+        verify(nationalRegistriesConnector).institutionsByLegalTaxId(any());
     }
 }
 
