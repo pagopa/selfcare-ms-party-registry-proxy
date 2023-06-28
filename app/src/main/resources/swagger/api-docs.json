@@ -147,6 +147,7 @@
           "description" : "Filter from origin category",
           "required" : false,
           "style" : "form",
+          "explode" : true,
           "schema" : {
             "type" : "string"
           }
@@ -1070,6 +1071,7 @@
           "description" : "Filter from origin category",
           "required" : false,
           "style" : "form",
+          "explode" : true,
           "schema" : {
             "type" : "string"
           }
