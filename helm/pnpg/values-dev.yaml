@@ -34,3 +34,4 @@ configEnvSpecific:
   INFO_CAMERE_URL: "https://icapiscl.infocamere.it"
   INFO_CAMERE_INSTITUTIONS_BY_LEGAL_ENDPOINT: "/ic/ce/wspa/wspa/rest/listaLegaleRappresentante/{taxId}"
   INFO_CAMERE_AUTHENTICATION_ENDPOINT: "/ic/ce/wspa/wspa/rest/authentication"
+  NATIONAL_REGISTRIES_URL: "https://api-selcpg.dev.notifichedigitali.it/national-registries-private"
