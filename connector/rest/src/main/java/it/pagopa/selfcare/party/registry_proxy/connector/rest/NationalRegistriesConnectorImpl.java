@@ -57,7 +57,9 @@ public class NationalRegistriesConnectorImpl implements NationalRegistriesConnec
 
     private VerifyLegalResponse toVerifyLegalResponse(AdELegalOKDto adELegalOKDto) {
         VerifyLegalResponse verifyLegalResponse = new VerifyLegalResponse();
-        verifyLegalResponse.setVerificationResult(adELegalOKDto.getVerificationResult());
+        if(adELegalOKDto.getVerificationResult() != null){
+            verifyLegalResponse.setVerificationResult(adELegalOKDto.getVerificationResult());
+        }
         verifyLegalResponse.setVerifyLegalResultDetail(adELegalOKDto.getResultDetail().getValue());
         verifyLegalResponse.setVerifyLegalResultCode(adELegalOKDto.getResultCode().getValue());
         return verifyLegalResponse;
