@@ -2,7 +2,6 @@ package it.pagopa.selfcare.party.registry_proxy.web.model.mapper;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressProfessionalResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.VerifyLegalResponse;
-import it.pagopa.selfcare.party.registry_proxy.core.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.web.model.LegalAddressResponse;
 import it.pagopa.selfcare.party.registry_proxy.web.model.LegalVerificationResult;
 import org.springframework.util.StringUtils;
@@ -13,9 +12,6 @@ public class NationalRegistriesMapper {
     }
 
     public static LegalAddressResponse toResource(LegalAddressProfessionalResponse response) {
-        if(!StringUtils.hasText(response.getAddress())) {
-            throw new ResourceNotFoundException("Legal Address not found");
-        }
         LegalAddressResponse legalAddressResponse = new LegalAddressResponse();
         legalAddressResponse.setAddress(constructAddress(response));
         legalAddressResponse.setZipCode(response.getZip());

@@ -3,8 +3,6 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressProfessionalResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.VerifyLegalResponse;
 import it.pagopa.selfcare.party.registry_proxy.core.NationalRegistriesService;
-import it.pagopa.selfcare.party.registry_proxy.core.exception.ResourceNotFoundException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,18 +47,6 @@ class NationalRegistriesControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
                         .string("{\"address\":\"42 Main St, Municipality (Province)\",\"zipCode\":\"21654\"}"));
-    }
-
-    @Test
-    void testLegalAddressWithoutAddress() throws Exception {
-        LegalAddressProfessionalResponse legalAddressProfessionalResponse = new LegalAddressProfessionalResponse();
-        legalAddressProfessionalResponse.setAddress("");
-        legalAddressProfessionalResponse.setDescription("The characteristics of someone or something");
-        legalAddressProfessionalResponse.setMunicipality("Municipality");
-        legalAddressProfessionalResponse.setProvince("Province");
-        legalAddressProfessionalResponse.setZip("21654");
-        when(nationalRegistriesService.getLegalAddress(any())).thenReturn(legalAddressProfessionalResponse);
-        Assertions.assertThrows(ResourceNotFoundException.class, () -> nationalRegistriesController.legalAddress("CIACIA80A01H501X"));
     }
 
     /**

@@ -9,6 +9,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.MaskDataUtil
 import it.pagopa.selfcare.party.registry_proxy.core.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -28,8 +29,10 @@ class NationalRegistriesServiceImpl implements NationalRegistriesService {
     public LegalAddressProfessionalResponse getLegalAddress(String taxId) {
         log.info("getLegalAddress for TaxId: {}", MaskDataUtils.maskString(taxId));
         LegalAddressResponse response = nationalRegistriesConnector.getLegalAddress(taxId);
-        if (response == null || response.getProfessionalAddress() == null) {
-            throw new ResourceNotFoundException();
+        if (response == null ||
+                response.getProfessionalAddress() == null ||
+                !StringUtils.hasText(response.getProfessionalAddress().getAddress())) {
+            throw new ResourceNotFoundException("Legal Address not found");
         }
         return toNationalRegistriesProfessionalResponse(response);
     }

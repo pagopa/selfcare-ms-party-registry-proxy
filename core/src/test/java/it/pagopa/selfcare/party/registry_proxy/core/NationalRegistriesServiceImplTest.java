@@ -23,6 +23,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,21 @@ class NationalRegistriesServiceImplTest {
         verify(legalAddressResponse).setDateTimeExtraction(any());
         verify(legalAddressResponse).setProfessionalAddress(any());
         verify(legalAddressResponse).setTaxId(any());
+    }
+
+    @Test
+    void testGetLegalAddressWithoutAddress() {
+        LegalAddressProfessionalResponse legalAddressProfessionalResponse = new LegalAddressProfessionalResponse();
+        LegalAddressResponse legalAddressResponse = mock(LegalAddressResponse.class);
+        doNothing().when(legalAddressResponse).setDateTimeExtraction(any());
+        doNothing().when(legalAddressResponse).setProfessionalAddress(any());
+        doNothing().when(legalAddressResponse).setTaxId(any());
+        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
+        legalAddressResponse.setDateTimeExtraction(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
+        legalAddressResponse.setProfessionalAddress(legalAddressProfessionalResponse);
+        legalAddressResponse.setTaxId("42");
+        when(nationalRegistriesConnector.getLegalAddress(any())).thenReturn(legalAddressResponse);
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> nationalRegistriesServiceImpl.getLegalAddress("Tax Id"));
     }
 
     /**
