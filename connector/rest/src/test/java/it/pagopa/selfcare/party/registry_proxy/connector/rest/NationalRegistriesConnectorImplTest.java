@@ -20,9 +20,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -121,6 +119,22 @@ class NationalRegistriesConnectorImplTest {
         VerifyLegalResponse actualVerifyLegalResult = nationalRegistriesConnectorImpl.verifyLegal("42", "42");
         assertEquals("00", actualVerifyLegalResult.getVerifyLegalResultCode());
         assertTrue(actualVerifyLegalResult.isVerificationResult());
+        assertEquals("XX00", actualVerifyLegalResult.getVerifyLegalResultDetail());
+        verify(nationalRegistriesRestClient).verifyLegal(any());
+    }
+
+    /**
+     * Method under test: {@link NationalRegistriesConnectorImpl#verifyLegal(String, String)}
+     */
+    @Test
+    void testVerifyLegalWithoutVerificationCode() {
+        AdELegalOKDto adELegalOKDto = new AdELegalOKDto();
+        adELegalOKDto.setResultCode(AdEResultCodeEnum._00);
+        adELegalOKDto.setResultDetail(AdEResultDetailEnum.XX00);
+        when(nationalRegistriesRestClient.verifyLegal(any())).thenReturn(adELegalOKDto);
+        VerifyLegalResponse actualVerifyLegalResult = nationalRegistriesConnectorImpl.verifyLegal("42", "42");
+        assertEquals("00", actualVerifyLegalResult.getVerifyLegalResultCode());
+        assertFalse(actualVerifyLegalResult.isVerificationResult());
         assertEquals("XX00", actualVerifyLegalResult.getVerifyLegalResultDetail());
         verify(nationalRegistriesRestClient).verifyLegal(any());
     }
