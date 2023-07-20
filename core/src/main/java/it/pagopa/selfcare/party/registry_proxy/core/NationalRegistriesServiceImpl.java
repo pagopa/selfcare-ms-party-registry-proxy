@@ -1,6 +1,9 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.NationalRegistriesConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultDetailEnum;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.InternalException;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.InvalidRequestException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressProfessionalResponse;
@@ -9,6 +12,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.MaskDataUtil
 import it.pagopa.selfcare.party.registry_proxy.core.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.time.OffsetDateTime;
@@ -40,7 +44,19 @@ class NationalRegistriesServiceImpl implements NationalRegistriesService {
     @Override
     public VerifyLegalResponse verifyLegal(String taxId, String vatNumber) {
         log.info("verify legal {} for vatNumber: {}", MaskDataUtils.maskString(taxId), MaskDataUtils.maskString(vatNumber));
-        return nationalRegistriesConnector.verifyLegal(taxId, vatNumber);
+        VerifyLegalResponse verifyLegalResponse = nationalRegistriesConnector.verifyLegal(taxId, vatNumber);
+        return checkResponseErrorCode(verifyLegalResponse);
+    }
+
+    private VerifyLegalResponse checkResponseErrorCode(VerifyLegalResponse verifyLegalResponse) {
+        Assert.notNull(verifyLegalResponse.getVerifyLegalResultDetail(), "verifyLegalResultDetail is required");
+        AdEResultDetailEnum adEResultDetailEnum = AdEResultDetailEnum.fromValue(verifyLegalResponse.getVerifyLegalResultDetail().getValue());
+        if(AdEResultDetailEnum.XX00 == adEResultDetailEnum){
+            return verifyLegalResponse;
+        }else if(AdEResultDetailEnum.XX01 == adEResultDetailEnum || AdEResultDetailEnum.XX02 == adEResultDetailEnum){
+            throw new InvalidRequestException("Formato dati non corretto");
+        }
+        throw new InternalException();
     }
 
     @Override

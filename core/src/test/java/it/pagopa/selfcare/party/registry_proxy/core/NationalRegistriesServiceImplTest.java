@@ -11,6 +11,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.NationalRegistriesConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultCodeEnum;
+import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultDetailEnum;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.InternalException;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.InvalidRequestException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressProfessionalResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressResponse;
@@ -104,10 +108,20 @@ class NationalRegistriesServiceImplTest {
     void testVerifyLegal() {
         VerifyLegalResponse verifyLegalResponse = new VerifyLegalResponse();
         verifyLegalResponse.setVerificationResult(true);
-        verifyLegalResponse.setVerifyLegalResultCode("Verify Legal Result Code");
-        verifyLegalResponse.setVerifyLegalResultDetail("Verify Legal Result Detail");
+        verifyLegalResponse.setVerifyLegalResultCode(AdEResultCodeEnum.CODE_00);
+        verifyLegalResponse.setVerifyLegalResultDetail(AdEResultDetailEnum.XX00);
         when(nationalRegistriesConnector.verifyLegal(any(), any())).thenReturn(verifyLegalResponse);
         assertSame(verifyLegalResponse, nationalRegistriesServiceImpl.verifyLegal("42", "42"));
+        verify(nationalRegistriesConnector).verifyLegal(any(), any());
+    }
+
+    @Test
+    void testVerifyLegalError() {
+        VerifyLegalResponse verifyLegalResponse = new VerifyLegalResponse();
+        verifyLegalResponse.setVerifyLegalResultCode(AdEResultCodeEnum.CODE_02);
+        verifyLegalResponse.setVerifyLegalResultDetail(AdEResultDetailEnum.XX03);
+        when(nationalRegistriesConnector.verifyLegal(any(), any())).thenReturn(verifyLegalResponse);
+        assertThrows(InternalException.class, () -> nationalRegistriesServiceImpl.verifyLegal("42", "42"));
         verify(nationalRegistriesConnector).verifyLegal(any(), any());
     }
 
@@ -115,10 +129,13 @@ class NationalRegistriesServiceImplTest {
      * Method under test: {@link NationalRegistriesServiceImpl#verifyLegal(String, String)}
      */
     @Test
-    void testVerifyLegal2() {
+    void testVerifyLegalInvalidRequest() {
+        VerifyLegalResponse verifyLegalResponse = new VerifyLegalResponse();
+        verifyLegalResponse.setVerifyLegalResultCode(AdEResultCodeEnum.CODE_01);
+        verifyLegalResponse.setVerifyLegalResultDetail(AdEResultDetailEnum.XX01);
         when(nationalRegistriesConnector.verifyLegal(any(), any()))
-                .thenThrow(new ResourceNotFoundException());
-        assertThrows(ResourceNotFoundException.class, () -> nationalRegistriesServiceImpl.verifyLegal("42", "42"));
+                .thenReturn(verifyLegalResponse);
+        assertThrows(InvalidRequestException.class, () -> nationalRegistriesServiceImpl.verifyLegal("42", "42"));
         verify(nationalRegistriesConnector).verifyLegal(any(), any());
     }
 

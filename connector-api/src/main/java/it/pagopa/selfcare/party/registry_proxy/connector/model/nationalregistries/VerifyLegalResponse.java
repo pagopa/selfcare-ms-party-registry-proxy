@@ -1,11 +1,14 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries;
 
+import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultCodeEnum;
+import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultDetailEnum;
 import lombok.Data;
 
 @Data
 public class VerifyLegalResponse {
 
     private boolean verificationResult = false;
-    private String verifyLegalResultCode;
-    private String verifyLegalResultDetail;
+    private AdEResultCodeEnum verifyLegalResultCode;
+    private AdEResultDetailEnum verifyLegalResultDetail;
+    private String verifyLegalResultDetailMessage;
 }

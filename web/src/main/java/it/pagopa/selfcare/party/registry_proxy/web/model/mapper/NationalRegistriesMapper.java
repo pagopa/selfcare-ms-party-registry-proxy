@@ -34,8 +34,8 @@ public class NationalRegistriesMapper {
 
     public static LegalVerificationResult toResult(VerifyLegalResponse response) {
         LegalVerificationResult legalVerificationResult = new LegalVerificationResult();
-        legalVerificationResult.setResultCode(response.getVerifyLegalResultCode());
-        legalVerificationResult.setResultDetail(response.getVerifyLegalResultDetail());
+        legalVerificationResult.setResultCode(response.getVerifyLegalResultCode().getValue());
+        legalVerificationResult.setResultDetail(response.getVerifyLegalResultDetail().getValue());
         legalVerificationResult.setVerificationResult(response.isVerificationResult());
         return legalVerificationResult;
     }
