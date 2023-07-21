@@ -40,9 +40,6 @@ class SwaggerConfigTest {
     private CategoryService categoryService;
 
     @MockBean
-    private InfoCamereService infoCamereService;
-
-    @MockBean
     private NationalRegistriesService nationalRegistriesService;
 
     @MockBean

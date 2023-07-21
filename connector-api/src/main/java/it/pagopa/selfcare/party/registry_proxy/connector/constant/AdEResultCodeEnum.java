@@ -1,16 +1,20 @@
-package it.pagopa.selfcare.party.registry_proxy.connector.rest.model;
+package it.pagopa.selfcare.party.registry_proxy.connector.constant;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum AdEResultCodeEnum {
 
-        _00("00"),
+        CODE_00("00"),
 
-        _01("01"),
+        CODE_01("01"),
 
-        _02("02");
+        CODE_02("02"),
 
-        private String value;
+        CODE_03("03"),
+
+        UNKNOWN("UNKNOWN");
+
+        private final String value;
 
         AdEResultCodeEnum(String value) {
             this.value = value;

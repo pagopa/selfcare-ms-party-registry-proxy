@@ -2,6 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.web.handler;
 
 import feign.FeignException;
 import it.pagopa.selfcare.commons.web.model.Problem;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.InvalidRequestException;
 import it.pagopa.selfcare.party.registry_proxy.core.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.web.exception.ValidationFailedException;
 import org.junit.jupiter.api.Test;
@@ -11,8 +12,7 @@ import org.springframework.http.ResponseEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 class PartyRegistryProxyExceptionHandlerTest {
 
@@ -33,6 +33,22 @@ class PartyRegistryProxyExceptionHandlerTest {
         assertNotNull(responseEntity.getBody());
         assertEquals(DETAIL_MESSAGE, responseEntity.getBody().getDetail());
         assertEquals(NOT_FOUND.value(), responseEntity.getBody().getStatus());
+    }
+
+    @Test
+    void handleInvalidRequestException() {
+        //given
+        InvalidRequestException mockException = Mockito.mock(InvalidRequestException.class);
+        Mockito.when(mockException.getMessage())
+                .thenReturn(DETAIL_MESSAGE);
+        //when
+        ResponseEntity<Problem> responseEntity = handler.handleInvalidRequestException(mockException);
+        //then
+        assertNotNull(responseEntity);
+        assertEquals(BAD_REQUEST, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
+        assertEquals(DETAIL_MESSAGE, responseEntity.getBody().getDetail());
+        assertEquals(BAD_REQUEST.value(), responseEntity.getBody().getStatus());
     }
 
     /**

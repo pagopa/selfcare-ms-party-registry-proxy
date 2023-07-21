@@ -3,8 +3,8 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.NationalRegistriesRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.AdELegalOKDto;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.AdEResultCodeEnum;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.AdEResultDetailEnum;
+import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultCodeEnum;
+import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultDetailEnum;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.GetAddressRegistroImpreseOKDto;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ProfessionalAddressDto;
 import org.junit.jupiter.api.Test;
@@ -112,14 +112,15 @@ class NationalRegistriesConnectorImplTest {
     @Test
     void testVerifyLegal() {
         AdELegalOKDto adELegalOKDto = new AdELegalOKDto();
-        adELegalOKDto.setResultCode(AdEResultCodeEnum._00);
+        adELegalOKDto.setResultCode(AdEResultCodeEnum.CODE_00);
         adELegalOKDto.setResultDetail(AdEResultDetailEnum.XX00);
+        adELegalOKDto.setResultDetailMessage("Detail Message");
         adELegalOKDto.setVerificationResult(true);
         when(nationalRegistriesRestClient.verifyLegal(any())).thenReturn(adELegalOKDto);
         VerifyLegalResponse actualVerifyLegalResult = nationalRegistriesConnectorImpl.verifyLegal("42", "42");
-        assertEquals("00", actualVerifyLegalResult.getVerifyLegalResultCode());
+        assertEquals("00", actualVerifyLegalResult.getVerifyLegalResultCode().getValue());
         assertTrue(actualVerifyLegalResult.isVerificationResult());
-        assertEquals("XX00", actualVerifyLegalResult.getVerifyLegalResultDetail());
+        assertEquals("XX00", actualVerifyLegalResult.getVerifyLegalResultDetail().getValue());
         verify(nationalRegistriesRestClient).verifyLegal(any());
     }
 
@@ -129,13 +130,14 @@ class NationalRegistriesConnectorImplTest {
     @Test
     void testVerifyLegalWithoutVerificationCode() {
         AdELegalOKDto adELegalOKDto = new AdELegalOKDto();
-        adELegalOKDto.setResultCode(AdEResultCodeEnum._00);
+        adELegalOKDto.setResultCode(AdEResultCodeEnum.CODE_00);
         adELegalOKDto.setResultDetail(AdEResultDetailEnum.XX00);
+        adELegalOKDto.setResultDetailMessage("Detail Message");
         when(nationalRegistriesRestClient.verifyLegal(any())).thenReturn(adELegalOKDto);
         VerifyLegalResponse actualVerifyLegalResult = nationalRegistriesConnectorImpl.verifyLegal("42", "42");
-        assertEquals("00", actualVerifyLegalResult.getVerifyLegalResultCode());
+        assertEquals("00", actualVerifyLegalResult.getVerifyLegalResultCode().getValue());
         assertFalse(actualVerifyLegalResult.isVerificationResult());
-        assertEquals("XX00", actualVerifyLegalResult.getVerifyLegalResultDetail());
+        assertEquals("XX00", actualVerifyLegalResult.getVerifyLegalResultDetail().getValue());
         verify(nationalRegistriesRestClient).verifyLegal(any());
     }
 }

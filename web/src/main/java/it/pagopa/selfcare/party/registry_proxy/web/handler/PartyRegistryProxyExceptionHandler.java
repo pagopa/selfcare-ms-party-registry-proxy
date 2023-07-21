@@ -3,6 +3,7 @@ package it.pagopa.selfcare.party.registry_proxy.web.handler;
 import feign.FeignException;
 import it.pagopa.selfcare.commons.web.model.Problem;
 import it.pagopa.selfcare.commons.web.model.mapper.ProblemMapper;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.InvalidRequestException;
 import it.pagopa.selfcare.party.registry_proxy.core.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.web.exception.ValidationFailedException;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,12 @@ public class PartyRegistryProxyExceptionHandler {
     ResponseEntity<Problem> handleResourceNotFoundException(ResourceNotFoundException e) {
         log.warn(e.toString());
         return ProblemMapper.toResponseEntity(new Problem(NOT_FOUND, e.getMessage()));
+    }
+
+    @ExceptionHandler({InvalidRequestException.class})
+    ResponseEntity<Problem> handleInvalidRequestException(InvalidRequestException e) {
+        log.warn(e.toString());
+        return ProblemMapper.toResponseEntity(new Problem(BAD_REQUEST, e.getMessage()));
     }
 
     @ExceptionHandler({ValidationFailedException.class})
