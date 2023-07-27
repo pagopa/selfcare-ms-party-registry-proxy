@@ -1,4 +1,4 @@
-package it.pagopa.selfcare.party.registry_proxy.connector.rest.model;
+package it.pagopa.selfcare.party.registry_proxy.connector.constant;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
@@ -17,7 +17,7 @@ public enum AdEResultDetailEnum {
 
     XXXX("XXXX");
 
-    private String value;
+    private final String value;
 
     AdEResultDetailEnum(String value) {
         this.value = value;
@@ -27,4 +27,14 @@ public enum AdEResultDetailEnum {
     public String getValue() {
         return value;
     }
+
+    public static AdEResultDetailEnum fromValue(String code) {
+        for (AdEResultDetailEnum b : AdEResultDetailEnum.values()) {
+            if (b.value.equals(code)) {
+                return b;
+            }
+        }
+        return AdEResultDetailEnum.XXXX;
+    }
+
 }

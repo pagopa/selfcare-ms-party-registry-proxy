@@ -6,6 +6,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.NationalReg
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 @Slf4j
 @Service
@@ -56,12 +57,15 @@ public class NationalRegistriesConnectorImpl implements NationalRegistriesConnec
     }
 
     private VerifyLegalResponse toVerifyLegalResponse(AdELegalOKDto adELegalOKDto) {
+        Assert.notNull(adELegalOKDto.getResultDetail(), "ResultDetail is required");
+        Assert.notNull(adELegalOKDto.getResultCode(), "ResultCode is required");
         VerifyLegalResponse verifyLegalResponse = new VerifyLegalResponse();
         if(adELegalOKDto.getVerificationResult() != null){
             verifyLegalResponse.setVerificationResult(adELegalOKDto.getVerificationResult());
         }
-        verifyLegalResponse.setVerifyLegalResultDetail(adELegalOKDto.getResultDetail().getValue());
-        verifyLegalResponse.setVerifyLegalResultCode(adELegalOKDto.getResultCode().getValue());
+        verifyLegalResponse.setVerifyLegalResultDetail(adELegalOKDto.getResultDetail());
+        verifyLegalResponse.setVerifyLegalResultCode(adELegalOKDto.getResultCode());
+        verifyLegalResponse.setVerifyLegalResultDetailMessage(adELegalOKDto.getResultDetailMessage());
         return verifyLegalResponse;
     }
 

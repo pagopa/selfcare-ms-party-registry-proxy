@@ -1,5 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
+import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultCodeEnum;
+import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultDetailEnum;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressProfessionalResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.VerifyLegalResponse;
 import it.pagopa.selfcare.party.registry_proxy.core.NationalRegistriesService;
@@ -56,8 +58,8 @@ class NationalRegistriesControllerTest {
     void testVerifyLegal() throws Exception {
         VerifyLegalResponse verifyLegalResponse = new VerifyLegalResponse();
         verifyLegalResponse.setVerificationResult(true);
-        verifyLegalResponse.setVerifyLegalResultCode("Verify Legal Result Code");
-        verifyLegalResponse.setVerifyLegalResultDetail("Verify Legal Result Detail");
+        verifyLegalResponse.setVerifyLegalResultCode(AdEResultCodeEnum.CODE_01);
+        verifyLegalResponse.setVerifyLegalResultDetail(AdEResultDetailEnum.XX01);
         when(nationalRegistriesService.verifyLegal(any(), any())).thenReturn(verifyLegalResponse);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/national-registries/verify-legal")
                 .param("taxId", "CIACIA80A01H501X")
@@ -69,8 +71,7 @@ class NationalRegistriesControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
                         .string(
-                                "{\"verificationResult\":true,\"resultCode\":\"Verify Legal Result Code\",\"resultDetail\":\"Verify Legal Result"
-                                        + " Detail\"}"));
+                                "{\"verificationResult\":true,\"resultCode\":\"01\",\"resultDetail\":\"XX01\"}"));
     }
 }
 
