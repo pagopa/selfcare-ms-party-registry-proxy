@@ -29,7 +29,15 @@ public class GeoTaxonomiesConnectorImpl implements GeoTaxonomiesConnector {
     public List<GeographicTaxonomy> getExtByDescription(String description, Integer offset, Integer limit) {
         log.debug(LogUtils.CONFIDENTIAL_MARKER, "getExtByDescription description = {}", description);
         Assert.hasText(description, "Description is required");
-        GeographicTaxonomiesResponse result = restClient.getExtByDescription(description, offset, limit);
+
+        GeographicTaxonomiesResponse result;
+        try {
+            result = restClient.getExtByDescription(description, offset, limit);
+        } catch (Exception e){
+            log.error("Error GeographicTaxonomy rest client, message: {}", e.getMessage());
+            return List.of();
+        }
+
         log.debug(LogUtils.CONFIDENTIAL_MARKER, "getExtByDescription result = {}", result);
         return toGeoTaxonomiesList(result.getGeographicTaxonomiesResponse());
     }
@@ -38,7 +46,15 @@ public class GeoTaxonomiesConnectorImpl implements GeoTaxonomiesConnector {
     public GeographicTaxonomy getExtByCode(String code) {
         log.debug(LogUtils.CONFIDENTIAL_MARKER, "getExtByCode code = {}", code);
         Assert.hasText(code, "Code is required");
-        GeographicTaxonomyResponse result = restClient.getExtByCode(code);
+
+        GeographicTaxonomyResponse result;
+        try {
+            result = restClient.getExtByCode(code);
+        } catch (Exception e){
+            log.error("Error GeographicTaxonomy rest client, message: {}", e.getMessage());
+            return null;
+        }
+
         log.debug(LogUtils.CONFIDENTIAL_MARKER, "getExtByCode result = {}", result);
         return toGeoTaxonomy(result);
     }
