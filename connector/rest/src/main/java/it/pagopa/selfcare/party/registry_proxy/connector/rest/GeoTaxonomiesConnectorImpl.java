@@ -1,7 +1,11 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import it.pagopa.selfcare.commons.base.logging.LogUtils;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.GeoTaxonomiesConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.ServiceUnavailableException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.GeographicTaxonomy;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.GeoTaxonomiesRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.geotaxonomy.GeographicTaxonomiesResponse;
@@ -26,37 +30,37 @@ public class GeoTaxonomiesConnectorImpl implements GeoTaxonomiesConnector {
 
 
     @Override
+    @CircuitBreaker(name = "geotaxCircuitbreaker", fallbackMethod = "fallbackGetExtByDescription")
+    @Retry(name = "retry503")
     public List<GeographicTaxonomy> getExtByDescription(String description, Integer offset, Integer limit) {
         log.debug(LogUtils.CONFIDENTIAL_MARKER, "getExtByDescription description = {}", description);
         Assert.hasText(description, "Description is required");
 
-        GeographicTaxonomiesResponse result;
-        try {
-            result = restClient.getExtByDescription(description, offset, limit);
-        } catch (Exception e){
-            log.error("Error GeographicTaxonomy rest client, message: {}", e.getMessage());
-            return List.of();
-        }
+        GeographicTaxonomiesResponse result = restClient.getExtByDescription(description, offset, limit);
 
         log.debug(LogUtils.CONFIDENTIAL_MARKER, "getExtByDescription result = {}", result);
         return toGeoTaxonomiesList(result.getGeographicTaxonomiesResponse());
     }
 
+    public List<GeographicTaxonomy> fallbackGetExtByDescription(ServiceUnavailableException e) {
+        return List.of();
+    }
+
     @Override
+    @CircuitBreaker(name = "geotaxCircuitbreaker", fallbackMethod = "fallbackGetExtByCode")
+    @Retry(name = "retry503")
     public GeographicTaxonomy getExtByCode(String code) {
         log.debug(LogUtils.CONFIDENTIAL_MARKER, "getExtByCode code = {}", code);
         Assert.hasText(code, "Code is required");
 
-        GeographicTaxonomyResponse result;
-        try {
-            result = restClient.getExtByCode(code);
-        } catch (Exception e){
-            log.error("Error GeographicTaxonomy rest client, message: {}", e.getMessage());
-            return null;
-        }
+        GeographicTaxonomyResponse result = restClient.getExtByCode(code);
 
         log.debug(LogUtils.CONFIDENTIAL_MARKER, "getExtByCode result = {}", result);
         return toGeoTaxonomy(result);
+    }
+
+    public GeographicTaxonomy fallbackGetExtByCode(ServiceUnavailableException e) {
+        throw new ResourceNotFoundException("");
     }
 
     private GeographicTaxonomy toGeoTaxonomy(GeographicTaxonomyResponse geographicTaxonomyResponse) {

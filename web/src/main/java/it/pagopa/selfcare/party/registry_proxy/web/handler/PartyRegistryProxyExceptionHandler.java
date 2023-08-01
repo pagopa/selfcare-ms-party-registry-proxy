@@ -34,6 +34,12 @@ public class PartyRegistryProxyExceptionHandler {
         return ProblemMapper.toResponseEntity(new Problem(NOT_FOUND, e.getMessage()));
     }
 
+    @ExceptionHandler({it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException.class})
+    ResponseEntity<Problem> handleResourceNotFoundException(it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException e) {
+        log.warn(e.toString());
+        return ProblemMapper.toResponseEntity(new Problem(NOT_FOUND, e.getMessage()));
+    }
+
     @ExceptionHandler({InvalidRequestException.class})
     ResponseEntity<Problem> handleInvalidRequestException(InvalidRequestException e) {
         log.warn(e.toString());
