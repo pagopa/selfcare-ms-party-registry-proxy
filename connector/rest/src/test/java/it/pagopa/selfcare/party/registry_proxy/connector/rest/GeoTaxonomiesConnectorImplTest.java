@@ -2,10 +2,13 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
 
 
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.ServiceUnavailableException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.GeographicTaxonomy;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.GeoTaxonomiesRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.geotaxonomy.GeographicTaxonomiesResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.geotaxonomy.GeographicTaxonomyResponse;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
@@ -194,6 +197,17 @@ class GeoTaxonomiesConnectorImplTest {
         assertEquals("Code is required", e.getMessage());
         Mockito.verifyNoInteractions(geoTaxonomiesRestClient);
 
+    }
+
+    @Test
+    void fallbackGetExtByDescriptionTest(){
+        List<GeographicTaxonomy> list = geoTaxonomiesConnectorImpl.fallbackGetExtByDescription(new ServiceUnavailableException());
+        Assertions.assertTrue(list.isEmpty());
+    }
+
+    @Test
+    void fallbackGetExtByCodeTest(){
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> geoTaxonomiesConnectorImpl.fallbackGetExtByCode(new ServiceUnavailableException()));
     }
 
 
