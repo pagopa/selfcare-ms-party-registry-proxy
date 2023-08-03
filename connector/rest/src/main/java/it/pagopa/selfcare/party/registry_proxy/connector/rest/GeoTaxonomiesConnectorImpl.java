@@ -4,7 +4,6 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import it.pagopa.selfcare.commons.base.logging.LogUtils;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.GeoTaxonomiesConnector;
-import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ServiceUnavailableException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.GeographicTaxonomy;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.GeoTaxonomiesRestClient;
@@ -57,10 +56,6 @@ public class GeoTaxonomiesConnectorImpl implements GeoTaxonomiesConnector {
 
         log.debug(LogUtils.CONFIDENTIAL_MARKER, "getExtByCode result = {}", result);
         return toGeoTaxonomy(result);
-    }
-
-    public GeographicTaxonomy fallbackGetExtByCode(ServiceUnavailableException e) {
-        throw new ResourceNotFoundException("");
     }
 
     private GeographicTaxonomy toGeoTaxonomy(GeographicTaxonomyResponse geographicTaxonomyResponse) {

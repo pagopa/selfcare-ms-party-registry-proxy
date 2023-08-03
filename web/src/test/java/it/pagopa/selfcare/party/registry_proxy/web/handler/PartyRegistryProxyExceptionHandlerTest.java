@@ -2,8 +2,9 @@ package it.pagopa.selfcare.party.registry_proxy.web.handler;
 
 import feign.FeignException;
 import it.pagopa.selfcare.commons.web.model.Problem;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.BadGatewayException;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.InvalidRequestException;
-import it.pagopa.selfcare.party.registry_proxy.core.exception.ResourceNotFoundException;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.web.exception.ValidationFailedException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -36,6 +37,22 @@ class PartyRegistryProxyExceptionHandlerTest {
     }
 
     @Test
+    void handleResourceNotFound2Exception() {
+        //given
+        ResourceNotFoundException mockException = Mockito.mock(ResourceNotFoundException.class);
+        Mockito.when(mockException.getMessage())
+                .thenReturn(DETAIL_MESSAGE);
+        //when
+        ResponseEntity<Problem> responseEntity = handler.handleResourceNotFoundException(mockException);
+        //then
+        assertNotNull(responseEntity);
+        assertEquals(NOT_FOUND, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
+        assertEquals(DETAIL_MESSAGE, responseEntity.getBody().getDetail());
+        assertEquals(NOT_FOUND.value(), responseEntity.getBody().getStatus());
+    }
+
+    @Test
     void handleInvalidRequestException() {
         //given
         InvalidRequestException mockException = Mockito.mock(InvalidRequestException.class);
@@ -49,6 +66,22 @@ class PartyRegistryProxyExceptionHandlerTest {
         assertNotNull(responseEntity.getBody());
         assertEquals(DETAIL_MESSAGE, responseEntity.getBody().getDetail());
         assertEquals(BAD_REQUEST.value(), responseEntity.getBody().getStatus());
+    }
+
+    @Test
+    void handleBadgatewayException() {
+        //given
+        BadGatewayException mockException = Mockito.mock(BadGatewayException.class);
+        Mockito.when(mockException.getMessage())
+                .thenReturn(DETAIL_MESSAGE);
+        //when
+        ResponseEntity<Problem> responseEntity = handler.handleBadGatewayException(mockException);
+        //then
+        assertNotNull(responseEntity);
+        assertEquals(BAD_GATEWAY, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
+        assertEquals(DETAIL_MESSAGE, responseEntity.getBody().getDetail());
+        assertEquals(BAD_GATEWAY.value(), responseEntity.getBody().getStatus());
     }
 
     /**
