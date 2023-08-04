@@ -2,7 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.core;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
-import it.pagopa.selfcare.party.registry_proxy.core.exception.ResourceNotFoundException;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.core.exception.TooManyResourceFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -13,13 +13,13 @@ import static org.mockito.Mockito.when;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.NationalRegistriesConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultCodeEnum;
 import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultDetailEnum;
-import it.pagopa.selfcare.party.registry_proxy.connector.exception.InternalException;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.BadGatewayException;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.InvalidRequestException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressProfessionalResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.VerifyLegalResponse;
-import it.pagopa.selfcare.party.registry_proxy.core.exception.ResourceNotFoundException;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -121,7 +121,7 @@ class NationalRegistriesServiceImplTest {
         verifyLegalResponse.setVerifyLegalResultCode(AdEResultCodeEnum.CODE_02);
         verifyLegalResponse.setVerifyLegalResultDetail(AdEResultDetailEnum.XX03);
         when(nationalRegistriesConnector.verifyLegal(any(), any())).thenReturn(verifyLegalResponse);
-        assertThrows(InternalException.class, () -> nationalRegistriesServiceImpl.verifyLegal("42", "42"));
+        assertThrows(BadGatewayException.class, () -> nationalRegistriesServiceImpl.verifyLegal("42", "42"));
         verify(nationalRegistriesConnector).verifyLegal(any(), any());
     }
 
@@ -139,9 +139,6 @@ class NationalRegistriesServiceImplTest {
         verify(nationalRegistriesConnector).verifyLegal(any(), any());
     }
 
-    /**
-     * Method under test: {@link InfoCamereServiceImpl#institutionsByLegalTaxId(String)}
-     */
     @Test
     void testInstitutionsByLegalTaxId() {
         Businesses businesses = new Businesses();
@@ -154,9 +151,6 @@ class NationalRegistriesServiceImplTest {
         verify(nationalRegistriesConnector).institutionsByLegalTaxId(any());
     }
 
-    /**
-     * Method under test: {@link InfoCamereServiceImpl#institutionsByLegalTaxId(String)}
-     */
     @Test
     void testInstitutionsByLegalTaxIdNotFound() {
         Businesses businesses = new Businesses();
@@ -169,9 +163,6 @@ class NationalRegistriesServiceImplTest {
         verify(nationalRegistriesConnector).institutionsByLegalTaxId(any());
     }
 
-    /**
-     * Method under test: {@link InfoCamereServiceImpl#institutionsByLegalTaxId(String)}
-     */
     @Test
     void testInstitutionsByLegalTaxIdNotFound2() {
         Businesses businesses = new Businesses();
@@ -184,9 +175,6 @@ class NationalRegistriesServiceImplTest {
         verify(nationalRegistriesConnector).institutionsByLegalTaxId(any());
     }
 
-    /**
-     * Method under test: {@link InfoCamereServiceImpl#institutionsByLegalTaxId(String)}
-     */
     @Test
     void testInstitutionsByLegalTaxIdNotFound3() {
         Businesses businesses = new Businesses();
@@ -199,9 +187,6 @@ class NationalRegistriesServiceImplTest {
         verify(nationalRegistriesConnector).institutionsByLegalTaxId(any());
     }
 
-    /**
-     * Method under test: {@link InfoCamereServiceImpl#institutionsByLegalTaxId(String)}
-     */
     @Test
     void testInstitutionsByLegalTaxIdNotFound4() {
         Businesses businesses = new Businesses();

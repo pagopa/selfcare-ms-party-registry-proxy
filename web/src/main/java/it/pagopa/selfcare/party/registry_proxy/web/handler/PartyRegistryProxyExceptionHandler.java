@@ -3,8 +3,9 @@ package it.pagopa.selfcare.party.registry_proxy.web.handler;
 import feign.FeignException;
 import it.pagopa.selfcare.commons.web.model.Problem;
 import it.pagopa.selfcare.commons.web.model.mapper.ProblemMapper;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.BadGatewayException;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.InvalidRequestException;
-import it.pagopa.selfcare.party.registry_proxy.core.exception.ResourceNotFoundException;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.web.exception.ValidationFailedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
@@ -16,8 +17,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.Optional;
 
 import static it.pagopa.selfcare.commons.web.handler.RestExceptionsHandler.UNHANDLED_EXCEPTION;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
 @RestControllerAdvice
@@ -34,16 +34,16 @@ public class PartyRegistryProxyExceptionHandler {
         return ProblemMapper.toResponseEntity(new Problem(NOT_FOUND, e.getMessage()));
     }
 
-    @ExceptionHandler({it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException.class})
-    ResponseEntity<Problem> handleResourceNotFoundException(it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException e) {
-        log.warn(e.toString());
-        return ProblemMapper.toResponseEntity(new Problem(NOT_FOUND, e.getMessage()));
-    }
-
     @ExceptionHandler({InvalidRequestException.class})
     ResponseEntity<Problem> handleInvalidRequestException(InvalidRequestException e) {
         log.warn(e.toString());
         return ProblemMapper.toResponseEntity(new Problem(BAD_REQUEST, e.getMessage()));
+    }
+
+    @ExceptionHandler({BadGatewayException.class})
+    ResponseEntity<Problem> handleBadGatewayException(BadGatewayException e) {
+        log.warn(e.toString());
+        return ProblemMapper.toResponseEntity(new Problem(BAD_GATEWAY, e.getMessage()));
     }
 
     @ExceptionHandler({ValidationFailedException.class})
