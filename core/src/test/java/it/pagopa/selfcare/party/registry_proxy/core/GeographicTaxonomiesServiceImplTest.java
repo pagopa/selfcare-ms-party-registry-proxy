@@ -2,6 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.core;
 
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.GeoTaxonomiesConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.GeographicTaxonomy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -126,17 +127,6 @@ public class GeographicTaxonomiesServiceImplTest {
 
         //given
         String code = null;
-        GeographicTaxonomy geographicTaxonomy = new GeographicTaxonomy();
-        geographicTaxonomy.setDescription("Roma");
-        geographicTaxonomy.setGeotaxId(code);
-        geographicTaxonomy.setEnabled(true);
-        geographicTaxonomy.setRegionId("12");
-        geographicTaxonomy.setProvinceId("058");
-        geographicTaxonomy.setProvinceAbbreviation("RM");
-        geographicTaxonomy.setCountry("100");
-        geographicTaxonomy.setCountryAbbreviation("IT");
-        geographicTaxonomy.setIstatCode("null");
-        when(geoTaxonomiesConnector.getExtByCode(anyString())).thenReturn(geographicTaxonomy);
 
         //when
         Executable executable = () -> geographicTaxonomiesService.retriveGeoTaxonomyByCode(code);
@@ -146,5 +136,7 @@ public class GeographicTaxonomiesServiceImplTest {
         assertEquals("Code is required", e.getMessage());
         Mockito.verifyNoInteractions(geoTaxonomiesConnector);
     }
+
+
 
 }

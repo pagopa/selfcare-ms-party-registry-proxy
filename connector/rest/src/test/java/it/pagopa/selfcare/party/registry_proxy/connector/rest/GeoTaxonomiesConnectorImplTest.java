@@ -20,6 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.pagopa.selfcare.party.registry_proxy.connector.rest.GeoTaxonomiesConnectorImpl.CODE_S_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -176,18 +177,6 @@ class GeoTaxonomiesConnectorImplTest {
 
         //given
         String code = null;
-        GeographicTaxonomyResponse geographicTaxonomyResponse = new GeographicTaxonomyResponse();
-        geographicTaxonomyResponse.setDescription("Roma");
-        geographicTaxonomyResponse.setGeotaxId(code);
-        geographicTaxonomyResponse.setEnabled(true);
-        geographicTaxonomyResponse.setRegionId("12");
-        geographicTaxonomyResponse.setProvinceId("058");
-        geographicTaxonomyResponse.setProvinceAbbreviation("RM");
-        geographicTaxonomyResponse.setCountry("100");
-        geographicTaxonomyResponse.setCountryAbbreviation("IT");
-        geographicTaxonomyResponse.setIstatCode("null");
-
-        when(geoTaxonomiesRestClient.getExtByCode(anyString())).thenReturn(geographicTaxonomyResponse);
 
         //when
         Executable executable = () -> geoTaxonomiesConnectorImpl.getExtByCode(code);
@@ -196,6 +185,23 @@ class GeoTaxonomiesConnectorImplTest {
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
         assertEquals("Code is required", e.getMessage());
         Mockito.verifyNoInteractions(geoTaxonomiesRestClient);
+    }
+
+
+
+    @Test
+    void testGetExtByCode_notFound() {
+
+        //given
+        String code = "example";
+        when(geoTaxonomiesRestClient.getExtByCode(anyString())).thenReturn(null);
+
+        //when
+        Executable executable = () -> geoTaxonomiesConnectorImpl.getExtByCode(code);
+
+        //then
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
+        assertEquals(String.format(CODE_S_NOT_FOUND,code), e.getMessage());
 
     }
 
