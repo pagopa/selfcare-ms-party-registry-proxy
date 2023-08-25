@@ -17,11 +17,13 @@ import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
 public class GeoTaxonomiesConnectorImpl implements GeoTaxonomiesConnector {
 
+    public static final String CODE_S_NOT_FOUND = "Code %s not found!";
     private final GeoTaxonomiesRestClient restClient;
     @Autowired
     public GeoTaxonomiesConnectorImpl(GeoTaxonomiesRestClient restClient) {
@@ -54,6 +56,7 @@ public class GeoTaxonomiesConnectorImpl implements GeoTaxonomiesConnector {
         Assert.hasText(code, "Code is required");
 
         GeographicTaxonomyResponse result = restClient.getExtByCode(code);
+        if(Objects.isNull(result)) throw new ResourceNotFoundException(String.format(CODE_S_NOT_FOUND, code));
 
         log.debug(LogUtils.CONFIDENTIAL_MARKER, "getExtByCode result = {}", result);
         return toGeoTaxonomy(result);
