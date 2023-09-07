@@ -28,4 +28,9 @@ public class InMemoryIndexConfig {
         return new RAMDirectory();
     }
 
+    @Bean
+    public Directory pdndDirectory() {
+        return new RAMDirectory();
+    }
+
 }

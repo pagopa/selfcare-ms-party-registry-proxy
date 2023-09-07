@@ -17,7 +17,6 @@ public interface IndexSearchService<T> {
 
     List<T> findById(SearchField field, String value);
 
-
     @SneakyThrows
     QueryResult<T> findAll(int page, int limit, String entityType, QueryFilter... filters);
 }
