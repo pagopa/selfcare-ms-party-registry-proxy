@@ -8,7 +8,6 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
 import it.pagopa.selfcare.party.registry_proxy.core.PDNDService;
 import it.pagopa.selfcare.party.registry_proxy.web.model.PDNDsResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.PDNDMapper;
-import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.PDNDsMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,13 +50,15 @@ public class PDNDController {
         log.trace("search start");
         log.debug("search search = {}, page = {}, limit = {}", search, page, limit);
         final QueryResult<PDND> result = pdndService.search(search, page, limit);
-        final PDNDsResource institutionsResource = PDNDsMapper.toResource(result.getItems().stream()
+        final PDNDsResource pdndResource = PDNDsResource.builder()
+                .items(result.getItems().stream()
                         .map(pdndMapper::toResource)
-                        .collect(Collectors.toList()),
-                result.getTotalHits());
-        log.debug("search result = {}", institutionsResource);
+                        .collect(Collectors.toList()))
+                .count(result.getTotalHits())
+                .build();
+        log.debug("search result = {}", pdndResource);
         log.trace("search end");
-        return institutionsResource;
+        return pdndResource;
     }
 
 }
