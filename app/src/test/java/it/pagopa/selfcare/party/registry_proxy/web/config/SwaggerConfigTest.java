@@ -25,16 +25,19 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(classes = {
         SwaggerConfig.class,
-        WebConfig.class
+        WebConfig.class,
 })
 @EnableOpenApi
 @EnableWebMvc
-@ComponentScan(basePackages = "it.pagopa.selfcare.party.registry_proxy.web.controller")
+@ComponentScan(basePackages = {"it.pagopa.selfcare.party.registry_proxy.web.controller", "it.pagopa.selfcare.party.registry_proxy.web.model.mapper"})
 @TestPropertySource(locations = "classpath:config/application.yml")
 class SwaggerConfigTest {
 
     @MockBean
     private InstitutionService institutionService;
+
+    @MockBean
+    private PDNDService pdndService;
 
     @MockBean
     private CategoryService categoryService;

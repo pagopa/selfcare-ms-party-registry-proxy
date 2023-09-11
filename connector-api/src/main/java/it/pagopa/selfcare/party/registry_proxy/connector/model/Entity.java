@@ -10,7 +10,8 @@ public enum Entity {
     CATEGORY("CATEGORY"),
     INSTITUTION("INSTITUTION"),
     AOO("AOO"),
-    UO("UO");
+    UO("UO"),
+    PDND("PDND");
 
     private final String value;
 
