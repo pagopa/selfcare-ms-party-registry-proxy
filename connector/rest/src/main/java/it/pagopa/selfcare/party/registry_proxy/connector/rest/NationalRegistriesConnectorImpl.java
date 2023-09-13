@@ -41,8 +41,10 @@ public class NationalRegistriesConnectorImpl implements NationalRegistriesConnec
     private LegalAddressResponse toLegalAddressResponse(GetAddressRegistroImpreseOKDto legalAddress) {
         LegalAddressResponse legalAddressResponse = new LegalAddressResponse();
         legalAddressResponse.setTaxId(legalAddress.getTaxId());
-        legalAddressResponse.setProfessionalAddress(toProfessionalAddress(legalAddress.getProfessionalAddress()));
         legalAddressResponse.setDateTimeExtraction(legalAddress.getDateTimeExtraction());
+        if(legalAddress.getProfessionalAddress() != null) {
+            legalAddressResponse.setProfessionalAddress(toProfessionalAddress(legalAddress.getProfessionalAddress()));
+        }
         return legalAddressResponse;
     }
 

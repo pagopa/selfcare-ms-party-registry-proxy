@@ -1,5 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.NationalRegistriesRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.AdELegalOKDto;
@@ -7,6 +8,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultCodeE
 import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultDetailEnum;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.GetAddressRegistroImpreseOKDto;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ProfessionalAddressDto;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +74,23 @@ class NationalRegistriesConnectorImplTest {
         assertEquals("42 Main St", actualLegalAddress.getProfessionalAddress().getAddress());
         assertEquals("21654", actualLegalAddress.getProfessionalAddress().getZip());
         verify(nationalRegistriesRestClient).getLegalAddress(any());
+    }
+
+    /**
+     * Method under test: {@link NationalRegistriesConnectorImpl#getLegalAddress(String)}
+     */
+    @Test
+    void testGetLegalAddress3() {
+
+        GetAddressRegistroImpreseOKDto getAddressRegistroImpreseOKDto = new GetAddressRegistroImpreseOKDto();
+        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
+        Date fromResult = Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant());
+        getAddressRegistroImpreseOKDto.setDateTimeExtraction(fromResult);
+        getAddressRegistroImpreseOKDto.setTaxId("42");
+        when(nationalRegistriesRestClient.getLegalAddress(any()))
+                .thenReturn(getAddressRegistroImpreseOKDto);
+        Assertions.assertThrows(ResourceNotFoundException.class,
+                () ->  nationalRegistriesConnectorImpl.getLegalAddress("Tax Code"));
     }
 
     /**
