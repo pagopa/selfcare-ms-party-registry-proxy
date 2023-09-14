@@ -1,6 +1,5 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.NationalRegistriesRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.AdELegalOKDto;
@@ -89,8 +88,9 @@ class NationalRegistriesConnectorImplTest {
         getAddressRegistroImpreseOKDto.setTaxId("42");
         when(nationalRegistriesRestClient.getLegalAddress(any()))
                 .thenReturn(getAddressRegistroImpreseOKDto);
-        Assertions.assertThrows(ResourceNotFoundException.class,
-                () ->  nationalRegistriesConnectorImpl.getLegalAddress("Tax Code"));
+        LegalAddressResponse response = nationalRegistriesConnectorImpl.getLegalAddress("Tax Code");
+        Assertions.assertNull(response.getProfessionalAddress());
+        Assertions.assertEquals("42", response.getTaxId());
     }
 
     /**
