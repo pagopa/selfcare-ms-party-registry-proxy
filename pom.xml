@@ -139,6 +139,7 @@
     <module>app</module>
     <module>connector-api</module>
     <module>connector</module>
+    <module>connector/azure_storage</module>
   </modules>
 
 
