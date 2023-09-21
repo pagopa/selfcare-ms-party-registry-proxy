@@ -17,6 +17,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 
@@ -47,11 +48,10 @@ class AzureBlobClient implements FileStorageConnector {
     @Override
     public ResourceResponse getFile(String fileName) {
         log.info("START - getFile for path: {}", fileName);
-        try {
-            ResourceResponse response = new ResourceResponse();
+        ResourceResponse response = new ResourceResponse();
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             final CloudBlobContainer blobContainer = blobClient.getContainerReference(containerReference);
             final CloudBlockBlob blob = blobContainer.getBlockBlobReference(fileName);
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             BlobProperties properties = blob.getProperties();
             blob.download(outputStream);
             log.info("END - getFile - path {}", fileName);
@@ -65,7 +65,7 @@ class AzureBlobClient implements FileStorageConnector {
             }
             throw new ProxyRegistryException(String.format(ERROR_DURING_DOWNLOAD_FILE_MESSAGE, fileName),
                     ERROR_DURING_DOWNLOAD_FILE_CODE);
-        } catch (URISyntaxException e) {
+        } catch (URISyntaxException | IOException e) {
             throw new ProxyRegistryException(String.format(ERROR_DURING_DOWNLOAD_FILE_MESSAGE, fileName),
                     ERROR_DURING_DOWNLOAD_FILE_CODE);
         }
