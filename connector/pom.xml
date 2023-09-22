@@ -10,6 +10,11 @@
     <artifactId>selc-party-registry-proxy-connector</artifactId>
     <packaging>pom</packaging>
 
+    <modules>
+        <module>rest</module>
+        <module>lucene</module>
+    </modules>
+
     <dependencies>
         <dependency>
             <groupId>it.pagopa.selfcare.party</groupId>
@@ -17,8 +22,4 @@
         </dependency>
     </dependencies>
 
-    <modules>
-        <module>rest</module>
-        <module>lucene</module>
-    </modules>
 </project>

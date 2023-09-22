@@ -2,6 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.web.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.PDND;
 import lombok.Data;
 
@@ -41,6 +42,11 @@ public class PDNDResource implements PDND {
     @NotBlank
     @Email
     private String digitalAddress;
+
+    @ApiModelProperty(value = "${swagger.model.*.origin}", required = true)
+    @JsonProperty(required = true)
+    @NotBlank
+    private Origin origin;
 
 
 

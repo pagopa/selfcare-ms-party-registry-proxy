@@ -1603,7 +1603,7 @@
       },
       "PDNDResource" : {
         "title" : "PDNDResource",
-        "required" : [ "description", "digitalAddress", "id", "originId", "taxCode" ],
+        "required" : [ "description", "digitalAddress", "id", "origin", "originId", "taxCode" ],
         "type" : "object",
         "properties" : {
           "anacEnabled" : {
@@ -1625,6 +1625,11 @@
           },
           "id" : {
             "type" : "string"
+          },
+          "origin" : {
+            "type" : "string",
+            "description" : "Describes which is the source of data",
+            "enum" : [ "INFOCAMERE", "IPA", "static" ]
           },
           "originId" : {
             "type" : "string"

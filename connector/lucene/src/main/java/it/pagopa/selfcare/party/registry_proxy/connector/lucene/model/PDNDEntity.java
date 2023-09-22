@@ -1,5 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.model;
 
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.PDND;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,5 +16,5 @@ public class PDNDEntity implements PDND {
     private String taxCode;
     private String description;
     private String digitalAddress;
-
+    private Origin origin;
 }

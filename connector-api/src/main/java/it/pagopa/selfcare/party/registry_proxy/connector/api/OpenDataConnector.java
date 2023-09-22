@@ -1,13 +1,10 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.api;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.model.AOO;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Category;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.UO;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
 
 import java.util.List;
 
-public interface OpenDataConnector<I extends Institution, C extends Category, A extends AOO, U extends UO> {
+public interface OpenDataConnector<I extends Institution, C extends Category, A extends AOO, U extends UO, K extends PDND> {
 
     List<I> getInstitutions();
 
@@ -16,5 +13,7 @@ public interface OpenDataConnector<I extends Institution, C extends Category, A 
     List<A> getAOOs();
 
     List<U> getUOs();
+
+    List<K> getPDNDs(String fileName);
 
 }

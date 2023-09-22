@@ -2,10 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.core;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.OpenDataConnector;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.AOO;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Category;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.UO;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +31,9 @@ class OpenDataLoaderTest {
     @MockBean
     private IndexWriterService<UO> uoIndexWriterService;
 
+    @MockBean
+    private IndexWriterService<PDND> pdndIndexWriterService;
+
     @Autowired
     private OpenDataLoader openDataLoader;
 
@@ -53,6 +53,9 @@ class OpenDataLoaderTest {
         final List uos = List.of();
         when(openDataConnector.getUOs())
                 .thenReturn(uos);
+        final List stations = List.of();
+        when(openDataConnector.getPDNDs(anyString()))
+                .thenReturn(stations);
         // when
         openDataLoader.run();
         // then
@@ -68,6 +71,8 @@ class OpenDataLoaderTest {
                 .adds(aoos);
         verify(uoIndexWriterService, times(1))
                 .adds(uos);
+        verify(pdndIndexWriterService, times(1))
+                .adds(stations);
         //verifyNoMoreInteractions(openDataConnector, institutionIndexWriterService, categoryIndexWriterService, aooIndexWriterService, uoIndexWriterService);
     }
 

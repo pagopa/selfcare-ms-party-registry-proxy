@@ -1,11 +1,9 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
+import it.pagopa.selfcare.party.registry_proxy.connector.api.FileStorageConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.MockOpenDataRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.OpenDataMockEnabledCondition;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.MockOpenDataAOO;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.MockOpenDataCategory;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.MockOpenDataInstitution;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.MockOpenDataUO;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Conditional;
@@ -19,8 +17,8 @@ import org.springframework.stereotype.Service;
 class MockOpenDataConnector extends OpenDataConnectorTemplate {
 
     @Autowired
-    public MockOpenDataConnector(MockOpenDataRestClient restClient) {
-        super(restClient);
+    public MockOpenDataConnector(MockOpenDataRestClient restClient, FileStorageConnector fileStorageConnector) {
+        super(restClient, fileStorageConnector);
         log.trace("Initializing {}", MockOpenDataConnector.class.getSimpleName());
     }
 
@@ -43,5 +41,10 @@ class MockOpenDataConnector extends OpenDataConnectorTemplate {
     @Override
     protected Class<MockOpenDataUO> getUOType() {
         return MockOpenDataUO.class;
+    }
+
+    @Override
+    protected Class<MockOpenDataPDND> getPDNDType(){
+        return MockOpenDataPDND.class;
     }
 }
