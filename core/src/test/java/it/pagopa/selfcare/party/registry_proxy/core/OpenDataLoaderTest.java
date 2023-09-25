@@ -54,7 +54,7 @@ class OpenDataLoaderTest {
         when(openDataConnector.getUOs())
                 .thenReturn(uos);
         final List stations = List.of();
-        when(openDataConnector.getPDNDs(anyString()))
+        when(openDataConnector.getStations(anyString()))
                 .thenReturn(stations);
         // when
         openDataLoader.run();

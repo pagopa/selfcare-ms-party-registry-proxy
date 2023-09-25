@@ -17,11 +17,11 @@ import java.util.List;
 abstract class OpenDataConnectorTemplate<I extends Institution, C extends Category, A extends AOO, U extends UO, K extends PDND> implements OpenDataConnector<I, C, A, U, K> {
 
     private final OpenDataRestClient restClient;
-    private final FileStorageConnector azureBlobClient;
+    private final FileStorageConnector fileStorageConnector;
 
     protected OpenDataConnectorTemplate(OpenDataRestClient restClient, FileStorageConnector fileStorageConnector) {
         this.restClient = restClient;
-        this.azureBlobClient = fileStorageConnector;
+        this.fileStorageConnector = fileStorageConnector;
     }
 
     @SneakyThrows
@@ -112,10 +112,10 @@ abstract class OpenDataConnectorTemplate<I extends Institution, C extends Catego
     }
 
     @Override
-    public List<K> getPDNDs(String fileName) {
+    public List<K> getStations(String fileName) {
         log.trace("getPDNDs start");
         List<K> pdnds;
-        final ResourceResponse resourceResponse = azureBlobClient.getFile(fileName);
+        final ResourceResponse resourceResponse = fileStorageConnector.getFile(fileName);
         try (Reader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(resourceResponse.getData())))) {
             CsvToBean<K> csvToBean = new CsvToBeanBuilder<K>(reader)
                     .withType(getPDNDType())

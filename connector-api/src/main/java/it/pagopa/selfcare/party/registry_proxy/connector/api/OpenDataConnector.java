@@ -14,6 +14,6 @@ public interface OpenDataConnector<I extends Institution, C extends Category, A 
 
     List<U> getUOs();
 
-    List<K> getPDNDs(String fileName);
+    List<K> getStations(String fileName);
 
 }

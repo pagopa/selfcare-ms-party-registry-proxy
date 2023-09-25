@@ -49,7 +49,7 @@ public class OpenDataLoader implements CommandLineRunner {
             categoryIndexWriterService.adds(openDataConnector.getCategories());
             aooIndexWriterService.adds(openDataConnector.getAOOs());
             uoIndexWriterService.adds(openDataConnector.getUOs());
-            pdndIndexWriterService.adds(openDataConnector.getPDNDs(pdndCsvFileName));
+            pdndIndexWriterService.adds(openDataConnector.getStations(pdndCsvFileName));
         });
         log.trace("run end");
     }
