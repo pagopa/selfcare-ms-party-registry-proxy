@@ -25,7 +25,7 @@ import java.security.InvalidKeyException;
 @Service
 @PropertySource("classpath:config/azure-storage-config.properties")
 @Profile("AzureStorage")
-public class AzureBlobClient implements FileStorageConnector {
+class AzureBlobClient implements FileStorageConnector {
 
     private static final String ERROR_DURING_DOWNLOAD_FILE_MESSAGE = "Error during download file %s";
     private static final String ERROR_DURING_DOWNLOAD_FILE_CODE = "0000";
