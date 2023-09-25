@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiParam;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.PDND;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
 import it.pagopa.selfcare.party.registry_proxy.core.PDNDService;
+import it.pagopa.selfcare.party.registry_proxy.web.model.PDNDResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.PDNDsResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.PDNDMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -19,26 +20,26 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/pdnd", produces = MediaType.APPLICATION_JSON_VALUE)
-@Api(tags = "pdnd")
+@RequestMapping(value = "/station", produces = MediaType.APPLICATION_JSON_VALUE)
+@Api(tags = "station")
 public class PDNDController {
 
-    private final PDNDService pdndService;
+    private final PDNDService PDNDService;
     private final PDNDMapper pdndMapper;
 
     @Autowired
-    public PDNDController(PDNDService pdndService,
+    public PDNDController(PDNDService PDNDService,
                           PDNDMapper pdndMapper) {
         log.trace("Initializing {}", PDNDController.class.getSimpleName());
-        this.pdndService = pdndService;
+        this.PDNDService = PDNDService;
         this.pdndMapper = pdndMapper;
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.pdnd.search.summary}",
-            notes = "${swagger.api.pdnd.search.notes}")
-    public PDNDsResource search(@ApiParam("${swagger.model.pdnd.search}")
+    @ApiOperation(value = "${swagger.api.station.search.summary}",
+            notes = "${swagger.api.station.search.notes}")
+    public PDNDsResource search(@ApiParam("${swagger.model.*.search}")
                                 @RequestParam(value = "search", required = false)
                                 Optional<String> search,
                                 @ApiParam(value = "${swagger.model.*.page}")
@@ -49,7 +50,7 @@ public class PDNDController {
                                 Integer limit) {
         log.trace("search start");
         log.debug("search search = {}, page = {}, limit = {}", search, page, limit);
-        final QueryResult<PDND> result = pdndService.search(search, page, limit);
+        final QueryResult<PDND> result = PDNDService.search(search, page, limit);
         final PDNDsResource pdndResource = PDNDsResource.builder()
                 .items(result.getItems().stream()
                         .map(pdndMapper::toResource)
@@ -58,6 +59,20 @@ public class PDNDController {
                 .build();
         log.debug("search result = {}", pdndResource);
         log.trace("search end");
+        return pdndResource;
+    }
+
+    @GetMapping("/{taxId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "${swagger.api.station.search.summary}",
+            notes = "${swagger.api.station.search.notes}")
+    public PDNDResource searchByTaxCode(@ApiParam("${swagger.model.taxId}")
+                                        @PathVariable("taxId") String taxId) {
+        log.trace("find SA start");
+        log.debug("find SA = {}", taxId);
+        final PDNDResource pdndResource = pdndMapper.toResource(PDNDService.findByTaxId(taxId));
+        log.debug("find SA result = {}", pdndResource);
+        log.trace("find SA end");
         return pdndResource;
     }
 

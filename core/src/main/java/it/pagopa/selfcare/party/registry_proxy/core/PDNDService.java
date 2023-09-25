@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface PDNDService {
     QueryResult<PDND> search(Optional<String> searchText, int page, int limit);
+
+    PDND findByTaxId(String taxId);
 }
