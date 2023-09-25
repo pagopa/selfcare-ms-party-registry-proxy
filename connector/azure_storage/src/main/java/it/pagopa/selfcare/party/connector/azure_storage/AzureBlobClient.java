@@ -25,12 +25,12 @@ import java.security.InvalidKeyException;
 @Service
 @PropertySource("classpath:config/azure-storage-config.properties")
 @Profile("AzureStorage")
-class AzureBlobClient implements FileStorageConnector {
+public class AzureBlobClient implements FileStorageConnector {
 
-    private static final String  ERROR_DURING_DOWNLOAD_FILE_MESSAGE = "Error during download file %s";
-    private static final String  ERROR_DURING_DOWNLOAD_FILE_CODE =  "0000";
+    private static final String ERROR_DURING_DOWNLOAD_FILE_MESSAGE = "Error during download file %s";
+    private static final String ERROR_DURING_DOWNLOAD_FILE_CODE = "0000";
     private final CloudBlobClient blobClient;
-    private  final String containerReference;
+    private final String containerReference;
 
     AzureBlobClient(@Value("${blobStorage.connectionString}") String storageConnectionString,
                     @Value("${blobStorage.containerReference}") String containerReference)

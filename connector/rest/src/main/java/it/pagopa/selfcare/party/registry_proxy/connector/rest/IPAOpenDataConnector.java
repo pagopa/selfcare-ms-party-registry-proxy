@@ -13,12 +13,10 @@ import org.springframework.stereotype.Service;
 @Order(1)
 class IPAOpenDataConnector extends OpenDataConnectorTemplate {
 
-    @Autowired
     public IPAOpenDataConnector(IPAOpenDataRestClient restClient, FileStorageConnector fileStorageConnector) {
         super(restClient, fileStorageConnector);
         log.trace("Initializing {}", IPAOpenDataConnector.class.getSimpleName());
     }
-
 
     @Override
     protected Class<IPAOpenDataInstitution> getInstitutionType() {

@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>azure_storage</module>
         <module>rest</module>
         <module>lucene</module>
     </modules>

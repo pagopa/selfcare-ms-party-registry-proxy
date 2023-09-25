@@ -30,7 +30,7 @@ public class OpenDataLoader implements CommandLineRunner {
                           IndexWriterService<AOO> aooIndexWriterService,
                           IndexWriterService<UO> uoIndexWriterService,
                           IndexWriterService<PDND> pdndIndexWriterService,
-                          @Value("${}") String pdndCsvFileName) {
+                          @Value("${blobStorage.fileName}") String pdndCsvFileName) {
         log.trace("Initializing {}", OpenDataLoader.class.getSimpleName());
         this.openDataConnectors = openDataConnectors;
         this.institutionIndexWriterService = institutionIndexWriterService;
