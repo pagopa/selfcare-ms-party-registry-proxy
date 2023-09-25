@@ -38,6 +38,9 @@
     "name" : "nationalRegistries",
     "description" : "National Registries Controller"
   }, {
+    "name" : "pdnd",
+    "description" : "PDND Controller"
+  }, {
     "name" : "uo",
     "description" : "UO Controller"
   } ],
@@ -966,6 +969,99 @@
         } ]
       }
     },
+    "/pdnd" : {
+      "get" : {
+        "tags" : [ "pdnd" ],
+        "summary" : "Search pdnd",
+        "description" : "Returns a list of pdnd.",
+        "operationId" : "searchUsingGET_1",
+        "parameters" : [ {
+          "name" : "search",
+          "in" : "query",
+          "description" : "if passed, the result is filtered based on the contained value.",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "page",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "limit",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PDNDsResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
     "/uo" : {
       "get" : {
         "tags" : [ "uo" ],
@@ -1502,6 +1598,56 @@
           },
           "verificationResult" : {
             "type" : "boolean"
+          }
+        }
+      },
+      "PDNDResource" : {
+        "title" : "PDNDResource",
+        "required" : [ "description", "digitalAddress", "id", "originId", "taxCode" ],
+        "type" : "object",
+        "properties" : {
+          "anacEnabled" : {
+            "type" : "boolean",
+            "description" : "${swagger.model.pdnd.anacEnabled}",
+            "example" : false
+          },
+          "anacEngaged" : {
+            "type" : "boolean",
+            "example" : false
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "digitalAddress" : {
+            "type" : "string",
+            "format" : "email",
+            "example" : "email@example.com"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "originId" : {
+            "type" : "string"
+          },
+          "taxCode" : {
+            "type" : "string"
+          }
+        }
+      },
+      "PDNDsResource" : {
+        "title" : "PDNDsResource",
+        "required" : [ "count", "items" ],
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PDNDResource"
+            }
           }
         }
       },

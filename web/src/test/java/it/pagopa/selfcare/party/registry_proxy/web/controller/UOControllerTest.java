@@ -2,7 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.pagopa.selfcare.party.registry_proxy.core.UOService;
-import it.pagopa.selfcare.party.registry_proxy.core.exception.ResourceNotFoundException;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.web.config.WebTestConfig;
 import it.pagopa.selfcare.party.registry_proxy.web.handler.PartyRegistryProxyExceptionHandler;
 import it.pagopa.selfcare.party.registry_proxy.web.model.DummyUO;
