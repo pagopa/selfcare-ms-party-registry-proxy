@@ -17,11 +17,7 @@
   <description>A proxy for all Party Registry data sources used in Self Care</description>
 
   <properties>
-
-
     <selc-commons.version>2.4.6</selc-commons.version>
-
-
     <lucene.version>8.11.2</lucene.version>
   </properties>
 

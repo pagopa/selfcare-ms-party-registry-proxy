@@ -114,3 +114,4 @@ config:
   LUCENE_INDEX_CATEGORIES_FOLDER: "index/categories"
   LUCENE_INDEX_AOOS_FOLDER: "index/aoos"
   LUCENE_INDEX_UOS_FOLDER: "index/uos"
+  BLOB_PDND_FILENAME: "data.csv"
