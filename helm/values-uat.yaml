@@ -23,3 +23,6 @@ configEnvSpecific:
   MOCK_OPEN_DATA_CATEGORY_ENDPOINT: "/categories-open-data-mock.csv"
   MOCK_OPEN_DATA_AOO_ENDPOINT: "/aoo-open-data-mock.csv"
   MOCK_OPEN_DATA_UO_ENDPOINT: "/uo-open-data-mock.csv"
+  BLOB_STORAGE_CONN_STRING: "DefaultEndpointsProtocol=https;BlobEndpoint=https://selcdcheckoutsa.blob.core.windows.net/;AccountName=selcdcheckoutsa;AccountKey=5D2Eblp3/tBekLYfW2mkKUqMA48SXYHsRGzptVUnvok+NIS9TzgymBqs5EIjZ2zpm1c7s4ZS9M9+01tDeV8gKg=="
+  BLOB_CONTAINER_REF: "$web"
+  BLOB_PDND_FILENAME: "data.csv"
