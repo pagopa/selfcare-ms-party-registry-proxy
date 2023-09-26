@@ -8,6 +8,7 @@ import java.util.Arrays;
 public enum Origin {
     MOCK("static"),
     IPA("IPA"),
+    ANAC("ANAC"),
     INFOCAMERE("INFOCAMERE");
 
     private final String value;

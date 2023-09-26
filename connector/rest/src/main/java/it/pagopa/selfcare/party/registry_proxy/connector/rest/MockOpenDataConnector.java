@@ -24,7 +24,6 @@ class MockOpenDataConnector extends OpenDataConnectorTemplate {
         log.trace("Initializing {}", MockOpenDataConnector.class.getSimpleName());
     }
 
-
     @Override
     protected Class<MockOpenDataInstitution> getInstitutionType() {
         return MockOpenDataInstitution.class;
