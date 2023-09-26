@@ -38,7 +38,7 @@
     "name" : "nationalRegistries",
     "description" : "National Registries Controller"
   }, {
-    "name" : "station",
+    "name" : "stations",
     "description" : "Station Controller"
   }, {
     "name" : "uo",
@@ -969,9 +969,9 @@
         } ]
       }
     },
-    "/station" : {
+    "/stations" : {
       "get" : {
-        "tags" : [ "station" ],
+        "tags" : [ "stations" ],
         "summary" : "Search station",
         "description" : "Returns a list of station.",
         "operationId" : "searchUsingGET_1",
@@ -1062,9 +1062,9 @@
         } ]
       }
     },
-    "/station/{taxId}" : {
+    "/stations/{taxId}" : {
       "get" : {
-        "tags" : [ "station" ],
+        "tags" : [ "stations" ],
         "summary" : "Search station",
         "description" : "Returns a list of station.",
         "operationId" : "searchByTaxCodeUsingGET",

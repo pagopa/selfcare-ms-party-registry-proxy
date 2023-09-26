@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = {StationController.class, WebTestConfig.class, PartyRegistryProxyExceptionHandler.class, StationMapperImpl.class})
 class StationControllerTest {
 
-    private static final String BASE_URL = "/station";
+    private static final String BASE_URL = "/stations";
 
     @Autowired
     protected MockMvc mvc;

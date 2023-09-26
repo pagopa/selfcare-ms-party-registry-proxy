@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/station", produces = MediaType.APPLICATION_JSON_VALUE)
-@Api(tags = "station")
+@RequestMapping(value = "/stations", produces = MediaType.APPLICATION_JSON_VALUE)
+@Api(tags = "stations")
 public class StationController {
 
     private final StationService stationService;
