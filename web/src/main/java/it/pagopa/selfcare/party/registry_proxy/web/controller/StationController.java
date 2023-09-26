@@ -5,9 +5,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
-import it.pagopa.selfcare.party.registry_proxy.core.PDNDService;
+import it.pagopa.selfcare.party.registry_proxy.core.StationService;
+import it.pagopa.selfcare.party.registry_proxy.web.model.PDNDResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.PDNDsResource;
-import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.PDNDMapper;
+import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.StationMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,26 +20,26 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/pdnd", produces = MediaType.APPLICATION_JSON_VALUE)
-@Api(tags = "pdnd")
-public class PDNDController {
+@RequestMapping(value = "/station", produces = MediaType.APPLICATION_JSON_VALUE)
+@Api(tags = "station")
+public class StationController {
 
-    private final PDNDService pdndService;
-    private final PDNDMapper pdndMapper;
+    private final StationService stationService;
+    private final StationMapper stationMapper;
 
     @Autowired
-    public PDNDController(PDNDService pdndService,
-                          PDNDMapper pdndMapper) {
-        log.trace("Initializing {}", PDNDController.class.getSimpleName());
-        this.pdndService = pdndService;
-        this.pdndMapper = pdndMapper;
+    public StationController(StationService stationService,
+                             StationMapper stationMapper) {
+        log.trace("Initializing {}", StationController.class.getSimpleName());
+        this.stationService = stationService;
+        this.stationMapper = stationMapper;
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.pdnd.search.summary}",
-            notes = "${swagger.api.pdnd.search.notes}")
-    public PDNDsResource search(@ApiParam("${swagger.model.pdnd.search}")
+    @ApiOperation(value = "${swagger.api.station.search.summary}",
+            notes = "${swagger.api.station.search.notes}")
+    public PDNDsResource search(@ApiParam("${swagger.model.*.search}")
                                 @RequestParam(value = "search", required = false)
                                 Optional<String> search,
                                 @ApiParam(value = "${swagger.model.*.page}")
@@ -49,15 +50,29 @@ public class PDNDController {
                                 Integer limit) {
         log.trace("search start");
         log.debug("search search = {}, page = {}, limit = {}", search, page, limit);
-        final QueryResult<Station> result = pdndService.search(search, page, limit);
+        final QueryResult<Station> result = stationService.search(search, page, limit);
         final PDNDsResource pdndResource = PDNDsResource.builder()
                 .items(result.getItems().stream()
-                        .map(pdndMapper::toResource)
+                        .map(stationMapper::toResource)
                         .collect(Collectors.toList()))
                 .count(result.getTotalHits())
                 .build();
         log.debug("search result = {}", pdndResource);
         log.trace("search end");
+        return pdndResource;
+    }
+
+    @GetMapping("/{taxId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "${swagger.api.station.search.summary}",
+            notes = "${swagger.api.station.search.notes}")
+    public PDNDResource searchByTaxCode(@ApiParam("${swagger.model.taxId}")
+                                        @PathVariable("taxId") String taxId) {
+        log.trace("find SA start");
+        log.debug("find SA = {}", taxId);
+        final PDNDResource pdndResource = stationMapper.toResource(stationService.findByTaxId(taxId));
+        log.debug("find SA result = {}", pdndResource);
+        log.trace("find SA end");
         return pdndResource;
     }
 

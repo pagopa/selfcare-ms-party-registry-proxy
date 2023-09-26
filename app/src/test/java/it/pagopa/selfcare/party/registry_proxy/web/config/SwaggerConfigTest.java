@@ -37,7 +37,7 @@ class SwaggerConfigTest {
     private InstitutionService institutionService;
 
     @MockBean
-    private PDNDService pdndService;
+    private StationService StationService;
 
     @MockBean
     private CategoryService categoryService;
