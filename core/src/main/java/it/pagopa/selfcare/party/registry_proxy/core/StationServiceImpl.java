@@ -39,7 +39,8 @@ public class StationServiceImpl implements StationService {
     public Station findByTaxId(String taxId) {
         log.trace("find SA By taxId start");
         log.debug("find SA By taxId = {}", taxId.toUpperCase());
-        final List<Station> pdndList = indexSearchService.findById(Station.Field.TAX_CODE, taxId.toUpperCase());
+        taxId = "ANAC_" + taxId;
+        final List<Station> pdndList = indexSearchService.findById(Station.Field.ID, taxId.toUpperCase());
         if (pdndList.isEmpty()) {
             throw new ResourceNotFoundException();
         } else if (pdndList.size() > 1) {
