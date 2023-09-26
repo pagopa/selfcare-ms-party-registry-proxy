@@ -3,8 +3,8 @@ package it.pagopa.selfcare.party.registry_proxy.core;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.DummyPDNDQueryResult;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Entity;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.PDND.Field;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.PDND;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Station.Field;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 class PDNDServiceImplTest {
 
     @Mock
-    private IndexSearchService<PDND> indexSearchService;
+    private IndexSearchService<Station> indexSearchService;
 
     @InjectMocks
     private PDNDServiceImpl pdndService;
@@ -37,11 +37,11 @@ class PDNDServiceImplTest {
         when(indexSearchService.findAll(anyInt(), anyInt(), anyString()))
                 .thenReturn(queryResultMock);
         // when
-        final QueryResult<PDND> queryResult = pdndService.search(searchText, page, limit);
+        final QueryResult<Station> queryResult = pdndService.search(searchText, page, limit);
         // then
         assertSame(queryResultMock, queryResult);
         verify(indexSearchService, times(1))
-                .findAll(page, limit, Entity.PDND.toString());
+                .findAll(page, limit, Entity.STATION.toString());
         verifyNoMoreInteractions(indexSearchService);
     }
 
@@ -56,7 +56,7 @@ class PDNDServiceImplTest {
         when(indexSearchService.fullTextSearch(any(), anyString(), anyInt(), anyInt()))
                 .thenReturn(queryResultMock);
         // when
-        final QueryResult<PDND> queryResult = pdndService.search(searchText, page, limit);
+        final QueryResult<Station> queryResult = pdndService.search(searchText, page, limit);
         // then
         assertSame(queryResultMock, queryResult);
         verify(indexSearchService, times(1))

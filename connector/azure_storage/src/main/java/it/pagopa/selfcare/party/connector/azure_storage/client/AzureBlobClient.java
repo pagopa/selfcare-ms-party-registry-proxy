@@ -1,4 +1,4 @@
-package it.pagopa.selfcare.party.connector.azure_storage;
+package it.pagopa.selfcare.party.connector.azure_storage.client;
 
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
@@ -25,15 +25,15 @@ import java.security.InvalidKeyException;
 @Service
 @PropertySource("classpath:config/azure-storage-config.properties")
 @Profile("AzureStorage")
-class AzureBlobClient implements FileStorageConnector {
+public class AzureBlobClient implements FileStorageConnector {
 
     private static final String ERROR_DURING_DOWNLOAD_FILE_MESSAGE = "Error during download file %s";
     private static final String ERROR_DURING_DOWNLOAD_FILE_CODE = "0000";
     private final CloudBlobClient blobClient;
     private final String containerReference;
 
-    AzureBlobClient(@Value("${blobStorage.connectionString}") String storageConnectionString,
-                    @Value("${blobStorage.containerReference}") String containerReference)
+    public AzureBlobClient(@Value("${blobStorage.connectionString}") String storageConnectionString,
+                           @Value("${blobStorage.containerReference}") String containerReference)
             throws URISyntaxException, InvalidKeyException {
         if (log.isDebugEnabled()) {
             log.trace("AzureBlobClient");

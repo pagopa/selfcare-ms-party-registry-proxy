@@ -1,5 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
+import it.pagopa.selfcare.party.registry_proxy.connector.api.AnacDataConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.OpenDataConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
@@ -22,6 +23,9 @@ class OpenDataLoaderTest {
     private OpenDataConnector openDataConnector;
 
     @MockBean
+    private AnacDataConnector anacDataConnector;
+
+    @MockBean
     private IndexWriterService<Institution> institutionIndexWriterService;
 
     @MockBean
@@ -32,7 +36,7 @@ class OpenDataLoaderTest {
     private IndexWriterService<UO> uoIndexWriterService;
 
     @MockBean
-    private IndexWriterService<PDND> pdndIndexWriterService;
+    private IndexWriterService<Station> pdndIndexWriterService;
 
     @Autowired
     private OpenDataLoader openDataLoader;
@@ -54,8 +58,8 @@ class OpenDataLoaderTest {
         when(openDataConnector.getUOs())
                 .thenReturn(uos);
         final List stations = List.of();
-        when(openDataConnector.getStations(anyString()))
-                .thenReturn(stations);
+        when(anacDataConnector.getStations())
+               .thenReturn(stations);
         // when
         openDataLoader.run();
         // then

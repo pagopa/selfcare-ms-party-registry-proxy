@@ -1,4 +1,4 @@
-package it.pagopa.selfcare.party.connector.azure_storage;
+package it.pagopa.selfcare.party.connector.azure_storage.client;
 
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
@@ -6,6 +6,7 @@ import com.microsoft.azure.storage.blob.BlobProperties;
 import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
+import it.pagopa.selfcare.party.connector.azure_storage.client.AzureBlobClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ProxyRegistryException;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.Assertions;

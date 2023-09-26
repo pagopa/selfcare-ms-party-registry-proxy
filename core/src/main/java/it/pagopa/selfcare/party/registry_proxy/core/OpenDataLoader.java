@@ -1,11 +1,11 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
+import it.pagopa.selfcare.party.registry_proxy.connector.api.AnacDataConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.OpenDataConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +20,8 @@ public class OpenDataLoader implements CommandLineRunner {
     private final IndexWriterService<Category> categoryIndexWriterService;
     private final IndexWriterService<AOO> aooIndexWriterService;
     private final IndexWriterService<UO> uoIndexWriterService;
-    private final IndexWriterService<PDND> pdndIndexWriterService;
-    private final String pdndCsvFileName;
+    private final IndexWriterService<Station> pdndIndexWriterService;
+    private final AnacDataConnector anacDataConnector;
 
     @Autowired
     public OpenDataLoader(List<OpenDataConnector> openDataConnectors,
@@ -29,8 +29,8 @@ public class OpenDataLoader implements CommandLineRunner {
                           IndexWriterService<Category> categoryIndexWriterService,
                           IndexWriterService<AOO> aooIndexWriterService,
                           IndexWriterService<UO> uoIndexWriterService,
-                          IndexWriterService<PDND> pdndIndexWriterService,
-                          @Value("${blobStorage.fileName}") String pdndCsvFileName) {
+                          IndexWriterService<Station> pdndIndexWriterService,
+                          AnacDataConnector anacDataConnector) {
         log.trace("Initializing {}", OpenDataLoader.class.getSimpleName());
         this.openDataConnectors = openDataConnectors;
         this.institutionIndexWriterService = institutionIndexWriterService;
@@ -38,7 +38,7 @@ public class OpenDataLoader implements CommandLineRunner {
         this.aooIndexWriterService = aooIndexWriterService;
         this.uoIndexWriterService = uoIndexWriterService;
         this.pdndIndexWriterService = pdndIndexWriterService;
-        this.pdndCsvFileName = pdndCsvFileName;
+        this.anacDataConnector = anacDataConnector;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class OpenDataLoader implements CommandLineRunner {
             categoryIndexWriterService.adds(openDataConnector.getCategories());
             aooIndexWriterService.adds(openDataConnector.getAOOs());
             uoIndexWriterService.adds(openDataConnector.getUOs());
-            pdndIndexWriterService.adds(openDataConnector.getStations(pdndCsvFileName));
+            pdndIndexWriterService.adds(anacDataConnector.getStations());
         });
         log.trace("run end");
     }

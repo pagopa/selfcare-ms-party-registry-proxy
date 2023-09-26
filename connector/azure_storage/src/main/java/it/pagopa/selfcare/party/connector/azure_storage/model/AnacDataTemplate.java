@@ -1,15 +1,15 @@
-package it.pagopa.selfcare.party.registry_proxy.connector.rest.model;
+package it.pagopa.selfcare.party.connector.azure_storage.model;
 
 import com.opencsv.bean.CsvBindByName;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.PDND;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
-@EqualsAndHashCode(of = "id")
-public abstract class OpenDataPDNDTemplate implements PDND {
-
-    private String id;
+@NoArgsConstructor
+@EqualsAndHashCode(of = "taxCode")
+public class AnacDataTemplate implements Station {
     @CsvBindByName(column = "codice_IPA")
     private String originId;
     @CsvBindByName(column = "cf_gestore")
@@ -22,6 +22,4 @@ public abstract class OpenDataPDNDTemplate implements PDND {
     private boolean anacEngaged;
     @CsvBindByName(column = "anac_abilitato")
     private boolean anacEnabled;
-
-
 }

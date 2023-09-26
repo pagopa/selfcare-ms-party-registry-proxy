@@ -1,9 +1,9 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.converter;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.DummyPDND;
-import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.PDNDEntity;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.PDND;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.PDND.Field;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.DummyStation;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.StationEntity;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Station.Field;
 import org.apache.lucene.document.Document;
 import org.junit.jupiter.api.Test;
 
@@ -15,37 +15,33 @@ import java.util.stream.Collectors;
 import static it.pagopa.selfcare.commons.utils.TestUtils.mockInstance;
 import static org.junit.jupiter.api.Assertions.*;
 
-class PDNDToDocumentConverterTest {
+class StationToDocumentConverterTest {
 
-    private final Function<PDND, Document> converter;
+    private final Function<Station, Document> converter;
 
-
-    PDNDToDocumentConverterTest() {
-        this.converter = new PDNDToDocumentConverter();
+    StationToDocumentConverterTest() {
+        this.converter = new StationToDocumentConverter();
     }
-
 
     @Test
     void apply_nullInput() {
         // given
-        final PDND input = null;
+        final Station input = null;
         // when
         final Document output = converter.apply(input);
         // then
         assertNull(output);
     }
 
-
     @Test
     void apply() {
         // given
-        final PDND input = new DummyPDND();
+        final Station input = new DummyStation();
         // when
         final Document output = converter.apply(input);
         // then
         assertNotNull(output);
         assertEquals(input.getId(), output.get(Field.ID.toString()));
-        assertEquals(input.getOriginId(), output.get(Field.ORIGIN_ID.toString()));
         assertEquals(input.getTaxCode(), output.get(Field.TAX_CODE.toString()));
         assertEquals(input.getDescription(), output.get(Field.DESCRIPTION.toString()));
         assertEquals(input.getDigitalAddress(), output.get(Field.DIGITAL_ADDRESS.toString()));
@@ -59,17 +55,15 @@ class PDNDToDocumentConverterTest {
                 .count());
     }
 
-
     @Test
     void apply_NullOptionalFields() {
         // given
-        final PDND input = mockInstance(new PDNDEntity());
+        final Station input = mockInstance(new StationEntity());
         // when
         final Document output = converter.apply(input);
         // then
         assertNotNull(output);
         assertEquals(input.getId(), output.get(Field.ID.toString()));
-        assertEquals(input.getOriginId(), output.get(Field.ORIGIN_ID.toString()));
         assertEquals(input.getTaxCode(), output.get(Field.TAX_CODE.toString()));
         assertEquals(input.getDescription(), output.get(Field.DESCRIPTION.toString()));
         assertEquals(input.getDigitalAddress(), output.get(Field.DIGITAL_ADDRESS.toString()));

@@ -1,13 +1,16 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.model;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.PDND;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
-@EqualsAndHashCode(of = "id")
-public class PDNDEntity implements PDND {
+@NoArgsConstructor @AllArgsConstructor
+@EqualsAndHashCode(of = "taxCode")
+public class StationEntity implements Station {
 
     private String id;
     private String originId;

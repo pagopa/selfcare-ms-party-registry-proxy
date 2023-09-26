@@ -5,9 +5,9 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class DummyPDNDQueryResult implements QueryResult<PDND> {
+public class DummyPDNDQueryResult implements QueryResult<Station> {
 
-    private List<PDND> items = List.of();
+    private List<Station> items = List.of();
     private long totalHits;
 
 }

@@ -1,8 +1,8 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.converter;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.DummyInstitution;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution.Field;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.PDND;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Station.Field;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import org.apache.lucene.document.Document;
 import org.junit.jupiter.api.Test;
 
@@ -12,12 +12,12 @@ import java.util.function.Function;
 import static it.pagopa.selfcare.commons.utils.TestUtils.checkNotNullFields;
 import static org.junit.jupiter.api.Assertions.*;
 
-class DocumentToPDNDConverterTest {
+class DocumentToStationConverterTest {
 
-    private final Function<Document, PDND> converter;
+    private final Function<Document, Station> converter;
 
-    DocumentToPDNDConverterTest() {
-        this.converter = new DocumentToPDNDConverter();
+    DocumentToStationConverterTest() {
+        this.converter = new DocumentToStationConverter();
     }
 
     @Test
@@ -25,7 +25,7 @@ class DocumentToPDNDConverterTest {
         // given
         final Document input = null;
         // when
-        final PDND output = converter.apply(input);
+        final Station output = converter.apply(input);
         // then
         assertNull(output);
     }
@@ -35,11 +35,10 @@ class DocumentToPDNDConverterTest {
         // given
         final Document input = new DummyInstitution().toDocument();
         // when
-        final PDND output = converter.apply(input);
+        final Station output = converter.apply(input);
         // then
         assertNotNull(output);
         assertEquals(input.get(Field.ID.toString()), output.getId());
-        assertEquals(input.get(Field.ORIGIN_ID.toString()), output.getOriginId());
         assertEquals(input.get(Field.TAX_CODE.toString()), output.getTaxCode());
         assertEquals(input.get(Field.DESCRIPTION.toString()), output.getDescription());
         assertEquals(input.get(Field.DIGITAL_ADDRESS.toString()), output.getDigitalAddress());

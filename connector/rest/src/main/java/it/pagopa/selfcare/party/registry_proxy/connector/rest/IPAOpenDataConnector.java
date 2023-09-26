@@ -1,8 +1,10 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.api.FileStorageConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.IPAOpenDataRestClient;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.*;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.IPAOpenDataAOO;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.IPAOpenDataCategory;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.IPAOpenDataInstitution;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.IPAOpenDataUO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -12,8 +14,8 @@ import org.springframework.stereotype.Service;
 @Order(1)
 class IPAOpenDataConnector extends OpenDataConnectorTemplate {
 
-    public IPAOpenDataConnector(IPAOpenDataRestClient restClient, FileStorageConnector fileStorageConnector) {
-        super(restClient, fileStorageConnector);
+    public IPAOpenDataConnector(IPAOpenDataRestClient restClient) {
+        super(restClient);
         log.trace("Initializing {}", IPAOpenDataConnector.class.getSimpleName());
     }
 
@@ -35,11 +37,6 @@ class IPAOpenDataConnector extends OpenDataConnectorTemplate {
     @Override
     protected Class<IPAOpenDataUO> getUOType() {
         return IPAOpenDataUO.class;
-    }
-
-    @Override
-    protected Class<OpenDataPDNDTemplate> getPDNDType(){
-        return OpenDataPDNDTemplate.class;
     }
 
 }

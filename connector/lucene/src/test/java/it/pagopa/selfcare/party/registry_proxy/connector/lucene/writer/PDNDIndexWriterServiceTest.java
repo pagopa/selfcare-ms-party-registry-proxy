@@ -2,8 +2,8 @@ package it.pagopa.selfcare.party.registry_proxy.connector.lucene.writer;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis.PDNDTokenAnalyzer;
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.config.InMemoryIndexConfig;
-import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.DummyPDND;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.PDND;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.DummyStation;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import lombok.SneakyThrows;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.search.IndexSearcher;
@@ -49,7 +49,7 @@ class PDNDIndexWriterServiceTest {
     @Test
     void adds() {
         // given
-        final List<? extends PDND> items = List.of(new DummyPDND());
+        final List<? extends Station> items = List.of(new DummyStation());
         // when
         indexWriterService.adds(items);
         // then

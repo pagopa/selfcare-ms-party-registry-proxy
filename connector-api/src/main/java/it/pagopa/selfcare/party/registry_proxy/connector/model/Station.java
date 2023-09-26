@@ -1,22 +1,33 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.model;
 
 
-public interface PDND {
+public interface Station {
 
-    String getId();
-    String getTaxCode();
-    boolean isAnacEngaged();
-    String getDigitalAddress();
-    String getDescription();
-    boolean isAnacEnabled();
+    default String getId() {
+        return createId(getOrigin(), getTaxCode());
+    }
+
     String getOriginId();
-    Origin getOrigin();
+
+    String getTaxCode();
+
+    String getDescription();
+
+    String getDigitalAddress();
+
+    boolean isAnacEngaged();
+
+    boolean isAnacEnabled();
+
+    default Origin getOrigin() {
+        return Origin.ANAC;
+    }
 
     enum Field implements SearchField {
         ID("id"),
         TAX_CODE("taxCode"),
         DESCRIPTION("description"),
-        ORIGIN_ID("originId"),
+        ORIGIN("origin"),
         ANAC_ENABLED("anacEnabled"),
         ANAC_ENGAGED("anacEngaged"),
         DIGITAL_ADDRESS("digitalAddress");
@@ -32,6 +43,10 @@ public interface PDND {
             return name;
         }
 
+    }
+
+    static String createId(Origin origin, String code) {
+        return origin + "_" + code;
     }
 
 }
