@@ -23,13 +23,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class PDNDServiceImplTest {
+class StationServiceImplTest {
 
     @Mock
     private IndexSearchService<Station> indexSearchService;
 
     @InjectMocks
-    private PDNDServiceImpl pdndService;
+    private StationServiceImpl pdndService;
 
     @Test
     void search_emptySearchText() {

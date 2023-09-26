@@ -39,7 +39,7 @@
     "description" : "National Registries Controller"
   }, {
     "name" : "station",
-    "description" : "PDND Controller"
+    "description" : "Station Controller"
   }, {
     "name" : "uo",
     "description" : "UO Controller"

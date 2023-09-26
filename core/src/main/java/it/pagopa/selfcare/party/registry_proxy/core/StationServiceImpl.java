@@ -15,12 +15,12 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class PDNDServiceImpl implements PDNDService {
+public class StationServiceImpl implements StationService {
     private final IndexSearchService<Station> indexSearchService;
 
     @Autowired
-    PDNDServiceImpl(IndexSearchService<Station> indexSearchService) {
-        log.trace("Initializing {}", PDNDServiceImpl.class.getSimpleName());
+    StationServiceImpl(IndexSearchService<Station> indexSearchService) {
+        log.trace("Initializing {}", StationServiceImpl.class.getSimpleName());
         this.indexSearchService = indexSearchService;
     }
 
