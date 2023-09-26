@@ -17,11 +17,7 @@
   <description>A proxy for all Party Registry data sources used in Self Care</description>
 
   <properties>
-
-
     <selc-commons.version>2.4.6</selc-commons.version>
-
-
     <lucene.version>8.11.2</lucene.version>
   </properties>
 
@@ -30,6 +26,11 @@
       <dependency>
         <groupId>it.pagopa.selfcare.party</groupId>
         <artifactId>selc-party-registry-proxy-connector-rest</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>it.pagopa.selfcare.party</groupId>
+        <artifactId>selc-party-registry-proxy-connector-azure-storage</artifactId>
         <version>0.0.1-SNAPSHOT</version>
       </dependency>
       <dependency>
@@ -98,6 +99,11 @@
         <version>5.7.0</version>
       </dependency>
       <dependency>
+        <groupId>com.microsoft.azure</groupId>
+        <artifactId>azure-storage</artifactId>
+        <version>8.6.6</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.lucene</groupId>
         <artifactId>lucene-core</artifactId>
         <version>${lucene.version}</version>
@@ -139,7 +145,6 @@
     <module>app</module>
     <module>connector-api</module>
     <module>connector</module>
-    <module>connector/azure_storage</module>
   </modules>
 
 

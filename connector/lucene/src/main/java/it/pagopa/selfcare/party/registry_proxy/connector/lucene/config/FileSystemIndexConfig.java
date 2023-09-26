@@ -49,5 +49,4 @@ class FileSystemIndexConfig {
     public Directory uosDirectory(@Value("${lucene.index.uos.folder}") String indexFolder) {
         return FSDirectory.open(Path.of(indexFolder));
     }
-
 }

@@ -11,7 +11,7 @@ public enum Entity {
     INSTITUTION("INSTITUTION"),
     AOO("AOO"),
     UO("UO"),
-    PDND("PDND");
+    STATION("STATION");
 
     private final String value;
 

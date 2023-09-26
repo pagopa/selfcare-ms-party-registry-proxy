@@ -3,7 +3,7 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.PDND;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
 import it.pagopa.selfcare.party.registry_proxy.core.PDNDService;
 import it.pagopa.selfcare.party.registry_proxy.web.model.PDNDResource;
@@ -50,7 +50,7 @@ public class PDNDController {
                                 Integer limit) {
         log.trace("search start");
         log.debug("search search = {}, page = {}, limit = {}", search, page, limit);
-        final QueryResult<PDND> result = PDNDService.search(search, page, limit);
+        final QueryResult<Station> result = pdndService.search(search, page, limit);
         final PDNDsResource pdndResource = PDNDsResource.builder()
                 .items(result.getItems().stream()
                         .map(pdndMapper::toResource)

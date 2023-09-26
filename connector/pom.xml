@@ -10,15 +10,15 @@
     <artifactId>selc-party-registry-proxy-connector</artifactId>
     <packaging>pom</packaging>
 
+    <modules>
+        <module>azure_storage</module>
+        <module>rest</module>
+        <module>lucene</module>
+    </modules>
     <dependencies>
         <dependency>
             <groupId>it.pagopa.selfcare.party</groupId>
             <artifactId>selc-party-registry-proxy-connector-api</artifactId>
         </dependency>
     </dependencies>
-
-    <modules>
-        <module>rest</module>
-        <module>lucene</module>
-    </modules>
 </project>

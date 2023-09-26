@@ -6,7 +6,6 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.IPAOpenDataC
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.IPAOpenDataInstitution;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.IPAOpenDataUO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +14,10 @@ import org.springframework.stereotype.Service;
 @Order(1)
 class IPAOpenDataConnector extends OpenDataConnectorTemplate {
 
-    @Autowired
     public IPAOpenDataConnector(IPAOpenDataRestClient restClient) {
         super(restClient);
         log.trace("Initializing {}", IPAOpenDataConnector.class.getSimpleName());
     }
-
 
     @Override
     protected Class<IPAOpenDataInstitution> getInstitutionType() {

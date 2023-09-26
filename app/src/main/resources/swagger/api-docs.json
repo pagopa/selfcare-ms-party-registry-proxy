@@ -226,7 +226,7 @@
           "style" : "form",
           "schema" : {
             "type" : "string",
-            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
           }
         }, {
           "name" : "page",
@@ -320,7 +320,7 @@
           "style" : "simple",
           "schema" : {
             "type" : "string",
-            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
           }
         }, {
           "name" : "code",
@@ -745,7 +745,7 @@
           "style" : "form",
           "schema" : {
             "type" : "string",
-            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
           }
         }, {
           "name" : "categories",
@@ -1383,7 +1383,7 @@
           "origin" : {
             "type" : "string",
             "description" : "Describes which is the source of data",
-            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
           },
           "protocolloInformatico" : {
             "type" : "string",
@@ -1488,7 +1488,7 @@
           "origin" : {
             "type" : "string",
             "description" : "Describes which is the source of data",
-            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
           }
         }
       },
@@ -1595,7 +1595,7 @@
           "origin" : {
             "type" : "string",
             "description" : "Describes which is the source of data",
-            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
           },
           "originId" : {
             "type" : "string",
@@ -1676,7 +1676,7 @@
       },
       "PDNDResource" : {
         "title" : "PDNDResource",
-        "required" : [ "description", "digitalAddress", "id", "originId", "taxCode" ],
+        "required" : [ "description", "digitalAddress", "id", "origin", "originId", "taxCode" ],
         "type" : "object",
         "properties" : {
           "anacEnabled" : {
@@ -1702,6 +1702,11 @@
           "id" : {
             "type" : "string",
             "description" : "station's unique identifier"
+          },
+          "origin" : {
+            "type" : "string",
+            "description" : "Describes which is the source of data",
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
           },
           "originId" : {
             "type" : "string",
@@ -1851,7 +1856,7 @@
           "origin" : {
             "type" : "string",
             "description" : "Describes which is the source of data",
-            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
           },
           "telefono" : {
             "type" : "string",
