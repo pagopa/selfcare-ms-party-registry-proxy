@@ -24,14 +24,14 @@ import java.util.stream.Collectors;
 @Api(tags = "station")
 public class PDNDController {
 
-    private final PDNDService PDNDService;
+    private final PDNDService pdndService;
     private final PDNDMapper pdndMapper;
 
     @Autowired
-    public PDNDController(PDNDService PDNDService,
+    public PDNDController(PDNDService pdndService,
                           PDNDMapper pdndMapper) {
         log.trace("Initializing {}", PDNDController.class.getSimpleName());
-        this.PDNDService = PDNDService;
+        this.pdndService = pdndService;
         this.pdndMapper = pdndMapper;
     }
 
@@ -70,7 +70,7 @@ public class PDNDController {
                                         @PathVariable("taxId") String taxId) {
         log.trace("find SA start");
         log.debug("find SA = {}", taxId);
-        final PDNDResource pdndResource = pdndMapper.toResource(PDNDService.findByTaxId(taxId));
+        final PDNDResource pdndResource = pdndMapper.toResource(pdndService.findByTaxId(taxId));
         log.debug("find SA result = {}", pdndResource);
         log.trace("find SA end");
         return pdndResource;

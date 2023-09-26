@@ -1,9 +1,11 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Entity;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
+import it.pagopa.selfcare.party.registry_proxy.core.exception.TooManyResourceFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,16 +36,16 @@ public class PDNDServiceImpl implements PDNDService {
     }
 
     @Override
-    public PDND findByTaxId(String taxId) {
+    public Station findByTaxId(String taxId) {
         log.trace("find SA By taxId start");
         log.debug("find SA By taxId = {}", taxId.toUpperCase());
-        final List<PDND> pdndList = indexSearchService.findById(PDND.Field.TAX_CODE, taxId.toUpperCase());
+        final List<Station> pdndList = indexSearchService.findById(Station.Field.TAX_CODE, taxId.toUpperCase());
         if (pdndList.isEmpty()) {
             throw new ResourceNotFoundException();
         } else if (pdndList.size() > 1) {
             throw new TooManyResourceFoundException();
         }
-        final PDND pdnd = pdndList.get(0);
+        final Station pdnd = pdndList.get(0);
         log.debug("find SA By taxId result = {}", pdnd);
         log.trace("find SA By taxId end");
         return pdnd;

@@ -1,11 +1,13 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.DummyPDNDQueryResult;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Entity;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Station.Field;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
+import it.pagopa.selfcare.party.registry_proxy.core.exception.TooManyResourceFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
@@ -105,7 +107,7 @@ class PDNDServiceImplTest {
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of(dummyPDND));
         // when
-        final PDND result = pdndService.findByTaxId(taxId);
+        final Station result = pdndService.findByTaxId(taxId);
         // then
         assertSame(dummyPDND, result);
     }

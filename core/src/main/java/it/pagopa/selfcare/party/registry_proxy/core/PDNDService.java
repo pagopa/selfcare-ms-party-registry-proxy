@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface PDNDService {
     QueryResult<Station> search(Optional<String> searchText, int page, int limit);
 
-    PDND findByTaxId(String taxId);
+    Station findByTaxId(String taxId);
 
 }
