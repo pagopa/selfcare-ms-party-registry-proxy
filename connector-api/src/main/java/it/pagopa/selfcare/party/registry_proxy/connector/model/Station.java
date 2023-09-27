@@ -4,7 +4,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.model;
 public interface Station {
 
     default String getId() {
-        return createId(getOrigin(), getTaxCode());
+        return getTaxCode();
     }
 
     String getOriginId();
@@ -43,10 +43,6 @@ public interface Station {
             return name;
         }
 
-    }
-
-    static String createId(Origin origin, String code) {
-        return origin + "_" + code;
     }
 
 }
