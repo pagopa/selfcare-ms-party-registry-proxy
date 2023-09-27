@@ -17,6 +17,7 @@ import java.util.Optional;
 @Service
 public class StationServiceImpl implements StationService {
     private final IndexSearchService<Station> indexSearchService;
+    private static final String STATION_ID_PREFIX = "ANAC_";
 
     @Autowired
     StationServiceImpl(IndexSearchService<Station> indexSearchService) {
@@ -39,7 +40,7 @@ public class StationServiceImpl implements StationService {
     public Station findByTaxId(String taxId) {
         log.trace("find SA By taxId start");
         log.debug("find SA By taxId = {}", taxId.toUpperCase());
-        taxId = "ANAC_" + taxId;
+        taxId = STATION_ID_PREFIX + taxId;
         final List<Station> pdndList = indexSearchService.findById(Station.Field.ID, taxId.toUpperCase());
         if (pdndList.isEmpty()) {
             throw new ResourceNotFoundException();
