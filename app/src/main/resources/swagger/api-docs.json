@@ -38,8 +38,8 @@
     "name" : "nationalRegistries",
     "description" : "National Registries Controller"
   }, {
-    "name" : "pdnd",
-    "description" : "PDND Controller"
+    "name" : "stations",
+    "description" : "Station Controller"
   }, {
     "name" : "uo",
     "description" : "UO Controller"
@@ -226,7 +226,7 @@
           "style" : "form",
           "schema" : {
             "type" : "string",
-            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
           }
         }, {
           "name" : "page",
@@ -320,7 +320,7 @@
           "style" : "simple",
           "schema" : {
             "type" : "string",
-            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
           }
         }, {
           "name" : "code",
@@ -745,7 +745,7 @@
           "style" : "form",
           "schema" : {
             "type" : "string",
-            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
           }
         }, {
           "name" : "categories",
@@ -969,16 +969,16 @@
         } ]
       }
     },
-    "/pdnd" : {
+    "/stations" : {
       "get" : {
-        "tags" : [ "pdnd" ],
-        "summary" : "Search pdnd",
-        "description" : "Returns a list of pdnd.",
+        "tags" : [ "stations" ],
+        "summary" : "Search station",
+        "description" : "Returns a list of station.",
         "operationId" : "searchUsingGET_1",
         "parameters" : [ {
           "name" : "search",
           "in" : "query",
-          "description" : "if passed, the result is filtered based on the contained value.",
+          "description" : "${swagger.model.*.search}",
           "required" : false,
           "style" : "form",
           "schema" : {
@@ -1012,6 +1012,79 @@
               "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/PDNDsResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/stations/{taxId}" : {
+      "get" : {
+        "tags" : [ "stations" ],
+        "summary" : "Search station",
+        "description" : "Returns a list of station.",
+        "operationId" : "searchByTaxCodeUsingGET",
+        "parameters" : [ {
+          "name" : "taxId",
+          "in" : "path",
+          "description" : "${swagger.model.taxId}",
+          "required" : true,
+          "style" : "simple",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PDNDResource"
                 }
               }
             }
@@ -1310,7 +1383,7 @@
           "origin" : {
             "type" : "string",
             "description" : "Describes which is the source of data",
-            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
           },
           "protocolloInformatico" : {
             "type" : "string",
@@ -1415,7 +1488,7 @@
           "origin" : {
             "type" : "string",
             "description" : "Describes which is the source of data",
-            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
           }
         }
       },
@@ -1522,7 +1595,7 @@
           "origin" : {
             "type" : "string",
             "description" : "Describes which is the source of data",
-            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
           },
           "originId" : {
             "type" : "string",
@@ -1603,34 +1676,45 @@
       },
       "PDNDResource" : {
         "title" : "PDNDResource",
-        "required" : [ "description", "digitalAddress", "id", "originId", "taxCode" ],
+        "required" : [ "description", "digitalAddress", "id", "origin", "originId", "taxCode" ],
         "type" : "object",
         "properties" : {
           "anacEnabled" : {
             "type" : "boolean",
-            "description" : "${swagger.model.pdnd.anacEnabled}",
+            "description" : "${swagger.model.station.anacEnabled}",
             "example" : false
           },
           "anacEngaged" : {
             "type" : "boolean",
+            "description" : "${swagger.model.station.anacEngaged}",
             "example" : false
           },
           "description" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "station's name"
           },
           "digitalAddress" : {
             "type" : "string",
+            "description" : "station's mail address",
             "format" : "email",
             "example" : "email@example.com"
           },
           "id" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "station's unique identifier"
+          },
+          "origin" : {
+            "type" : "string",
+            "description" : "Describes which is the source of data",
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
           },
           "originId" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "station's anac unique identifier"
           },
           "taxCode" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "taxCode of station"
           }
         }
       },
@@ -1641,10 +1725,12 @@
         "properties" : {
           "count" : {
             "type" : "integer",
+            "description" : "list of station resource size",
             "format" : "int64"
           },
           "items" : {
             "type" : "array",
+            "description" : "list of station resource",
             "items" : {
               "$ref" : "#/components/schemas/PDNDResource"
             }
@@ -1770,7 +1856,7 @@
           "origin" : {
             "type" : "string",
             "description" : "Describes which is the source of data",
-            "enum" : [ "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
           },
           "telefono" : {
             "type" : "string",
