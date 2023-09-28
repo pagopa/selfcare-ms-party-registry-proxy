@@ -16,6 +16,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -46,6 +48,9 @@ public class AnacDataConnectorImpl implements AnacDataConnector {
         }
         log.debug("getStations result = {}", stations);
         log.trace("getStations end");
-        return stations;
+        return stations
+                .stream()
+                .filter(station -> Objects.isNull(station.getOriginId()))
+                .collect(Collectors.toList());
     }
 }
