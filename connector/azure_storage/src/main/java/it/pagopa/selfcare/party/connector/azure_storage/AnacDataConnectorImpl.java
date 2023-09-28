@@ -16,7 +16,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.List;
-import java.util.Objects;
+import org.springframework.util.StringUtils;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,7 +50,7 @@ public class AnacDataConnectorImpl implements AnacDataConnector {
         log.trace("getStations end");
         return stations
                 .stream()
-                .filter(station -> Objects.isNull(station.getOriginId()))
+                .filter(station -> !StringUtils.hasText(station.getOriginId()))
                 .collect(Collectors.toList());
     }
 }
