@@ -22,7 +22,6 @@ public class OpenDataLoader implements CommandLineRunner {
     private final IndexWriterService<UO> uoIndexWriterService;
     private final IndexWriterService<Station> pdndIndexWriterService;
     private final AnacDataConnector anacDataConnector;
-
     @Autowired
     public OpenDataLoader(List<OpenDataConnector> openDataConnectors,
                           IndexWriterService<Institution> institutionIndexWriterService,
