@@ -10,16 +10,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(of = "taxCode")
 public class AnacDataTemplate implements Station {
-    @CsvBindByName(column = "codice_IPA")
+    @CsvBindByName(column = "codiceIPA")
     private String originId;
-    @CsvBindByName(column = "cf_gestore")
+    @CsvBindByName(column = "codiceFiscaleGestore")
     private String taxCode;
-    @CsvBindByName(column = "denominazione")
+    @CsvBindByName(column = "denominazioneGestore")
     private String description;
-    @CsvBindByName(column = "domicilio_digitale")
+    @CsvBindByName(column = "PEC")
     private String digitalAddress;
-    @CsvBindByName(column = "anac_incaricato")
+    @CsvBindByName(column = "ANAC_incaricato")
     private boolean anacEngaged;
-    @CsvBindByName(column = "anac_abilitato")
+    @CsvBindByName(column = "ANAC_abilitato")
     private boolean anacEnabled;
 }
