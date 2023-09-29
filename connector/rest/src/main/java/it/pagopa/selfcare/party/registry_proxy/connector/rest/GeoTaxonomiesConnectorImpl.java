@@ -24,6 +24,7 @@ import java.util.Objects;
 public class GeoTaxonomiesConnectorImpl implements GeoTaxonomiesConnector {
 
     public static final String CODE_S_NOT_FOUND = "Code %s not found!";
+    public static final String ERROR_GEO_TAXONOMIES_REST_CLIENT_MESSAGE = "Error geo-taxonomies rest client, message: %s";
     private final GeoTaxonomiesRestClient restClient;
     @Autowired
     public GeoTaxonomiesConnectorImpl(GeoTaxonomiesRestClient restClient) {
@@ -45,6 +46,7 @@ public class GeoTaxonomiesConnectorImpl implements GeoTaxonomiesConnector {
     }
 
     public List<GeographicTaxonomy> fallbackGetExtByDescription(RuntimeException e) {
+        log.error(String.format(ERROR_GEO_TAXONOMIES_REST_CLIENT_MESSAGE, e.getMessage()));
         return List.of();
     }
 
@@ -63,6 +65,7 @@ public class GeoTaxonomiesConnectorImpl implements GeoTaxonomiesConnector {
     }
 
     public GeographicTaxonomy fallbackGetExtByCode(RuntimeException e) {
+        log.error(String.format(ERROR_GEO_TAXONOMIES_REST_CLIENT_MESSAGE, e.getMessage()));
         throw new ResourceNotFoundException("");
     }
 
