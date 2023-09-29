@@ -55,6 +55,5 @@ resilience4j:
          slow-call-rate-threshold: 60
          failure-rate-threshold: 60
          ignore-exceptions:
-           - it.pagopa.selfcare.party.registry_proxy.connector.exception.BadGatewayException
            - it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException
 

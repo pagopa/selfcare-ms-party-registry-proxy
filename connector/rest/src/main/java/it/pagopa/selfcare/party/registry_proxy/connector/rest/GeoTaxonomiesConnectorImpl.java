@@ -44,7 +44,7 @@ public class GeoTaxonomiesConnectorImpl implements GeoTaxonomiesConnector {
         return toGeoTaxonomiesList(result.getGeographicTaxonomiesResponse());
     }
 
-    public List<GeographicTaxonomy> fallbackGetExtByDescription(ServiceUnavailableException e) {
+    public List<GeographicTaxonomy> fallbackGetExtByDescription(RuntimeException e) {
         return List.of();
     }
 
@@ -62,7 +62,7 @@ public class GeoTaxonomiesConnectorImpl implements GeoTaxonomiesConnector {
         return toGeoTaxonomy(result);
     }
 
-    public GeographicTaxonomy fallbackGetExtByCode(ServiceUnavailableException e) {
+    public GeographicTaxonomy fallbackGetExtByCode(RuntimeException e) {
         throw new ResourceNotFoundException("");
     }
 
