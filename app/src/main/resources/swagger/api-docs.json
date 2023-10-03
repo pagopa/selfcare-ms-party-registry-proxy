@@ -1482,7 +1482,6 @@
       },
       "InstitutionResource" : {
         "title" : "InstitutionResource",
-        "required" : [ "address", "description", "digitalAddress", "id", "origin", "originId", "taxCode", "zipCode" ],
         "type" : "object",
         "properties" : {
           "address" : {
@@ -1503,9 +1502,7 @@
           },
           "digitalAddress" : {
             "type" : "string",
-            "description" : "Digital institution address",
-            "format" : "email",
-            "example" : "email@example.com"
+            "description" : "Digital institution address"
           },
           "id" : {
             "type" : "string",
