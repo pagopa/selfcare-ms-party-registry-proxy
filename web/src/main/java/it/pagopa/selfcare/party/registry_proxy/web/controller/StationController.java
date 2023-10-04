@@ -63,8 +63,8 @@ public class StationController {
 
     @GetMapping("/{taxId}")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.station.search.summary}", notes = "${swagger.api.station.search.notes}")
-    public StationResource searchByTaxCode(@ApiParam("${swagger.model.taxId}")
+    @ApiOperation(value = "${swagger.api.station.search.byId.summary}", notes = "${swagger.api.station.search.byId.notes}")
+    public StationResource searchByTaxCode(@ApiParam("${swagger.model.station.taxCode}")
                                            @PathVariable("taxId") String taxId) {
         log.trace("find SA start");
         log.debug("find SA = {}", taxId);
