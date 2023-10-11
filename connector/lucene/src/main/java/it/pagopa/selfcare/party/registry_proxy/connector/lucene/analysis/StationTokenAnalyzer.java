@@ -2,6 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.LowerCaseFilter;
 import org.apache.lucene.analysis.StopFilter;
 import org.apache.lucene.analysis.it.ItalianAnalyzer;
 import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilter;
@@ -13,19 +14,20 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @Qualifier("pdndTokenAnalyzer")
-public class PDNDTokenAnalyzer extends Analyzer {
+public class StationTokenAnalyzer extends Analyzer {
 
-    public PDNDTokenAnalyzer() {
-        log.trace("Initializing {}", PDNDTokenAnalyzer.class.getSimpleName());
+    public StationTokenAnalyzer() {
+        log.trace("Initializing {}", StationTokenAnalyzer.class.getSimpleName());
     }
 
     @Override
     protected TokenStreamComponents createComponents(String fieldName) {
         final StandardTokenizer tokenizer = new StandardTokenizer();
-        final StopFilter stopFilter = new StopFilter(tokenizer, ItalianAnalyzer.getDefaultStopSet());
+        final LowerCaseFilter lowerCaseFilter = new LowerCaseFilter(tokenizer);
+        final StopFilter stopFilter = new StopFilter(lowerCaseFilter, ItalianAnalyzer.getDefaultStopSet());
         final ASCIIFoldingFilter asciiFoldingFilter = new ASCIIFoldingFilter(stopFilter);
         final NGramTokenFilter nGramTokenFilter = new NGramTokenFilter(asciiFoldingFilter, 3, 5, true);
-        return new TokenStreamComponents(tokenizer, nGramTokenFilter);
+        return new Analyzer.TokenStreamComponents(tokenizer, nGramTokenFilter);
   }
 
 }

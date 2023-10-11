@@ -1,6 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.writer;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis.PDNDTokenAnalyzer;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis.StationTokenAnalyzer;
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.config.InMemoryIndexConfig;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.store.Directory;
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {
         InMemoryIndexConfig.class,
-        PDNDTokenAnalyzer.class,
+        StationTokenAnalyzer.class,
         PDNDIndexWriterFactory.class
 })
 class PDNDIndexWriterFactoryTest {
@@ -37,14 +37,14 @@ class PDNDIndexWriterFactoryTest {
         assertNotNull(indexWriter);
         assertTrue(indexWriter.isOpen());
         assertSame(pdndDirectory, indexWriter.getDirectory());
-        assertEquals(PDNDTokenAnalyzer.class, indexWriter.getAnalyzer().getClass());
+        assertEquals(StationTokenAnalyzer.class, indexWriter.getAnalyzer().getClass());
     }
 
 
     @Test
     void create_Exception() {
         // given
-        final IndexWriterFactory indexWriterFactory = new PDNDIndexWriterFactory(null, new PDNDTokenAnalyzer());
+        final IndexWriterFactory indexWriterFactory = new PDNDIndexWriterFactory(null, new StationTokenAnalyzer());
         // when
         final Executable executable = indexWriterFactory::create;
         // then
