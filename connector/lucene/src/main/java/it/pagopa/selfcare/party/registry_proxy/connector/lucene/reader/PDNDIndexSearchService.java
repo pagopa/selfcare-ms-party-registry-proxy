@@ -1,6 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.reader;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis.PDNDTokenAnalyzer;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis.StationTokenAnalyzer;
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.converter.DocumentToStationConverter;
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.StationQueryResult;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
@@ -18,7 +18,7 @@ class PDNDIndexSearchService extends IndexSearchServiceTemplate<Station> {
 
     @Autowired
     public PDNDIndexSearchService(Directory pdndDirectory) {
-        super(pdndDirectory, new PDNDTokenAnalyzer(), new DocumentToStationConverter());
+        super(pdndDirectory, new StationTokenAnalyzer(), new DocumentToStationConverter());
     }
 
     @Override

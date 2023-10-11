@@ -1,6 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.writer;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis.PDNDTokenAnalyzer;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis.StationTokenAnalyzer;
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.config.InMemoryIndexConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.DummyStation;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {
         InMemoryIndexConfig.class,
-        PDNDTokenAnalyzer.class,
+        StationTokenAnalyzer.class,
         PDNDIndexWriterFactory.class,
         PDNDIndexWriterService.class
 })
