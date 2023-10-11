@@ -1,14 +1,10 @@
 package it.pagopa.selfcare.party.registry_proxy.web.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.UO;
 import lombok.Data;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -16,83 +12,71 @@ public class UOResource implements UO {
 
     private String id;
 
-    @ApiModelProperty(required = true)
-    @JsonProperty(required = true)
-    @NotBlank
+    @ApiModelProperty(value = "${swagger.model.uo.ipaCode}")
     private String codiceIpa;
 
-    @ApiModelProperty(required = true)
-    @JsonProperty(required = true)
-    @NotBlank
+    @ApiModelProperty(value= "${swagger.model.uo.parentDescription}")
     private String denominazioneEnte;
 
-    @ApiModelProperty(required = true)
-    @JsonProperty(required = true)
-    @NotBlank
+    @ApiModelProperty(value= "${swagger.model.uo.taxCode}")
     private String codiceFiscaleEnte;
 
     @ApiModelProperty(value = "${swagger.model.uo.codiceUniUo}")
-    @JsonProperty(required = true)
-    @NotBlank
     private String codiceUniUo;
 
+    @ApiModelProperty(value = "${swagger.model.uo.parentCode}")
     private String codiceUniUoPadre;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.aoo.codiceUniAoo}")
     private String codiceUniAoo;
 
-    @ApiModelProperty(required = true)
-    @JsonProperty(required = true)
-    @NotBlank
+    @ApiModelProperty(value = "${swagger.model.uo.description}")
     private String descrizioneUo;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty()
     private String mail1;
 
-    @ApiModelProperty(value = "${swagger.model.*.origin}", required = true)
-    @JsonProperty(required = true)
-    @NotNull
+    @ApiModelProperty(value = "${swagger.model.*.origin}")
     private Origin origin;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.uo.creationDate}")
     private String dataIstituzione;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.uo.manager.firstname}")
     private String nomeResponsabile;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.uo.manager.lastname}")
     private String cognomeResponsabile;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.uo.manager.email}")
     private String mailResponsabile;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.uo.manager.phone}")
     private String telefonoResponsabile;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.uo.istatCode}")
     private String codiceComuneISTAT;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.uo.geograpichCode}")
     private String codiceCatastaleComune;
 
-    @ApiModelProperty(value = "${swagger.model.uo.CAP}", required = true)
+    @ApiModelProperty(value = "${swagger.model.uo.cap}")
     private String CAP;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.uo.legalAddress}")
     private String indirizzo;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.uo.phone}")
     private String telefono;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.uo.fax}")
     private String fax;
 
-    @ApiModelProperty(required = true)
     private String tipoMail1;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.uo.url}")
     private String url;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.uo.updateDate}")
     private String dataAggiornamento;
 }

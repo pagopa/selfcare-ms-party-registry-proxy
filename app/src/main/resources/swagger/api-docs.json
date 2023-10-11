@@ -1307,76 +1307,93 @@
     "schemas" : {
       "AOOResource" : {
         "title" : "AOOResource",
-        "required" : [ "codAoo", "codiceCatastaleComune", "codiceComuneISTAT", "codiceFiscaleEnte", "codiceIpa", "codiceUniAoo", "cognomeResponsabile", "dataAggiornamento", "dataIstituzione", "denominazioneAoo", "denominazioneEnte", "fax", "indirizzo", "mailResponsabile", "nomeResponsabile", "origin", "protocolloInformatico", "telefono", "telefonoResponsabile" ],
         "type" : "object",
         "properties" : {
           "cap" : {
             "type" : "string"
           },
           "codAoo" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO code"
           },
           "codiceCatastaleComune" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO land registry code"
           },
           "codiceComuneISTAT" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO istat code"
           },
           "codiceFiscaleEnte" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO fiscal code"
           },
           "codiceIpa" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO ipa code"
           },
           "codiceUniAoo" : {
             "type" : "string",
             "description" : "AOO unique identifier, the same of Id"
           },
           "cognomeResponsabile" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO manager lastname"
           },
           "dataAggiornamento" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Identifies date of last update on the specific AOO"
           },
           "dataIstituzione" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Identifies date of first creation for AOO"
           },
           "denominazioneAoo" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO description"
           },
           "denominazioneEnte" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO parent description"
           },
           "fax" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO fax"
           },
           "id" : {
             "type" : "string"
           },
           "indirizzo" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO address"
           },
           "mail1" : {
             "type" : "string"
           },
           "mailResponsabile" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO manager email"
           },
           "nomeResponsabile" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO manager firstname"
           },
           "origin" : {
             "type" : "string",
+            "description" : "{swagger.model.*.origin}",
             "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
           },
           "protocolloInformatico" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO IT protocol"
           },
           "telefono" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO phone number"
           },
           "telefonoResponsabile" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO manager phone number"
           },
           "tipoMail1" : {
             "type" : "string"
@@ -1450,7 +1467,6 @@
       },
       "CategoryResource" : {
         "title" : "CategoryResource",
-        "required" : [ "code", "kind", "name", "origin" ],
         "type" : "object",
         "properties" : {
           "code" : {
@@ -1690,14 +1706,17 @@
       },
       "StationResource" : {
         "title" : "StationResource",
-        "required" : [ "description", "digitalAddress", "id", "origin", "originId", "taxCode" ],
         "type" : "object",
         "properties" : {
           "anacEnabled" : {
-            "type" : "boolean"
+            "type" : "boolean",
+            "description" : "Identifies if ANAC station is enabled",
+            "example" : false
           },
           "anacEngaged" : {
-            "type" : "boolean"
+            "type" : "boolean",
+            "description" : "Identifies if ANAC station is engaged",
+            "example" : false
           },
           "description" : {
             "type" : "string",
@@ -1705,9 +1724,7 @@
           },
           "digitalAddress" : {
             "type" : "string",
-            "description" : "station's mail address",
-            "format" : "email",
-            "example" : "email@example.com"
+            "description" : "station's mail address"
           },
           "id" : {
             "type" : "string",
@@ -1749,66 +1766,80 @@
       },
       "UOResource" : {
         "title" : "UOResource",
-        "required" : [ "codiceCatastaleComune", "codiceComuneISTAT", "codiceFiscaleEnte", "codiceIpa", "codiceUniAoo", "cognomeResponsabile", "dataAggiornamento", "dataIstituzione", "denominazioneEnte", "descrizioneUo", "fax", "indirizzo", "mail1", "mailResponsabile", "nomeResponsabile", "origin", "telefono", "telefonoResponsabile", "tipoMail1", "url" ],
         "type" : "object",
         "properties" : {
           "cap" : {
             "type" : "string"
           },
           "codiceCatastaleComune" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO land registry code"
           },
           "codiceComuneISTAT" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO istat code"
           },
           "codiceFiscaleEnte" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO fiscal code"
           },
           "codiceIpa" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO ipa code"
           },
           "codiceUniAoo" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO unique identifier, the same of Id"
           },
           "codiceUniUo" : {
             "type" : "string",
             "description" : "UO unique identifier, the same of Id"
           },
           "codiceUniUoPadre" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO parent code"
           },
           "cognomeResponsabile" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO manager lastname"
           },
           "dataAggiornamento" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Identifies date of last update on the specific UO"
           },
           "dataIstituzione" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Identifies date of first creation for UO"
           },
           "denominazioneEnte" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO parent description"
           },
           "descrizioneUo" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO description"
           },
           "fax" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO fax"
           },
           "id" : {
             "type" : "string"
           },
           "indirizzo" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO address"
           },
           "mail1" : {
             "type" : "string"
           },
           "mailResponsabile" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO manager email"
           },
           "nomeResponsabile" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO manager firstname"
           },
           "origin" : {
             "type" : "string",
@@ -1816,16 +1847,19 @@
             "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
           },
           "telefono" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO phone number"
           },
           "telefonoResponsabile" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO manager phone number"
           },
           "tipoMail1" : {
             "type" : "string"
           },
           "url" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO url"
           }
         }
       },
