@@ -1,14 +1,10 @@
 package it.pagopa.selfcare.party.registry_proxy.web.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.AOO;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
 import lombok.Data;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -16,84 +12,69 @@ public class AOOResource implements AOO {
 
     private String id;
 
-    @ApiModelProperty(required = true)
-    @JsonProperty(required = true)
-    @NotBlank
+    @ApiModelProperty(value = "${swagger.model.aoo.ipaCode}")
     private String codiceIpa;
 
-    @ApiModelProperty(required = true)
-    @JsonProperty(required = true)
-    @NotBlank
+    @ApiModelProperty(value = "${swagger.model.aoo.parentDescription}")
     private String denominazioneEnte;
 
-    @ApiModelProperty(required = true)
-    @JsonProperty(required = true)
-    @NotBlank
+    @ApiModelProperty(value = "${swagger.model.aoo.taxCode}")
     private String codiceFiscaleEnte;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.codiceUniAoo}", required = true)
-    @JsonProperty(required = true)
-    @NotBlank
+    @ApiModelProperty(value = "${swagger.model.aoo.codiceUniAoo}")
     private String codiceUniAoo;
 
-    @ApiModelProperty(required = true)
-    @JsonProperty(required = true)
-    @NotBlank
+    @ApiModelProperty(value = "${swagger.model.aoo.description}")
     private String denominazioneAoo;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.aoo.creationDate}")
     private String dataIstituzione;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.aoo.manager.firstname}")
     private String nomeResponsabile;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.aoo.manager.lastname}")
     private String cognomeResponsabile;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.aoo.manager.email}")
     private String mailResponsabile;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.aoo.manager.phone}")
     private String telefonoResponsabile;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.aoo.istatCode}")
     private String codiceComuneISTAT;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.aoo.geograpichCode}")
     private String codiceCatastaleComune;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.aoo.cap}")
     private String CAP;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.aoo.legalAddress}")
     private String indirizzo;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.aoo.phone}")
     private String telefono;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.aoo.fax}")
     private String fax;
 
-    private String tipoMail1;
-
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.aoo.protocol}")
     private String protocolloInformatico;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.aoo.uriProtocol}")
     private String URIProtocolloInformatico;
 
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "${swagger.model.aoo.updateDate}")
     private String dataAggiornamento;
 
-    private String mail1;
-
-    @ApiModelProperty(required = true)
-    @JsonProperty(required = true)
-    @NotBlank
+    @ApiModelProperty(value = "${swagger.model.aoo.code}")
     private String codAoo;
 
-    @ApiModelProperty(required = true)
-    @JsonProperty(required = true)
-    @NotNull
+    @ApiModelProperty(value = "{swagger.model.*.origin}")
     private Origin origin;
+
+    private String tipoMail1;
+    private String mail1;
 }
