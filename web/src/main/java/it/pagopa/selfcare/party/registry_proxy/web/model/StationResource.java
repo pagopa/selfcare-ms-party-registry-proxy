@@ -7,10 +7,9 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 
 @Data
-public class PDNDResource implements Station {
+public class StationResource implements Station {
 
     @ApiModelProperty(value = "${swagger.model.station.id}", required = true)
     @JsonProperty(required = true)
@@ -20,9 +19,8 @@ public class PDNDResource implements Station {
     @JsonProperty(required = true)
     private String originId;
 
-    @ApiModelProperty(value = "${swagger.model.station.anacEngaged}")
     private boolean anacEngaged;
-    @ApiModelProperty(value = "${swagger.model.station.anacEnabled}")
+    
     private boolean anacEnabled;
 
     @ApiModelProperty(value = "${swagger.model.station.taxCode}", required = true)

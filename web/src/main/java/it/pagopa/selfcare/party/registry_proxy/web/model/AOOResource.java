@@ -16,17 +16,17 @@ public class AOOResource implements AOO {
 
     private String id;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.codiceIpa}", required = true)
+    @ApiModelProperty(required = true)
     @JsonProperty(required = true)
     @NotBlank
     private String codiceIpa;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.denominazioneEnte}", required = true)
+    @ApiModelProperty(required = true)
     @JsonProperty(required = true)
     @NotBlank
     private String denominazioneEnte;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.codiceFiscaleEnte}", required = true)
+    @ApiModelProperty(required = true)
     @JsonProperty(required = true)
     @NotBlank
     private String codiceFiscaleEnte;
@@ -36,65 +36,63 @@ public class AOOResource implements AOO {
     @NotBlank
     private String codiceUniAoo;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.denominazioneAoo}", required = true)
+    @ApiModelProperty(required = true)
     @JsonProperty(required = true)
     @NotBlank
     private String denominazioneAoo;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.dataInstituzione}", required = true)
+    @ApiModelProperty(required = true)
     private String dataIstituzione;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.nomeResponsabile}", required = true)
+    @ApiModelProperty(required = true)
     private String nomeResponsabile;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.cognomeResponsabile}", required = true)
+    @ApiModelProperty(required = true)
     private String cognomeResponsabile;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.mailResponsabile}", required = true)
+    @ApiModelProperty(required = true)
     private String mailResponsabile;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.telefonoResponsabile}", required = true)
+    @ApiModelProperty(required = true)
     private String telefonoResponsabile;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.codiceComuneISTAT}", required = true)
+    @ApiModelProperty(required = true)
     private String codiceComuneISTAT;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.codiceCatastaleComune}", required = true)
+    @ApiModelProperty(required = true)
     private String codiceCatastaleComune;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.CAP}", required = true)
+    @ApiModelProperty(required = true)
     private String CAP;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.indirizzo}", required = true)
+    @ApiModelProperty(required = true)
     private String indirizzo;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.telefono}", required = true)
+    @ApiModelProperty(required = true)
     private String telefono;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.fax}", required = true)
+    @ApiModelProperty(required = true)
     private String fax;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.tipoMail1}")
     private String tipoMail1;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.protocolloInformatico}", required = true)
+    @ApiModelProperty(required = true)
     private String protocolloInformatico;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.URIProtocolloInformatico}", required = true)
+    @ApiModelProperty(required = true)
     private String URIProtocolloInformatico;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.dataAggiornamento}", required = true)
+    @ApiModelProperty(required = true)
     private String dataAggiornamento;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.mail1}")
     private String mail1;
 
-    @ApiModelProperty(value = "${swagger.model.aoo.codAoo}", required = true)
+    @ApiModelProperty(required = true)
     @JsonProperty(required = true)
     @NotBlank
     private String codAoo;
 
-    @ApiModelProperty(value = "${swagger.model.*.origin}", required = true)
+    @ApiModelProperty(required = true)
     @JsonProperty(required = true)
     @NotNull
     private Origin origin;

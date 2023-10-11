@@ -54,7 +54,7 @@
         "parameters" : [ {
           "name" : "page",
           "in" : "query",
-          "description" : "page",
+          "description" : "Desired page number for result pagination. It is optional, and the default value is 1 when not specified",
           "required" : false,
           "style" : "form",
           "schema" : {
@@ -64,7 +64,7 @@
         }, {
           "name" : "limit",
           "in" : "query",
-          "description" : "limit",
+          "description" : "Maximum number of items per page. It is optional, and the default value is 10 when not specified",
           "required" : false,
           "style" : "form",
           "schema" : {
@@ -231,7 +231,7 @@
         }, {
           "name" : "page",
           "in" : "query",
-          "description" : "page",
+          "description" : "Desired page number for result pagination. It is optional, and the default value is 1 when not specified",
           "required" : false,
           "style" : "form",
           "schema" : {
@@ -241,7 +241,7 @@
         }, {
           "name" : "limit",
           "in" : "query",
-          "description" : "limit",
+          "description" : "Maximum number of items per page. It is optional, and the default value is 10 when not specified",
           "required" : false,
           "style" : "form",
           "schema" : {
@@ -638,7 +638,7 @@
         }, {
           "name" : "page",
           "in" : "query",
-          "description" : "page",
+          "description" : "Desired page number for result pagination. It is optional, and the default value is 1 when not specified",
           "required" : false,
           "style" : "form",
           "schema" : {
@@ -648,7 +648,7 @@
         }, {
           "name" : "limit",
           "in" : "query",
-          "description" : "limit",
+          "description" : "Maximum number of items per page. It is optional, and the default value is 10 when not specified",
           "required" : false,
           "style" : "form",
           "schema" : {
@@ -978,7 +978,7 @@
         "parameters" : [ {
           "name" : "search",
           "in" : "query",
-          "description" : "${swagger.model.*.search}",
+          "description" : "Optional search field. Users can provide a search string to filter results",
           "required" : false,
           "style" : "form",
           "schema" : {
@@ -987,7 +987,7 @@
         }, {
           "name" : "page",
           "in" : "query",
-          "description" : "page",
+          "description" : "Desired page number for result pagination. It is optional, and the default value is 1 when not specified",
           "required" : false,
           "style" : "form",
           "schema" : {
@@ -997,7 +997,7 @@
         }, {
           "name" : "limit",
           "in" : "query",
-          "description" : "limit",
+          "description" : "Maximum number of items per page. It is optional, and the default value is 10 when not specified",
           "required" : false,
           "style" : "form",
           "schema" : {
@@ -1011,7 +1011,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/PDNDsResource"
+                  "$ref" : "#/components/schemas/StationsResource"
                 }
               }
             }
@@ -1065,13 +1065,13 @@
     "/stations/{taxId}" : {
       "get" : {
         "tags" : [ "stations" ],
-        "summary" : "Search station",
-        "description" : "Returns a list of station.",
+        "summary" : "Search station by its taxCode",
+        "description" : "Returns only one station.",
         "operationId" : "searchByTaxCodeUsingGET",
         "parameters" : [ {
           "name" : "taxId",
           "in" : "path",
-          "description" : "${swagger.model.taxId}",
+          "description" : "taxCode of station",
           "required" : true,
           "style" : "simple",
           "schema" : {
@@ -1084,7 +1084,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/PDNDResource"
+                  "$ref" : "#/components/schemas/StationResource"
                 }
               }
             }
@@ -1144,7 +1144,7 @@
         "parameters" : [ {
           "name" : "page",
           "in" : "query",
-          "description" : "page",
+          "description" : "Desired page number for result pagination. It is optional, and the default value is 1 when not specified",
           "required" : false,
           "style" : "form",
           "schema" : {
@@ -1154,7 +1154,7 @@
         }, {
           "name" : "limit",
           "in" : "query",
-          "description" : "limit",
+          "description" : "Maximum number of items per page. It is optional, and the default value is 10 when not specified",
           "required" : false,
           "style" : "form",
           "schema" : {
@@ -1314,92 +1314,72 @@
             "type" : "string"
           },
           "codAoo" : {
-            "type" : "string",
-            "description" : "${swagger.model.aoo.codAoo}"
+            "type" : "string"
           },
           "codiceCatastaleComune" : {
-            "type" : "string",
-            "description" : "${swagger.model.aoo.codiceCatastaleComune}"
+            "type" : "string"
           },
           "codiceComuneISTAT" : {
-            "type" : "string",
-            "description" : "${swagger.model.aoo.codiceComuneISTAT}"
+            "type" : "string"
           },
           "codiceFiscaleEnte" : {
-            "type" : "string",
-            "description" : "${swagger.model.aoo.codiceFiscaleEnte}"
+            "type" : "string"
           },
           "codiceIpa" : {
-            "type" : "string",
-            "description" : "${swagger.model.aoo.codiceIpa}"
+            "type" : "string"
           },
           "codiceUniAoo" : {
             "type" : "string",
             "description" : "AOO unique identifier, the same of Id"
           },
           "cognomeResponsabile" : {
-            "type" : "string",
-            "description" : "${swagger.model.aoo.cognomeResponsabile}"
+            "type" : "string"
           },
           "dataAggiornamento" : {
-            "type" : "string",
-            "description" : "${swagger.model.aoo.dataAggiornamento}"
+            "type" : "string"
           },
           "dataIstituzione" : {
-            "type" : "string",
-            "description" : "${swagger.model.aoo.dataInstituzione}"
+            "type" : "string"
           },
           "denominazioneAoo" : {
-            "type" : "string",
-            "description" : "${swagger.model.aoo.denominazioneAoo}"
+            "type" : "string"
           },
           "denominazioneEnte" : {
-            "type" : "string",
-            "description" : "${swagger.model.aoo.denominazioneEnte}"
+            "type" : "string"
           },
           "fax" : {
-            "type" : "string",
-            "description" : "${swagger.model.aoo.fax}"
+            "type" : "string"
           },
           "id" : {
             "type" : "string"
           },
           "indirizzo" : {
-            "type" : "string",
-            "description" : "${swagger.model.aoo.indirizzo}"
+            "type" : "string"
           },
           "mail1" : {
-            "type" : "string",
-            "description" : "${swagger.model.aoo.mail1}"
+            "type" : "string"
           },
           "mailResponsabile" : {
-            "type" : "string",
-            "description" : "${swagger.model.aoo.mailResponsabile}"
+            "type" : "string"
           },
           "nomeResponsabile" : {
-            "type" : "string",
-            "description" : "${swagger.model.aoo.nomeResponsabile}"
+            "type" : "string"
           },
           "origin" : {
             "type" : "string",
-            "description" : "Describes which is the source of data",
             "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
           },
           "protocolloInformatico" : {
-            "type" : "string",
-            "description" : "${swagger.model.aoo.protocolloInformatico}"
+            "type" : "string"
           },
           "telefono" : {
-            "type" : "string",
-            "description" : "${swagger.model.aoo.telefono}"
+            "type" : "string"
           },
           "telefonoResponsabile" : {
-            "type" : "string",
-            "description" : "${swagger.model.aoo.telefonoResponsabile}"
+            "type" : "string"
           },
           "tipoMail1" : {
-            "type" : "string",
-            "description" : "${swagger.model.aoo.tipoMail1}"
+            "type" : "string"
           },
           "uriprotocolloInformatico" : {
             "type" : "string"
@@ -1413,12 +1393,12 @@
         "properties" : {
           "count" : {
             "type" : "integer",
-            "description" : "${swagger.model.aoos.totalCount}",
+            "description" : "Total count of items",
             "format" : "int64"
           },
           "items" : {
             "type" : "array",
-            "description" : "${swagger.model.aoos.items}",
+            "description" : "List of AOO resource",
             "items" : {
               "$ref" : "#/components/schemas/AOOResource"
             }
@@ -1555,7 +1535,6 @@
       },
       "InstitutionResource" : {
         "title" : "InstitutionResource",
-        "required" : [ "address", "description", "digitalAddress", "id", "origin", "originId", "taxCode", "zipCode" ],
         "type" : "object",
         "properties" : {
           "address" : {
@@ -1564,7 +1543,7 @@
           },
           "aoo" : {
             "type" : "string",
-            "description" : "aoo"
+            "description" : "Area organizzativa omogenea"
           },
           "category" : {
             "type" : "string",
@@ -1576,9 +1555,7 @@
           },
           "digitalAddress" : {
             "type" : "string",
-            "description" : "Digital institution address",
-            "format" : "email",
-            "example" : "email@example.com"
+            "description" : "Institution digital address"
           },
           "id" : {
             "type" : "string",
@@ -1586,7 +1563,7 @@
           },
           "istatCode" : {
             "type" : "string",
-            "description" : "Institution Istat Code"
+            "description" : "Institution istat Code"
           },
           "o" : {
             "type" : "string",
@@ -1674,69 +1651,6 @@
           }
         }
       },
-      "PDNDResource" : {
-        "title" : "PDNDResource",
-        "required" : [ "description", "digitalAddress", "id", "origin", "originId", "taxCode" ],
-        "type" : "object",
-        "properties" : {
-          "anacEnabled" : {
-            "type" : "boolean",
-            "description" : "${swagger.model.station.anacEnabled}",
-            "example" : false
-          },
-          "anacEngaged" : {
-            "type" : "boolean",
-            "description" : "${swagger.model.station.anacEngaged}",
-            "example" : false
-          },
-          "description" : {
-            "type" : "string",
-            "description" : "station's name"
-          },
-          "digitalAddress" : {
-            "type" : "string",
-            "description" : "station's mail address",
-            "format" : "email",
-            "example" : "email@example.com"
-          },
-          "id" : {
-            "type" : "string",
-            "description" : "station's unique identifier"
-          },
-          "origin" : {
-            "type" : "string",
-            "description" : "Describes which is the source of data",
-            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
-          },
-          "originId" : {
-            "type" : "string",
-            "description" : "station's anac unique identifier"
-          },
-          "taxCode" : {
-            "type" : "string",
-            "description" : "taxCode of station"
-          }
-        }
-      },
-      "PDNDsResource" : {
-        "title" : "PDNDsResource",
-        "required" : [ "count", "items" ],
-        "type" : "object",
-        "properties" : {
-          "count" : {
-            "type" : "integer",
-            "description" : "list of station resource size",
-            "format" : "int64"
-          },
-          "items" : {
-            "type" : "array",
-            "description" : "list of station resource",
-            "items" : {
-              "$ref" : "#/components/schemas/PDNDResource"
-            }
-          }
-        }
-      },
       "Problem" : {
         "title" : "Problem",
         "required" : [ "status", "title" ],
@@ -1774,6 +1688,65 @@
         },
         "description" : "A \"problem detail\" as a way to carry machine-readable details of errors (https://datatracker.ietf.org/doc/html/rfc7807)"
       },
+      "StationResource" : {
+        "title" : "StationResource",
+        "required" : [ "description", "digitalAddress", "id", "origin", "originId", "taxCode" ],
+        "type" : "object",
+        "properties" : {
+          "anacEnabled" : {
+            "type" : "boolean"
+          },
+          "anacEngaged" : {
+            "type" : "boolean"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "station's name"
+          },
+          "digitalAddress" : {
+            "type" : "string",
+            "description" : "station's mail address",
+            "format" : "email",
+            "example" : "email@example.com"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "station's unique identifier"
+          },
+          "origin" : {
+            "type" : "string",
+            "description" : "Describes which is the source of data",
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
+          },
+          "originId" : {
+            "type" : "string",
+            "description" : "station's anac unique identifier"
+          },
+          "taxCode" : {
+            "type" : "string",
+            "description" : "taxCode of station"
+          }
+        }
+      },
+      "StationsResource" : {
+        "title" : "StationsResource",
+        "required" : [ "count", "items" ],
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "description" : "list of station resource size",
+            "format" : "int64"
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "list of station resource",
+            "items" : {
+              "$ref" : "#/components/schemas/StationResource"
+            }
+          }
+        }
+      },
       "UOResource" : {
         "title" : "UOResource",
         "required" : [ "codiceCatastaleComune", "codiceComuneISTAT", "codiceFiscaleEnte", "codiceIpa", "codiceUniAoo", "cognomeResponsabile", "dataAggiornamento", "dataIstituzione", "denominazioneEnte", "descrizioneUo", "fax", "indirizzo", "mail1", "mailResponsabile", "nomeResponsabile", "origin", "telefono", "telefonoResponsabile", "tipoMail1", "url" ],
@@ -1783,75 +1756,59 @@
             "type" : "string"
           },
           "codiceCatastaleComune" : {
-            "type" : "string",
-            "description" : "${swagger.model.uo.codiceCatastaleComune}"
+            "type" : "string"
           },
           "codiceComuneISTAT" : {
-            "type" : "string",
-            "description" : "${swagger.model.uo.codiceComuneISTAT}"
+            "type" : "string"
           },
           "codiceFiscaleEnte" : {
-            "type" : "string",
-            "description" : "${swagger.model.uo.codiceFiscaleEnte}"
+            "type" : "string"
           },
           "codiceIpa" : {
-            "type" : "string",
-            "description" : "${swagger.model.uo.codiceIpa}"
+            "type" : "string"
           },
           "codiceUniAoo" : {
-            "type" : "string",
-            "description" : "${swagger.model.uo.codiceUniAoo}"
+            "type" : "string"
           },
           "codiceUniUo" : {
             "type" : "string",
             "description" : "UO unique identifier, the same of Id"
           },
           "codiceUniUoPadre" : {
-            "type" : "string",
-            "description" : "${swagger.model.uo.codiceUniUoPadre}"
+            "type" : "string"
           },
           "cognomeResponsabile" : {
-            "type" : "string",
-            "description" : "${swagger.model.uo.cognomeResponsabile}"
+            "type" : "string"
           },
           "dataAggiornamento" : {
-            "type" : "string",
-            "description" : "${swagger.model.uo.dataAggiornamento}"
+            "type" : "string"
           },
           "dataIstituzione" : {
-            "type" : "string",
-            "description" : "${swagger.model.uo.dataInstituzione}"
+            "type" : "string"
           },
           "denominazioneEnte" : {
-            "type" : "string",
-            "description" : "${swagger.model.uo.denominazioneEnte}"
+            "type" : "string"
           },
           "descrizioneUo" : {
-            "type" : "string",
-            "description" : "${swagger.model.uo.descrizioneUo}"
+            "type" : "string"
           },
           "fax" : {
-            "type" : "string",
-            "description" : "${swagger.model.uo.fax}"
+            "type" : "string"
           },
           "id" : {
             "type" : "string"
           },
           "indirizzo" : {
-            "type" : "string",
-            "description" : "${swagger.model.uo.indirizzo}"
+            "type" : "string"
           },
           "mail1" : {
-            "type" : "string",
-            "description" : "${swagger.model.uo.mail1}"
+            "type" : "string"
           },
           "mailResponsabile" : {
-            "type" : "string",
-            "description" : "${swagger.model.uo.mailResponsabile}"
+            "type" : "string"
           },
           "nomeResponsabile" : {
-            "type" : "string",
-            "description" : "${swagger.model.uo.nomeResponsabile}"
+            "type" : "string"
           },
           "origin" : {
             "type" : "string",
@@ -1859,20 +1816,16 @@
             "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
           },
           "telefono" : {
-            "type" : "string",
-            "description" : "${swagger.model.uo.telefono}"
+            "type" : "string"
           },
           "telefonoResponsabile" : {
-            "type" : "string",
-            "description" : "${swagger.model.uo.telefonoResponsabile}"
+            "type" : "string"
           },
           "tipoMail1" : {
-            "type" : "string",
-            "description" : "${swagger.model.uo.tipoMail1}"
+            "type" : "string"
           },
           "url" : {
-            "type" : "string",
-            "description" : "${swagger.model.uo.url}"
+            "type" : "string"
           }
         }
       },
@@ -1883,12 +1836,12 @@
         "properties" : {
           "count" : {
             "type" : "integer",
-            "description" : "${swagger.model.uos.totalCount}",
+            "description" : "Total count of items",
             "format" : "int64"
           },
           "items" : {
             "type" : "array",
-            "description" : "${swagger.model.uos.items}",
+            "description" : "List of UO resource",
             "items" : {
               "$ref" : "#/components/schemas/UOResource"
             }

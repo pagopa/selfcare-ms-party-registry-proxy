@@ -30,32 +30,6 @@ class InstitutionResourceTest {
     }
 
     @Test
-    void validateNullFields() {
-        // given
-        HashMap<String, Class<? extends Annotation>> toCheckMap = new HashMap<>();
-        toCheckMap.put("id", NotBlank.class);
-        toCheckMap.put("originId", NotBlank.class);
-        toCheckMap.put("taxCode", NotBlank.class);
-        toCheckMap.put("description", NotBlank.class);
-        toCheckMap.put("digitalAddress", NotBlank.class);
-        toCheckMap.put("address", NotBlank.class);
-        toCheckMap.put("zipCode", NotBlank.class);
-        toCheckMap.put("origin", NotNull.class);
-        InstitutionResource resource = new InstitutionResource();
-        // when
-        Set<ConstraintViolation<Object>> violations = validator.validate(resource);
-        // then
-        assertFalse(violations.isEmpty());
-        List<ConstraintViolation<Object>> filteredViolations = violations.stream()
-                .filter(violation -> {
-                    Class<? extends Annotation> annotationToCheck = toCheckMap.get(violation.getPropertyPath().toString());
-                    return !violation.getConstraintDescriptor().getAnnotation().annotationType().equals(annotationToCheck);
-                })
-                .collect(Collectors.toList());
-        assertTrue(filteredViolations.isEmpty());
-    }
-
-    @Test
     void validateNotNullFields() {
         // given
         InstitutionResource resource = mockInstance(new InstitutionResource());

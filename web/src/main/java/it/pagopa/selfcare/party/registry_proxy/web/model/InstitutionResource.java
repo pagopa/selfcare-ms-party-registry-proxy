@@ -14,14 +14,10 @@ import java.util.ArrayList;
 @Data
 public class InstitutionResource implements Institution {
 
-    @ApiModelProperty(value = "${swagger.model.institution.id}", required = true)
-    @JsonProperty(required = true)
-    @NotBlank
+    @ApiModelProperty(value = "${swagger.model.institution.id}")
     private String id;
 
-    @ApiModelProperty(value = "${swagger.model.institution.originId}", required = true)
-    @JsonProperty(required = true)
-    @NotBlank
+    @ApiModelProperty(value = "${swagger.model.institution.originId}")
     private String originId;
 
     @ApiModelProperty(value = "${swagger.model.institution.o}")
@@ -33,38 +29,25 @@ public class InstitutionResource implements Institution {
     @ApiModelProperty(value = "${swagger.model.institution.aoo}")
     private String aoo;
 
-    @ApiModelProperty(value = "${swagger.model.institution.taxCode}", required = true)
-    @JsonProperty(required = true)
-    @NotBlank
+    @ApiModelProperty(value = "${swagger.model.institution.taxCode}")
     private String taxCode;
 
     @ApiModelProperty(value = "${swagger.model.institution.category}")
     private String category;
 
-    @ApiModelProperty(value = "${swagger.model.institution.description}", required = true)
-    @JsonProperty(required = true)
-    @NotBlank
+    @ApiModelProperty(value = "${swagger.model.institution.description}")
     private String description;
 
-    @ApiModelProperty(value = "${swagger.model.institution.digitalAddress}", required = true)
-    @JsonProperty(required = true)
-    @NotBlank
-    @Email
+    @ApiModelProperty(value = "${swagger.model.institution.digitalAddress}")
     private String digitalAddress;
 
-    @ApiModelProperty(value = "${swagger.model.institution.address}", required = true)
-    @JsonProperty(required = true)
-    @NotBlank
+    @ApiModelProperty(value = "${swagger.model.institution.address}")
     private String address;
 
-    @ApiModelProperty(value = "${swagger.model.institution.zipCode}", required = true)
-    @JsonProperty(required = true)
-    @NotBlank
+    @ApiModelProperty(value = "${swagger.model.institution.zipCode}")
     private String zipCode;
 
-    @ApiModelProperty(value = "${swagger.model.*.origin}", required = true)
-    @JsonProperty(required = true)
-    @NotNull
+    @ApiModelProperty(value = "${swagger.model.*.origin}")
     private Origin origin;
 
     @ApiModelProperty(value = "${swagger.model.institution.istatCode}")
