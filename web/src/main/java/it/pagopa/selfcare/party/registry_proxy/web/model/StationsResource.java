@@ -11,15 +11,15 @@ import java.util.List;
 
 @Data
 @Builder
-public class PDNDsResource {
+public class StationsResource {
 
-    @ApiModelProperty(value = "${swagger.model.pdnd.items}", required = true)
+    @ApiModelProperty(value = "${swagger.model.station.items}", required = true)
     @JsonProperty(required = true)
     @NotNull
     @Valid
-    private List<PDNDResource> items;
+    private List<StationResource> items;
 
-    @ApiModelProperty(value = "${swagger.model.pdnd.totalCount}", required = true)
+    @ApiModelProperty(value = "${swagger.model.station.totalCount}", required = true)
     @JsonProperty(required = true)
     @NotNull
     private Long count;

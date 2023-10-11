@@ -19,11 +19,9 @@ abstract class OpenDataConnectorTemplate<I extends Institution, C extends Catego
 
     private final OpenDataRestClient restClient;
 
-
     protected OpenDataConnectorTemplate(OpenDataRestClient restClient) {
         this.restClient = restClient;
     }
-
 
     @SneakyThrows
     @Override
@@ -111,7 +109,6 @@ abstract class OpenDataConnectorTemplate<I extends Institution, C extends Catego
         log.trace("getUOs end");
         return uos;
     }
-
 
     protected abstract Class<I> getInstitutionType();
 

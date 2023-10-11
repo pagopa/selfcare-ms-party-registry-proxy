@@ -1,7 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.reader;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.config.InMemoryIndexConfig;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.PDND;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
 import org.apache.lucene.store.Directory;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class PDNDIndexSearchServiceTest {
 
     @Test
     void getQueryResult() {
-        final QueryResult<PDND> results = indexSearchService.getQueryResult(new ArrayList<>(), 1);
+        final QueryResult<Station> results = indexSearchService.getQueryResult(new ArrayList<>(), 1);
         assertNotNull(results);
     }
 

@@ -1,9 +1,9 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.reader;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis.PDNDTokenAnalyzer;
-import it.pagopa.selfcare.party.registry_proxy.connector.lucene.converter.DocumentToPDNDConverter;
-import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.PDNDQueryResult;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.PDND;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis.StationTokenAnalyzer;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.converter.DocumentToStationConverter;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.StationQueryResult;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.store.Directory;
@@ -14,16 +14,16 @@ import java.util.List;
 
 @Slf4j
 @Service
-class PDNDIndexSearchService extends IndexSearchServiceTemplate<PDND> {
+class PDNDIndexSearchService extends IndexSearchServiceTemplate<Station> {
 
     @Autowired
     public PDNDIndexSearchService(Directory pdndDirectory) {
-        super(pdndDirectory, new PDNDTokenAnalyzer(), new DocumentToPDNDConverter());
+        super(pdndDirectory, new StationTokenAnalyzer(), new DocumentToStationConverter());
     }
 
     @Override
-    protected QueryResult<PDND> getQueryResult(List<PDND> items, long totalHits) {
-        final PDNDQueryResult queryResult = new PDNDQueryResult();
+    protected QueryResult<Station> getQueryResult(List<Station> items, long totalHits) {
+        final StationQueryResult queryResult = new StationQueryResult();
         queryResult.setItems(items);
         queryResult.setTotalHits(totalHits);
         return queryResult;
