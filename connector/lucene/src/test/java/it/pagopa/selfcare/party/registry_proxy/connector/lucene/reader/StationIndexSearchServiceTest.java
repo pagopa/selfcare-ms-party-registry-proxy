@@ -1,9 +1,8 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.reader;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.config.InMemoryIndexConfig;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
-import org.apache.lucene.store.Directory;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {
         InMemoryIndexConfig.class,
-        PDNDIndexSearchService.class
+        StationIndexSearchService.class
 })
-class PDNDIndexSearchServiceTest {
+class StationIndexSearchServiceTest {
 
     @Autowired
-    private PDNDIndexSearchService indexSearchService;
-
-    @Autowired
-    private Directory pdndDirectory;
+    private StationIndexSearchService indexSearchService;
 
     @Test
     void getQueryResult() {

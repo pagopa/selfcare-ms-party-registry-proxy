@@ -226,7 +226,7 @@
           "style" : "form",
           "schema" : {
             "type" : "string",
-            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "IVASS", "static" ]
           }
         }, {
           "name" : "page",
@@ -320,7 +320,7 @@
           "style" : "simple",
           "schema" : {
             "type" : "string",
-            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "IVASS", "static" ]
           }
         }, {
           "name" : "code",
@@ -745,7 +745,7 @@
           "style" : "form",
           "schema" : {
             "type" : "string",
-            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "IVASS", "static" ]
           }
         }, {
           "name" : "categories",
@@ -1381,7 +1381,7 @@
           "origin" : {
             "type" : "string",
             "description" : "{swagger.model.*.origin}",
-            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "IVASS", "static" ]
           },
           "protocolloInformatico" : {
             "type" : "string",
@@ -1484,7 +1484,7 @@
           "origin" : {
             "type" : "string",
             "description" : "Describes which is the source of data",
-            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "IVASS", "static" ]
           }
         }
       },
@@ -1588,7 +1588,7 @@
           "origin" : {
             "type" : "string",
             "description" : "Describes which is the source of data",
-            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "IVASS", "static" ]
           },
           "originId" : {
             "type" : "string",
@@ -1733,7 +1733,7 @@
           "origin" : {
             "type" : "string",
             "description" : "Describes which is the source of data",
-            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "IVASS", "static" ]
           },
           "originId" : {
             "type" : "string",
@@ -1844,7 +1844,7 @@
           "origin" : {
             "type" : "string",
             "description" : "Describes which is the source of data",
-            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "IVASS", "static" ]
           },
           "telefono" : {
             "type" : "string",

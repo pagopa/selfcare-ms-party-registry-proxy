@@ -1,6 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.writer;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis.StationTokenAnalyzer;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis.InsuranceCompanyTokenAnalyzer;
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.config.InMemoryIndexConfig;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.store.Directory;
@@ -16,17 +16,16 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {
         InMemoryIndexConfig.class,
-        StationTokenAnalyzer.class,
-        PDNDIndexWriterFactory.class
+        InsuranceCompanyTokenAnalyzer.class,
+        IvassIndexWriterFactory.class
 })
-class PDNDIndexWriterFactoryTest {
+class IvassIndexWriterFactoryTest {
 
     @Autowired
-    private Directory pdndDirectory;
+    private Directory ivassDirectory;
 
     @Autowired
-    private PDNDIndexWriterFactory indexWriterFactory;
-
+    private IvassIndexWriterFactory indexWriterFactory;
 
     @Test
     void create() {
@@ -36,15 +35,15 @@ class PDNDIndexWriterFactoryTest {
         // then
         assertNotNull(indexWriter);
         assertTrue(indexWriter.isOpen());
-        assertSame(pdndDirectory, indexWriter.getDirectory());
-        assertEquals(StationTokenAnalyzer.class, indexWriter.getAnalyzer().getClass());
+        assertSame(ivassDirectory, indexWriter.getDirectory());
+        assertEquals(InsuranceCompanyTokenAnalyzer.class, indexWriter.getAnalyzer().getClass());
     }
 
 
     @Test
     void create_Exception() {
         // given
-        final IndexWriterFactory indexWriterFactory = new PDNDIndexWriterFactory(null, new StationTokenAnalyzer());
+        final IndexWriterFactory indexWriterFactory = new StationIndexWriterFactory(null, new InsuranceCompanyTokenAnalyzer());
         // when
         final Executable executable = indexWriterFactory::create;
         // then

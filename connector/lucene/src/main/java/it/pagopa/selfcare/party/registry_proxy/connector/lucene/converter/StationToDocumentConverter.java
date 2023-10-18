@@ -8,7 +8,6 @@ import org.apache.lucene.util.BytesRef;
 
 import java.util.function.Function;
 
-import static it.pagopa.selfcare.party.registry_proxy.connector.model.Institution.Field.ID;
 import static it.pagopa.selfcare.party.registry_proxy.connector.model.Station.Field.*;
 
 @Slf4j

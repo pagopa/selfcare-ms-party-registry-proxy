@@ -29,8 +29,9 @@ public class InMemoryIndexConfig {
     }
 
     @Bean
-    public Directory pdndDirectory() {
-        return new RAMDirectory();
-    }
+    public Directory anacDirectory() { return new RAMDirectory(); }
+
+    @Bean
+    public Directory ivassDirectory() { return new RAMDirectory(); }
 
 }
