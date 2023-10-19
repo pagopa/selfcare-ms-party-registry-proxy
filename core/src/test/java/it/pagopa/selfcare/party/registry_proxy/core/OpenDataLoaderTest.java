@@ -69,7 +69,7 @@ class OpenDataLoaderTest {
         when(anacDataConnector.getStations())
                .thenReturn(stations);
         final List insuranceCompanies = List.of();
-        when(ivassDataConnector.getAS())
+        when(ivassDataConnector.getInsurances())
                 .thenReturn(insuranceCompanies);
         // when
         openDataLoader.run();

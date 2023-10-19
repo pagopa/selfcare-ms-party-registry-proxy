@@ -56,7 +56,7 @@ public class OpenDataLoader implements CommandLineRunner {
             aooIndexWriterService.adds(openDataConnector.getAOOs());
             uoIndexWriterService.adds(openDataConnector.getUOs());
             stationIndexWriterService.adds(anacDataConnector.getStations());
-            ivassIndexWriterService.adds(ivassDataConnector.getAS());
+            ivassIndexWriterService.adds(ivassDataConnector.getInsurances());
         });
         log.trace("run end");
     }
