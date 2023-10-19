@@ -6,6 +6,7 @@ import it.pagopa.selfcare.party.registry_proxy.core.IvassService;
 import it.pagopa.selfcare.party.registry_proxy.web.config.WebTestConfig;
 import it.pagopa.selfcare.party.registry_proxy.web.handler.PartyRegistryProxyExceptionHandler;
 import it.pagopa.selfcare.party.registry_proxy.web.model.DummyInsuranceCompany;
+import it.pagopa.selfcare.party.registry_proxy.web.model.DummyInsuranceQueryResult;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.InsuranceCompanyMapperImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.Optional;
 
 import static it.pagopa.selfcare.commons.utils.TestUtils.mockInstance;
 import static org.hamcrest.Matchers.notNullValue;
@@ -79,6 +82,65 @@ class IvassControllerTest {
         // then
         verify(ivassService, times(1))
                 .findByTaxCode(taxId);
+        verifyNoMoreInteractions(ivassService);
+    }
+
+    @Test
+    void search() throws Exception {
+        // given
+        final String search = "search";
+        final String page = "2";
+        final String limit = "2";
+        when(ivassService.search(any(), anyInt(), anyInt()))
+                .thenReturn(new DummyInsuranceQueryResult());
+        // when
+        mvc.perform(MockMvcRequestBuilders
+                        .get(BASE_URL + "/")
+                        .queryParam("search", search)
+                        .queryParam("page", page)
+                        .queryParam("limit", limit)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .accept(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count", notNullValue()))
+                .andExpect(jsonPath("$.items", notNullValue()))
+                .andExpect(jsonPath("$.items[0].id", notNullValue()))
+                .andExpect(jsonPath("$.items[0].originId", notNullValue()))
+                .andExpect(jsonPath("$.items[0].workType", notNullValue()))
+                .andExpect(jsonPath("$.items[0].registerType", notNullValue()))
+                .andExpect(jsonPath("$.items[0].address", notNullValue()))
+                .andExpect(jsonPath("$.items[0].taxCode", notNullValue()))
+                .andExpect(jsonPath("$.items[0].description", notNullValue()))
+                .andExpect(jsonPath("$.items[0].digitalAddress", notNullValue()));
+        // then
+        verify(ivassService, times(1))
+                .search(Optional.of(search), Integer.parseInt(page), Integer.parseInt(limit));
+        verifyNoMoreInteractions(ivassService);
+    }
+
+    @Test
+    void search_defaultInputParams() throws Exception {
+        // given
+        when(ivassService.search(any(), anyInt(), anyInt()))
+                .thenReturn(new DummyInsuranceQueryResult());
+        // when
+        mvc.perform(MockMvcRequestBuilders
+                        .get(BASE_URL + "/")
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .accept(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count", notNullValue()))
+                .andExpect(jsonPath("$.items", notNullValue()))
+                .andExpect(jsonPath("$.items[0].id", notNullValue()))
+                .andExpect(jsonPath("$.items[0].originId", notNullValue()))
+                .andExpect(jsonPath("$.items[0].registerType", notNullValue()))
+                .andExpect(jsonPath("$.items[0].workType", notNullValue()))
+                .andExpect(jsonPath("$.items[0].taxCode", notNullValue()))
+                .andExpect(jsonPath("$.items[0].description", notNullValue()))
+                .andExpect(jsonPath("$.items[0].digitalAddress", notNullValue()));
+        // then
+        verify(ivassService, times(1))
+                .search(Optional.empty(), 1, 10);
         verifyNoMoreInteractions(ivassService);
     }
 }
