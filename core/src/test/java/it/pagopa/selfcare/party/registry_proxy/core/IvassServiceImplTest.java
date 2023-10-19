@@ -2,8 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.core;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.DummyInsuranceCompany;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.InsuranceCompany;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
 import it.pagopa.selfcare.party.registry_proxy.core.exception.TooManyResourceFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -66,5 +66,43 @@ class IvassServiceImplTest {
         final InsuranceCompany result = ivassService.findByTaxCode(taxId);
         // then
         assertSame(dummyCompany, result);
+    }
+
+    @Test
+    void search_emptySearchText() {
+        // given
+        final Optional<String> searchText = Optional.empty();
+        final int page = 0;
+        final int limit = 0;
+
+        final DummyInsuranceQueryResult queryResultMock = new DummyInsuranceQueryResult();
+        when(indexSearchService.findAll(anyInt(), anyInt(), anyString()))
+                .thenReturn(queryResultMock);
+        // when
+        final QueryResult<InsuranceCompany> queryResult = ivassService.search(searchText, page, limit);
+        // then
+        assertSame(queryResultMock, queryResult);
+        verify(indexSearchService, times(1))
+                .findAll(page, limit, Entity.INSURANCE_COMPANY.toString());
+        verifyNoMoreInteractions(indexSearchService);
+    }
+
+    @Test
+    void search_notEmptySearchText() {
+        // given
+        final Optional<String> searchText = Optional.of("pippo");
+        final int page = 0;
+        final int limit = 0;
+
+        final DummyInsuranceQueryResult queryResultMock = new DummyInsuranceQueryResult();
+        when(indexSearchService.fullTextSearch(any(), anyString(), anyInt(), anyInt()))
+                .thenReturn(queryResultMock);
+        // when
+        final QueryResult<InsuranceCompany> queryResult = ivassService.search(searchText, page, limit);
+        // then
+        assertSame(queryResultMock, queryResult);
+        verify(indexSearchService, times(1))
+                .fullTextSearch(InsuranceCompany.Field.DESCRIPTION, searchText.get(), page, limit);
+        verifyNoMoreInteractions(indexSearchService);
     }
 }

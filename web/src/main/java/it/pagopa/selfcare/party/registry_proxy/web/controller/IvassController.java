@@ -3,13 +3,19 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.InsuranceCompany;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
 import it.pagopa.selfcare.party.registry_proxy.core.IvassService;
+import it.pagopa.selfcare.party.registry_proxy.web.model.InsuranceCompaniesResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.InsuranceCompanyResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.InsuranceCompanyMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -31,11 +37,37 @@ public class IvassController {
     @ApiOperation(value = "${swagger.api.insurance-company.search.byId.summary}", notes = "${swagger.api.insurance-company.search.byId.notes}")
     public InsuranceCompanyResource searchByTaxCode(@ApiParam("${swagger.model.insurance-company.taxCode}")
                                                     @PathVariable("taxId") String taxId) {
-        log.trace("find AS start");
-        log.debug("find AS = {}", taxId);
+        log.trace("searchByTaxCode start");
+        log.debug("searchByTaxCode parameter = {}", taxId);
         final InsuranceCompanyResource insuranceCompany = insuranceCompanyMapper.toResource(ivassService.findByTaxCode(taxId));
-        log.debug("find AS result = {}", insuranceCompany);
-        log.trace("find AS end");
+        log.debug("searchByTaxCode result = {}", insuranceCompany);
+        log.trace("searchByTaxCode end");
         return insuranceCompany;
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "${swagger.api.insurance-company.search.summary}", notes = "${swagger.api.insurance-company.search.notes}")
+    public InsuranceCompaniesResource search(@ApiParam("${swagger.model.*.search}")
+                                             @RequestParam(value = "search", required = false)
+                                                 Optional<String> search,
+                                             @ApiParam(value = "${swagger.model.*.page}")
+                                             @RequestParam(value = "page", required = false, defaultValue = "1")
+                                             Integer page,
+                                             @ApiParam(value = "${swagger.model.*.limit}")
+                                             @RequestParam(value = "limit", required = false, defaultValue = "10")
+                                             Integer limit) {
+        log.trace("search start");
+        log.debug("search search = {}, page = {}, limit = {}", search, page, limit);
+        final QueryResult<InsuranceCompany> result = ivassService.search(search, page, limit);
+        final InsuranceCompaniesResource companiesResource = InsuranceCompaniesResource.builder()
+                .items(result.getItems().stream()
+                        .map(insuranceCompanyMapper::toResource)
+                        .collect(Collectors.toList()))
+                .count(result.getTotalHits())
+                .build();
+        log.debug("search result = {}", companiesResource);
+        log.trace("search end");
+        return companiesResource;
     }
 }
