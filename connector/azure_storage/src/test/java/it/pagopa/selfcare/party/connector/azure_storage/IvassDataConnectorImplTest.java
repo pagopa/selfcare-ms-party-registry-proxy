@@ -30,7 +30,7 @@ class IvassDataConnectorImplTest {
                 "aaaaaaa,codice_test,denominazione_test,test@pec.it,lavoro,albo\n";
         response.setData(bytes.getBytes(StandardCharsets.UTF_8));
         when(azureBlobClientMock.getFile(anyString())).thenReturn(response);
-        final List<InsuranceCompany> companies = ivassDataConnector.getAS();
+        final List<InsuranceCompany> companies = ivassDataConnector.getInsurances();
         assertNotNull(companies);
         verify(azureBlobClientMock, times(1)).getFile(filename);
         verifyNoMoreInteractions(azureBlobClientMock);
