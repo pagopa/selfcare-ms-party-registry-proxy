@@ -14,11 +14,11 @@ import java.util.List;
 
 @Slf4j
 @Service
-class PDNDIndexSearchService extends IndexSearchServiceTemplate<Station> {
+class StationIndexSearchService extends IndexSearchServiceTemplate<Station> {
 
     @Autowired
-    public PDNDIndexSearchService(Directory pdndDirectory) {
-        super(pdndDirectory, new StationTokenAnalyzer(), new DocumentToStationConverter());
+    public StationIndexSearchService(Directory anacDirectory) {
+        super(anacDirectory, new StationTokenAnalyzer(), new DocumentToStationConverter());
     }
 
     @Override

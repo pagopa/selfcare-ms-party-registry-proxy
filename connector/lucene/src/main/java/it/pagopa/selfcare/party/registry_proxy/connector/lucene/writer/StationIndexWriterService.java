@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-class PDNDIndexWriterService extends IndexWriterServiceTemplate<Station> {
+class StationIndexWriterService extends IndexWriterServiceTemplate<Station> {
 
     @Autowired
-    public PDNDIndexWriterService(@Qualifier("pdndIndexWriterFactory") IndexWriterFactory pdndIndexWriterFactory) {
-        super(pdndIndexWriterFactory, new StationToDocumentConverter());
+    public StationIndexWriterService(@Qualifier("stationIndexWriterFactory") IndexWriterFactory stationIndexWriterFactory) {
+        super(stationIndexWriterFactory, new StationToDocumentConverter());
     }
 
     @Override
