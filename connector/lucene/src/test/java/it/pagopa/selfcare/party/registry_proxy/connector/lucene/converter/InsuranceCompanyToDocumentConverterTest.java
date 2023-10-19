@@ -2,6 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.lucene.converter;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.DummyInsuranceCompany;
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.InsuranceCompanyEntity;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.InsuranceCompany;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.InsuranceCompany.Field;
 import org.apache.lucene.document.Document;
@@ -46,7 +47,7 @@ class InsuranceCompanyToDocumentConverterTest {
         assertEquals(input.getDescription(), output.get(Field.DESCRIPTION.toString()));
         assertEquals(input.getDigitalAddress(), output.get(Field.DIGITAL_ADDRESS.toString()));
         assertEquals(input.getRegisterType(), output.get(Field.REGISTER_TYPE.toString()));
-        assertEquals(input.getWorkType(), output.get(Field.WORK_TYPE.toString()));
+        assertEquals(input.getAddress(), output.get(Field.ADDRESS.toString()));
         final Set<String> fieldValues = Arrays.stream(Field.values())
                 .map(Field::toString)
                 .collect(Collectors.toSet());
@@ -65,9 +66,10 @@ class InsuranceCompanyToDocumentConverterTest {
         assertNotNull(output);
         assertEquals(input.getId(), output.get(Field.ID.toString()));
         assertEquals(input.getTaxCode(), output.get(Field.TAX_CODE.toString()));
+        assertEquals(input.getOrigin().toString(), output.get(Institution.Field.ORIGIN.toString()));
         assertEquals(input.getDescription(), output.get(Field.DESCRIPTION.toString()));
         assertEquals(input.getDigitalAddress(), output.get(Field.DIGITAL_ADDRESS.toString()));
-        assertEquals(input.getWorkType(), output.get(Field.WORK_TYPE.toString()));
+        assertEquals(input.getAddress(), output.get(Field.ADDRESS.toString()));
         assertEquals(input.getRegisterType(), output.get(Field.REGISTER_TYPE.toString()));
         final Set<String> fieldValues = Arrays.stream(Field.values())
                 .map(Field::toString)

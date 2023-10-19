@@ -41,7 +41,7 @@ class StationControllerTest {
     protected ObjectMapper mapper;
 
     @MockBean
-    private StationService StationServiceMock;
+    private StationService stationServiceMock;
 
     @Test
     void search() throws Exception {
@@ -49,7 +49,7 @@ class StationControllerTest {
         final String search = "search";
         final String page = "2";
         final String limit = "2";
-        when(StationServiceMock.search(any(), anyInt(), anyInt()))
+        when(stationServiceMock.search(any(), anyInt(), anyInt()))
                 .thenReturn(new DummyPDNDQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
@@ -70,15 +70,15 @@ class StationControllerTest {
                 .andExpect(jsonPath("$.items[0].description", notNullValue()))
                 .andExpect(jsonPath("$.items[0].digitalAddress", notNullValue()));
         // then
-        verify(StationServiceMock, times(1))
+        verify(stationServiceMock, times(1))
                 .search(Optional.of(search), Integer.parseInt(page), Integer.parseInt(limit));
-        verifyNoMoreInteractions(StationServiceMock);
+        verifyNoMoreInteractions(stationServiceMock);
     }
 
     @Test
     void search_defaultInputParams() throws Exception {
         // given
-        when(StationServiceMock.search(any(), anyInt(), anyInt()))
+        when(stationServiceMock.search(any(), anyInt(), anyInt()))
                 .thenReturn(new DummyPDNDQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
@@ -96,16 +96,16 @@ class StationControllerTest {
                 .andExpect(jsonPath("$.items[0].description", notNullValue()))
                 .andExpect(jsonPath("$.items[0].digitalAddress", notNullValue()));
         // then
-        verify(StationServiceMock, times(1))
+        verify(stationServiceMock, times(1))
                 .search(Optional.empty(), 1, 10);
-        verifyNoMoreInteractions(StationServiceMock);
+        verifyNoMoreInteractions(stationServiceMock);
     }
 
     @Test
     void findStation() throws Exception {
         // given
         final String taxId = "CODE";
-        when(StationServiceMock.findByTaxId(any()))
+        when(stationServiceMock.findByTaxId(any()))
                 .thenReturn(mockInstance(new DummyPDND()));
         // when
         mvc.perform(MockMvcRequestBuilders
@@ -121,16 +121,16 @@ class StationControllerTest {
                 .andExpect(jsonPath("$.anacEngaged", notNullValue()));
         // then
 
-        verify(StationServiceMock, times(1))
+        verify(stationServiceMock, times(1))
                 .findByTaxId(taxId);
-        verifyNoMoreInteractions(StationServiceMock);
+        verifyNoMoreInteractions(stationServiceMock);
     }
 
     @Test
     void findStationNotFound() throws Exception {
         // given
         final String taxId = "CODE";
-        when(StationServiceMock.findByTaxId(any()))
+        when(stationServiceMock.findByTaxId(any()))
                 .thenThrow(ResourceNotFoundException.class);
         // when
         mvc.perform(MockMvcRequestBuilders
@@ -139,8 +139,8 @@ class StationControllerTest {
                         .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isNotFound());
         // then
-        verify(StationServiceMock, times(1))
+        verify(stationServiceMock, times(1))
                 .findByTaxId(taxId);
-        verifyNoMoreInteractions(StationServiceMock);
+        verifyNoMoreInteractions(stationServiceMock);
     }
 }
