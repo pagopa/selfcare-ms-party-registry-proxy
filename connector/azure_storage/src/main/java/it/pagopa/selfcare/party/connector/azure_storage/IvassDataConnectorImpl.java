@@ -42,7 +42,6 @@ public class IvassDataConnectorImpl implements IvassDataConnector {
             CsvToBean<InsuranceCompany> csvToBean = new CsvToBeanBuilder<InsuranceCompany>(reader)
                     .withType(IvassDataTemplate.class)
                     .withSeparator(';')
-                    .withIgnoreLeadingWhiteSpace(true)
                     .build();
             companies = csvToBean.parse();
         } catch (Exception e) {

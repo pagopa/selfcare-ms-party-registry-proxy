@@ -26,8 +26,8 @@ class IvassDataConnectorImplTest {
         final String filename = "test.csv";
         IvassDataConnector ivassDataConnector = new IvassDataConnectorImpl(filename, azureBlobClientMock);
         ResourceResponse response = new ResourceResponse();
-        String bytes = "CODICE_IVASS,CODICE_FISCALE,DENOMINAZIONE_IMPRESA,PEC,TIPO_LAVORO,TIPO_ALBO\n" +
-                "aaaaaaa,codice_test,denominazione_test,test@pec.it,lavoro,albo\n";
+        String bytes = "CODICE_IVASS;CODICE_FISCALE;DENOMINAZIONE_IMPRESA;PEC;TIPO_LAVORO;TIPO_ALBO\n" +
+                "aaaaaaa;codice_test;denominazione_test;test@pec.it;lavoro;albo\n";
         response.setData(bytes.getBytes(StandardCharsets.UTF_8));
         when(azureBlobClientMock.getFile(anyString())).thenReturn(response);
         final List<InsuranceCompany> companies = ivassDataConnector.getInsurances();
