@@ -23,7 +23,7 @@ public class DocumentToInsuranceCompanyConverter implements Function<Document, I
             company.setTaxCode(document.get(TAX_CODE.toString()));
             company.setDescription(document.get(DESCRIPTION.toString()));
             company.setDigitalAddress(document.get(DIGITAL_ADDRESS.toString()));
-            company.setOrigin(Origin.ANAC);
+            company.setOrigin(Origin.IVASS);
         }
         return company;
     }
