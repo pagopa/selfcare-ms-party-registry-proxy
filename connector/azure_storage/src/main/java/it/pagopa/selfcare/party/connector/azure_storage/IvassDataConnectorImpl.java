@@ -34,7 +34,7 @@ public class IvassDataConnectorImpl implements IvassDataConnector {
     }
 
     @Override
-    public List<InsuranceCompany> getAS() {
+    public List<InsuranceCompany> getInsurances() {
         log.trace("getAS start");
         List<InsuranceCompany> companies = new ArrayList<>();
         final ResourceResponse resourceResponse = fileStorageConnector.getFile(sourceFilename);

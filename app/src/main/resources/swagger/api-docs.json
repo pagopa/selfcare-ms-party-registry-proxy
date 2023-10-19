@@ -35,6 +35,9 @@
     "name" : "institution",
     "description" : "Institution operations"
   }, {
+    "name" : "insurance-companies",
+    "description" : "Ivass Controller"
+  }, {
     "name" : "nationalRegistries",
     "description" : "National Registries Controller"
   }, {
@@ -814,6 +817,172 @@
         } ]
       }
     },
+    "/insurance-companies" : {
+      "get" : {
+        "tags" : [ "insurance-companies" ],
+        "summary" : "Search insurance company",
+        "description" : "Returns a list of insurance companies",
+        "operationId" : "searchUsingGET_1",
+        "parameters" : [ {
+          "name" : "search",
+          "in" : "query",
+          "description" : "Optional search field. Users can provide a search string to filter results",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "Desired page number for result pagination. It is optional, and the default value is 1 when not specified",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Maximum number of items per page. It is optional, and the default value is 10 when not specified",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InsuranceCompaniesResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/insurance-companies/{taxId}" : {
+      "get" : {
+        "tags" : [ "insurance-companies" ],
+        "summary" : "Search insurance company by its taxCode",
+        "description" : "Returns only one insurance company.",
+        "operationId" : "searchByTaxCodeUsingGET",
+        "parameters" : [ {
+          "name" : "taxId",
+          "in" : "path",
+          "description" : "taxCode of insurance company",
+          "required" : true,
+          "style" : "simple",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InsuranceCompanyResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
     "/national-registries/legal-address" : {
       "get" : {
         "tags" : [ "nationalRegistries" ],
@@ -974,7 +1143,7 @@
         "tags" : [ "stations" ],
         "summary" : "Search station",
         "description" : "Returns a list of station.",
-        "operationId" : "searchUsingGET_1",
+        "operationId" : "searchUsingGET_2",
         "parameters" : [ {
           "name" : "search",
           "in" : "query",
@@ -1067,7 +1236,7 @@
         "tags" : [ "stations" ],
         "summary" : "Search station by its taxCode",
         "description" : "Returns only one station.",
-        "operationId" : "searchByTaxCodeUsingGET",
+        "operationId" : "searchByTaxCodeUsingGET_1",
         "parameters" : [ {
           "name" : "taxId",
           "in" : "path",
@@ -1622,6 +1791,68 @@
             "items" : {
               "$ref" : "#/components/schemas/InstitutionResource"
             }
+          }
+        }
+      },
+      "InsuranceCompaniesResource" : {
+        "title" : "InsuranceCompaniesResource",
+        "required" : [ "count", "items" ],
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "description" : "list of companies resource size",
+            "format" : "int64"
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "list of insurance companies resource",
+            "items" : {
+              "$ref" : "#/components/schemas/InsuranceCompanyResource"
+            }
+          }
+        }
+      },
+      "InsuranceCompanyResource" : {
+        "title" : "InsuranceCompanyResource",
+        "type" : "object",
+        "properties" : {
+          "address" : {
+            "type" : "string",
+            "description" : "Identifies legal address of insurance company"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "insurance company's name"
+          },
+          "digitalAddress" : {
+            "type" : "string",
+            "description" : "insurance company's mail address"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "insurance company's unique identifier"
+          },
+          "origin" : {
+            "type" : "string",
+            "description" : "Describes which is the source of data",
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "IVASS", "static" ]
+          },
+          "originId" : {
+            "type" : "string",
+            "description" : "insurance company's IVASS unique identifier"
+          },
+          "registerType" : {
+            "type" : "string",
+            "description" : "Identifies register type for company"
+          },
+          "taxCode" : {
+            "type" : "string",
+            "description" : "taxCode of insurance company"
+          },
+          "workType" : {
+            "type" : "string",
+            "description" : "Identifies work type for company"
           }
         }
       },

@@ -2,12 +2,12 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
-import it.pagopa.selfcare.party.registry_proxy.core.StationService;
+import it.pagopa.selfcare.party.registry_proxy.core.IvassService;
 import it.pagopa.selfcare.party.registry_proxy.web.config.WebTestConfig;
 import it.pagopa.selfcare.party.registry_proxy.web.handler.PartyRegistryProxyExceptionHandler;
-import it.pagopa.selfcare.party.registry_proxy.web.model.DummyPDND;
-import it.pagopa.selfcare.party.registry_proxy.web.model.DummyPDNDQueryResult;
-import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.StationMapperImpl;
+import it.pagopa.selfcare.party.registry_proxy.web.model.DummyInsuranceCompany;
+import it.pagopa.selfcare.party.registry_proxy.web.model.DummyInsuranceQueryResult;
+import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.InsuranceCompanyMapperImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -28,11 +28,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(value = {StationController.class}, excludeAutoConfiguration = SecurityAutoConfiguration.class)
-@ContextConfiguration(classes = {StationController.class, WebTestConfig.class, PartyRegistryProxyExceptionHandler.class, StationMapperImpl.class})
-class StationControllerTest {
+@WebMvcTest(value = {IvassController.class}, excludeAutoConfiguration = SecurityAutoConfiguration.class)
+@ContextConfiguration(classes = {IvassController.class, WebTestConfig.class, PartyRegistryProxyExceptionHandler.class, InsuranceCompanyMapperImpl.class})
+class IvassControllerTest {
 
-    private static final String BASE_URL = "/stations";
+    private static final String BASE_URL = "/insurance-companies";
 
     @Autowired
     protected MockMvc mvc;
@@ -41,7 +41,7 @@ class StationControllerTest {
     protected ObjectMapper mapper;
 
     @MockBean
-    private StationService stationServiceMock;
+    private IvassService ivassService;
 
     @Test
     void search() throws Exception {
@@ -49,8 +49,8 @@ class StationControllerTest {
         final String search = "search";
         final String page = "2";
         final String limit = "2";
-        when(stationServiceMock.search(any(), anyInt(), anyInt()))
-                .thenReturn(new DummyPDNDQueryResult());
+        when(ivassService.search(any(), anyInt(), anyInt()))
+                .thenReturn(new DummyInsuranceQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
                         .get(BASE_URL + "/")
@@ -64,22 +64,23 @@ class StationControllerTest {
                 .andExpect(jsonPath("$.items", notNullValue()))
                 .andExpect(jsonPath("$.items[0].id", notNullValue()))
                 .andExpect(jsonPath("$.items[0].originId", notNullValue()))
-                .andExpect(jsonPath("$.items[0].anacEnabled", notNullValue()))
-                .andExpect(jsonPath("$.items[0].anacEngaged", notNullValue()))
+                .andExpect(jsonPath("$.items[0].workType", notNullValue()))
+                .andExpect(jsonPath("$.items[0].registerType", notNullValue()))
+                .andExpect(jsonPath("$.items[0].address", notNullValue()))
                 .andExpect(jsonPath("$.items[0].taxCode", notNullValue()))
                 .andExpect(jsonPath("$.items[0].description", notNullValue()))
                 .andExpect(jsonPath("$.items[0].digitalAddress", notNullValue()));
         // then
-        verify(stationServiceMock, times(1))
+        verify(ivassService, times(1))
                 .search(Optional.of(search), Integer.parseInt(page), Integer.parseInt(limit));
-        verifyNoMoreInteractions(stationServiceMock);
+        verifyNoMoreInteractions(ivassService);
     }
 
     @Test
     void search_defaultInputParams() throws Exception {
         // given
-        when(stationServiceMock.search(any(), anyInt(), anyInt()))
-                .thenReturn(new DummyPDNDQueryResult());
+        when(ivassService.search(any(), anyInt(), anyInt()))
+                .thenReturn(new DummyInsuranceQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
                         .get(BASE_URL + "/")
@@ -90,23 +91,23 @@ class StationControllerTest {
                 .andExpect(jsonPath("$.items", notNullValue()))
                 .andExpect(jsonPath("$.items[0].id", notNullValue()))
                 .andExpect(jsonPath("$.items[0].originId", notNullValue()))
-                .andExpect(jsonPath("$.items[0].anacEnabled", notNullValue()))
-                .andExpect(jsonPath("$.items[0].anacEngaged", notNullValue()))
+                .andExpect(jsonPath("$.items[0].registerType", notNullValue()))
+                .andExpect(jsonPath("$.items[0].workType", notNullValue()))
                 .andExpect(jsonPath("$.items[0].taxCode", notNullValue()))
                 .andExpect(jsonPath("$.items[0].description", notNullValue()))
                 .andExpect(jsonPath("$.items[0].digitalAddress", notNullValue()));
         // then
-        verify(stationServiceMock, times(1))
+        verify(ivassService, times(1))
                 .search(Optional.empty(), 1, 10);
-        verifyNoMoreInteractions(stationServiceMock);
+        verifyNoMoreInteractions(ivassService);
     }
 
     @Test
     void findStation() throws Exception {
         // given
         final String taxId = "CODE";
-        when(stationServiceMock.findByTaxId(any()))
-                .thenReturn(mockInstance(new DummyPDND()));
+        when(ivassService.findByTaxCode(any()))
+                .thenReturn(mockInstance(new DummyInsuranceCompany()));
         // when
         mvc.perform(MockMvcRequestBuilders
                         .get(BASE_URL + "/{taxId}", taxId)
@@ -118,19 +119,19 @@ class StationControllerTest {
                 .andExpect(jsonPath("$.taxCode", notNullValue()))
                 .andExpect(jsonPath("$.description", notNullValue()))
                 .andExpect(jsonPath("$.digitalAddress", notNullValue()))
-                .andExpect(jsonPath("$.anacEngaged", notNullValue()));
+                .andExpect(jsonPath("$.address", notNullValue()));
         // then
 
-        verify(stationServiceMock, times(1))
-                .findByTaxId(taxId);
-        verifyNoMoreInteractions(stationServiceMock);
+        verify(ivassService, times(1))
+                .findByTaxCode(taxId);
+        verifyNoMoreInteractions(ivassService);
     }
 
     @Test
     void findStationNotFound() throws Exception {
         // given
         final String taxId = "CODE";
-        when(stationServiceMock.findByTaxId(any()))
+        when(ivassService.findByTaxCode(any()))
                 .thenThrow(ResourceNotFoundException.class);
         // when
         mvc.perform(MockMvcRequestBuilders
@@ -139,8 +140,8 @@ class StationControllerTest {
                         .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isNotFound());
         // then
-        verify(stationServiceMock, times(1))
-                .findByTaxId(taxId);
-        verifyNoMoreInteractions(stationServiceMock);
+        verify(ivassService, times(1))
+                .findByTaxCode(taxId);
+        verifyNoMoreInteractions(ivassService);
     }
 }
