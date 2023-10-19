@@ -40,7 +40,7 @@ class IvassControllerTest {
     private IvassService ivassService;
 
     @Test
-    void findStation() throws Exception {
+    void findInsurance() throws Exception {
         // given
         final String taxId = "CODE";
         when(ivassService.findByTaxCode(any()))
@@ -65,7 +65,7 @@ class IvassControllerTest {
     }
 
     @Test
-    void findStationNotFound() throws Exception {
+    void findInsuranceNotFound() throws Exception {
         // given
         final String taxId = "CODE";
         when(ivassService.findByTaxCode(any()))

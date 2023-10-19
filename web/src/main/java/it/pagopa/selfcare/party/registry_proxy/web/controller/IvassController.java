@@ -31,11 +31,11 @@ public class IvassController {
     @ApiOperation(value = "${swagger.api.insurance-company.search.byId.summary}", notes = "${swagger.api.insurance-company.search.byId.notes}")
     public InsuranceCompanyResource searchByTaxCode(@ApiParam("${swagger.model.insurance-company.taxCode}")
                                                     @PathVariable("taxId") String taxId) {
-        log.trace("find AS start");
-        log.debug("find AS = {}", taxId);
+        log.trace("searchByTaxCode start");
+        log.debug("searchByTaxCode parameter = {}", taxId);
         final InsuranceCompanyResource insuranceCompany = insuranceCompanyMapper.toResource(ivassService.findByTaxCode(taxId));
-        log.debug("find AS result = {}", insuranceCompany);
-        log.trace("find AS end");
+        log.debug("searchByTaxCode result = {}", insuranceCompany);
+        log.trace("searchByTaxCode end");
         return insuranceCompany;
     }
 }

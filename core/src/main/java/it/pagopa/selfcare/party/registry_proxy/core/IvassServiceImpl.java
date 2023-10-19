@@ -24,8 +24,8 @@ public class IvassServiceImpl implements IvassService {
 
     @Override
     public InsuranceCompany findByTaxCode(String taxId) {
-        log.trace("find AS By taxCode start");
-        log.debug("find AS By taxCode = {}", taxId.toUpperCase());
+        log.trace("findByTaxCode start");
+        log.debug("findByTaxCode parameter = {}", taxId.toUpperCase());
         final List<InsuranceCompany> companies = indexSearchService.findById(InsuranceCompany.Field.ID, taxId.toUpperCase());
         if (companies.isEmpty()) {
             throw new ResourceNotFoundException();
@@ -33,8 +33,8 @@ public class IvassServiceImpl implements IvassService {
             throw new TooManyResourceFoundException();
         }
         final InsuranceCompany company = companies.get(0);
-        log.debug("find AS By taxCode result = {}", company);
-        log.trace("find AS By taxCode end");
+        log.debug("findByTaxCode result = {}", company);
+        log.trace("findByTaxCode end");
         return company;
     }
 
