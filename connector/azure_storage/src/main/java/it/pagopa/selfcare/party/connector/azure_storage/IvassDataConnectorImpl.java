@@ -35,9 +35,15 @@ public class IvassDataConnectorImpl implements IvassDataConnector {
 
     @Override
     public List<InsuranceCompany> getInsurances() {
-        log.trace("getAS start");
+        log.trace("getInsurances start");
         List<InsuranceCompany> companies = new ArrayList<>();
-        final ResourceResponse resourceResponse = fileStorageConnector.getFile(sourceFilename);
+        ResourceResponse resourceResponse;
+        try {
+            resourceResponse = fileStorageConnector.getFile(sourceFilename);
+        } catch (Exception e) {
+            log.error("Impossible to retrieve file IVASS. Error: {}", e.getMessage(), e);
+            return companies;
+        }
         try (Reader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(resourceResponse.getData())))) {
             CsvToBean<InsuranceCompany> csvToBean = new CsvToBeanBuilder<InsuranceCompany>(reader)
                     .withType(IvassDataTemplate.class)
@@ -47,11 +53,11 @@ public class IvassDataConnectorImpl implements IvassDataConnector {
         } catch (Exception e) {
             log.error("Impossible to acquire data for IVASS. Error: {}", e.getMessage(), e);
         }
-        log.debug("getAS result = {}", companies);
-        log.trace("getAS end");
+        log.debug("getInsurances result = {}", companies);
+        log.trace("getInsurances end");
         return companies
-                .stream()
-                .filter(company -> StringUtils.hasText(company.getTaxCode()) && StringUtils.hasText(company.getDigitalAddress()))
-                .collect(Collectors.toList());
+                    .stream()
+                    .filter(company -> StringUtils.hasText(company.getTaxCode()) && StringUtils.hasText(company.getDigitalAddress()))
+                    .collect(Collectors.toList());
     }
 }

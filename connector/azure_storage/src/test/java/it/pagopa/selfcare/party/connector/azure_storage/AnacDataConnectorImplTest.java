@@ -2,6 +2,7 @@ package it.pagopa.selfcare.party.connector.azure_storage;
 
 import it.pagopa.selfcare.party.connector.azure_storage.client.AzureBlobClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.AnacDataConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.ResourceResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,6 +33,17 @@ class AnacDataConnectorImplTest {
         when(azureBlobClientMock.getFile(anyString())).thenReturn(response);
         final List<Station> stations = anacDataConnector.getStations();
         assertNotNull(stations);
+        verify(azureBlobClientMock, times(1)).getFile(filename);
+        verifyNoMoreInteractions(azureBlobClientMock);
+    }
+
+    @Test
+    void getStationsFileNotFound() {
+        final String filename = "test.csv";
+        AnacDataConnector anacDataConnector = new AnacDataConnectorImpl(filename, azureBlobClientMock);
+        when(azureBlobClientMock.getFile(anyString())).thenThrow(ResourceNotFoundException.class);
+        final List<Station> stations = anacDataConnector.getStations();
+       assertTrue(stations.isEmpty());
         verify(azureBlobClientMock, times(1)).getFile(filename);
         verifyNoMoreInteractions(azureBlobClientMock);
     }
