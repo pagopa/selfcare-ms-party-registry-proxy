@@ -1,9 +1,9 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.writer;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis.StationTokenAnalyzer;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis.InsuranceCompanyTokenAnalyzer;
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.config.InMemoryIndexConfig;
-import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.DummyStation;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
+import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.DummyInsuranceCompany;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.InsuranceCompany;
 import lombok.SneakyThrows;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.search.IndexSearcher;
@@ -23,19 +23,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {
         InMemoryIndexConfig.class,
-        StationTokenAnalyzer.class,
-        PDNDIndexWriterFactory.class,
-        PDNDIndexWriterService.class
+        InsuranceCompanyTokenAnalyzer.class,
+        IvassIndexWriterFactory.class,
+        IvassIndexWriterService.class
 })
-class PDNDIndexWriterServiceTest {
+class IvassIndexWriterServiceTest {
 
     @Autowired
-    @Qualifier("pdndDirectory")
+    @Qualifier("ivassDirectory")
     private Directory directory;
 
     @Autowired
-    private PDNDIndexWriterService indexWriterService;
-
+    private IvassIndexWriterService indexWriterService;
 
     @SneakyThrows
     private long count(Directory directory) {
@@ -49,7 +48,7 @@ class PDNDIndexWriterServiceTest {
     @Test
     void adds() {
         // given
-        final List<? extends Station> items = List.of(new DummyStation());
+        final List<? extends InsuranceCompany> items = List.of(new DummyInsuranceCompany());
         // when
         indexWriterService.adds(items);
         // then

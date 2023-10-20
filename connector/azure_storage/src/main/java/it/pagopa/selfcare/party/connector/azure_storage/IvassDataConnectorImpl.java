@@ -2,11 +2,11 @@ package it.pagopa.selfcare.party.connector.azure_storage;
 
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
-import it.pagopa.selfcare.party.connector.azure_storage.model.AnacDataTemplate;
-import it.pagopa.selfcare.party.registry_proxy.connector.api.AnacDataConnector;
+import it.pagopa.selfcare.party.connector.azure_storage.model.IvassDataTemplate;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.FileStorageConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.api.IvassDataConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.InsuranceCompany;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.ResourceResponse;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,36 +22,36 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class AnacDataConnectorImpl implements AnacDataConnector {
+public class IvassDataConnectorImpl implements IvassDataConnector {
 
     private final FileStorageConnector fileStorageConnector;
     private final String sourceFilename;
 
-    public AnacDataConnectorImpl(@Value("${blobStorage.anac.filename}") String anacCsvFileName,
-                                 FileStorageConnector fileStorageConnector) {
+    public IvassDataConnectorImpl(@Value("${blobStorage.ivass.filename}") String ivassCsvFileName,
+                                  FileStorageConnector fileStorageConnector) {
         this.fileStorageConnector = fileStorageConnector;
-        this.sourceFilename = anacCsvFileName;
+        this.sourceFilename = ivassCsvFileName;
     }
 
     @Override
-    public List<Station> getStations() {
-       log.trace("getStations start");
-        List<Station> stations = new ArrayList<>();
+    public List<InsuranceCompany> getInsurances() {
+        log.trace("getAS start");
+        List<InsuranceCompany> companies = new ArrayList<>();
         final ResourceResponse resourceResponse = fileStorageConnector.getFile(sourceFilename);
         try (Reader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(resourceResponse.getData())))) {
-            CsvToBean<Station> csvToBean = new CsvToBeanBuilder<Station>(reader)
-                    .withType(AnacDataTemplate.class)
-                    .withIgnoreLeadingWhiteSpace(true)
+            CsvToBean<InsuranceCompany> csvToBean = new CsvToBeanBuilder<InsuranceCompany>(reader)
+                    .withType(IvassDataTemplate.class)
+                    .withSeparator(';')
                     .build();
-            stations = csvToBean.parse();
+            companies = csvToBean.parse();
         } catch (Exception e) {
-            log.error("Impossible to acquire data for ANAC. Error: {}", e.getMessage(), e);
+            log.error("Impossible to acquire data for IVASS. Error: {}", e.getMessage(), e);
         }
-        log.debug("getStations result = {}", stations);
-        log.trace("getStations end");
-        return stations
+        log.debug("getAS result = {}", companies);
+        log.trace("getAS end");
+        return companies
                 .stream()
-                .filter(station -> !StringUtils.hasText(station.getOriginId()))
+                .filter(company -> StringUtils.hasText(company.getTaxCode()) && StringUtils.hasText(company.getDigitalAddress()))
                 .collect(Collectors.toList());
     }
 }
