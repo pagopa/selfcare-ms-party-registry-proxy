@@ -35,15 +35,17 @@ public class AnacDataConnectorImpl implements AnacDataConnector {
 
     @Override
     public List<Station> getStations() {
-       log.trace("getStations start");
+        log.trace("getStations start");
         List<Station> stations = new ArrayList<>();
-        final ResourceResponse resourceResponse = fileStorageConnector.getFile(sourceFilename);
-        try (Reader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(resourceResponse.getData())))) {
+        try {
+            final ResourceResponse resourceResponse = fileStorageConnector.getFile(sourceFilename);
+            Reader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(resourceResponse.getData())));
             CsvToBean<Station> csvToBean = new CsvToBeanBuilder<Station>(reader)
                     .withType(AnacDataTemplate.class)
                     .withIgnoreLeadingWhiteSpace(true)
                     .build();
             stations = csvToBean.parse();
+            reader.close();
         } catch (Exception e) {
             log.error("Impossible to acquire data for ANAC. Error: {}", e.getMessage(), e);
         }
