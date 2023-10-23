@@ -2,6 +2,7 @@ package it.pagopa.selfcare.party.connector.azure_storage;
 
 import it.pagopa.selfcare.party.connector.azure_storage.client.AzureBlobClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IvassDataConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.InsuranceCompany;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.ResourceResponse;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,6 +34,17 @@ class IvassDataConnectorImplTest {
         when(azureBlobClientMock.getFile(anyString())).thenReturn(response);
         final List<InsuranceCompany> companies = ivassDataConnector.getInsurances();
         assertNotNull(companies);
+        verify(azureBlobClientMock, times(1)).getFile(filename);
+        verifyNoMoreInteractions(azureBlobClientMock);
+    }
+
+    @Test
+    void getInsurancesFileNotFound() {
+        final String filename = "test.csv";
+        IvassDataConnector ivassDataConnector = new IvassDataConnectorImpl(filename, azureBlobClientMock);
+        when(azureBlobClientMock.getFile(anyString())).thenThrow(ResourceNotFoundException.class);
+        final List<InsuranceCompany> insurances = ivassDataConnector.getInsurances();
+        assertTrue(insurances.isEmpty());
         verify(azureBlobClientMock, times(1)).getFile(filename);
         verifyNoMoreInteractions(azureBlobClientMock);
     }
