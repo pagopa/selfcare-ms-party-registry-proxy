@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.Collections;
+
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = "taxCode")
@@ -22,4 +24,11 @@ public class AnacDataTemplate implements Station {
     private boolean anacEngaged;
     @CsvBindByName(column = "ANAC_abilitato")
     private boolean anacEnabled;
+
+    public String getTaxCode() {
+        if(this.taxCode.length() < 11) {
+            return String.join("", Collections.nCopies(11 - taxCode.length(), "0")) + this.taxCode;
+        }
+        return this.taxCode;
+    }
 }

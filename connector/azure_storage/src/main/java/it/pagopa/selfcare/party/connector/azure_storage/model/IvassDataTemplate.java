@@ -6,10 +6,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.Collections;
+
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = "taxCode")
 public class IvassDataTemplate implements InsuranceCompany {
+
     @CsvBindByName(column = "CODICE_IVASS")
     private String originId;
     @CsvBindByName(column = "CODICE_FISCALE")
@@ -24,4 +27,11 @@ public class IvassDataTemplate implements InsuranceCompany {
     private String registerType;
     @CsvBindByName(column = "INDIRIZZO_SEDE_LEGALE_RAPPRESENTANZA_IN_ITALIA")
     private String address;
+
+    public String getTaxCode() {
+        if(this.taxCode.length() < 11) {
+            return String.join("", Collections.nCopies(11 - taxCode.length(), "0")) + this.taxCode;
+        }
+        return this.taxCode;
+    }
 }
