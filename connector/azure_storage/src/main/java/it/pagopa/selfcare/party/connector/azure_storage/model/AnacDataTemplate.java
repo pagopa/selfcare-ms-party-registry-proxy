@@ -5,6 +5,9 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Collections;
 
 @Data
 @NoArgsConstructor
@@ -22,4 +25,11 @@ public class AnacDataTemplate implements Station {
     private boolean anacEngaged;
     @CsvBindByName(column = "ANAC_abilitato")
     private boolean anacEnabled;
+
+    public String getTaxCode() {
+        if(this.taxCode.length() < 11) {
+            return StringUtils.leftPad(this.taxCode, 11, "0");
+        }
+        return this.taxCode;
+    }
 }
