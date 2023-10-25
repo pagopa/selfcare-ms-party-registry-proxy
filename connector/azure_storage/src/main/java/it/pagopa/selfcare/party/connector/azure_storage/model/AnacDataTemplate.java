@@ -5,6 +5,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
 
@@ -27,7 +28,7 @@ public class AnacDataTemplate implements Station {
 
     public String getTaxCode() {
         if(this.taxCode.length() < 11) {
-            return String.join("", Collections.nCopies(11 - taxCode.length(), "0")) + this.taxCode;
+            return StringUtils.leftPad(this.taxCode, 11, "0");
         }
         return this.taxCode;
     }
