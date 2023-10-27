@@ -67,7 +67,10 @@ public class IvassDataConnectorImpl implements IvassDataConnector {
                 .filter(company -> StringUtils.hasText(company.getTaxCode())
                         && StringUtils.hasText(company.getDigitalAddress())
                         && workTypesAdmitted.contains(company.getWorkType())
-                        && registryTypesAdmitted.stream().anyMatch(StringUtils.trimTrailingWhitespace(company.getRegisterType().split("-")[0])::equals))
+                        && registryTypesAdmitted
+                        .stream()
+                        .anyMatch(StringUtils.trimAllWhitespace(company.getRegisterType()
+                                .split("-")[0])::equals))
                 .collect(Collectors.toList());
     }
 }

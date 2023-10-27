@@ -40,7 +40,7 @@ class IvassDataConnectorImplTest {
     @Test
     void getInsurancesFilteredByRegistryType() {
         final String filename = "test.csv";
-        IvassDataConnector ivassDataConnector = new IvassDataConnectorImpl(filename, List.of("Elenco I", "Elenco II"), List.of("DANNI"), azureBlobClientMock);
+        IvassDataConnector ivassDataConnector = new IvassDataConnectorImpl(filename, List.of("ElencoI", "ElencoII"), List.of("DANNI"), azureBlobClientMock);
         ResourceResponse response = new ResourceResponse();
         String bytes = "CODICE_IVASS;CODICE_FISCALE;DENOMINAZIONE_IMPRESA;PEC;TIPO_LAVORO;TIPO_ALBO\n" +
                 "aaaaaaa;codice_test;denominazione_test;test@pec.it;DANNI;Elenco II - imprese\n";
@@ -56,7 +56,7 @@ class IvassDataConnectorImplTest {
     @Test
     void getInsurancesFilteredByWorkType() {
         final String filename = "test.csv";
-        IvassDataConnector ivassDataConnector = new IvassDataConnectorImpl(filename, List.of("Elenco I"), List.of("DANNO"), azureBlobClientMock);
+        IvassDataConnector ivassDataConnector = new IvassDataConnectorImpl(filename, List.of("ElencoI"), List.of("DANNO"), azureBlobClientMock);
         ResourceResponse response = new ResourceResponse();
         String bytes = "CODICE_IVASS;CODICE_FISCALE;DENOMINAZIONE_IMPRESA;PEC;TIPO_LAVORO;TIPO_ALBO\n" +
                 "aaaaaaa;codice_test;denominazione_test;test@pec.it;DANNI;Elenco I - imprese\n";
