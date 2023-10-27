@@ -13,8 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -26,7 +25,7 @@ class IvassDataConnectorImplTest {
     @Test
     void getInsuranceCompanies() {
         final String filename = "test.csv";
-        IvassDataConnector ivassDataConnector = new IvassDataConnectorImpl(filename, azureBlobClientMock);
+        IvassDataConnector ivassDataConnector = new IvassDataConnectorImpl(filename, List.of(), List.of(), azureBlobClientMock);
         ResourceResponse response = new ResourceResponse();
         String bytes = "CODICE_IVASS;CODICE_FISCALE;DENOMINAZIONE_IMPRESA;PEC;TIPO_LAVORO;TIPO_ALBO\n" +
                 "aaaaaaa;codice_test;denominazione_test;test@pec.it;lavoro;albo\n";
@@ -39,9 +38,41 @@ class IvassDataConnectorImplTest {
     }
 
     @Test
+    void getInsurancesFilteredByRegistryType() {
+        final String filename = "test.csv";
+        IvassDataConnector ivassDataConnector = new IvassDataConnectorImpl(filename, List.of("Elenco I", "Elenco II"), List.of("DANNI"), azureBlobClientMock);
+        ResourceResponse response = new ResourceResponse();
+        String bytes = "CODICE_IVASS;CODICE_FISCALE;DENOMINAZIONE_IMPRESA;PEC;TIPO_LAVORO;TIPO_ALBO\n" +
+                "aaaaaaa;codice_test;denominazione_test;test@pec.it;DANNI;Elenco II - imprese\n";
+        response.setData(bytes.getBytes(StandardCharsets.UTF_8));
+        when(azureBlobClientMock.getFile(anyString())).thenReturn(response);
+        final List<InsuranceCompany> companies = ivassDataConnector.getInsurances();
+        assertNotNull(companies);
+        assertFalse(companies.isEmpty());
+        verify(azureBlobClientMock, times(1)).getFile(filename);
+        verifyNoMoreInteractions(azureBlobClientMock);
+    }
+
+    @Test
+    void getInsurancesFilteredByWorkType() {
+        final String filename = "test.csv";
+        IvassDataConnector ivassDataConnector = new IvassDataConnectorImpl(filename, List.of("Elenco I"), List.of("DANNO"), azureBlobClientMock);
+        ResourceResponse response = new ResourceResponse();
+        String bytes = "CODICE_IVASS;CODICE_FISCALE;DENOMINAZIONE_IMPRESA;PEC;TIPO_LAVORO;TIPO_ALBO\n" +
+                "aaaaaaa;codice_test;denominazione_test;test@pec.it;DANNI;Elenco I - imprese\n";
+        response.setData(bytes.getBytes(StandardCharsets.UTF_8));
+        when(azureBlobClientMock.getFile(anyString())).thenReturn(response);
+        final List<InsuranceCompany> companies = ivassDataConnector.getInsurances();
+        assertNotNull(companies);
+        assertTrue(companies.isEmpty());
+        verify(azureBlobClientMock, times(1)).getFile(filename);
+        verifyNoMoreInteractions(azureBlobClientMock);
+    }
+
+    @Test
     void getInsurancesFileNotFound() {
         final String filename = "test.csv";
-        IvassDataConnector ivassDataConnector = new IvassDataConnectorImpl(filename, azureBlobClientMock);
+        IvassDataConnector ivassDataConnector = new IvassDataConnectorImpl(filename, List.of(), List.of(), azureBlobClientMock);
         when(azureBlobClientMock.getFile(anyString())).thenThrow(ResourceNotFoundException.class);
         final List<InsuranceCompany> insurances = ivassDataConnector.getInsurances();
         assertTrue(insurances.isEmpty());
