@@ -9,6 +9,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.InsuranceCompany;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.ResourceResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -22,17 +23,23 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@PropertySource("classpath:config/ivass-config.properties")
 public class IvassDataConnectorImpl implements IvassDataConnector {
 
     private final FileStorageConnector fileStorageConnector;
     private final String sourceFilename;
+    private final List<String> registryTypesAdmitted;
+    private final List<String> workTypesAdmitted;
 
     public IvassDataConnectorImpl(@Value("${blobStorage.ivass.filename}") String ivassCsvFileName,
+                                  @Value("#{'${ivass.registryTypes.admitted}'.split(',')}") List<String> registryTypes,
+                                  @Value("#{'${ivass.workTypes.admitted}'.split(',')}") List<String> registryWorkTypes,
                                   FileStorageConnector fileStorageConnector) {
         this.fileStorageConnector = fileStorageConnector;
+        this.registryTypesAdmitted = registryTypes;
+        this.workTypesAdmitted = registryWorkTypes;
         this.sourceFilename = ivassCsvFileName;
     }
-
     @Override
     public List<InsuranceCompany> getInsurances() {
         log.trace("getInsurances start");
@@ -56,8 +63,14 @@ public class IvassDataConnectorImpl implements IvassDataConnector {
         log.debug("getInsurances result = {}", companies);
         log.trace("getInsurances end");
         return companies
-                    .stream()
-                    .filter(company -> StringUtils.hasText(company.getTaxCode()) && StringUtils.hasText(company.getDigitalAddress()))
-                    .collect(Collectors.toList());
+                .stream()
+                .filter(company -> StringUtils.hasText(company.getTaxCode())
+                        && StringUtils.hasText(company.getDigitalAddress())
+                        && workTypesAdmitted.contains(company.getWorkType())
+                        && registryTypesAdmitted
+                        .stream()
+                        .anyMatch(StringUtils.trimAllWhitespace(company.getRegisterType()
+                                .split("-")[0])::equals))
+                .collect(Collectors.toList());
     }
 }
