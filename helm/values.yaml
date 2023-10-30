@@ -118,5 +118,5 @@ config:
   LUCENE_INDEX_IVASS_FOLDER: "index/ivass"
   BLOB_ANAC_FILENAME: "anac-data.csv"
   BLOB_IVASS_FILENAME: "ivass-data.csv"
-  IVASS_REGISTRY_TYPES: "Elenco I,Elenco II,Sezione I,Sezione II"
+  IVASS_REGISTRY_TYPES: "ElencoI,ElencoII,SezioneI,SezioneII"
   IVASS_WORK_TYPES: "VITA,PICCOLO CUMULO,MISTA"
