@@ -2,6 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.core;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.AnacDataConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
+import it.pagopa.selfcare.party.registry_proxy.connector.api.IvassDataConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.OpenDataConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
 import org.junit.jupiter.api.Test;
@@ -26,21 +27,28 @@ class OpenDataLoaderTest {
     private AnacDataConnector anacDataConnector;
 
     @MockBean
+    private IvassDataConnector ivassDataConnector;
+
+    @MockBean
     private IndexWriterService<Institution> institutionIndexWriterService;
 
     @MockBean
     private IndexWriterService<Category> categoryIndexWriterService;
+
     @MockBean
     private IndexWriterService<AOO> aooIndexWriterService;
+
     @MockBean
     private IndexWriterService<UO> uoIndexWriterService;
 
     @MockBean
     private IndexWriterService<Station> pdndIndexWriterService;
 
+    @MockBean
+    private IndexWriterService<InsuranceCompany> ivassIndexWriterService;
+
     @Autowired
     private OpenDataLoader openDataLoader;
-
 
     @Test
     void run() {
@@ -60,6 +68,9 @@ class OpenDataLoaderTest {
         final List stations = List.of();
         when(anacDataConnector.getStations())
                .thenReturn(stations);
+        final List insuranceCompanies = List.of();
+        when(ivassDataConnector.getInsurances())
+                .thenReturn(insuranceCompanies);
         // when
         openDataLoader.run();
         // then
@@ -77,7 +88,8 @@ class OpenDataLoaderTest {
                 .adds(uos);
         verify(pdndIndexWriterService, times(1))
                 .adds(stations);
-        //verifyNoMoreInteractions(openDataConnector, institutionIndexWriterService, categoryIndexWriterService, aooIndexWriterService, uoIndexWriterService);
+        verify(ivassIndexWriterService, times(1))
+                .adds(insuranceCompanies);
     }
 
 }

@@ -35,6 +35,9 @@
     "name" : "institution",
     "description" : "Institution operations"
   }, {
+    "name" : "insurance-companies",
+    "description" : "Ivass Controller"
+  }, {
     "name" : "nationalRegistries",
     "description" : "National Registries Controller"
   }, {
@@ -226,7 +229,7 @@
           "style" : "form",
           "schema" : {
             "type" : "string",
-            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "IVASS", "static" ]
           }
         }, {
           "name" : "page",
@@ -320,7 +323,7 @@
           "style" : "simple",
           "schema" : {
             "type" : "string",
-            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "IVASS", "static" ]
           }
         }, {
           "name" : "code",
@@ -745,7 +748,7 @@
           "style" : "form",
           "schema" : {
             "type" : "string",
-            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "IVASS", "static" ]
           }
         }, {
           "name" : "categories",
@@ -764,6 +767,172 @@
               "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/InstitutionResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/insurance-companies" : {
+      "get" : {
+        "tags" : [ "insurance-companies" ],
+        "summary" : "Search insurance company",
+        "description" : "Returns a list of insurance companies",
+        "operationId" : "searchUsingGET_1",
+        "parameters" : [ {
+          "name" : "search",
+          "in" : "query",
+          "description" : "Optional search field. Users can provide a search string to filter results",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "Desired page number for result pagination. It is optional, and the default value is 1 when not specified",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Maximum number of items per page. It is optional, and the default value is 10 when not specified",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InsuranceCompaniesResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/insurance-companies/{taxId}" : {
+      "get" : {
+        "tags" : [ "insurance-companies" ],
+        "summary" : "Search insurance company by its taxCode",
+        "description" : "Returns only one insurance company.",
+        "operationId" : "searchByTaxCodeUsingGET",
+        "parameters" : [ {
+          "name" : "taxId",
+          "in" : "path",
+          "description" : "taxCode of insurance company",
+          "required" : true,
+          "style" : "simple",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InsuranceCompanyResource"
                 }
               }
             }
@@ -974,7 +1143,7 @@
         "tags" : [ "stations" ],
         "summary" : "Search station",
         "description" : "Returns a list of station.",
-        "operationId" : "searchUsingGET_1",
+        "operationId" : "searchUsingGET_2",
         "parameters" : [ {
           "name" : "search",
           "in" : "query",
@@ -1067,7 +1236,7 @@
         "tags" : [ "stations" ],
         "summary" : "Search station by its taxCode",
         "description" : "Returns only one station.",
-        "operationId" : "searchByTaxCodeUsingGET",
+        "operationId" : "searchByTaxCodeUsingGET_1",
         "parameters" : [ {
           "name" : "taxId",
           "in" : "path",
@@ -1307,76 +1476,93 @@
     "schemas" : {
       "AOOResource" : {
         "title" : "AOOResource",
-        "required" : [ "codAoo", "codiceCatastaleComune", "codiceComuneISTAT", "codiceFiscaleEnte", "codiceIpa", "codiceUniAoo", "cognomeResponsabile", "dataAggiornamento", "dataIstituzione", "denominazioneAoo", "denominazioneEnte", "fax", "indirizzo", "mailResponsabile", "nomeResponsabile", "origin", "protocolloInformatico", "telefono", "telefonoResponsabile" ],
         "type" : "object",
         "properties" : {
           "cap" : {
             "type" : "string"
           },
           "codAoo" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO code"
           },
           "codiceCatastaleComune" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO land registry code"
           },
           "codiceComuneISTAT" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO istat code"
           },
           "codiceFiscaleEnte" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO fiscal code"
           },
           "codiceIpa" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO ipa code"
           },
           "codiceUniAoo" : {
             "type" : "string",
             "description" : "AOO unique identifier, the same of Id"
           },
           "cognomeResponsabile" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO manager lastname"
           },
           "dataAggiornamento" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Identifies date of last update on the specific AOO"
           },
           "dataIstituzione" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Identifies date of first creation for AOO"
           },
           "denominazioneAoo" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO description"
           },
           "denominazioneEnte" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO parent description"
           },
           "fax" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO fax"
           },
           "id" : {
             "type" : "string"
           },
           "indirizzo" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO address"
           },
           "mail1" : {
             "type" : "string"
           },
           "mailResponsabile" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO manager email"
           },
           "nomeResponsabile" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO manager firstname"
           },
           "origin" : {
             "type" : "string",
-            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
+            "description" : "{swagger.model.*.origin}",
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "IVASS", "static" ]
           },
           "protocolloInformatico" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO IT protocol"
           },
           "telefono" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO phone number"
           },
           "telefonoResponsabile" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO manager phone number"
           },
           "tipoMail1" : {
             "type" : "string"
@@ -1450,7 +1636,6 @@
       },
       "CategoryResource" : {
         "title" : "CategoryResource",
-        "required" : [ "code", "kind", "name", "origin" ],
         "type" : "object",
         "properties" : {
           "code" : {
@@ -1468,7 +1653,7 @@
           "origin" : {
             "type" : "string",
             "description" : "Describes which is the source of data",
-            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "IVASS", "static" ]
           }
         }
       },
@@ -1572,7 +1757,7 @@
           "origin" : {
             "type" : "string",
             "description" : "Describes which is the source of data",
-            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "IVASS", "static" ]
           },
           "originId" : {
             "type" : "string",
@@ -1606,6 +1791,68 @@
             "items" : {
               "$ref" : "#/components/schemas/InstitutionResource"
             }
+          }
+        }
+      },
+      "InsuranceCompaniesResource" : {
+        "title" : "InsuranceCompaniesResource",
+        "required" : [ "count", "items" ],
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "description" : "list of companies resource size",
+            "format" : "int64"
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "list of insurance companies resource",
+            "items" : {
+              "$ref" : "#/components/schemas/InsuranceCompanyResource"
+            }
+          }
+        }
+      },
+      "InsuranceCompanyResource" : {
+        "title" : "InsuranceCompanyResource",
+        "type" : "object",
+        "properties" : {
+          "address" : {
+            "type" : "string",
+            "description" : "Identifies legal address of insurance company"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "insurance company's name"
+          },
+          "digitalAddress" : {
+            "type" : "string",
+            "description" : "insurance company's mail address"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "insurance company's unique identifier"
+          },
+          "origin" : {
+            "type" : "string",
+            "description" : "Describes which is the source of data",
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "IVASS", "static" ]
+          },
+          "originId" : {
+            "type" : "string",
+            "description" : "insurance company's IVASS unique identifier"
+          },
+          "registerType" : {
+            "type" : "string",
+            "description" : "Identifies register type for company"
+          },
+          "taxCode" : {
+            "type" : "string",
+            "description" : "taxCode of insurance company"
+          },
+          "workType" : {
+            "type" : "string",
+            "description" : "Identifies work type for company"
           }
         }
       },
@@ -1690,14 +1937,17 @@
       },
       "StationResource" : {
         "title" : "StationResource",
-        "required" : [ "description", "digitalAddress", "id", "origin", "originId", "taxCode" ],
         "type" : "object",
         "properties" : {
           "anacEnabled" : {
-            "type" : "boolean"
+            "type" : "boolean",
+            "description" : "Identifies if ANAC station is enabled",
+            "example" : false
           },
           "anacEngaged" : {
-            "type" : "boolean"
+            "type" : "boolean",
+            "description" : "Identifies if ANAC station is engaged",
+            "example" : false
           },
           "description" : {
             "type" : "string",
@@ -1705,9 +1955,7 @@
           },
           "digitalAddress" : {
             "type" : "string",
-            "description" : "station's mail address",
-            "format" : "email",
-            "example" : "email@example.com"
+            "description" : "station's mail address"
           },
           "id" : {
             "type" : "string",
@@ -1716,7 +1964,7 @@
           "origin" : {
             "type" : "string",
             "description" : "Describes which is the source of data",
-            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "IVASS", "static" ]
           },
           "originId" : {
             "type" : "string",
@@ -1749,83 +1997,100 @@
       },
       "UOResource" : {
         "title" : "UOResource",
-        "required" : [ "codiceCatastaleComune", "codiceComuneISTAT", "codiceFiscaleEnte", "codiceIpa", "codiceUniAoo", "cognomeResponsabile", "dataAggiornamento", "dataIstituzione", "denominazioneEnte", "descrizioneUo", "fax", "indirizzo", "mail1", "mailResponsabile", "nomeResponsabile", "origin", "telefono", "telefonoResponsabile", "tipoMail1", "url" ],
         "type" : "object",
         "properties" : {
           "cap" : {
             "type" : "string"
           },
           "codiceCatastaleComune" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO land registry code"
           },
           "codiceComuneISTAT" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO istat code"
           },
           "codiceFiscaleEnte" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO fiscal code"
           },
           "codiceIpa" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO ipa code"
           },
           "codiceUniAoo" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "AOO unique identifier, the same of Id"
           },
           "codiceUniUo" : {
             "type" : "string",
             "description" : "UO unique identifier, the same of Id"
           },
           "codiceUniUoPadre" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO parent code"
           },
           "cognomeResponsabile" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO manager lastname"
           },
           "dataAggiornamento" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Identifies date of last update on the specific UO"
           },
           "dataIstituzione" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Identifies date of first creation for UO"
           },
           "denominazioneEnte" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO parent description"
           },
           "descrizioneUo" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO description"
           },
           "fax" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO fax"
           },
           "id" : {
             "type" : "string"
           },
           "indirizzo" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO address"
           },
           "mail1" : {
             "type" : "string"
           },
           "mailResponsabile" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO manager email"
           },
           "nomeResponsabile" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO manager firstname"
           },
           "origin" : {
             "type" : "string",
             "description" : "Describes which is the source of data",
-            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "static" ]
+            "enum" : [ "ANAC", "INFOCAMERE", "IPA", "IVASS", "static" ]
           },
           "telefono" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO phone number"
           },
           "telefonoResponsabile" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO manager phone number"
           },
           "tipoMail1" : {
             "type" : "string"
           },
           "url" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "UO url"
           }
         }
       },

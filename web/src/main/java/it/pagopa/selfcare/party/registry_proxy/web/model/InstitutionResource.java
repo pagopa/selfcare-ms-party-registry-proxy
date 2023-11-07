@@ -1,15 +1,9 @@
 package it.pagopa.selfcare.party.registry_proxy.web.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
 import lombok.Data;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 
 @Data
 public class InstitutionResource implements Institution {
@@ -52,6 +46,5 @@ public class InstitutionResource implements Institution {
 
     @ApiModelProperty(value = "${swagger.model.institution.istatCode}")
     private String istatCode;
-
 
 }

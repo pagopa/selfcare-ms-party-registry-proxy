@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-@Qualifier("stationTokenAnalyzer")
-public class StationTokenAnalyzer extends Analyzer {
+@Qualifier("ivassTokenAnalyzer")
+public class InsuranceCompanyTokenAnalyzer extends Analyzer {
 
-    public StationTokenAnalyzer() {
-        log.trace("Initializing {}", StationTokenAnalyzer.class.getSimpleName());
+    public InsuranceCompanyTokenAnalyzer() {
+        log.trace("Initializing {}", InsuranceCompanyTokenAnalyzer.class.getSimpleName());
     }
 
     @Override
@@ -27,7 +27,7 @@ public class StationTokenAnalyzer extends Analyzer {
         final StopFilter stopFilter = new StopFilter(lowerCaseFilter, ItalianAnalyzer.getDefaultStopSet());
         final ASCIIFoldingFilter asciiFoldingFilter = new ASCIIFoldingFilter(stopFilter);
         final NGramTokenFilter nGramTokenFilter = new NGramTokenFilter(asciiFoldingFilter, 3, 5, true);
-        return new Analyzer.TokenStreamComponents(tokenizer, nGramTokenFilter);
+        return new TokenStreamComponents(tokenizer, nGramTokenFilter);
   }
 
 }

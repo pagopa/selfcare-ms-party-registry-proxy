@@ -40,6 +40,9 @@ class SwaggerConfigTest {
     private StationService StationService;
 
     @MockBean
+    private IvassService ivassService;
+
+    @MockBean
     private CategoryService categoryService;
 
     @MockBean

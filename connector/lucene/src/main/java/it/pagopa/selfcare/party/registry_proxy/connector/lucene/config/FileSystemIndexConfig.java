@@ -40,13 +40,19 @@ class FileSystemIndexConfig {
 
     @SneakyThrows
     @Bean
-    public Directory pdndDirectory(@Value("${lucene.index.pdnd.folder}") String indexFolder) {
+    public Directory uosDirectory(@Value("${lucene.index.uos.folder}") String indexFolder) {
         return FSDirectory.open(Path.of(indexFolder));
     }
 
     @SneakyThrows
     @Bean
-    public Directory uosDirectory(@Value("${lucene.index.uos.folder}") String indexFolder) {
+    public Directory anacDirectory(@Value("${lucene.index.anac.folder}") String indexFolder) {
+        return FSDirectory.open(Path.of(indexFolder));
+    }
+
+    @SneakyThrows
+    @Bean
+    public Directory ivassDirectory(@Value("${lucene.index.ivass.folder}") String indexFolder) {
         return FSDirectory.open(Path.of(indexFolder));
     }
 }

@@ -110,3 +110,7 @@ config:
   LUCENE_INDEX_CATEGORIES_FOLDER: "index/categories"
   LUCENE_INDEX_AOOS_FOLDER: "index/aoos"
   LUCENE_INDEX_UOS_FOLDER: "index/uos"
+  LUCENE_INDEX_ANAC_FOLDER: "index/anac"
+  LUCENE_INDEX_IVASS_FOLDER: "index/ivass"
+  BLOB_ANAC_FILENAME: "anac-data.csv"
+  BLOB_IVASS_FILENAME: "ivass-data.csv"

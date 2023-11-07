@@ -9,6 +9,7 @@ public enum Origin {
     MOCK("static"),
     IPA("IPA"),
     ANAC("ANAC"),
+    IVASS("IVASS"),
     INFOCAMERE("INFOCAMERE");
 
     private final String value;
