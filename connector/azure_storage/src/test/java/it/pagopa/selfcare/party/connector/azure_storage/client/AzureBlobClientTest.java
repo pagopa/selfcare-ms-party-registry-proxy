@@ -115,11 +115,6 @@ class AzureBlobClientTest {
     private void mockCloudBlobClient(AzureBlobClient blobClient, CloudBlobClient blobClientMock) throws NoSuchFieldException, IllegalAccessException {
         Field field = AzureBlobClient.class.getDeclaredField("blobClient");
         field.setAccessible(true);
-
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        modifiersField.setAccessible(true);
-        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-
         field.set(blobClient, blobClientMock);
     }
 
