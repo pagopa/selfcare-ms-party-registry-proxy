@@ -5,7 +5,6 @@ import io.github.resilience4j.retry.annotation.Retry;
 import it.pagopa.selfcare.commons.base.logging.LogUtils;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.GeoTaxonomiesConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
-import it.pagopa.selfcare.party.registry_proxy.connector.exception.ServiceUnavailableException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.GeographicTaxonomy;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.GeoTaxonomiesRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.geotaxonomy.GeographicTaxonomiesResponse;
@@ -34,7 +33,7 @@ public class GeoTaxonomiesConnectorImpl implements GeoTaxonomiesConnector {
 
     @Override
     @CircuitBreaker(name = "geotaxCircuitbreaker", fallbackMethod = "fallbackGetExtByDescription")
-    @Retry(name = "retry503")
+    @Retry(name = "retryServiceUnavailable")
     public List<GeographicTaxonomy> getExtByDescription(String description, Integer offset, Integer limit) {
         log.debug(LogUtils.CONFIDENTIAL_MARKER, "getExtByDescription description = {}", description);
         Assert.hasText(description, "Description is required");
@@ -52,7 +51,7 @@ public class GeoTaxonomiesConnectorImpl implements GeoTaxonomiesConnector {
 
     @Override
     @CircuitBreaker(name = "geotaxCircuitbreaker", fallbackMethod = "fallbackGetExtByCode")
-    @Retry(name = "retry503")
+    @Retry(name = "retryServiceUnavailable")
     public GeographicTaxonomy getExtByCode(String code) {
         log.debug(LogUtils.CONFIDENTIAL_MARKER, "getExtByCode code = {}", code);
         Assert.hasText(code, "Code is required");

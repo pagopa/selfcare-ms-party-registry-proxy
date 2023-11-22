@@ -36,7 +36,7 @@ resilience4j:
   retry:
     retry-aspect-order: 2
     instances:
-      retry503:
+      retryServiceUnavailable:
         max-attempts: 3
         wait-duration: 5s
         enable-exponential-backoff: true
