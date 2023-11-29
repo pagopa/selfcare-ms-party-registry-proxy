@@ -1,13 +1,10 @@
-package it.pagopa.selfcare.party.connector.azure_storage.model;
+package it.pagopa.selfcare.party.registry_proxy.connector.model;
 
 import com.opencsv.bean.CsvBindByName;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.Collections;
 
 @Data
 @NoArgsConstructor

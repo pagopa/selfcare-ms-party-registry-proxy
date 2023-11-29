@@ -1,6 +1,5 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.api.AnacDataConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IvassDataConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.OpenDataConnector;
@@ -23,7 +22,7 @@ public class OpenDataLoader implements CommandLineRunner {
     private final IndexWriterService<UO> uoIndexWriterService;
     private final IndexWriterService<Station> stationIndexWriterService;
     private final IndexWriterService<InsuranceCompany> ivassIndexWriterService;
-    private final AnacDataConnector anacDataConnector;
+    private final ANACService anacService;
     private final IvassDataConnector ivassDataConnector;
     @Autowired
     public OpenDataLoader(List<OpenDataConnector> openDataConnectors,
@@ -33,7 +32,7 @@ public class OpenDataLoader implements CommandLineRunner {
                           IndexWriterService<UO> uoIndexWriterService,
                           IndexWriterService<Station> stationIndexWriterService,
                           IndexWriterService<InsuranceCompany> ivassIndexWriterService,
-                          AnacDataConnector anacDataConnector,
+                          ANACService anacService,
                           IvassDataConnector ivassDataConnector) {
         log.trace("Initializing {}", OpenDataLoader.class.getSimpleName());
         this.openDataConnectors = openDataConnectors;
@@ -43,7 +42,7 @@ public class OpenDataLoader implements CommandLineRunner {
         this.uoIndexWriterService = uoIndexWriterService;
         this.stationIndexWriterService = stationIndexWriterService;
         this.ivassIndexWriterService = ivassIndexWriterService;
-        this.anacDataConnector = anacDataConnector;
+        this.anacService = anacService;
         this.ivassDataConnector = ivassDataConnector;
     }
 
@@ -55,7 +54,7 @@ public class OpenDataLoader implements CommandLineRunner {
             categoryIndexWriterService.adds(openDataConnector.getCategories());
             aooIndexWriterService.adds(openDataConnector.getAOOs());
             uoIndexWriterService.adds(openDataConnector.getUOs());
-            stationIndexWriterService.adds(anacDataConnector.getStations());
+            stationIndexWriterService.adds(anacService.getStations());
             ivassIndexWriterService.adds(ivassDataConnector.getInsurances());
         });
         log.trace("run end");

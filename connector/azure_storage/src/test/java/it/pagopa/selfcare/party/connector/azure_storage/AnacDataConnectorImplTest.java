@@ -4,14 +4,14 @@ import it.pagopa.selfcare.party.connector.azure_storage.client.AzureBlobClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.AnacDataConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.ResourceResponse;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -31,19 +31,19 @@ class AnacDataConnectorImplTest {
                 "aaaaaaa,tax_code,denominazione,test@pec.it,false,false\n";
         response.setData(bytes.getBytes(StandardCharsets.UTF_8));
         when(azureBlobClientMock.getFile(anyString())).thenReturn(response);
-        final List<Station> stations = anacDataConnector.getStations();
-        assertNotNull(stations);
+        final InputStream inputStream = anacDataConnector.getANACData();
+        assertNotNull(inputStream);
         verify(azureBlobClientMock, times(1)).getFile(filename);
         verifyNoMoreInteractions(azureBlobClientMock);
     }
 
     @Test
-    void getStationsFileNotFound() {
+    void getStationsFileNotFound() throws IOException {
         final String filename = "test.csv";
         AnacDataConnector anacDataConnector = new AnacDataConnectorImpl(filename, azureBlobClientMock);
         when(azureBlobClientMock.getFile(anyString())).thenThrow(ResourceNotFoundException.class);
-        final List<Station> stations = anacDataConnector.getStations();
-       assertTrue(stations.isEmpty());
+        final InputStream inputStream = anacDataConnector.getANACData();
+        assertTrue(inputStream.available() == 0);
         verify(azureBlobClientMock, times(1)).getFile(filename);
         verifyNoMoreInteractions(azureBlobClientMock);
     }
