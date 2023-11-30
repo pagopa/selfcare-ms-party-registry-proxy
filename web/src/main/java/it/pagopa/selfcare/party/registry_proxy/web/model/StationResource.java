@@ -2,11 +2,10 @@ package it.pagopa.selfcare.party.registry_proxy.web.model;
 
 import io.swagger.annotations.ApiModelProperty;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import lombok.Data;
 
 @Data
-public class StationResource implements Station {
+public class StationResource {
 
     @ApiModelProperty(value = "${swagger.model.station.id}")
     private String id;

@@ -45,8 +45,8 @@ class StationToDocumentConverterTest {
         assertEquals(input.getTaxCode(), output.get(Field.TAX_CODE.toString()));
         assertEquals(input.getDescription(), output.get(Field.DESCRIPTION.toString()));
         assertEquals(input.getDigitalAddress(), output.get(Field.DIGITAL_ADDRESS.toString()));
-        assertTrue(input.isAnacEnabled(), output.get(Field.ANAC_ENABLED.toString()));
-        assertTrue(input.isAnacEngaged(), output.get(Field.ANAC_ENGAGED.toString()));
+        assertEquals(input.getAnacEnabled(), output.get(Field.ANAC_ENABLED.toString()));
+        assertEquals(input.getAnacEngaged(), output.get(Field.ANAC_ENGAGED.toString()));
         final Set<String> fieldValues = Arrays.stream(Field.values())
                 .map(Field::toString)
                 .collect(Collectors.toSet());
@@ -67,8 +67,8 @@ class StationToDocumentConverterTest {
         assertEquals(input.getTaxCode(), output.get(Field.TAX_CODE.toString()));
         assertEquals(input.getDescription(), output.get(Field.DESCRIPTION.toString()));
         assertEquals(input.getDigitalAddress(), output.get(Field.DIGITAL_ADDRESS.toString()));
-        assertTrue(input.isAnacEnabled(), output.get(Field.ANAC_ENABLED.toString()));
-        assertTrue(input.isAnacEngaged(), output.get(Field.ANAC_ENGAGED.toString()));
+        assertEquals(input.getAnacEnabled(), output.get(Field.ANAC_ENABLED.toString()));
+        assertEquals(input.getAnacEngaged(), output.get(Field.ANAC_ENGAGED.toString()));
         final Set<String> fieldValues = Arrays.stream(Field.values())
                 .map(Field::toString)
                 .collect(Collectors.toSet());

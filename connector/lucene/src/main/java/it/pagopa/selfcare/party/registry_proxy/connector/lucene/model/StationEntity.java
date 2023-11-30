@@ -14,8 +14,8 @@ public class StationEntity implements Station {
 
     private String id;
     private String originId;
-    private boolean anacEnabled;
-    private boolean anacEngaged;
+    private String anacEnabled;
+    private String anacEngaged;
     private String taxCode;
     private String description;
     private String digitalAddress;
