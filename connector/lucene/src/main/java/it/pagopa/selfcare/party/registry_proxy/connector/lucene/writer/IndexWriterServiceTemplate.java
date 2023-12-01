@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
-
 import java.util.List;
 import java.util.function.Function;
 
@@ -53,8 +52,6 @@ abstract class IndexWriterServiceTemplate<T> implements IndexWriterService<T> {
         }
         log.trace("deleteAll end");
     }
-
-
     protected abstract String getId(T item);
 
 }

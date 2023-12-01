@@ -44,6 +44,8 @@ spec:
             - secretRef:
                 name: infocamere-service-secrets
             - secretRef:
+                name: anac-ftp-secret
+            - secretRef:
                 name: national-registry-secrets
             - configMapRef:
                 name: jwt
@@ -55,6 +57,8 @@ spec:
                 name: inner-service-url
             - configMapRef:
                 name: infocamere-service
+            - configMapRef:
+                name: anac-ftp
           ports:
             - name: http
               containerPort: {{ .Values.containers.portNumber }}

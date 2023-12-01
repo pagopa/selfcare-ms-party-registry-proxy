@@ -1,49 +1,71 @@
 package it.pagopa.selfcare.party.connector.ftp.client;
 
+import com.jcraft.jsch.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.FTPConnector;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPClientConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetAddress;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 @Component
 @Slf4j
 @PropertySource("classpath:config/ftp-config.properties")
 public class AnacFTPClient implements FTPConnector {
 
-    private final FTPClient ftpClient;
-    public AnacFTPClient(@Value("${ftp.external.ip}") String address,
-                         @Value("${ftp.user}")String user,
-                         @Value("${ftp.password}")String password) {
+    private final String address;
+    private final String user;
+    private final String password;
+    private final Integer port;
+    private final String knownHost;
 
-        FTPClientConfig conf = new FTPClientConfig(FTPClientConfig.SYST_UNIX);
-        conf.setServerLanguageCode("it");
+    public AnacFTPClient(@Value("${anac.ftp.ip}") String address,
+                         @Value("${anac.ftp.port}") Integer port,
+                         @Value("${anac.ftp.user}") String user,
+                         @Value("${anac.ftp.password}") String password,
+                         @Value("${anac.ftp.known-host}") String knownHost) {
 
-        ftpClient = new FTPClient();
-        ftpClient.configure(conf);
+        this.address = address;
+        this.password = password;
+        this.user = user;
+        this.port = port;
+        this.knownHost = knownHost;
 
-        try {
-            InetAddress server = InetAddress.getByName(address);
-            ftpClient.connect(server);
-            ftpClient.login(user, password);
-        } catch (IOException e) {
-            log.error("Error during sftp connection. Error: {}", e.getMessage(), e);
-        }
     }
 
     @Override
-    public InputStream getFile(String sourceFilename) {
+    public Optional<InputStream> getFile(String fileName) {
+        Optional<InputStream> optionalInputStream = Optional.empty();
+        ChannelSftp channelSftp = new ChannelSftp();
         try {
-            return ftpClient.retrieveFileStream(sourceFilename);
-        } catch (IOException e) {
-            log.error("Impossible to retrieve file ANAC. Error: {}", e.getMessage(), e);
-            return InputStream.nullInputStream();
+            channelSftp = setupJsch();
+            optionalInputStream = connectAndRetrieveFile(channelSftp, fileName);
+        } catch (JSchException | SftpException | IOException e) {
+            log.error("Error during get file from ANAC ftp: {}", e.getMessage());
+            log.trace("Error during get file from ANAC ftp", e);
+        } finally {
+            channelSftp.exit();
         }
+        return optionalInputStream;
+    }
+
+    private Optional<InputStream> connectAndRetrieveFile(ChannelSftp channelSftp, String fileName) throws JSchException, SftpException, IOException {
+        channelSftp.connect();
+        InputStream inputStream = channelSftp.get(fileName);
+        InputStream finalInputStream = new ByteArrayInputStream(inputStream.readAllBytes());
+        return Optional.of(finalInputStream);
+    }
+
+    private ChannelSftp setupJsch() throws JSchException {
+        JSch jsch = new JSch();
+        jsch.setKnownHosts(new ByteArrayInputStream(knownHost.getBytes(StandardCharsets.UTF_8)));
+        Session jschSession = jsch.getSession(user, address, port);
+        jschSession.setPassword(password);
+        jschSession.connect();
+        return (ChannelSftp) jschSession.openChannel("sftp");
+
     }
 }

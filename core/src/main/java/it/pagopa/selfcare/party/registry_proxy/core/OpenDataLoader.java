@@ -24,6 +24,7 @@ public class OpenDataLoader implements CommandLineRunner {
     private final IndexWriterService<InsuranceCompany> ivassIndexWriterService;
     private final ANACService anacService;
     private final IvassDataConnector ivassDataConnector;
+
     @Autowired
     public OpenDataLoader(List<OpenDataConnector> openDataConnectors,
                           IndexWriterService<Institution> institutionIndexWriterService,

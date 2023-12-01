@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -19,23 +20,23 @@ import java.io.*;
 public class AnacDataConnectorImpl implements AnacDataConnector {
 
     private final FileStorageConnector fileStorageConnector;
-    private final String sourceFilename;
+    private final String fileName;
 
-    public AnacDataConnectorImpl(@Value("${blobStorage.anac.filename}") String anacCsvFileName,
+    public AnacDataConnectorImpl(@Value("${blobStorage.anac.filename}") String azureAnacFileName,
                                  FileStorageConnector fileStorageConnector) {
         this.fileStorageConnector = fileStorageConnector;
-        this.sourceFilename = anacCsvFileName;
+        this.fileName = azureAnacFileName;
     }
 
     @Override
-    public InputStream getANACData() {
+    public Optional<InputStream> getANACData() {
         ResourceResponse resourceResponse;
         try {
-            resourceResponse = fileStorageConnector.getFile(sourceFilename);
-            return new ByteArrayInputStream(resourceResponse.getData());
+            resourceResponse = fileStorageConnector.getFile(fileName);
+            return Optional.of(new ByteArrayInputStream(resourceResponse.getData()));
         } catch (Exception e) {
             log.error("Impossible to retrieve file ANAC. Error: {}", e.getMessage(), e);
-            return InputStream.nullInputStream();
+            return Optional.empty();
         }
     }
 }
