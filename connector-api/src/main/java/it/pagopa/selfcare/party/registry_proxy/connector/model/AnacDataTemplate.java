@@ -19,9 +19,9 @@ public class AnacDataTemplate implements Station {
     @CsvBindByName(column = "PEC")
     private String digitalAddress;
     @CsvBindByName(column = "ANAC_incaricato")
-    private boolean anacEngaged;
+    private String anacEngaged;
     @CsvBindByName(column = "ANAC_abilitato")
-    private boolean anacEnabled;
+    private String anacEnabled;
 
     public String getTaxCode() {
         if(this.taxCode.length() < 11) {

@@ -15,9 +15,9 @@ public interface Station {
 
     String getDigitalAddress();
 
-    boolean isAnacEngaged();
+    String getAnacEngaged();
 
-    boolean isAnacEnabled();
+    String getAnacEnabled();
 
     default Origin getOrigin() {
         return Origin.ANAC;
