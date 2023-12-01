@@ -9,6 +9,9 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -17,18 +20,34 @@ import java.io.*;
         havingValue = "sftp")
 @PropertySource("classpath:config/ftp-config.properties")
 public class AnacDataFromFTPConnectorImpl implements AnacDataConnector {
-    private final String sourceFilename;
+
+    private static final String ANAC_DATA_FILE_PREFIX = "collaudo-";
+    private static final String ANAC_DATA_FILE_SUFFIX = ".csv";
+    private final String directory;
     private final FTPConnector ftpConnector;
 
-    public AnacDataFromFTPConnectorImpl(@Value("${ftp.anac.filename}") String anacCsvFileName,
+    public AnacDataFromFTPConnectorImpl(@Value("${anac.ftp.directory}") String anacDirectory,
                                         FTPConnector ftpConnector) {
         this.ftpConnector = ftpConnector;
-        this.sourceFilename = anacCsvFileName;
+        this.directory = anacDirectory;
     }
 
+
     @Override
-    public InputStream getANACData() {
-        log.trace("getStations start");
-        return ftpConnector.getFile(sourceFilename);
+    public Optional<InputStream> getANACData() {
+        String fileName = createFileName();
+        log.trace("getANACData on filename: {} start", fileName);
+        Optional<InputStream> optionalInputStream = ftpConnector.getFile(directory + fileName);
+        log.trace("getANACData on filename: {} end", fileName);
+        return optionalInputStream;
+    }
+
+    private String createFileName() {
+        StringBuilder fileNameBuilder = new StringBuilder();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        return fileNameBuilder.append(ANAC_DATA_FILE_PREFIX)
+                .append(LocalDateTime.now().format(formatter))
+                .append(ANAC_DATA_FILE_SUFFIX)
+                .toString();
     }
 }

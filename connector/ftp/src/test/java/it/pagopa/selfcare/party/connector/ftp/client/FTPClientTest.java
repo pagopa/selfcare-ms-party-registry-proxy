@@ -13,6 +13,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -21,7 +22,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 class FTPClientTest {
 
-    private final String filename = "logo-pagopa-spa.png";
     private AnacFTPClient anacFtpClient;
 
     @Mock
@@ -29,14 +29,16 @@ class FTPClientTest {
 
     @BeforeEach
     public void init(){
-        anacFtpClient = new AnacFTPClient("localhost","user","pass");
+        anacFtpClient = new AnacFTPClient("localhost",22, "user","pass", "string");
     }
 
     @Test
     void getFileOk() throws IOException{
         //given
-        String bytes = "codice_IPA,cf_gestore,cenominazione,comicilio_digitale,anac_incaricato,anac_abilitato\n" +
-                "aaaaaaa,tax_code,denominazione,test@pec.it,false,false\n";
+        String bytes = """
+                codice_IPA,cf_gestore,cenominazione,comicilio_digitale,anac_incaricato,anac_abilitato
+                aaaaaaa,tax_code,denominazione,test@pec.it,false,false
+                """;
         InputStream mockInputStream = new ByteArrayInputStream(bytes.getBytes(StandardCharsets.UTF_8));
         when(ftpClient.retrieveFileStream(any())).thenReturn(mockInputStream);
         Executable executable = () ->  anacFtpClient.getFile("filename");
@@ -47,8 +49,8 @@ class FTPClientTest {
     void getFileKO() throws IOException {
         //given
         when(ftpClient.retrieveFileStream(any())).thenThrow(IOException.class);
-        InputStream resp =  anacFtpClient.getFile("filename");
-        assertEquals(0, resp.available());
+        Optional<InputStream> resp =  anacFtpClient.getFile("filename");
+        assertTrue(resp.isEmpty());
     }
 
 }

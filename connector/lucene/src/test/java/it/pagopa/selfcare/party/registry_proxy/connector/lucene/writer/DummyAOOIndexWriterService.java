@@ -26,4 +26,9 @@ public class DummyAOOIndexWriterService implements IndexWriterService<AOO> {
         indexWriterService.deleteAll();
     }
 
+    @Override
+    public void cleanIndex(String entityType) {
+        indexWriterService.cleanIndex(entityType);
+    }
+
 }
