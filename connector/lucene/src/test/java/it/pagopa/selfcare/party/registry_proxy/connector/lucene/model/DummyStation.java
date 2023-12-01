@@ -45,13 +45,13 @@ public class DummyStation implements Station {
     }
 
     @Override
-    public boolean isAnacEnabled() {
-        return dummyEntity.isAnacEnabled();
+    public String getAnacEnabled() {
+        return dummyEntity.getAnacEnabled();
     }
 
     @Override
-    public boolean isAnacEngaged() {
-        return dummyEntity.isAnacEngaged();
+    public String getAnacEngaged() {
+        return dummyEntity.getAnacEngaged();
     }
 
     @Override

@@ -12,7 +12,7 @@ public class DummyPDND implements Station {
     private String taxCode;
     private String description;
     private String digitalAddress;
-    private boolean anacEnabled;
-    private boolean anacEngaged;
+    private String anacEnabled;
+    private String anacEngaged;
 
 }
