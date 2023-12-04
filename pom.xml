@@ -30,6 +30,11 @@
       </dependency>
       <dependency>
         <groupId>it.pagopa.selfcare.party</groupId>
+        <artifactId>selc-party-registry-proxy-connector-ftp</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>it.pagopa.selfcare.party</groupId>
         <artifactId>selc-party-registry-proxy-connector-azure-storage</artifactId>
         <version>0.0.1-SNAPSHOT</version>
       </dependency>

@@ -30,6 +30,11 @@
             <artifactId>selc-party-registry-proxy-connector-azure-storage</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>it.pagopa.selfcare.party</groupId>
+            <artifactId>selc-party-registry-proxy-connector-ftp</artifactId>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>
