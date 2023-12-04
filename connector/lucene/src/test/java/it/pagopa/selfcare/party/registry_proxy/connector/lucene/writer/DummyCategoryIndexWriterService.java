@@ -26,4 +26,9 @@ public class DummyCategoryIndexWriterService implements IndexWriterService<Categ
         indexWriterService.deleteAll();
     }
 
+    @Override
+    public void cleanIndex(String entityType) {
+        indexWriterService.cleanIndex(entityType);
+    }
+
 }

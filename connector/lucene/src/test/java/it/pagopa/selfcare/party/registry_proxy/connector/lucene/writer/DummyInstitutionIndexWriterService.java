@@ -26,4 +26,9 @@ public class DummyInstitutionIndexWriterService implements IndexWriterService<In
         indexWriterService.deleteAll();
     }
 
+    @Override
+    public void cleanIndex(String entityType) {
+        indexWriterService.cleanIndex(entityType);
+    }
+
 }

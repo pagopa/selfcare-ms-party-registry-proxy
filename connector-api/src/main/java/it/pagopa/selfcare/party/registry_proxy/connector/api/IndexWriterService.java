@@ -9,4 +9,6 @@ public interface IndexWriterService<T> {
 
     void deleteAll();
 
+    void cleanIndex(String entityType);
+
 }

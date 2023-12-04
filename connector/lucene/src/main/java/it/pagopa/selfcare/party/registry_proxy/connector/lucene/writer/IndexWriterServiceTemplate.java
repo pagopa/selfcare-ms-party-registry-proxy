@@ -1,12 +1,15 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.writer;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Entity;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution.Field;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.*;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -52,6 +55,23 @@ abstract class IndexWriterServiceTemplate<T> implements IndexWriterService<T> {
         }
         log.trace("deleteAll end");
     }
+
+    @SneakyThrows
+    @Override
+    public void cleanIndex(String entityType) {
+        log.trace("cleanIndex start");
+        final IndexWriter indexWriter = indexWriterFactory.create();
+        try (indexWriter) {
+            final BooleanQuery.Builder queryBuilder = new BooleanQuery.Builder();
+            final TermQuery indexFilterQuery = new TermQuery(new Term(Entity.ENTITY_TYPE.toString(), entityType));
+            queryBuilder.add(indexFilterQuery, BooleanClause.Occur.MUST);
+            indexWriter.deleteDocuments(queryBuilder.build());
+            indexWriter.commit();
+        }
+        log.trace("cleanIndex end");
+    }
+
+
     protected abstract String getId(T item);
 
 }

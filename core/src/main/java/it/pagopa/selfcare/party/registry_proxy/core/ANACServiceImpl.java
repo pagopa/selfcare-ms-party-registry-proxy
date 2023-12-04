@@ -26,6 +26,18 @@ public class ANACServiceImpl implements ANACService {
 
 
     private final AnacDataConnector anacDataConnector;
+    private final IndexWriterService<Station> stationIndexWriterService;
+
+    @Scheduled(cron = "0 0 0/6 * * *")
+    void updateStationIndex() {
+        log.trace("start update ANAC Stations index");
+        List<Station> stations = getStations();
+        if (!stations.isEmpty()) {
+            stationIndexWriterService.cleanIndex(Entity.STATION.toString());
+            stationIndexWriterService.adds(stations);
+        }
+        log.trace("updated ANAC Stations index end");
+    }
 
     @Override
     public List<Station> getStations() {
