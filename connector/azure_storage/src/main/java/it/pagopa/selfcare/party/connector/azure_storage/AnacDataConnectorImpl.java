@@ -1,63 +1,42 @@
 package it.pagopa.selfcare.party.connector.azure_storage;
 
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
-import it.pagopa.selfcare.party.connector.azure_storage.model.AnacDataTemplate;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.AnacDataConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.FileStorageConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.ResourceResponse;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.io.*;
+import java.util.Optional;
 
 @Service
 @Slf4j
+@ConditionalOnProperty(
+        value = "file.connector.type",
+        havingValue = "azure",
+        matchIfMissing = true)
 public class AnacDataConnectorImpl implements AnacDataConnector {
 
     private final FileStorageConnector fileStorageConnector;
-    private final String sourceFilename;
+    private final String fileName;
 
-    public AnacDataConnectorImpl(@Value("${blobStorage.anac.filename}") String anacCsvFileName,
+    public AnacDataConnectorImpl(@Value("${blobStorage.anac.filename}") String azureAnacFileName,
                                  FileStorageConnector fileStorageConnector) {
         this.fileStorageConnector = fileStorageConnector;
-        this.sourceFilename = anacCsvFileName;
+        this.fileName = azureAnacFileName;
     }
 
     @Override
-    public List<Station> getStations() {
-        log.trace("getStations start");
-        List<Station> stations = new ArrayList<>();
+    public Optional<InputStream> getANACData() {
         ResourceResponse resourceResponse;
         try {
-            resourceResponse = fileStorageConnector.getFile(sourceFilename);
+            resourceResponse = fileStorageConnector.getFile(fileName);
+            return Optional.of(new ByteArrayInputStream(resourceResponse.getData()));
         } catch (Exception e) {
             log.error("Impossible to retrieve file ANAC. Error: {}", e.getMessage(), e);
-            return stations;
+            return Optional.empty();
         }
-        try (Reader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(resourceResponse.getData())))) {
-            CsvToBean<Station> csvToBean = new CsvToBeanBuilder<Station>(reader)
-                    .withType(AnacDataTemplate.class)
-                    .withIgnoreLeadingWhiteSpace(true)
-                    .build();
-            stations = csvToBean.parse();
-        } catch (Exception e) {
-            log.error("Impossible to acquire data for ANAC. Error: {}", e.getMessage(), e);
-        }
-        log.debug("getStations result = {}", stations);
-        log.trace("getStations end");
-        return stations
-                    .stream()
-                    .filter(station -> !StringUtils.hasText(station.getOriginId()))
-                    .collect(Collectors.toList());
     }
 }
