@@ -1,6 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.AnacDataConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.api.FileStorageConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import org.junit.jupiter.api.Assertions;
@@ -26,6 +27,11 @@ class ANACServiceImplTest {
     private ANACServiceImpl anacService;
 
     @Mock
+    private FileStorageConnector fileStorageConnector;
+
+    private String fileStorageFileName = "fileStorageFileName";
+
+    @Mock
     private AnacDataConnector anacDataConnector;
 
     @Mock
@@ -35,25 +41,25 @@ class ANACServiceImplTest {
             "00000000000,srl s.r.l.,srl@pec.it,,true,false,false";
 
     @Test
-    void getStations() {
-        anacService = new ANACServiceImpl(anacDataConnector, stationIndexWriterService);
+    void loadStations() {
+        anacService = new ANACServiceImpl(anacDataConnector, fileStorageConnector, fileStorageFileName, stationIndexWriterService);
         InputStream inputStream = new ByteArrayInputStream(testCaseCsv.getBytes(StandardCharsets.UTF_8));
         when(anacDataConnector.getANACData()).thenReturn(Optional.of(inputStream));
-        Executable executable = () -> anacService.getStations();
+        Executable executable = () -> anacService.loadStations();
         Assertions.assertDoesNotThrow(executable);
     }
 
     @Test
     void getStationsEmpty() {
-        anacService = new ANACServiceImpl(anacDataConnector, stationIndexWriterService);
+        anacService = new ANACServiceImpl(anacDataConnector, fileStorageConnector, fileStorageFileName, stationIndexWriterService);
         when(anacDataConnector.getANACData()).thenReturn(Optional.empty());
-        List<Station> stationList = anacService.getStations();
+        List<Station> stationList = anacService.loadStations();
         Assertions.assertEquals(0, stationList.size());
     }
 
     @Test
     void updateStationIndex() {
-        anacService = new ANACServiceImpl(anacDataConnector, stationIndexWriterService);
+        anacService = new ANACServiceImpl(anacDataConnector, fileStorageConnector, fileStorageFileName, stationIndexWriterService);
         InputStream inputStream = new ByteArrayInputStream(testCaseCsv.getBytes(StandardCharsets.UTF_8));
         when(anacDataConnector.getANACData()).thenReturn(Optional.of(inputStream));
         Executable executable = () -> anacService.updateStationIndex();
