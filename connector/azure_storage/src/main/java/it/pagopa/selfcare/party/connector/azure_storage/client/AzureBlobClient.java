@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 
@@ -29,6 +30,8 @@ public class AzureBlobClient implements FileStorageConnector {
 
     private static final String ERROR_DURING_DOWNLOAD_FILE_MESSAGE = "Error during download file %s";
     private static final String ERROR_DURING_DOWNLOAD_FILE_CODE = "0000";
+    private static final String ERROR_DURING_UPLOAD_FILE_MESSAGE = "Error during upload file %s";
+    private static final String ERROR_DURING_UPLOAD_FILE_CODE = "0000";
     private final CloudBlobClient blobClient;
     private final String containerReference;
 
@@ -71,4 +74,18 @@ public class AzureBlobClient implements FileStorageConnector {
         }
     }
 
+    @Override
+    public void uploadFile(InputStream file, String fileName) {
+        log.info("START - uploadFile for path: {}", fileName);
+        try {
+            final CloudBlobContainer blobContainer = blobClient.getContainerReference(containerReference);
+            final CloudBlockBlob blob = blobContainer.getBlockBlobReference(fileName);
+            blob.upload(file, file.available());
+            log.info("Uploaded {}", fileName);
+        } catch (StorageException | URISyntaxException | IOException e) {
+            log.error(String.format(ERROR_DURING_UPLOAD_FILE_MESSAGE, fileName), e);
+            throw new ProxyRegistryException(String.format(ERROR_DURING_UPLOAD_FILE_MESSAGE, fileName),
+                    ERROR_DURING_UPLOAD_FILE_CODE);
+        }
+    }
 }

@@ -29,7 +29,7 @@ public class AnacDataConnectorImpl implements AnacDataConnector {
     }
 
     @Override
-    public Optional<InputStream> getANACData() {
+    public Optional<ByteArrayInputStream> getANACData() {
         ResourceResponse resourceResponse;
         try {
             resourceResponse = fileStorageConnector.getFile(fileName);
