@@ -10,7 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 
 import org.junit.jupiter.api.function.Executable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -43,7 +42,7 @@ class ANACServiceImplTest {
     @Test
     void loadStations() {
         anacService = new ANACServiceImpl(anacDataConnector, fileStorageConnector, fileStorageFileName, stationIndexWriterService);
-        InputStream inputStream = new ByteArrayInputStream(testCaseCsv.getBytes(StandardCharsets.UTF_8));
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(testCaseCsv.getBytes(StandardCharsets.UTF_8));
         when(anacDataConnector.getANACData()).thenReturn(Optional.of(inputStream));
         Executable executable = () -> anacService.loadStations();
         Assertions.assertDoesNotThrow(executable);
@@ -60,7 +59,7 @@ class ANACServiceImplTest {
     @Test
     void updateStationIndex() {
         anacService = new ANACServiceImpl(anacDataConnector, fileStorageConnector, fileStorageFileName, stationIndexWriterService);
-        InputStream inputStream = new ByteArrayInputStream(testCaseCsv.getBytes(StandardCharsets.UTF_8));
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(testCaseCsv.getBytes(StandardCharsets.UTF_8));
         when(anacDataConnector.getANACData()).thenReturn(Optional.of(inputStream));
         Executable executable = () -> anacService.updateStationIndex();
         Assertions.assertDoesNotThrow(executable);

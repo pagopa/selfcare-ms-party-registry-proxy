@@ -36,7 +36,7 @@ class AnacDataFromFTPConnectorImplTest {
                 """;
         InputStream mockInputStream = new ByteArrayInputStream(bytes.getBytes(StandardCharsets.UTF_8));
         when(ftpClient.getFile(anyString())).thenReturn(Optional.of(mockInputStream));
-        final Optional<InputStream> inputStream = anacDataConnector.getANACData();
+        final Optional<ByteArrayInputStream> inputStream = anacDataConnector.getANACData();
         assertNotNull(inputStream);
         verify(ftpClient, times(1)).getFile(anyString());
         verifyNoMoreInteractions(ftpClient);
@@ -48,7 +48,7 @@ class AnacDataFromFTPConnectorImplTest {
         final String directory = "/test/";
         AnacDataConnector anacDataConnector = new AnacDataFromFTPConnectorImpl(directory, filename, ftpClient, azureBlobClient);
         when(ftpClient.getFile(anyString())).thenReturn(Optional.empty());
-        final  Optional<InputStream> inputStream = anacDataConnector.getANACData();
+        final  Optional<ByteArrayInputStream> inputStream = anacDataConnector.getANACData();
         assertTrue(inputStream.isEmpty());
         verify(ftpClient, times(1)).getFile(any());
         verifyNoMoreInteractions(ftpClient);

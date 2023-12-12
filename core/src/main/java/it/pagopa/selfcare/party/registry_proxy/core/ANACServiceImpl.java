@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Collections;
@@ -72,9 +71,9 @@ public class ANACServiceImpl implements ANACService {
      * according to properties file.connector.type, that can assume the value SFTP or AZURE
      */
     public List<Station> getStations() {
-        Optional<InputStream> optionalInputStream = anacDataConnector.getANACData();
-        return optionalInputStream.map(inputStream -> {
-                    List<Station> stations = retrieveStationListFromCSV(inputStream);
+        Optional<ByteArrayInputStream> optionalData = anacDataConnector.getANACData();
+        return optionalData.map(data -> {
+                    List<Station> stations = retrieveStationListFromCSV(data);
                     log.debug("getStations result = {}", stations);
                     log.trace("getStations end");
                     return stations;
@@ -88,13 +87,13 @@ public class ANACServiceImpl implements ANACService {
             resourceResponse = fileStorageConnector.getFile(fileStorageFileName);
             return retrieveStationListFromCSV(new ByteArrayInputStream(resourceResponse.getData()));
         } catch (Exception e) {
-            log.error("Impossible to retrieve file ANAC. Error: {}", e.getMessage(), e);
+            log.error("Error during retrieving ANAC csv. Error: {}", e.getMessage(), e);
             return Collections.emptyList();
         }
     }
 
-    private static List<Station> retrieveStationListFromCSV(InputStream inputStream) {
-        Reader reader = new InputStreamReader(inputStream);
+    private static List<Station> retrieveStationListFromCSV(ByteArrayInputStream byteArrayInputStream) {
+        Reader reader = new InputStreamReader(byteArrayInputStream);
         CsvToBeanBuilder<Station> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
         csvToBeanBuilder.withType(AnacDataTemplate.class);
         csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);

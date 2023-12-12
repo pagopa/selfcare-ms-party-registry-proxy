@@ -46,19 +46,19 @@ public class AnacDataFromFTPConnectorImpl implements AnacDataConnector {
      * If there is no such file, it returns an empty Optional InputStream. Otherwise, it uploads that InputStream to Azure Blob Storage to update the last ANAC file and returns it as well.
      */
     @Override
-    public Optional<InputStream> getANACData() {
+    public Optional<ByteArrayInputStream> getANACData() {
         String fileName = createFileName();
         log.trace("getANACData on filename: {} start", fileName);
         Optional<InputStream> optionalFile = ftpConnector.getFile(directory + fileName);
         return optionalFile.flatMap(inputStream -> {
-            Optional<InputStream> opt = updateFileOnAzureStorageAndRetrieveInputStream(inputStream);
+            Optional<ByteArrayInputStream> opt = updateFileOnAzureStorageAndRetrieveInputStream(inputStream);
             log.trace("getANACData on filename: {} end", fileName);
             return opt;
         });
 
     }
 
-    private Optional<InputStream> updateFileOnAzureStorageAndRetrieveInputStream(InputStream inputStream){
+    private Optional<ByteArrayInputStream> updateFileOnAzureStorageAndRetrieveInputStream(InputStream inputStream){
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             IOUtils.copy(inputStream, out);
@@ -66,6 +66,7 @@ public class AnacDataFromFTPConnectorImpl implements AnacDataConnector {
             azureBlobClient.uploadFile(new ByteArrayInputStream(bytes), anacFileName);
             return Optional.of(new ByteArrayInputStream(bytes));
         } catch (IOException e) {
+            log.error("Error during retrieving ANAC csv. Error: {}", e.getMessage(), e);
             return Optional.empty();
         }
     }
