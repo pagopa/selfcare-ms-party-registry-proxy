@@ -21,6 +21,10 @@
             <artifactId>jsch</artifactId>
             <version>0.1.55</version>
         </dependency>
+        <dependency>
+            <groupId>it.pagopa.selfcare.party</groupId>
+            <artifactId>selc-party-registry-proxy-connector-azure-storage</artifactId>
+        </dependency>
     </dependencies>
 
 

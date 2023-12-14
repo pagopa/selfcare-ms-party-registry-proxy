@@ -9,8 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
@@ -34,7 +34,7 @@ class AnacDataConnectorImplTest {
                 """;
         response.setData(bytes.getBytes(StandardCharsets.UTF_8));
         when(azureBlobClientMock.getFile(anyString())).thenReturn(response);
-        final Optional<InputStream> inputStream = anacDataConnector.getANACData();
+        final Optional<ByteArrayInputStream> inputStream = anacDataConnector.getANACData();
         assertNotNull(inputStream);
         verify(azureBlobClientMock, times(1)).getFile(filename);
         verifyNoMoreInteractions(azureBlobClientMock);
@@ -45,7 +45,7 @@ class AnacDataConnectorImplTest {
         final String filename = "test.csv";
         AnacDataConnector anacDataConnector = new AnacDataConnectorImpl(filename, azureBlobClientMock);
         when(azureBlobClientMock.getFile(anyString())).thenThrow(ResourceNotFoundException.class);
-        final  Optional<InputStream> inputStream = anacDataConnector.getANACData();
+        final  Optional<ByteArrayInputStream> inputStream = anacDataConnector.getANACData();
         assertTrue(inputStream.isEmpty());
         verify(azureBlobClientMock, times(1)).getFile(filename);
         verifyNoMoreInteractions(azureBlobClientMock);
@@ -63,7 +63,7 @@ class AnacDataConnectorImplTest {
                 """;
         response.setData(bytes.getBytes(StandardCharsets.UTF_8));
         when(azureBlobClientMock.getFile(anyString())).thenReturn(response);
-        final  Optional<InputStream> inputStream = anacDataConnector.getANACData();
+        final  Optional<ByteArrayInputStream> inputStream = anacDataConnector.getANACData();
         assertTrue(inputStream.isPresent());
         verify(azureBlobClientMock, times(1)).getFile(filename);
         verifyNoMoreInteractions(azureBlobClientMock);
@@ -74,7 +74,7 @@ class AnacDataConnectorImplTest {
         final String filename = "test.csv";
         AnacDataConnector anacDataConnector = new AnacDataConnectorImpl(filename, azureBlobClientMock);
         when(azureBlobClientMock.getFile(anyString())).thenThrow(ResourceNotFoundException.class);
-        final  Optional<InputStream> inputStream = anacDataConnector.getANACData();
+        final  Optional<ByteArrayInputStream> inputStream = anacDataConnector.getANACData();
         assertTrue(inputStream.isEmpty());
         verify(azureBlobClientMock, times(1)).getFile(filename);
         verifyNoMoreInteractions(azureBlobClientMock);
