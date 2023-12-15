@@ -1,5 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
+import io.github.resilience4j.retry.annotation.Retry;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.NationalRegistriesConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.NationalRegistriesRestClient;
@@ -19,18 +20,21 @@ public class NationalRegistriesConnectorImpl implements NationalRegistriesConnec
     }
 
     @Override
+    @Retry(name = "retryServiceUnavailable")
     public LegalAddressResponse getLegalAddress(String taxCode) {
         LegalAddressRequest legalAddressRequest = createLegalAddressRequest(taxCode);
         return toLegalAddressResponse(nationalRegistriesRestClient.getLegalAddress(legalAddressRequest));
     }
 
     @Override
+    @Retry(name = "retryServiceUnavailable")
     public VerifyLegalResponse verifyLegal(String taxId, String vatNumber) {
         AdELegalRequestBodyDto request = createRequest(taxId, vatNumber);
         return toVerifyLegalResponse(nationalRegistriesRestClient.verifyLegal(request));
     }
 
     @Override
+    @Retry(name = "retryServiceUnavailable")
     public Businesses institutionsByLegalTaxId(String legalTaxId) {
         log.info("start institutionsByLegalTaxId");
         LegalInstitutionsRequestBody request = createLegalInstitutionsRequest(legalTaxId);

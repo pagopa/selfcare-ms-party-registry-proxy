@@ -18,6 +18,10 @@ spring:
       remote-fields: X-Client-Ip
       correlation-fields: X-Client-Ip
 
+file:
+  connector:
+    type: "sftp"
+
 info:
   build:
     artifact: "@project.parent.artifactId@"
@@ -36,7 +40,7 @@ resilience4j:
   retry:
     retry-aspect-order: 2
     instances:
-      retry503:
+      retryServiceUnavailable:
         max-attempts: 3
         wait-duration: 5s
         enable-exponential-backoff: true

@@ -3,6 +3,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.lucene.writer;
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.analysis.StationTokenAnalyzer;
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.config.InMemoryIndexConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.DummyStation;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Entity;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import lombok.SneakyThrows;
 import org.apache.lucene.index.DirectoryReader;
@@ -59,6 +60,15 @@ class StationIndexWriterServiceTest {
         // given
         // when
         indexWriterService.deleteAll();
+        // then
+        assertEquals(0, count(directory));
+    }
+
+    @Test
+    void cleanIndex() {
+        // given
+        // when
+        indexWriterService.cleanIndex(Entity.STATION.name());
         // then
         assertEquals(0, count(directory));
     }

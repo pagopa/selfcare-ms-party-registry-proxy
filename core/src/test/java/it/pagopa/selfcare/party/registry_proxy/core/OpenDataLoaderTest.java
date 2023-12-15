@@ -1,10 +1,14 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.api.AnacDataConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IvassDataConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.OpenDataConnector;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.AOO;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Category;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.InsuranceCompany;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.UO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +28,7 @@ class OpenDataLoaderTest {
     private OpenDataConnector openDataConnector;
 
     @MockBean
-    private AnacDataConnector anacDataConnector;
+    private ANACService anacService;
 
     @MockBean
     private IvassDataConnector ivassDataConnector;
@@ -66,8 +70,6 @@ class OpenDataLoaderTest {
         when(openDataConnector.getUOs())
                 .thenReturn(uos);
         final List stations = List.of();
-        when(anacDataConnector.getStations())
-               .thenReturn(stations);
         final List insuranceCompanies = List.of();
         when(ivassDataConnector.getInsurances())
                 .thenReturn(insuranceCompanies);
@@ -88,6 +90,8 @@ class OpenDataLoaderTest {
                 .adds(uos);
         verify(pdndIndexWriterService, times(1))
                 .adds(stations);
+        verify(anacService, times(1))
+                .loadStations();
         verify(ivassIndexWriterService, times(1))
                 .adds(insuranceCompanies);
     }

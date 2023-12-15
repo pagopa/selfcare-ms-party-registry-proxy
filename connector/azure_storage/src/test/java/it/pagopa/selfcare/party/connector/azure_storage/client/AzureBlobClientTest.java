@@ -6,7 +6,6 @@ import com.microsoft.azure.storage.blob.BlobProperties;
 import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
-import it.pagopa.selfcare.party.connector.azure_storage.client.AzureBlobClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ProxyRegistryException;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.Assertions;
@@ -15,11 +14,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mockito;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -110,6 +110,27 @@ class AzureBlobClientTest {
         ProxyRegistryException e = assertThrows(ProxyRegistryException.class, executable);
         assertEquals(String.format("Error during download file %s", filename), e.getMessage());
 
+    }
+
+    @Test
+    void uploadFileOk() throws URISyntaxException, StorageException, NoSuchFieldException, IllegalAccessException, IOException {
+        CloudBlockBlob blockBlobMock = Mockito.mock(CloudBlockBlob.class);
+        Mockito.when(blockBlobMock.getProperties())
+                .thenReturn(new BlobProperties());
+        CloudBlobContainer blobContainerMock = Mockito.mock(CloudBlobContainer.class);
+        Mockito.when(blobContainerMock.getBlockBlobReference(Mockito.anyString()))
+                .thenReturn(blockBlobMock);
+        CloudBlobClient blobClientMock = Mockito.mock(CloudBlobClient.class);
+        Mockito.when(blobClientMock.getContainerReference("$web"))
+                .thenReturn(blobContainerMock);
+        Mockito.doNothing().
+                when(blockBlobMock).upload(any(), Mockito.anyByte());
+
+        mockCloudBlobClient(blobClient, blobClientMock);
+
+        Executable executable = () -> blobClient.uploadFile(new ByteArrayInputStream("test".getBytes(StandardCharsets.UTF_8)), filename);
+        // then
+        Assertions.assertDoesNotThrow(executable);
     }
 
     private void mockCloudBlobClient(AzureBlobClient blobClient, CloudBlobClient blobClientMock) throws NoSuchFieldException, IllegalAccessException {

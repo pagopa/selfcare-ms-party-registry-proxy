@@ -25,8 +25,8 @@ public class StationToDocumentConverter implements Function<Station, Document> {
             doc.add(new TextField(DESCRIPTION.toString(), station.getDescription(), Field.Store.YES));
             doc.add(new StoredField(TAX_CODE.toString(), station.getTaxCode()));
             doc.add(new StoredField(DIGITAL_ADDRESS.toString(), station.getDigitalAddress()));
-            doc.add(new StoredField(ANAC_ENABLED.toString(), String.valueOf(station.isAnacEnabled())));
-            doc.add(new StoredField(ANAC_ENGAGED.toString(), String.valueOf(station.isAnacEngaged())));
+            doc.add(new StoredField(ANAC_ENABLED.toString(), station.getAnacEnabled()));
+            doc.add(new StoredField(ANAC_ENGAGED.toString(), station.getAnacEngaged()));
         }
         return doc;
     }
