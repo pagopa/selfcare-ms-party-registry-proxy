@@ -18,6 +18,14 @@ ingress:
         - path: /party-registry-proxy/v1/(.*)
           pathType: ImplementationSpecific
 
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 1500m
+    memory: 3Gi
+
 autoscaling:
   enabled: false
   minReplicas: 1
