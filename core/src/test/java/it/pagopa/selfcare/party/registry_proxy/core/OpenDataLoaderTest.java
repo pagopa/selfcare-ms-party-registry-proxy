@@ -90,6 +90,8 @@ class OpenDataLoaderTest {
                 .adds(uos);
         verify(pdndIndexWriterService, times(1))
                 .adds(stations);
+        verify(anacService, times(1))
+                .loadStations();
         verify(ivassIndexWriterService, times(1))
                 .adds(insuranceCompanies);
     }
