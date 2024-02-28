@@ -1,25 +1,24 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import it.pagopa.selfcare.party.registry_proxy.connector.api.NationalRegistriesConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultCodeEnum;
 import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultDetailEnum;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.BadGatewayException;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.InvalidRequestException;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressProfessionalResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.VerifyLegalResponse;
-import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,13 +26,8 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {NationalRegistriesServiceImpl.class})
 @ExtendWith(SpringExtension.class)
@@ -128,11 +122,12 @@ class NationalRegistriesServiceImplTest {
     /**
      * Method under test: {@link NationalRegistriesServiceImpl#verifyLegal(String, String)}
      */
-    @Test
-    void testVerifyLegalInvalidRequest() {
+    @ParameterizedTest
+    @EnumSource(value = AdEResultDetailEnum.class, names = {"XX01", "XX02", "XXXX"})
+    void testVerifyLegalInvalidRequest(AdEResultDetailEnum code) {
         VerifyLegalResponse verifyLegalResponse = new VerifyLegalResponse();
         verifyLegalResponse.setVerifyLegalResultCode(AdEResultCodeEnum.CODE_01);
-        verifyLegalResponse.setVerifyLegalResultDetail(AdEResultDetailEnum.XX01);
+        verifyLegalResponse.setVerifyLegalResultDetail(code);
         when(nationalRegistriesConnector.verifyLegal(any(), any()))
                 .thenReturn(verifyLegalResponse);
         assertThrows(InvalidRequestException.class, () -> nationalRegistriesServiceImpl.verifyLegal("42", "42"));
