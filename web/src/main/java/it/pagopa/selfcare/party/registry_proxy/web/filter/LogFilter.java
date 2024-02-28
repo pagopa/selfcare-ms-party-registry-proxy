@@ -24,6 +24,13 @@ public class LogFilter implements Filter {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
         final String httpUri = httpServletRequest.getRequestURI();
+
+        if (httpUri.startsWith("/actuator/health")) {
+            log.trace("request to health-check actuator");
+            chain.doFilter(httpServletRequest, httpServletResponse);
+            return;
+        }
+        
         final String httpMethod = httpServletRequest.getMethod();
         long startTime = System.currentTimeMillis();
 
