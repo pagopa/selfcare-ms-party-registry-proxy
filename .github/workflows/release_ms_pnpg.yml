@@ -1,4 +1,4 @@
-name: Release PNPG ms-party-registry-proxy
+name: Release - PNPG ms-party-registry-proxy
 
 on:
   workflow_dispatch:
