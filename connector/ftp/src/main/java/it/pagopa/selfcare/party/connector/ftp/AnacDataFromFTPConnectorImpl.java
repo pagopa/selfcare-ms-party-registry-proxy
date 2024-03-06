@@ -52,7 +52,7 @@ public class AnacDataFromFTPConnectorImpl implements AnacDataConnector {
         Optional<InputStream> optionalFile = ftpConnector.getFile(directory + fileName);
         return optionalFile.flatMap(inputStream -> {
             Optional<ByteArrayInputStream> opt = updateFileOnAzureStorageAndRetrieveInputStream(inputStream);
-            log.trace("getANACData on filename: {} end", fileName);
+            log.debug("getANACData on filename from ftp: {} end", fileName);
             return opt;
         });
 

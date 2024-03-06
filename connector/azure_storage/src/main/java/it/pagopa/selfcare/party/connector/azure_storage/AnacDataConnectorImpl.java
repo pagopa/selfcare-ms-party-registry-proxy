@@ -35,7 +35,7 @@ public class AnacDataConnectorImpl implements AnacDataConnector {
             resourceResponse = fileStorageConnector.getFile(fileName);
             return Optional.of(new ByteArrayInputStream(resourceResponse.getData()));
         } catch (Exception e) {
-            log.error("Impossible to retrieve file ANAC. Error: {}", e.getMessage(), e);
+            log.error("Impossible to retrieve file ANAC from Storage. Error: {}", e.getMessage(), e);
             return Optional.empty();
         }
     }
