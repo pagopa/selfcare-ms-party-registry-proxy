@@ -33,7 +33,7 @@ public class IvassServiceImpl implements IvassService {
     public InsuranceCompany findByTaxCode(String taxId) {
         log.trace("findByTaxCode start");
         log.debug("findByTaxCode parameter = {}", taxId.toUpperCase());
-        final List<InsuranceCompany> companies = indexSearchService.findById(InsuranceCompany.Field.ID, taxId.toUpperCase());
+        final List<InsuranceCompany> companies = indexSearchService.findById(InsuranceCompany.Field.TAX_CODE, taxId.toUpperCase());
         if (companies.isEmpty()) {
             throw new ResourceNotFoundException();
         } else if (companies.size() > 1) {
