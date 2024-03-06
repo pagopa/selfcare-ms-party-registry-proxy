@@ -39,7 +39,7 @@ abstract class OpenDataConnectorTemplate<I extends Institution, C extends Catego
         }
 
         //TODO: scartare i record che non soddisfano determinati requisiti?
-        log.debug("getInstitutions result = {}", institutions);
+        //log.debug("getInstitutions result = {}", institutions);
         log.trace("getInstitutions end");
         return institutions;
     }
@@ -61,7 +61,7 @@ abstract class OpenDataConnectorTemplate<I extends Institution, C extends Catego
         }
 
         //TODO: scartare i record che non soddisfano determinati requisiti?
-        log.debug("getCategories result = {}", categories);
+        //log.debug("getCategories result = {}", categories);
         log.trace("getCategories end");
         return categories;
     }
@@ -83,7 +83,7 @@ abstract class OpenDataConnectorTemplate<I extends Institution, C extends Catego
         }
 
         //TODO: scartare i record che non soddisfano determinati requisiti?
-        log.debug("getAOOs result = {}", aoos);
+        //log.debug("getAOOs result = {}", aoos);
         log.trace("getAOOs end");
         return aoos;
     }
@@ -105,7 +105,7 @@ abstract class OpenDataConnectorTemplate<I extends Institution, C extends Catego
         }
 
         //TODO: scartare i record che non soddisfano determinati requisiti?
-        log.debug("getUOs result = {}", uos);
+        //log.debug("getUOs result = {}", uos);
         log.trace("getUOs end");
         return uos;
     }

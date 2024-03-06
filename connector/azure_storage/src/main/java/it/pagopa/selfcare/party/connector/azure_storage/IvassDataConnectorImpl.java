@@ -60,7 +60,7 @@ public class IvassDataConnectorImpl implements IvassDataConnector {
         } catch (Exception e) {
             log.error("Impossible to acquire data for IVASS. Error: {}", e.getMessage(), e);
         }
-        log.debug("getInsurances result = {}", companies);
+        //log.debug("getInsurances result = {}", companies);
         log.trace("getInsurances end");
         return companies
                 .stream()
