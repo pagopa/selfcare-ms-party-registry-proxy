@@ -53,7 +53,7 @@ public class AnacFTPClient implements FTPConnector {
     }
 
     private Optional<InputStream> connectAndRetrieveFile(ChannelSftp channelSftp, String fileName) throws JSchException, SftpException, IOException {
-        channelSftp.connect();
+        channelSftp.connect(30000);
         InputStream inputStream = channelSftp.get(fileName);
         InputStream finalInputStream = new ByteArrayInputStream(inputStream.readAllBytes());
         return Optional.of(finalInputStream);
