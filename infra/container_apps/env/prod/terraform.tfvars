@@ -44,7 +44,7 @@ app_settings = [
   },
   {
     name  = "MOCK_OPEN_DATA_ENABLED"
-    value = "true"
+    value = "false"
   },
   {
     name  = "MOCK_OPEN_DATA_URL"
