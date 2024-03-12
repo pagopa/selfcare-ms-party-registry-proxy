@@ -31,7 +31,7 @@ abstract class IndexWriterServiceTemplate<T> implements IndexWriterService<T> {
     @Override
     public void adds(List<? extends T> items) {
         log.trace("adds start");
-        log.debug("adds items = {}", items);
+        log.debug("adds items = {}", items.size());
         final IndexWriter indexWriter = indexWriterFactory.create();
         try (indexWriter) {
             for (T item : items) {
