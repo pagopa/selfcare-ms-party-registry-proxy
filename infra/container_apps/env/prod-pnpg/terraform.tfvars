@@ -89,4 +89,5 @@ secrets_names = {
   "BLOB_STORAGE_CONN_STRING"              = "web-storage-connection-string"
   "NATIONAL_REGISTRY_API_KEY"             = "national-registry-api-key"
   "APPLICATIONINSIGHTS_CONNECTION_STRING" = "appinsights-connection-string"
+  "JWT_TOKEN_PUBLIC_KEY"                  = "jwt-public-key"
 }
