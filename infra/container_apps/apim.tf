@@ -23,7 +23,7 @@ module "apim_api_bff_proxy" {
 
   description  = "BFF Proxy API"
   display_name = "BFF Proxy API"
-  path         = "party-registry-proxy"
+  path         = "party-registry-proxy/v1"
   protocols = [
     "https"
   ]
@@ -33,7 +33,7 @@ module "apim_api_bff_proxy" {
   content_format = "openapi+json"
   content_value  = templatefile("../../app/src/main/resources/swagger/api-docs.json", {
     url         = format("%s.%s", var.api_dns_zone_prefix, var.external_domain)
-    basePath     = "/party-registry-proxy"
+    basePath     = "/party-registry-proxy/v1"
   })
 
   subscription_required = false
@@ -52,6 +52,7 @@ module "apim_api_bff_proxy" {
                 <method>POST</method>
                 <method>PUT</method>
                 <method>DELETE</method>
+                <method>HEAD</method>
                 <method>OPTIONS</method>
             </allowed-methods>
             <allowed-headers>
