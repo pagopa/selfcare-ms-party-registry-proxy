@@ -1,8 +1,5 @@
 is_pnpg   = true
 env_short = "d"
-private_dns_name = "selc-d-pnpg-party-reg-proxy-ca.whiteglacier-211c4885.westeurope.azurecontainerapps.io"
-dns_zone_prefix    = "dev.selfcare"
-api_dns_zone_prefix = "api-pnpg.dev.selfcare"
 
 tags = {
   CreatedBy   = "Terraform"

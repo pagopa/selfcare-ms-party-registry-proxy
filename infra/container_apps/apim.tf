@@ -6,6 +6,7 @@ locals {
 
 
 resource "azurerm_api_management_api_version_set" "apim_api_bff_proxy" {
+  count               = var.is_pnpg ? 0 : 1  
   name                = local.api_name
   resource_group_name = local.apim_rg
   api_management_name = local.apim_name
@@ -15,11 +16,12 @@ resource "azurerm_api_management_api_version_set" "apim_api_bff_proxy" {
 
 
 module "apim_api_bff_proxy" {
+  count               = var.is_pnpg ? 0 : 1             
   source              = "github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v7.50.1"
   name                = local.api_name
   api_management_name = local.apim_name
   resource_group_name = local.apim_rg
-  version_set_id      = azurerm_api_management_api_version_set.apim_api_bff_proxy.id
+  version_set_id      = azurerm_api_management_api_version_set.apim_api_bff_proxy[0].id
 
   description  = "BFF Proxy API"
   display_name = "BFF Proxy API"
