@@ -2,7 +2,7 @@ is_pnpg   = true
 env_short = "u"
 private_dns_name   = "selc-u-party-reg-proxy-ca.redground-be752d1f5.westeurope.azurecontainerapps.io"
 dns_zone_prefix    = "uat.selfcare"
-api_dns_zone_prefix = format("api-pnpg.%s", var.dns_zone_prefix)
+api_dns_zone_prefix = "api-pnpg.uat.selfcare"
 
 tags = {
   CreatedBy   = "Terraform"

@@ -2,7 +2,7 @@ is_pnpg   = true
 env_short = "p"
 private_dns_name = "selc-p-party-reg-proxy-ca.salmonpond-602699235.westeurope.azurecontainerapps.io"
 dns_zone_prefix    = "selfcare"
-api_dns_zone_prefix = format("api-pnpg.%s", var.dns_zone_prefix)
+api_dns_zone_prefix = "api-pnpg.selfcare"
 
 tags = {
   CreatedBy   = "Terraform"
