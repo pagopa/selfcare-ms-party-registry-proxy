@@ -87,5 +87,6 @@ secrets_names = {
   "NATIONAL_REGISTRY_API_KEY"             = "national-registry-api-key"
   "APPLICATIONINSIGHTS_CONNECTION_STRING" = "appinsights-connection-string"
   "JWT_TOKEN_PUBLIC_KEY"                  = "jwt-public-key"
+  "GEOTAXONOMY_API_KEY"                   = "geotaxonomy-api-key"
 }
 
