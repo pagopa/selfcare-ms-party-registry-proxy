@@ -31,7 +31,7 @@ public class DirectoryReaderFactory {
             currentReader = Optional.ofNullable(DirectoryReader.openIfChanged(currentReader))
                     .orElse(currentReader);
         }
-        log.debug("create result = {}", currentReader);
+        //log.debug("create result = {}", currentReader);
         log.trace("create end");
         return currentReader;
     }
