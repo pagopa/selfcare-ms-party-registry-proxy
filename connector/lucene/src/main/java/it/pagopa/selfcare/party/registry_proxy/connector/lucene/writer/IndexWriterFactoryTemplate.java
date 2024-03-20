@@ -26,7 +26,7 @@ abstract class IndexWriterFactoryTemplate implements IndexWriterFactory {
     public IndexWriter create() {
         log.trace("create start");
         final IndexWriter indexWriter = new IndexWriter(directory, new IndexWriterConfig(analyzer));
-        log.debug("create result = {}", indexWriter);
+        //log.debug("create result = {}", indexWriter);
         log.trace("create end");
         return indexWriter;
     }
