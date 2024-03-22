@@ -58,6 +58,7 @@ variable "secrets_names" {
 
 variable "private_dns_name" {
   type        = string
+  default     = "selc-d-party-reg-proxy-ca.gentleflower-c63e62fe.westeurope.azurecontainerapps.io"
   description = "Container Apps private DNS record"
 }
 

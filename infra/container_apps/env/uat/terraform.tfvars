@@ -67,6 +67,30 @@ app_settings = [
   {
     name  = "ANAC_FTP_DIRECTORY"
     value = "/mnt/RegistroGestoriPiattaforme/Collaudo/"
+  },  
+  {
+    name  = "LUCENE_INDEX_INSTITUTIONS_FOLDER"
+    value = "index/institutions"
+  },
+  {
+    name  = "LUCENE_INDEX_CATEGORIES_FOLDER"
+    value = "index/categories"
+  },
+  {
+    name  = "LUCENE_INDEX_AOOS_FOLDER"
+    value = "index/aoos"
+  },
+  {
+    name  = "LUCENE_INDEX_UOS_FOLDER"
+    value = "index/uos"
+  },
+  {
+    name  = "LUCENE_INDEX_ANAC_FOLDER"
+    value = "index/anac"
+  },
+  {
+    name  = "LUCENE_INDEX_IVASS_FOLDER"
+    value = "index/ivass"
   }
 ]
 
@@ -75,4 +99,7 @@ secrets_names = {
   "NATIONAL_REGISTRY_API_KEY"             = "national-registry-api-key"
   "APPLICATIONINSIGHTS_CONNECTION_STRING" = "appinsights-connection-string"
   "JWT_TOKEN_PUBLIC_KEY"                  = "jwt-public-key"
+  "GEOTAXONOMY_API_KEY"                   = "geotaxonomy-api-key"
+  "ANAC_FTP_PASSWORD"                     = "anac-ftp-password"
+  "ANAC_FTP_KNOWN_HOST"                   = "anac-ftp-known-host"
 }
