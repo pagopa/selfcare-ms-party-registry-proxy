@@ -82,6 +82,14 @@ app_settings = [
   {
     name  = "NATIONAL_REGISTRIES_URL"
     value = "https://api-selcpg.notifichedigitali.it/national-registries-private"
+  },
+  {
+    name  = "REST_CLIENT_CONNECT_TIMEOUT"
+    value = "30000"
+  },
+  {
+    name  = "REST_CLIENT_READ_TIMEOUT"
+    value = "30000"
   }
 ]
 
