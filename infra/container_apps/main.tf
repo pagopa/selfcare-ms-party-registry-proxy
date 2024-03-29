@@ -17,7 +17,7 @@ module "container_app_party_reg_proxy" {
   container_app      = var.container_app
   container_app_name = "party-reg-proxy"
   image_name         = "selfcare-ms-party-registry-proxy"
-  image_tag          = "releases-1.0.0"
+  image_tag          = var.image_tag
   app_settings       = var.app_settings
   secrets_names      = var.secrets_names
   workload_profile_name = var. workload_profile_name
