@@ -1,5 +1,5 @@
 env_short = "p"
-private_dns_name = "selc-p-party-reg-proxy-ca.bluedune-cc0f8752.westeurope.azurecontainerapps.io"
+private_dns_name = "selc-p-party-reg-proxy-ca.salmonstone-7f910b8f.westeurope.azurecontainerapps.io"
 dns_zone_prefix    = "selfcare"
 api_dns_zone_prefix = "api.selfcare"
 
