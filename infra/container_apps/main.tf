@@ -16,6 +16,7 @@ module "container_app_party_reg_proxy" {
   env_short          = var.env_short
   container_app      = var.container_app
   container_app_name = "party-reg-proxy"
+  container_app_environment_name = local.container_app_environment_name
   image_name         = "selfcare-ms-party-registry-proxy"
   image_tag          = var.image_tag
   app_settings       = var.app_settings
