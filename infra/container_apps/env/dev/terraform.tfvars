@@ -1,4 +1,4 @@
-env_short = "d"
+env_short           = "d"
 private_dns_name    = "selc-d-party-reg-proxy-ca.livelydesert-633675bb.westeurope.azurecontainerapps.io"
 dns_zone_prefix     = "dev.selfcare"
 api_dns_zone_prefix = "api.dev.selfcare"
@@ -14,7 +14,7 @@ tags = {
 container_app = {
   min_replicas = 0
   max_replicas = 1
-    scale_rules = [
+  scale_rules = [
     {
       custom = {
         metadata = {
@@ -28,8 +28,8 @@ container_app = {
       name = "cron-scale-rule"
     }
   ]
-  cpu          = 1
-  memory       = "2Gi"
+  cpu    = 1
+  memory = "2Gi"
 }
 
 app_settings = [
@@ -92,7 +92,7 @@ app_settings = [
   {
     name  = "ANAC_FTP_DIRECTORY"
     value = "/mnt/RegistroGestoriPiattaforme/Collaudo/"
-  },  
+  },
   {
     name  = "LUCENE_INDEX_INSTITUTIONS_FOLDER"
     value = "index/institutions"

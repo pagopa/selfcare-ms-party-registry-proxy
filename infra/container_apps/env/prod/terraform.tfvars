@@ -1,6 +1,6 @@
-env_short = "p"
-private_dns_name = "selc-p-party-reg-proxy-ca.salmonstone-7f910b8f.westeurope.azurecontainerapps.io"
-dns_zone_prefix    = "selfcare"
+env_short           = "p"
+private_dns_name    = "selc-p-party-reg-proxy-ca.salmonstone-7f910b8f.westeurope.azurecontainerapps.io"
+dns_zone_prefix     = "selfcare"
 api_dns_zone_prefix = "api.selfcare"
 
 tags = {
@@ -80,7 +80,7 @@ app_settings = [
   {
     name  = "ANAC_FTP_DIRECTORY"
     value = "/mnt/RegistroGestoriPiattaforme/Collaudo/"
-  },  
+  },
   {
     name  = "LUCENE_INDEX_INSTITUTIONS_FOLDER"
     value = "index/institutions"
