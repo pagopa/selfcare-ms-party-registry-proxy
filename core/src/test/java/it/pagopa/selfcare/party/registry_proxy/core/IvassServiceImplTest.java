@@ -39,6 +39,17 @@ class IvassServiceImplTest {
         assertThrows(ResourceNotFoundException.class, executable);
     }
 
+    @Test
+    void findByOriginId_ResourceNotFound() {
+        // given
+        final String originId = "originId";
+        when(indexSearchService.findById(any(), anyString()))
+                .thenReturn(List.of());
+        // when
+        final Executable executable = () -> ivassService.findByOriginId(originId);
+        // then
+        assertThrows(ResourceNotFoundException.class, executable);
+    }
 
     @Test
     void findById_TooManyResourceFound() {
@@ -54,6 +65,19 @@ class IvassServiceImplTest {
     }
 
     @Test
+    void findByOriginId_TooManyResourceFound() {
+        // given
+        final String originId = "originId";
+        final DummyInsuranceCompany dummyCompany = new DummyInsuranceCompany();
+        when(indexSearchService.findById(any(), anyString()))
+                .thenReturn(List.of(dummyCompany, dummyCompany));
+        // when
+        final Executable executable = () -> ivassService.findByOriginId(originId);
+        // then
+        assertThrows(TooManyResourceFoundException.class, executable);
+    }
+
+    @Test
     void findById_found() {
         // given
         final String taxId = "taxId";
@@ -64,6 +88,21 @@ class IvassServiceImplTest {
                 .thenReturn(List.of(dummyCompany));
         // when
         final InsuranceCompany result = ivassService.findByTaxCode(taxId);
+        // then
+        assertSame(dummyCompany, result);
+    }
+
+    @Test
+    void findByOriginId_found() {
+        // given
+        final String originId = "originId";
+        final DummyInsuranceCompany dummyCompany = new DummyInsuranceCompany();
+        dummyCompany.setId("id");
+        dummyCompany.setOriginId("originId");
+        when(indexSearchService.findById(any(), anyString()))
+                .thenReturn(List.of(dummyCompany));
+        // when
+        final InsuranceCompany result = ivassService.findByOriginId(originId);
         // then
         assertSame(dummyCompany, result);
     }

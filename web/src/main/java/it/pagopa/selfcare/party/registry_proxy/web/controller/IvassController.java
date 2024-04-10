@@ -45,12 +45,24 @@ public class IvassController {
         return insuranceCompany;
     }
 
+    @GetMapping("/origin/{originId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "${swagger.api.insurance-company.search.byId.summary}", notes = "${swagger.api.insurance-company.search.byId.notes}")
+    public InsuranceCompanyResource searchByOriginId(@ApiParam("${swagger.model.insurance-company.originId}")
+                                                     @PathVariable("originId") String originId) {
+        log.trace("searchByTaxCode start");
+        final InsuranceCompanyResource insuranceCompany = insuranceCompanyMapper.toResource(ivassService.findByOriginId(originId));
+        log.debug("searchByTaxCode result = {}", insuranceCompany);
+        log.trace("searchByTaxCode end");
+        return insuranceCompany;
+    }
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "${swagger.api.insurance-company.search.summary}", notes = "${swagger.api.insurance-company.search.notes}")
     public InsuranceCompaniesResource search(@ApiParam("${swagger.model.*.search}")
                                              @RequestParam(value = "search", required = false)
-                                                 Optional<String> search,
+                                             Optional<String> search,
                                              @ApiParam(value = "${swagger.model.*.page}")
                                              @RequestParam(value = "page", required = false, defaultValue = "1")
                                              Integer page,
