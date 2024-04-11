@@ -1,9 +1,9 @@
-env_short             = "u"
-private_dns_name      = "selc-u-party-reg-proxy-ca.agreeablesky-f71e6306.westeurope.azurecontainerapps.io"
-dns_zone_prefix       = "uat.selfcare"
-api_dns_zone_prefix   = "api.uat.selfcare"
-cae_name              = "cae"
-workload_profile_name = "Consumption"
+env_short           = "u"
+private_dns_name    = "selc-u-party-reg-proxy-ca.proudglacier-20652b81.westeurope.azurecontainerapps.io"
+dns_zone_prefix     = "uat.selfcare"
+api_dns_zone_prefix = "api.uat.selfcare"
+suffix_increment    = "-001"
+cae_name            = "cae-001"
 
 tags = {
   CreatedBy   = "Terraform"
