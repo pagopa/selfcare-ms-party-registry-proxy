@@ -21,7 +21,7 @@ public class InsuranceCompanyToDocumentConverter implements Function<InsuranceCo
             doc.add(new StringField(Entity.ENTITY_TYPE.toString(), Entity.INSURANCE_COMPANY.toString(), Field.Store.YES));
             doc.add(new StringField(ID.toString(), company.getId(), Field.Store.YES));
             doc.add(new StoredField(ORIGIN.toString(), company.getOrigin().toString()));
-            doc.add(new StoredField(ORIGIN_ID.toString(), company.getOriginId()));
+            doc.add(new StringField(ORIGIN_ID.toString(), company.getOriginId(), Field.Store.YES));
             doc.add(new SortedDocValuesField(DESCRIPTION.toString(), new BytesRef(company.getDescription())));
             doc.add(new TextField(DESCRIPTION.toString(), company.getDescription(), Field.Store.YES));
             doc.add(new StoredField(TAX_CODE.toString(), company.getTaxCode()));
