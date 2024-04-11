@@ -1,12 +1,12 @@
 locals {
-    apim_name = format("selc-%s-apim", var.env_short)
-    apim_rg   = format("selc-%s-api-rg", var.env_short)
-    api_name  = format("selc-%s-api-bff-proxy", var.env_short)
+  apim_name = format("selc-%s-apim", var.env_short)
+  apim_rg   = format("selc-%s-api-rg", var.env_short)
+  api_name  = format("selc-%s-api-bff-proxy", var.env_short)
 }
 
 
 resource "azurerm_api_management_api_version_set" "apim_api_bff_proxy" {
-  count               = var.is_pnpg ? 0 : 1  
+  count               = var.is_pnpg ? 0 : 1
   name                = local.api_name
   resource_group_name = local.apim_rg
   api_management_name = local.apim_name
@@ -16,7 +16,7 @@ resource "azurerm_api_management_api_version_set" "apim_api_bff_proxy" {
 
 
 module "apim_api_bff_proxy" {
-  count               = var.is_pnpg ? 0 : 1             
+  count               = var.is_pnpg ? 0 : 1
   source              = "github.com/pagopa/terraform-azurerm-v3.git//api_management_api?ref=v7.50.1"
   name                = local.api_name
   api_management_name = local.apim_name
@@ -33,9 +33,9 @@ module "apim_api_bff_proxy" {
   service_url = format("https://%s", var.private_dns_name)
 
   content_format = "openapi+json"
-  content_value  = templatefile("./apim_api_bff_proxy.json", {
-    url         = format("%s.%s", var.api_dns_zone_prefix, var.external_domain)
-    basePath     = "/party-registry-proxy/v1"
+  content_value = templatefile("./apim_api_bff_proxy.json", {
+    url      = format("%s.%s", var.api_dns_zone_prefix, var.external_domain)
+    basePath = "/party-registry-proxy/v1"
   })
 
   subscription_required = false

@@ -1,7 +1,9 @@
-env_short = "u"
-private_dns_name = "selc-u-party-reg-proxy-ca.agreeablesky-f71e6306.westeurope.azurecontainerapps.io"
-dns_zone_prefix    = "uat.selfcare"
-api_dns_zone_prefix = "api.uat.selfcare"
+env_short             = "u"
+private_dns_name      = "selc-u-party-reg-proxy-ca.agreeablesky-f71e6306.westeurope.azurecontainerapps.io"
+dns_zone_prefix       = "uat.selfcare"
+api_dns_zone_prefix   = "api.uat.selfcare"
+cae_name              = "cae"
+workload_profile_name = "Consumption"
 
 tags = {
   CreatedBy   = "Terraform"
@@ -67,7 +69,7 @@ app_settings = [
   {
     name  = "ANAC_FTP_DIRECTORY"
     value = "/mnt/RegistroGestoriPiattaforme/Collaudo/"
-  },  
+  },
   {
     name  = "LUCENE_INDEX_INSTITUTIONS_FOLDER"
     value = "index/institutions"
