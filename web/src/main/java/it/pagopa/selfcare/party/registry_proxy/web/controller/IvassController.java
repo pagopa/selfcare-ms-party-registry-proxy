@@ -51,7 +51,7 @@ public class IvassController {
     public InsuranceCompanyResource searchByOriginId(@ApiParam("${swagger.model.insurance-company.originId}")
                                                      @PathVariable("originId") String originId) {
         log.trace("searchByOriginId start");
-        log.debug("searchByTaxCode parameter = {}", originId);
+        log.debug("searchByOriginId parameter = {}", originId.replaceAll("[\r\n]", ""));
         final InsuranceCompanyResource insuranceCompany = insuranceCompanyMapper.toResource(ivassService.findByOriginId(originId));
         log.debug("searchByOriginId result = {}", insuranceCompany);
         log.trace("searchByOriginId end");
