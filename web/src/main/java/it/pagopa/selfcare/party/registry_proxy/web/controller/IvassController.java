@@ -38,7 +38,9 @@ public class IvassController {
     public InsuranceCompanyResource searchByTaxCode(@ApiParam("${swagger.model.insurance-company.taxCode}")
                                                     @PathVariable("taxId") String taxId) {
         log.trace("searchByTaxCode start");
-        log.debug("searchByTaxCode parameter = {}", taxId);
+        if (taxId.matches("\\w*")) {
+            log.debug("searchByTaxCode parameter = {}", taxId);
+        }
         final InsuranceCompanyResource insuranceCompany = insuranceCompanyMapper.toResource(ivassService.findByTaxCode(taxId));
         log.debug("searchByTaxCode result = {}", insuranceCompany);
         log.trace("searchByTaxCode end");
@@ -51,6 +53,9 @@ public class IvassController {
     public InsuranceCompanyResource searchByOriginId(@ApiParam("${swagger.model.insurance-company.originId}")
                                                      @PathVariable("originId") String originId) {
         log.trace("searchByOriginId start");
+        if (originId.matches("\\w*")) {
+            log.debug("searchByOriginId parameter = {}", originId);
+        }
         final InsuranceCompanyResource insuranceCompany = insuranceCompanyMapper.toResource(ivassService.findByOriginId(originId));
         log.debug("searchByOriginId result = {}", insuranceCompany);
         log.trace("searchByOriginId end");
