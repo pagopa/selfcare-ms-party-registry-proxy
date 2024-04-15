@@ -53,7 +53,7 @@ public class IvassController {
 
     @GetMapping("/origin/{originId}")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.insurance-company.search.byId.summary}", notes = "${swagger.api.insurance-company.search.byId.notes}")
+    @ApiOperation(value = "${swagger.api.insurance-company.search.byIvassCode.summary}", notes = "${swagger.api.insurance-company.search.byIvassCode.notes}")
     public InsuranceCompanyResource searchByOriginId(@ApiParam("${swagger.model.insurance-company.originId}")
                                                      @PathVariable("originId") String originId) {
         log.trace("searchByOriginId start");
