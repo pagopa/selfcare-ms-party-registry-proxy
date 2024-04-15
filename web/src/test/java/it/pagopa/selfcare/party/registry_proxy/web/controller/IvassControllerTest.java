@@ -42,6 +42,9 @@ class IvassControllerTest {
     @MockBean
     private IvassService ivassService;
 
+    /**
+     * Method under test: {@link IvassController#searchByTaxCode(String)}
+     */
     @Test
     void findInsurance() throws Exception {
         // given
@@ -66,7 +69,39 @@ class IvassControllerTest {
                 .findByTaxCode(taxId);
         verifyNoMoreInteractions(ivassService);
     }
+    
+    /**
+     * Method under test: {@link IvassController#searchByOriginId(String)}
+     */
+    @Test
+    void findInsuranceByOriginId() throws Exception {
+        // given
+        final String originId = "originId";
+        when(ivassService.findByOriginId(any()))
+                .thenReturn(mockInstance(new DummyInsuranceCompany()));
+        // when
+        mvc.perform(MockMvcRequestBuilders
+                        .get(BASE_URL + "/origin/{originId}", originId)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .accept(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", notNullValue()))
+                .andExpect(jsonPath("$.originId", notNullValue()))
+                .andExpect(jsonPath("$.taxCode", notNullValue()))
+                .andExpect(jsonPath("$.description", notNullValue()))
+                .andExpect(jsonPath("$.digitalAddress", notNullValue()))
+                .andExpect(jsonPath("$.address", notNullValue()));
+        // then
 
+        verify(ivassService, times(1))
+                .findByOriginId(originId);
+        verifyNoMoreInteractions(ivassService);
+    }
+    
+
+    /**
+     * Method under test: {@link IvassController#searchByTaxCode(String)}
+     */
     @Test
     void findInsuranceNotFound() throws Exception {
         // given
@@ -85,6 +120,30 @@ class IvassControllerTest {
         verifyNoMoreInteractions(ivassService);
     }
 
+    /**
+     * Method under test: {@link IvassController#searchByOriginId(String)}
+     */
+    @Test
+    void findInsuranceNyOriginIdNotFound() throws Exception {
+        // given
+        final String originId = "originId";
+        when(ivassService.findByOriginId(any()))
+                .thenThrow(ResourceNotFoundException.class);
+        // when
+        mvc.perform(MockMvcRequestBuilders
+                        .get(BASE_URL + "/origin/{originId}", originId)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .accept(APPLICATION_JSON_VALUE))
+                .andExpect(status().isNotFound());
+        // then
+        verify(ivassService, times(1))
+                .findByOriginId(originId);
+        verifyNoMoreInteractions(ivassService);
+    }
+
+    /**
+     * Method under test: {@link IvassController#search(Optional, Integer, Integer)}
+     */
     @Test
     void search() throws Exception {
         // given
@@ -118,6 +177,9 @@ class IvassControllerTest {
         verifyNoMoreInteractions(ivassService);
     }
 
+    /**
+     * Method under test: {@link IvassController#search(Optional, Integer, Integer)}
+     */
     @Test
     void search_defaultInputParams() throws Exception {
         // given

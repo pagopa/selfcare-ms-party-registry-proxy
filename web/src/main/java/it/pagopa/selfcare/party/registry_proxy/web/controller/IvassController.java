@@ -38,10 +38,27 @@ public class IvassController {
     public InsuranceCompanyResource searchByTaxCode(@ApiParam("${swagger.model.insurance-company.taxCode}")
                                                     @PathVariable("taxId") String taxId) {
         log.trace("searchByTaxCode start");
-        log.debug("searchByTaxCode parameter = {}", taxId);
+        if (taxId.matches("\\w*")) {
+            log.debug("searchByTaxCode parameter = {}", taxId);
+        }
         final InsuranceCompanyResource insuranceCompany = insuranceCompanyMapper.toResource(ivassService.findByTaxCode(taxId));
         log.debug("searchByTaxCode result = {}", insuranceCompany);
         log.trace("searchByTaxCode end");
+        return insuranceCompany;
+    }
+
+    @GetMapping("/origin/{originId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "${swagger.api.insurance-company.search.byId.summary}", notes = "${swagger.api.insurance-company.search.byId.notes}")
+    public InsuranceCompanyResource searchByOriginId(@ApiParam("${swagger.model.insurance-company.originId}")
+                                                     @PathVariable("originId") String originId) {
+        log.trace("searchByOriginId start");
+        if (originId.matches("\\w*")) {
+            log.debug("searchByOriginId parameter = {}", originId);
+        }
+        final InsuranceCompanyResource insuranceCompany = insuranceCompanyMapper.toResource(ivassService.findByOriginId(originId));
+        log.debug("searchByOriginId result = {}", insuranceCompany);
+        log.trace("searchByOriginId end");
         return insuranceCompany;
     }
 
@@ -50,7 +67,7 @@ public class IvassController {
     @ApiOperation(value = "${swagger.api.insurance-company.search.summary}", notes = "${swagger.api.insurance-company.search.notes}")
     public InsuranceCompaniesResource search(@ApiParam("${swagger.model.*.search}")
                                              @RequestParam(value = "search", required = false)
-                                                 Optional<String> search,
+                                             Optional<String> search,
                                              @ApiParam(value = "${swagger.model.*.page}")
                                              @RequestParam(value = "page", required = false, defaultValue = "1")
                                              Integer page,

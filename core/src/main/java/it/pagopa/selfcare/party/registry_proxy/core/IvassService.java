@@ -8,5 +8,6 @@ import java.util.Optional;
 public interface IvassService {
     QueryResult<InsuranceCompany> search(Optional<String> searchText, int page, int limit);
     InsuranceCompany findByTaxCode(String taxId);
+    InsuranceCompany findByOriginId(String ivassCode);
 }
 

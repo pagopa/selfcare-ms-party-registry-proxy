@@ -42,6 +42,21 @@ public class IvassServiceImpl implements IvassService {
     }
 
     @Override
+    public InsuranceCompany findByOriginId(String originId) {
+        log.trace("findByIvassCode start");
+        final List<InsuranceCompany> companies = indexSearchService.findById(InsuranceCompany.Field.ORIGIN_ID, originId.toUpperCase());
+        if (companies.isEmpty()) {
+            throw new ResourceNotFoundException();
+        } else if (companies.size() > 1) {
+            throw new TooManyResourceFoundException();
+        }
+        final InsuranceCompany company = companies.get(0);
+        log.debug("findByIvassCode result = {}", company);
+        log.trace("findByIvassCode end");
+        return company;
+    }
+
+    @Override
     public QueryResult<InsuranceCompany> search(Optional<String> searchText, int page, int limit) {
         log.trace("search start");
         log.debug("search searchText = {}, page = {}, limit = {}", searchText, page, limit);
