@@ -32,6 +32,10 @@ public class IvassController {
         this.insuranceCompanyMapper = insuranceCompanyMapper;
     }
 
+    /**
+     * @deprecated since a new version has been implemented
+     */
+    @Deprecated(forRemoval = true)
     @GetMapping("/{taxId}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "${swagger.api.insurance-company.search.byId.summary}", notes = "${swagger.api.insurance-company.search.byId.notes}")

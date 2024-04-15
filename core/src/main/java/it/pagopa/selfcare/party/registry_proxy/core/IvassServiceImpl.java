@@ -25,6 +25,10 @@ public class IvassServiceImpl implements IvassService {
         this.indexSearchService = indexSearchService;
     }
 
+    /**
+     * @deprecated method has been deprecated because a new method has been implemented.
+     */
+    @Deprecated(forRemoval = true)
     @Override
     public InsuranceCompany findByTaxCode(String taxId) {
         log.trace("findByTaxCode start");
