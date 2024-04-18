@@ -11,7 +11,7 @@ import java.util.Collections;
 
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(of = "taxCode")
+@EqualsAndHashCode(of = "originId")
 public class IvassDataTemplate implements InsuranceCompany {
 
     @CsvBindByName(column = "CODICE_IVASS")
@@ -30,7 +30,7 @@ public class IvassDataTemplate implements InsuranceCompany {
     private String address;
 
     public String getTaxCode() {
-        if(this.taxCode.length() < 11) {
+        if(!StringUtils.isBlank(this.taxCode) && this.taxCode.length() < 11) {
             return StringUtils.leftPad(this.taxCode, 11, "0");
         }
         return this.taxCode;
