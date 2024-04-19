@@ -33,6 +33,6 @@ public class IvassDataTemplate implements InsuranceCompany {
         if(!StringUtils.isBlank(this.taxCode) && this.taxCode.length() < 11) {
             return StringUtils.leftPad(this.taxCode, 11, "0");
         }
-        return this.taxCode;
+        return this.taxCode.trim();
     }
 }
