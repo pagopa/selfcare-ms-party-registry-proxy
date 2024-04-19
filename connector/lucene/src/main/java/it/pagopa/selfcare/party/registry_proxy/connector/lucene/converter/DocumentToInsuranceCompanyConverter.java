@@ -4,6 +4,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.lucene.model.InsuranceC
 import it.pagopa.selfcare.party.registry_proxy.connector.model.InsuranceCompany;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.document.Document;
 
 import java.util.function.Function;
@@ -20,7 +21,7 @@ public class DocumentToInsuranceCompanyConverter implements Function<Document, I
             company = new InsuranceCompanyEntity();
             company.setId(document.get(ID.toString()));
             company.setOriginId(document.get(ORIGIN_ID.toString()));
-            company.setTaxCode(document.get(TAX_CODE.toString()));
+            company.setTaxCode(StringUtils.isEmpty(document.get(TAX_CODE.toString())) ? null : document.get(TAX_CODE.toString()));
             company.setDescription(document.get(DESCRIPTION.toString()));
             company.setAddress(document.get(ADDRESS.toString()));
             company.setRegisterType(document.get(REGISTER_TYPE.toString()));
