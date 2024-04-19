@@ -3,7 +3,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.model;
 public interface InsuranceCompany {
 
     default String getId() {
-        return getTaxCode();
+        return getOriginId();
     }
 
     String getOriginId();
