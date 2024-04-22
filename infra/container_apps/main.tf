@@ -23,6 +23,41 @@ module "container_app_party_reg_proxy" {
   app_settings                   = var.app_settings
   secrets_names                  = var.secrets_names
   workload_profile_name          = var.workload_profile_name
+  probes                         = [
+    {
+      httpGet = {
+        path   = "actuator/health"
+        port   = 8080
+        scheme = "HTTP"
+      }
+      timeoutSeconds   = 30
+      type             = "Liveness"
+      failureThreshold = 3
+      initialDelaySeconds = 1
+    },
+    {
+      httpGet = {
+        path   = "actuator/health"
+        port   = 8080
+        scheme = "HTTP"
+      }
+      timeoutSeconds   = 30
+      type             = "Readiness"
+      failureThreshold = 30
+      initialDelaySeconds = 30
+    },
+    {
+      httpGet = {
+        path   = "actuator/health"
+        port   = 8080
+        scheme = "HTTP"
+      }
+      timeoutSeconds   = 30
+      failureThreshold = 30
+      type             = "Startup"
+      initialDelaySeconds = 60
+    }
+  ]
 
   tags = var.tags
 }
