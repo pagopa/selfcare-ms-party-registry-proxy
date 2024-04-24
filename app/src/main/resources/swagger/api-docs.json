@@ -913,7 +913,7 @@
     "/insurance-companies/origin/{originId}" : {
       "get" : {
         "tags" : [ "insurance-companies" ],
-        "summary" : "Search insurance company by its taxCode",
+        "summary" : "Search insurance company by its IVASS code",
         "description" : "Returns only one insurance company.",
         "operationId" : "searchByOriginIdUsingGET",
         "parameters" : [ {
@@ -1051,6 +1051,7 @@
             }
           }
         },
+        "deprecated" : true,
         "security" : [ {
           "bearerAuth" : [ "global" ]
         } ]
