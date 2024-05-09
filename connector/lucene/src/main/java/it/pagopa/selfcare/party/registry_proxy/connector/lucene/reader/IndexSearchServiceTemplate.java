@@ -16,6 +16,7 @@ import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.springframework.util.Assert;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -91,7 +92,12 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
         bq.add(allDcs, BooleanClause.Occur.SHOULD);
         bq.add(cparser.parse(categories.replace(",", " OR ")), BooleanClause.Occur.MUST);
         bq.add(query, BooleanClause.Occur.SHOULD);
-        indexSearcher.search(parser.parse(bq.build().toString()), collector);
+        try {
+            indexSearcher.search(parser.parse(bq.build().toString()), collector);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         final TopDocs hits = collector.topDocs((page - 1) * limit, limit);
 
         final List<T> foundCategories = new ArrayList<>(hits.scoreDocs.length);
