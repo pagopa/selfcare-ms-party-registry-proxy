@@ -95,7 +95,7 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
         try {
             indexSearcher.search(parser.parse(bq.build().toString()), collector);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
 
         final TopDocs hits = collector.topDocs((page - 1) * limit, limit);
