@@ -54,7 +54,7 @@ class UOIndexWriterServiceTest {
         // when
         indexWriterService.adds(items);
         // then
-        assertEquals(1, count(directory));
+        assertEquals(2, count(directory));
     }
 
 
