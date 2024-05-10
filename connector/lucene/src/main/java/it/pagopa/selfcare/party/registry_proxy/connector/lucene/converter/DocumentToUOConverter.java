@@ -22,6 +22,7 @@ public class DocumentToUOConverter implements Function<Document, UO> {
             entity.setOrigin(Origin.fromValue(document.get(ORIGIN.toString())));
             entity.setDenominazioneEnte(document.get(DENOMINAZIONE_ENTE.toString()));
             entity.setCodiceFiscaleEnte(document.get(CODICE_FISCALE_ENTE.toString()));
+            entity.setCodiceFiscaleSfe(document.get(CODICE_FISCALE_SFE.toString()));
             entity.setCodiceUniAoo(document.get(CODICE_UNI_AOO.toString()));
             entity.setCodiceUniUo(document.get(CODICE_UNI_UO.toString()));
             entity.setCodiceUniUoPadre(document.get(CODICE_UNI_UO_PADRE.toString()));

@@ -7,6 +7,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 import static it.pagopa.selfcare.party.registry_proxy.connector.model.Category.Field.ID;
@@ -25,6 +26,9 @@ public class UOToDocumentConverter implements Function<UO, Document> {
             doc.add(new StringField(CODICE_IPA.toString(), uo.getCodiceIpa(), Field.Store.YES));
             doc.add(new StringField(CODICE_FISCALE_ENTE.toString(), uo.getCodiceFiscaleEnte(), Field.Store.YES));
             doc.add(new StringField(CODICE_UNI_UO.toString(), uo.getCodiceUniUo(), Field.Store.YES));
+            if (Objects.nonNull(uo.getCodiceFiscaleSfe())) {
+                doc.add(new StringField(CODICE_FISCALE_SFE.toString(), uo.getCodiceFiscaleSfe(), Field.Store.YES));
+            }
             doc.add(new StringField(CODICE_UNI_UO_PADRE.toString(), uo.getCodiceUniUoPadre(), Field.Store.YES));
             doc.add(new StringField(CODICE_UNI_AOO.toString(), uo.getCodiceUniAoo(), Field.Store.YES));
             doc.add(new StringField(ORIGIN.toString(), uo.getOrigin().toString(), Field.Store.YES));

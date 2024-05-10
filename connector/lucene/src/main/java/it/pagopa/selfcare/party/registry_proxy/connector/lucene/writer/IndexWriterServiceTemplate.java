@@ -6,11 +6,15 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution.Field
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.StringField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.*;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.TermQuery;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 @Slf4j
@@ -19,13 +23,11 @@ abstract class IndexWriterServiceTemplate<T> implements IndexWriterService<T> {
     private final Function<T, Document> documentConverter;
     private final IndexWriterFactory indexWriterFactory;
 
-
     public IndexWriterServiceTemplate(IndexWriterFactory indexWriterFactory, Function<T, Document> documentConverter) {
         log.trace("Initializing {}", getClass().getSimpleName());
         this.indexWriterFactory = indexWriterFactory;
         this.documentConverter = documentConverter;
     }
-
 
     @SneakyThrows
     @Override
@@ -43,7 +45,6 @@ abstract class IndexWriterServiceTemplate<T> implements IndexWriterService<T> {
         log.trace("adds end");
     }
 
-
     @SneakyThrows
     @Override
     public void deleteAll() {
@@ -54,6 +55,24 @@ abstract class IndexWriterServiceTemplate<T> implements IndexWriterService<T> {
             indexWriter.commit();
         }
         log.trace("deleteAll end");
+    }
+
+    @SneakyThrows
+    @Override
+    public void updateDocumentValues(T item, Map<String, String> fieldsToUpdate) {
+        log.trace("updateDocumentValues start");
+        final IndexWriter indexWriter = indexWriterFactory.create();
+        try (indexWriter) {
+            final String fieldId = getId(item);
+            final Document document = documentConverter.apply(item);
+            for (Map.Entry<String, String> entry : fieldsToUpdate.entrySet()) {
+                document.add(new StringField(entry.getKey(), entry.getValue(), org.apache.lucene.document.Field.Store.YES));
+            }
+            indexWriter.updateDocument(new Term(Field.ID.toString(), fieldId), document);
+            indexWriter.commit();
+            log.debug("Document for {} with ID {} has been updated", item.getClass(), fieldId);
+        }
+        log.trace("updateDocumentValues end");
     }
 
     @SneakyThrows
@@ -70,7 +89,6 @@ abstract class IndexWriterServiceTemplate<T> implements IndexWriterService<T> {
         }
         log.trace("cleanIndex end");
     }
-
 
     protected abstract String getId(T item);
 

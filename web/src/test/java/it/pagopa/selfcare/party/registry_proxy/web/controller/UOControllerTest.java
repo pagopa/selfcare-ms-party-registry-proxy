@@ -7,6 +7,7 @@ import it.pagopa.selfcare.party.registry_proxy.web.config.WebTestConfig;
 import it.pagopa.selfcare.party.registry_proxy.web.handler.PartyRegistryProxyExceptionHandler;
 import it.pagopa.selfcare.party.registry_proxy.web.model.DummyUO;
 import it.pagopa.selfcare.party.registry_proxy.web.model.DummyUOQueryResult;
+import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.UOMapperImpl;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(value = {UOController.class}, excludeAutoConfiguration = SecurityAutoConfiguration.class)
-@ContextConfiguration(classes = {UOController.class, WebTestConfig.class, PartyRegistryProxyExceptionHandler.class})
+@ContextConfiguration(classes = {UOController.class, WebTestConfig.class, PartyRegistryProxyExceptionHandler.class, UOMapperImpl.class})
 class UOControllerTest {
 
     private static final String BASE_URL = "";

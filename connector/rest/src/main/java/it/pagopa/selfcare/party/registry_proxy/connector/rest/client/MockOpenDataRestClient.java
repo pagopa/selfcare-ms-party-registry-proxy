@@ -24,4 +24,8 @@ public interface MockOpenDataRestClient extends OpenDataRestClient {
     @ResponseBody
     String retrieveUOs();
 
+    @GetMapping(value = "${rest-client.mock-open-data.retrieveUOsWithSfe.path}", produces = MediaType.TEXT_PLAIN_VALUE)
+    @ResponseBody
+    String retrieveUOsWithSfe();
+
 }

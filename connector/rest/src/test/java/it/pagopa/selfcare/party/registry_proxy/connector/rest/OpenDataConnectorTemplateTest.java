@@ -103,6 +103,8 @@ abstract class OpenDataConnectorTemplateTest {
         final String csvContent = new String(Files.readAllBytes(ResourceUtils.getFile(resourceLocation).toPath()));
         when(getOpenDataRestClientMock().retrieveUOs())
                 .thenReturn(csvContent);
+        when(getOpenDataRestClientMock().retrieveUOsWithSfe())
+                .thenReturn(csvContent);
         // when
         final List<? extends UO> uos = getOpenDataConnector().getUOs();
         // then
@@ -116,6 +118,36 @@ abstract class OpenDataConnectorTemplateTest {
         assertNotNull(uos.get(0).getOrigin());
         assertNotNull(uos.get(0).getDescrizioneUo());
         assertNotNull(uos.get(0).getDenominazioneEnte());
+
+
+        verify(getOpenDataRestClientMock(), times(1))
+                .retrieveUOs();
+        verifyNoMoreInteractions(getOpenDataRestClientMock());
+    }
+
+    @Test
+    void getUOsWithSfe() throws IOException {
+        // given
+        final String resourceLocation = "classpath:uos-sfe-open-data.csv";
+        final String csvContent = new String(Files.readAllBytes(ResourceUtils.getFile(resourceLocation).toPath()));
+        when(getOpenDataRestClientMock().retrieveUOsWithSfe())
+                .thenReturn(csvContent);
+        when(getOpenDataRestClientMock().retrieveUOs())
+                .thenReturn(csvContent);
+        // when
+        final List<? extends UO> uos = getOpenDataConnector().getUOs();
+        // then
+        assertNotNull(uos);
+        assertEquals(1, uos.size());
+        assertNotNull(uos.get(0).getCodiceIpa());
+        assertNotNull(uos.get(0).getCodiceFiscaleEnte());
+        assertNotNull(uos.get(0).getCodiceUniUo());
+        assertNotNull(uos.get(0).getCodiceUniUoPadre());
+        assertNotNull(uos.get(0).getCodiceUniAoo());
+        assertNotNull(uos.get(0).getOrigin());
+        assertNotNull(uos.get(0).getDescrizioneUo());
+        assertNotNull(uos.get(0).getDenominazioneEnte());
+        assertNotNull(uos.get(0).getCodiceFiscaleSfe());
 
 
         verify(getOpenDataRestClientMock(), times(1))
