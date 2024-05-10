@@ -17,6 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -64,6 +65,17 @@ class UOIndexWriterServiceTest {
         indexWriterService.deleteAll();
         // then
         assertEquals(0, count(directory));
+    }
+
+    @Test
+    void updateDocumentValues() {
+        // given
+        UO uo = new DummyUO();
+        Map<String, String> fieldsToUpdate = Map.of(UO.Field.CODICE_FISCALE_SFE.toString(), "test");
+        // when
+        indexWriterService.updateDocumentValues(uo, fieldsToUpdate);
+        // then
+        assertEquals(1, count(directory));
     }
 
 }
