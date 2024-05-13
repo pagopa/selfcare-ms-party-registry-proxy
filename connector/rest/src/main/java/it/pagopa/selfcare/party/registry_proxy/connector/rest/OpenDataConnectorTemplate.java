@@ -113,7 +113,6 @@ abstract class OpenDataConnectorTemplate<I extends Institution, C extends Catego
         uosWithSfe.forEach(uo -> {
             var oldUO = mapUos.get(uo.getId());
             oldUO.setCodiceFiscaleSfe(uo.getCodiceFiscaleSfe());
-            mapUos.put(uo.getId(), oldUO);
         });
 
         log.trace("getUOs end");
