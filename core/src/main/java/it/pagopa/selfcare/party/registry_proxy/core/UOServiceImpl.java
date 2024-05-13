@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static java.util.stream.Collectors.toList;
-
 @Slf4j
 @Service
 class UOServiceImpl implements UOService {
@@ -151,7 +149,7 @@ class UOServiceImpl implements UOService {
                         log.error("Impossible to parse date {}", uo.getDataAggiornamento());
                         return false;
                     }
-                }).collect(toList());
+                }).toList();
     }
 
 }

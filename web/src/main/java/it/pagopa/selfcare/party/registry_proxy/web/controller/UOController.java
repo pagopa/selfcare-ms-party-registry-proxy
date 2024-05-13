@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
-
 @Slf4j
 @RestController
 @RequestMapping(value = "uo", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -49,7 +47,7 @@ public class UOController {
         final QueryResult<UO> result = uoService.findAll(page, limit);
         final UOsResource uosResource = UOsResource.builder()
                 .count(result.getTotalHits())
-                .items(result.getItems().stream().map(uoMapper::toResource).collect(toList()))
+                .items(result.getItems().stream().map(uoMapper::toResource).toList())
                 .build();
         log.debug("find all UO result = {}", uosResource);
         log.trace("find all UO end");
