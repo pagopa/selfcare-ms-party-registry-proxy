@@ -41,12 +41,13 @@ class UOServiceImplTest {
         // given
         final int page = 0;
         final int limit = 0;
+        final Optional<String> taxCodeInvoicing = Optional.empty();
 
         final DummyUOQueryResult queryResultMock = new DummyUOQueryResult();
         when(indexSearchService.findAll(anyInt(), anyInt(), anyString()))
                 .thenReturn(queryResultMock);
         // when
-        final QueryResult<UO> queryResult = uoService.findAll(page, limit);
+        final QueryResult<UO> queryResult = uoService.findAll(taxCodeInvoicing, page, limit);
         // then
         assertSame(queryResultMock, queryResult);
         verify(indexSearchService, times(1))
@@ -58,11 +59,12 @@ class UOServiceImplTest {
     void search_notEmptyOrigin() {
         final int page = 0;
         final int limit = 0;
+        final Optional<String> taxCodeInvoicing = Optional.of("pippo");
         final DummyUOQueryResult queryResultMock = new DummyUOQueryResult();
         when(indexSearchService.findAll(anyInt(), anyInt(), any(), any()))
                 .thenReturn(queryResultMock);
         // when
-        final QueryResult<UO> queryResult = uoService.findAll(page, limit);
+        final QueryResult<UO> queryResult = uoService.findAll(taxCodeInvoicing, page, limit);
         // then
         assertSame(queryResultMock, queryResult);
     }
@@ -140,44 +142,6 @@ class UOServiceImplTest {
         when(openDataRestClient.retrieveUOsWithSfe()).thenReturn(response);
         Executable executable = () -> uoService.updateUOsIndex();
         Assertions.assertDoesNotThrow(executable);
-    }
-
-    @Test
-    void findByTaxCodeSfe_found() {
-        // given
-        final String taxCodeSfe = "taxCodeSfe";
-        final DummyUO UO = new DummyUO();
-        UO.setCodiceFiscaleEnte(taxCodeSfe);
-        when(indexSearchService.findById(any(), anyString()))
-                .thenReturn(List.of(UO));
-        final UO result = uoService.findByTaxCodeSfe(taxCodeSfe);
-        // then
-        assertSame(UO, result);
-    }
-
-    @Test
-    void findByTaxCodeSfe_TooManyResourceFound() {
-        // given
-        final String taxCodeSfe = "taxCodeSfe";
-        final DummyUO UO = new DummyUO();
-        when(indexSearchService.findById(any(), anyString()))
-                .thenReturn(List.of(UO, UO));
-        // when
-        final Executable executable = () -> uoService.findByTaxCodeSfe(taxCodeSfe);
-        // then
-        assertThrows(TooManyResourceFoundException.class, executable);
-    }
-
-    @Test
-    void findByTaxCodeSfe_ResourceNotFound() {
-        // given
-        final String taxCodeSfe = "taxCodeSfe";
-        when(indexSearchService.findById(any(), anyString()))
-                .thenReturn(List.of());
-        // when
-        final Executable executable = () -> uoService.findByTaxCodeSfe(taxCodeSfe);
-        // then
-        assertThrows(ResourceNotFoundException.class, executable);
     }
 
 }

@@ -45,13 +45,11 @@ class UOServiceImpl implements UOService {
     }
 
     @Override
-    public QueryResult<UO> findAll(int page, int limit) {
+    public QueryResult<UO> findAll(Optional<String> taxCodeInvoicing, int page, int limit) {
         log.trace("find all UO start");
         log.debug("find all UO, page = {}, limit = {}", page, limit);
-        final QueryResult<UO> queryResult;
-
-        queryResult = indexSearchService.findAll(page, limit, Entity.UO.toString());
-
+        final QueryResult<UO> queryResult = taxCodeInvoicing.map(text -> indexSearchService.fullTextSearch(UO.Field.CODICE_FISCALE_SFE, text, page, limit))
+                .orElseGet(() -> indexSearchService.findAll(page, limit, Entity.UO.toString()));
         log.debug("find all UO result = {}", queryResult);
         log.trace("find all UO end");
         return queryResult;
@@ -73,22 +71,6 @@ class UOServiceImpl implements UOService {
         }
         log.debug("find UO By CodiceUniUO result = {}", uo);
         log.trace("find UO By CodiceUniUO end");
-        return uo;
-    }
-
-    @Override
-    public UO findByTaxCodeSfe(String taxCodeSfe) {
-        log.trace("find UO By TaxCodeSfe start");
-        log.debug("find UO By TaxCodeSfe = {}", taxCodeSfe.toUpperCase());
-        final List<UO> uoList = indexSearchService.findById(UO.Field.CODICE_FISCALE_SFE, taxCodeSfe.toUpperCase());
-        if (uoList.isEmpty()) {
-            throw new ResourceNotFoundException();
-        } else if (uoList.size() > 1) {
-            throw new TooManyResourceFoundException();
-        }
-        final UO uo = uoList.get(0);
-        log.debug("find UO By TaxCodeSfe result = {}", uo);
-        log.trace("find UO By TaxCodeSfe end");
         return uo;
     }
 

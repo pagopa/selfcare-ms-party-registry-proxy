@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
+import java.util.Optional;
 
 import static it.pagopa.selfcare.commons.utils.TestUtils.mockInstance;
 import static org.hamcrest.Matchers.notNullValue;
@@ -45,53 +46,55 @@ class UOControllerTest {
     private UOService uoServiceMock;
 
     /**
-     * Method under test: {@link UOController#findAll(Integer, Integer)}
+     * Method under test: {@link UOController#findAll(Integer, Integer, Optional)}
      */
     @Test
     void findUOs_defaultInputParams() throws Exception {
         // given
-        when(uoServiceMock.findAll(anyInt(), anyInt()))
+        when(uoServiceMock.findAll(any(), anyInt(), anyInt()))
                 .thenReturn(new DummyUOQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
-                .get(BASE_URL + "/uo")
-                .contentType(APPLICATION_JSON_VALUE)
-                .accept(APPLICATION_JSON_VALUE))
+                        .get(BASE_URL + "/uo")
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items", notNullValue()));
         // then
         verify(uoServiceMock, times(1))
-                .findAll( 1, 10);
+                .findAll(Optional.empty(), 1, 10);
         verifyNoMoreInteractions(uoServiceMock);
     }
 
     /**
-     * Method under test: {@link UOController#findAll(Integer, Integer)}
+     * Method under test: {@link UOController#findAll(Integer, Integer, Optional)}
      */
     @Test
     void findUOs() throws Exception {
         // given
         final String page = "2";
         final String limit = "2";
-        when(uoServiceMock.findAll(anyInt(), anyInt()))
+        final String taxCodeInvoicing = "taxCodeInvoicing";
+        when(uoServiceMock.findAll(any(), anyInt(), anyInt()))
                 .thenReturn(new DummyUOQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
-                .get(BASE_URL + "/uo")
-                .queryParam("page", page)
-                .queryParam("limit", limit)
-                .contentType(APPLICATION_JSON_VALUE)
-                .accept(APPLICATION_JSON_VALUE))
+                        .get(BASE_URL + "/uo")
+                        .queryParam("page", page)
+                        .queryParam("limit", limit)
+                        .queryParam("taxCodeInvoicing", taxCodeInvoicing)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items", notNullValue()));
         // then
         verify(uoServiceMock, times(1))
-                .findAll(Integer.parseInt(page), Integer.parseInt(limit));
+                .findAll(Optional.of("taxCodeInvoicing"), Integer.parseInt(page), Integer.parseInt(limit));
         verifyNoMoreInteractions(uoServiceMock);
     }
 
     /**
-     * Method under test: {@link UOController#findByUnicode(String, List)}
+     * Method under test: {@link UOController#findAll(Integer, Integer, Optional)}
      */
     @Test
     void findUo() throws Exception {
@@ -187,56 +190,6 @@ class UOControllerTest {
 
         verify(uoServiceMock, times(1))
                 .findByUnicode(code, categories);
-    }
-
-    /**
-     * Method under test: {@link UOController#findByTaxCodeSfe(String)}
-     */
-    @Test
-    void findUoByTaxCodeSfe() throws Exception {
-        // given
-        final String taxCodeSfe = "CODE";
-        when(uoServiceMock.findByTaxCodeSfe(any()))
-                .thenReturn(mockInstance(new DummyUO()));
-        // when
-        mvc.perform(MockMvcRequestBuilders
-                        .get(BASE_URL + "/uo/sfe/{taxCodeSfe}", taxCodeSfe)
-                        .contentType(APPLICATION_JSON_VALUE)
-                        .accept(APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.codiceUniUo", notNullValue()))
-                .andExpect(jsonPath("$.origin", notNullValue()))
-                .andExpect(jsonPath("$.codiceIpa", notNullValue()))
-                .andExpect(jsonPath("$.denominazioneEnte", notNullValue()))
-                .andExpect(jsonPath("$.codiceFiscaleEnte", notNullValue()))
-                .andExpect(jsonPath("$.codiceFiscaleSfe", Matchers.matchesPattern("setCodiceFiscaleSfe")))
-                .andExpect(jsonPath("$.descrizioneUo", notNullValue()));
-        // then
-
-        verify(uoServiceMock, times(1))
-                .findByTaxCodeSfe(taxCodeSfe);
-        verifyNoMoreInteractions(uoServiceMock);
-    }
-
-    /**
-     * Method under test: {@link UOController#findByTaxCodeSfe(String)}
-     */
-    @Test
-    void findUoByTaxCodeSfeNotFound() throws Exception {
-        // given
-        final String taxCodeSfe = "CODE";
-        when(uoServiceMock.findByTaxCodeSfe(any()))
-                .thenThrow(ResourceNotFoundException.class);
-        // when
-        mvc.perform(MockMvcRequestBuilders
-                        .get(BASE_URL + "/uo/sfe/{taxCodeSfe}", taxCodeSfe)
-                        .contentType(APPLICATION_JSON_VALUE)
-                        .accept(APPLICATION_JSON_VALUE))
-                .andExpect(status().isNotFound());
-        // then
-        verify(uoServiceMock, times(1))
-                .findByTaxCodeSfe(taxCodeSfe);
-        verifyNoMoreInteractions(uoServiceMock);
     }
 
 }

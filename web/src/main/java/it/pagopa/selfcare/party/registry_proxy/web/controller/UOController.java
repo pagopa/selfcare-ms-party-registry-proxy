@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -34,17 +35,19 @@ public class UOController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.uo.findAll.summary}",
-            notes = "${swagger.api.uo.findAll.notes}")
-    public UOsResource findAll(@ApiParam(value = "${swagger.model.*.page}")
+    @ApiOperation(value = "${swagger.api.uo.findAll.summary}", notes = "${swagger.api.uo.findAll.notes}")
+    public UOsResource findAll(@ApiParam(value = "${swagger.model.*.limit}")
+                               @RequestParam(value = "limit", required = false, defaultValue = "10")
+                               Integer limit,
+                               @ApiParam(value = "${swagger.model.*.page}")
                                @RequestParam(value = "page", required = false, defaultValue = "1")
                                Integer page,
-                               @ApiParam(value = "${swagger.model.*.limit}")
-                               @RequestParam(value = "limit", required = false, defaultValue = "10")
-                               Integer limit) {
+                               @ApiParam(value = "${swagger.model.uo.taxCodeInvoicing}")
+                               @RequestParam(value = "taxCodeInvoicing", required = false)
+                               Optional<String> taxCodeInvoicing) {
         log.trace("find all UO start");
         log.debug("find all UO, page = {}, limit = {}", page, limit);
-        final QueryResult<UO> result = uoService.findAll(page, limit);
+        final QueryResult<UO> result = uoService.findAll(taxCodeInvoicing, page, limit);
         final UOsResource uosResource = UOsResource.builder()
                 .count(result.getTotalHits())
                 .items(result.getItems().stream().map(uoMapper::toResource).toList())
@@ -66,21 +69,6 @@ public class UOController {
         log.trace("find UO start");
         log.debug("find UO = {}", codiceUniUo);
         final UOResource uoResource = uoMapper.toResource(uoService.findByUnicode(codiceUniUo,categories));
-        log.debug("find UO result = {}", uoResource);
-        log.trace("find UO end");
-        return uoResource;
-    }
-
-    @GetMapping("/sfe/{taxCodeSfe}")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.uo.findBy.summary}", notes = "${swagger.api.uo.findBy.notes}")
-    public UOResource findByTaxCodeSfe(@ApiParam(value = "${swagger.model.uo.taxCodeSfe}")
-                                       @PathVariable("taxCodeSfe") String taxCodeSfe) {
-        log.trace("find UO start");
-        if (taxCodeSfe.matches("\\w*")) {
-            log.debug("find UO = {}", taxCodeSfe);
-        }
-        final UOResource uoResource = uoMapper.toResource(uoService.findByTaxCodeSfe(taxCodeSfe));
         log.debug("find UO result = {}", uoResource);
         log.trace("find UO end");
         return uoResource;
