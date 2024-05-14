@@ -77,7 +77,9 @@ public class UOController {
     public UOResource findByTaxCodeSfe(@ApiParam(value = "${swagger.model.uo.taxCodeSfe}")
                                        @PathVariable("taxCodeSfe") String taxCodeSfe) {
         log.trace("find UO start");
-        log.debug("find UO = {}", taxCodeSfe);
+        if (taxCodeSfe.matches("\\w*")) {
+            log.debug("find UO = {}", taxCodeSfe);
+        }
         final UOResource uoResource = uoMapper.toResource(uoService.findByTaxCodeSfe(taxCodeSfe));
         log.debug("find UO result = {}", uoResource);
         log.trace("find UO end");
