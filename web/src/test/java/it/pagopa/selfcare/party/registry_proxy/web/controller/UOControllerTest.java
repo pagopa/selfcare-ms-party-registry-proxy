@@ -1,8 +1,8 @@
 package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.pagopa.selfcare.party.registry_proxy.core.UOService;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
+import it.pagopa.selfcare.party.registry_proxy.core.UOService;
 import it.pagopa.selfcare.party.registry_proxy.web.config.WebTestConfig;
 import it.pagopa.selfcare.party.registry_proxy.web.handler.PartyRegistryProxyExceptionHandler;
 import it.pagopa.selfcare.party.registry_proxy.web.model.DummyUO;
@@ -200,8 +200,7 @@ class UOControllerTest {
                 .thenReturn(mockInstance(new DummyUO()));
         // when
         mvc.perform(MockMvcRequestBuilders
-                        .get(BASE_URL + "/uo")
-                        .param("taxCodeSfe",taxCodeSfe)
+                        .get(BASE_URL + "/uo/sfe/{taxCodeSfe}", taxCodeSfe)
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
@@ -215,7 +214,28 @@ class UOControllerTest {
         // then
 
         verify(uoServiceMock, times(1))
-                .findByUnicode(taxCodeSfe, null);
+                .findByTaxCodeSfe(taxCodeSfe);
+        verifyNoMoreInteractions(uoServiceMock);
+    }
+
+    /**
+     * Method under test: {@link UOController#findByTaxCodeSfe(String)}
+     */
+    @Test
+    void findUoByTaxCodeSfeNotFound() throws Exception {
+        // given
+        final String taxCodeSfe = "CODE";
+        when(uoServiceMock.findByTaxCodeSfe(any()))
+                .thenThrow(ResourceNotFoundException.class);
+        // when
+        mvc.perform(MockMvcRequestBuilders
+                        .get(BASE_URL + "/uo/sfe/{taxCodeSfe}", taxCodeSfe)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .accept(APPLICATION_JSON_VALUE))
+                .andExpect(status().isNotFound());
+        // then
+        verify(uoServiceMock, times(1))
+                .findByTaxCodeSfe(taxCodeSfe);
         verifyNoMoreInteractions(uoServiceMock);
     }
 

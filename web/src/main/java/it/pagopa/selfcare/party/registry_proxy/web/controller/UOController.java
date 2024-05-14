@@ -73,7 +73,7 @@ public class UOController {
 
     @GetMapping("/sfe/{taxCodeSfe}")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.uo.findBy.summary}", notes = "${swagger.api.uo.findBySfe.notes}")
+    @ApiOperation(value = "${swagger.api.uo.findBy.summary}", notes = "${swagger.api.uo.findBy.notes}")
     public UOResource findByTaxCodeSfe(@ApiParam(value = "${swagger.model.uo.taxCodeSfe}")
                                        @PathVariable("taxCodeSfe") String taxCodeSfe) {
         log.trace("find UO start");
