@@ -54,7 +54,6 @@ class UOServiceImplTest {
         verifyNoMoreInteractions(indexSearchService);
     }
 
-
     @Test
     void search_notEmptyOrigin() {
         final int page = 0;
@@ -78,7 +77,6 @@ class UOServiceImplTest {
         assertThrows(RuntimeException.class, executable);
     }
 
-
     @Test
     void findById_ResourceNotFound() {
         // given
@@ -90,7 +88,6 @@ class UOServiceImplTest {
         // then
         assertThrows(ResourceNotFoundException.class, executable);
     }
-
 
     @Test
     void findById_TooManyResourceFound() {
@@ -104,7 +101,6 @@ class UOServiceImplTest {
         // then
         assertThrows(TooManyResourceFoundException.class, executable);
     }
-
 
     @Test
     void findById_found() {
@@ -139,10 +135,49 @@ class UOServiceImplTest {
     @Test
     void updateUosIndexWithMalformedDate() {
         final String response = "id,Codice_IPA,Denominazione_ente,Codice_fiscale_ente,Codice_fiscale_sfe,Codice_uni_uo,Codice_uni_uo_padre,Codice_uni_aoo,Descrizione_uo,Mail1,Data_aggiornamento\n" +
-                "id,Codice_IPA,Denominazione_ente,Codice_fiscale_ente,Codice_fiscale_sfe,Codice_uni_uo,Codice_uni_uo_padre,Codice_uni_aoo,Descrizione_uo,Mail1,2024-15-12";        when(openDataRestClient.retrieveUOs()).thenReturn(response);
+                "id,Codice_IPA,Denominazione_ente,Codice_fiscale_ente,Codice_fiscale_sfe,Codice_uni_uo,Codice_uni_uo_padre,Codice_uni_aoo,Descrizione_uo,Mail1,2024-15-12";
+        when(openDataRestClient.retrieveUOs()).thenReturn(response);
         when(openDataRestClient.retrieveUOsWithSfe()).thenReturn(response);
         Executable executable = () -> uoService.updateUOsIndex();
         Assertions.assertDoesNotThrow(executable);
+    }
+
+    @Test
+    void findByTaxCodeSfe_found() {
+        // given
+        final String taxCodeSfe = "taxCodeSfe";
+        final DummyUO UO = new DummyUO();
+        UO.setCodiceFiscaleEnte(taxCodeSfe);
+        when(indexSearchService.findById(any(), anyString()))
+                .thenReturn(List.of(UO));
+        final UO result = uoService.findByTaxCodeSfe(taxCodeSfe);
+        // then
+        assertSame(UO, result);
+    }
+
+    @Test
+    void findByTaxCodeSfe_TooManyResourceFound() {
+        // given
+        final String taxCodeSfe = "taxCodeSfe";
+        final DummyUO UO = new DummyUO();
+        when(indexSearchService.findById(any(), anyString()))
+                .thenReturn(List.of(UO, UO));
+        // when
+        final Executable executable = () -> uoService.findByTaxCodeSfe(taxCodeSfe);
+        // then
+        assertThrows(TooManyResourceFoundException.class, executable);
+    }
+
+    @Test
+    void findByTaxCodeSfe_ResourceNotFound() {
+        // given
+        final String taxCodeSfe = "taxCodeSfe";
+        when(indexSearchService.findById(any(), anyString()))
+                .thenReturn(List.of());
+        // when
+        final Executable executable = () -> uoService.findByTaxCodeSfe(taxCodeSfe);
+        // then
+        assertThrows(ResourceNotFoundException.class, executable);
     }
 
 }

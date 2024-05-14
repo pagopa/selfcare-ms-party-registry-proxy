@@ -12,4 +12,6 @@ public interface UOService {
 
     UO findByUnicode(String codiceUniUO, List<String> categoriesList);
 
+    UO findByTaxCodeSfe(String taxCodeSfe);
+
 }

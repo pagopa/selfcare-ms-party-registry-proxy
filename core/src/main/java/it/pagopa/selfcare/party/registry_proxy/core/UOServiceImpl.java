@@ -41,7 +41,6 @@ class UOServiceImpl implements UOService {
         this.indexSearchService = indexSearchService;
         this.institutionService = institutionService;
         this.uoIndexWriterService = uoIndexWriterService;
-
         this.openDataRestClient = openDataRestClient;
     }
 
@@ -74,6 +73,22 @@ class UOServiceImpl implements UOService {
         }
         log.debug("find UO By CodiceUniUO result = {}", uo);
         log.trace("find UO By CodiceUniUO end");
+        return uo;
+    }
+
+    @Override
+    public UO findByTaxCodeSfe(String taxCodeSfe) {
+        log.trace("find UO By TaxCodeSfe start");
+        log.debug("find UO By TaxCodeSfe = {}", taxCodeSfe.toUpperCase());
+        final List<UO> uoList = indexSearchService.findById(UO.Field.CODICE_FISCALE_SFE, taxCodeSfe.toUpperCase());
+        if (uoList.isEmpty()) {
+            throw new ResourceNotFoundException();
+        } else if (uoList.size() > 1) {
+            throw new TooManyResourceFoundException();
+        }
+        final UO uo = uoList.get(0);
+        log.debug("find UO By TaxCodeSfe result = {}", uo);
+        log.trace("find UO By TaxCodeSfe end");
         return uo;
     }
 

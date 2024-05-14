@@ -44,7 +44,9 @@ class UOControllerTest {
     @MockBean
     private UOService uoServiceMock;
 
-
+    /**
+     * Method under test: {@link UOController#findAll(Integer, Integer)}
+     */
     @Test
     void findUOs_defaultInputParams() throws Exception {
         // given
@@ -63,7 +65,9 @@ class UOControllerTest {
         verifyNoMoreInteractions(uoServiceMock);
     }
 
-
+    /**
+     * Method under test: {@link UOController#findAll(Integer, Integer)}
+     */
     @Test
     void findUOs() throws Exception {
         // given
@@ -86,6 +90,9 @@ class UOControllerTest {
         verifyNoMoreInteractions(uoServiceMock);
     }
 
+    /**
+     * Method under test: {@link UOController#findByUnicode(String, List)}
+     */
     @Test
     void findUo() throws Exception {
         // given
@@ -111,6 +118,9 @@ class UOControllerTest {
         verifyNoMoreInteractions(uoServiceMock);
     }
 
+    /**
+     * Method under test: {@link UOController#findByUnicode(String, List)}
+     */
     @Test
     void findUoNotFound() throws Exception {
         // given
@@ -129,6 +139,9 @@ class UOControllerTest {
         verifyNoMoreInteractions(uoServiceMock);
     }
 
+    /**
+     * Method under test: {@link UOController#findByUnicode(String, List)}
+     */
     @Test
     void findUoWithCategoriesFound() throws Exception {
         // given
@@ -154,6 +167,9 @@ class UOControllerTest {
                 .findByUnicode(code, categories);
     }
 
+    /**
+     * Method under test: {@link UOController#findByUnicode(String, List)}
+     */
     @Test
     void findUoWithCategoriesNotFound() throws Exception {
         // given
@@ -171,6 +187,36 @@ class UOControllerTest {
 
         verify(uoServiceMock, times(1))
                 .findByUnicode(code, categories);
+    }
+
+    /**
+     * Method under test: {@link UOController#findByTaxCodeSfe(String)}
+     */
+    @Test
+    void findUoByTaxCodeSfe() throws Exception {
+        // given
+        final String taxCodeSfe = "CODE";
+        when(uoServiceMock.findByTaxCodeSfe(any()))
+                .thenReturn(mockInstance(new DummyUO()));
+        // when
+        mvc.perform(MockMvcRequestBuilders
+                        .get(BASE_URL + "/uo")
+                        .param("taxCodeSfe",taxCodeSfe)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .accept(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.codiceUniUo", notNullValue()))
+                .andExpect(jsonPath("$.origin", notNullValue()))
+                .andExpect(jsonPath("$.codiceIpa", notNullValue()))
+                .andExpect(jsonPath("$.denominazioneEnte", notNullValue()))
+                .andExpect(jsonPath("$.codiceFiscaleEnte", notNullValue()))
+                .andExpect(jsonPath("$.codiceFiscaleSfe", Matchers.matchesPattern("setCodiceFiscaleSfe")))
+                .andExpect(jsonPath("$.descrizioneUo", notNullValue()));
+        // then
+
+        verify(uoServiceMock, times(1))
+                .findByUnicode(taxCodeSfe, null);
+        verifyNoMoreInteractions(uoServiceMock);
     }
 
 }

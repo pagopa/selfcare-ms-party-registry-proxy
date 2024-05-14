@@ -54,7 +54,6 @@ public class UOController {
         return uosResource;
     }
 
-
     @GetMapping("/{codiceUniAoo}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "${swagger.api.uo.findBy.summary}",
@@ -67,6 +66,19 @@ public class UOController {
         log.trace("find UO start");
         log.debug("find UO = {}", codiceUniUo);
         final UOResource uoResource = uoMapper.toResource(uoService.findByUnicode(codiceUniUo,categories));
+        log.debug("find UO result = {}", uoResource);
+        log.trace("find UO end");
+        return uoResource;
+    }
+
+    @GetMapping("/sfe/{taxCodeSfe}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "${swagger.api.uo.findBy.summary}", notes = "${swagger.api.uo.findBySfe.notes}")
+    public UOResource findByTaxCodeSfe(@ApiParam(value = "${swagger.model.uo.taxCodeSfe}")
+                                       @PathVariable("taxCodeSfe") String taxCodeSfe) {
+        log.trace("find UO start");
+        log.debug("find UO = {}", taxCodeSfe);
+        final UOResource uoResource = uoMapper.toResource(uoService.findByTaxCodeSfe(taxCodeSfe));
         log.debug("find UO result = {}", uoResource);
         log.trace("find UO end");
         return uoResource;
