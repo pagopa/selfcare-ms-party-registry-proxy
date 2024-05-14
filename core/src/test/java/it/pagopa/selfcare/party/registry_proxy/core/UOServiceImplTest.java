@@ -1,9 +1,11 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.OpenDataRestClient;
 import it.pagopa.selfcare.party.registry_proxy.core.exception.TooManyResourceFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
@@ -28,9 +30,11 @@ class UOServiceImplTest {
     @Mock
     private InstitutionService institutionService;
 
+    @Mock
+    private OpenDataRestClient openDataRestClient;
+
     @InjectMocks
     private UOServiceImpl uoService;
-
 
     @Test
     void search_emptyOrigin() {
@@ -120,6 +124,25 @@ class UOServiceImplTest {
         final UO result = uoService.findByUnicode(id, categories);
         // then
         assertSame(UO, result);
+    }
+
+    @Test
+    void updateUosIndex() {
+        final String response = "id,Codice_IPA,Denominazione_ente,Codice_fiscale_ente,Codice_fiscale_sfe,Codice_uni_uo,Codice_uni_uo_padre,Codice_uni_aoo,Descrizione_uo,Mail1,Data_aggiornamento\n" +
+                "id,Codice_IPA,Denominazione_ente,Codice_fiscale_ente,Codice_fiscale_sfe,Codice_uni_uo,Codice_uni_uo_padre,Codice_uni_aoo,Descrizione_uo,Mail1,2024-01-01";
+        when(openDataRestClient.retrieveUOs()).thenReturn(response);
+        when(openDataRestClient.retrieveUOsWithSfe()).thenReturn(response);
+        Executable executable = () -> uoService.updateUOsIndex();
+        Assertions.assertDoesNotThrow(executable);
+    }
+
+    @Test
+    void updateUosIndexWithMalformedDate() {
+        final String response = "id,Codice_IPA,Denominazione_ente,Codice_fiscale_ente,Codice_fiscale_sfe,Codice_uni_uo,Codice_uni_uo_padre,Codice_uni_aoo,Descrizione_uo,Mail1,Data_aggiornamento\n" +
+                "id,Codice_IPA,Denominazione_ente,Codice_fiscale_ente,Codice_fiscale_sfe,Codice_uni_uo,Codice_uni_uo_padre,Codice_uni_aoo,Descrizione_uo,Mail1,2024-15-12";        when(openDataRestClient.retrieveUOs()).thenReturn(response);
+        when(openDataRestClient.retrieveUOsWithSfe()).thenReturn(response);
+        Executable executable = () -> uoService.updateUOsIndex();
+        Assertions.assertDoesNotThrow(executable);
     }
 
 }

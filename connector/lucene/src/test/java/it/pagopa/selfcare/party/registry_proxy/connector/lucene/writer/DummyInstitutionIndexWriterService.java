@@ -4,6 +4,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 
 import java.util.List;
+import java.util.Map;
 
 public class DummyInstitutionIndexWriterService implements IndexWriterService<Institution> {
 
@@ -29,6 +30,11 @@ public class DummyInstitutionIndexWriterService implements IndexWriterService<In
     @Override
     public void cleanIndex(String entityType) {
         indexWriterService.cleanIndex(entityType);
+    }
+
+    @Override
+    public void updateDocumentValues(Institution item, Map<String, String> fieldsToUpdate) {
+        indexWriterService.updateDocumentValues(item, fieldsToUpdate);
     }
 
 }

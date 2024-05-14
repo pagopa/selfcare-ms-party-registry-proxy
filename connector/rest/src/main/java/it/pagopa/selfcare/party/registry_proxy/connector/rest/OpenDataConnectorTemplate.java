@@ -8,11 +8,15 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.Category;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.UO;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.OpenDataRestClient;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.IPAOpenDataUO;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.util.List;
+import java.util.function.Function;
+
+import static java.util.stream.Collectors.toMap;
 
 @Slf4j
 abstract class OpenDataConnectorTemplate<I extends Institution, C extends Category, A extends AOO, U extends UO> implements OpenDataConnector<I, C, A, U> {
@@ -91,12 +95,12 @@ abstract class OpenDataConnectorTemplate<I extends Institution, C extends Catego
     @Override
     public List<U> getUOs() {
         log.trace("getUOs start");
-        List<U> uos;
+        List<IPAOpenDataUO> uos;
         final String csv = restClient.retrieveUOs();
 
         try (Reader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(csv.getBytes())))) {
-            CsvToBean<U> csvToBean = new CsvToBeanBuilder<U>(reader)
-                    .withType(getUOType())
+            CsvToBean<IPAOpenDataUO> csvToBean = new CsvToBeanBuilder<IPAOpenDataUO>(reader)
+                    .withType(IPAOpenDataUO.class)
                     .withIgnoreLeadingWhiteSpace(true)
                     .build();
             uos = csvToBean.parse();
@@ -104,10 +108,30 @@ abstract class OpenDataConnectorTemplate<I extends Institution, C extends Catego
             throw new RuntimeException(e);
         }
 
-        //TODO: scartare i record che non soddisfano determinati requisiti?
-        //log.debug("getUOs result = {}", uos);
+        List<U> uosWithSfe = getUOsWithSfe();
+        var mapUos = uos.stream().collect(toMap(UO::getId, Function.identity()));
+        uosWithSfe.forEach(uo -> {
+            var oldUO = mapUos.get(uo.getId());
+            oldUO.setCodiceFiscaleSfe(uo.getCodiceFiscaleSfe());
+        });
+
         log.trace("getUOs end");
-        return uos;
+        return (List<U>) uos;
+    }
+
+    private List<U> getUOsWithSfe() {
+        List<U> uosWithSfe;
+        final String csvWithSfe = restClient.retrieveUOsWithSfe();
+        try (Reader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(csvWithSfe.getBytes())))) {
+            CsvToBean<U> csvToBean = new CsvToBeanBuilder<U>(reader)
+                    .withType(getUOType())
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .build();
+            uosWithSfe = csvToBean.parse();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return uosWithSfe;
     }
 
     protected abstract Class<I> getInstitutionType();

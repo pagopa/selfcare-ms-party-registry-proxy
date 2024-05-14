@@ -4,6 +4,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.UO;
 
 import java.util.List;
+import java.util.Map;
 
 public class DummyUOIndexWriterService implements IndexWriterService<UO> {
 
@@ -29,5 +30,10 @@ public class DummyUOIndexWriterService implements IndexWriterService<UO> {
     @Override
     public void cleanIndex(String entityType) {
         indexWriterService.cleanIndex(entityType);
+    }
+
+    @Override
+    public void updateDocumentValues(UO item, Map<String, String> fieldsToUpdate) {
+        indexWriterService.updateDocumentValues(item, fieldsToUpdate);
     }
 }

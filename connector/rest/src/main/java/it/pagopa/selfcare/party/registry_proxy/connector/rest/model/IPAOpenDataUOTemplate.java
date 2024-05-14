@@ -4,6 +4,7 @@ import com.opencsv.bean.CsvBindByName;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.UO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
 @EqualsAndHashCode(of = "codiceUniUo")
@@ -15,6 +16,8 @@ public abstract class IPAOpenDataUOTemplate implements UO {
     private String denominazioneEnte;
     @CsvBindByName(column = "Codice_fiscale_ente")
     private String codiceFiscaleEnte;
+    @CsvBindByName(column = "Codice_fiscale_sfe")
+    private String codiceFiscaleSfe;
     @CsvBindByName(column = "Codice_uni_uo")
     private String codiceUniUo;
     @CsvBindByName(column = "Codice_uni_uo_padre")

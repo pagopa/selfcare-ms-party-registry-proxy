@@ -21,6 +21,9 @@ public class UOResource implements UO {
     @ApiModelProperty(value= "${swagger.model.uo.taxCode}")
     private String codiceFiscaleEnte;
 
+    @ApiModelProperty(value= "${swagger.model.uo.taxCodeSfe}")
+    private String codiceFiscaleSfe;
+
     @ApiModelProperty(value = "${swagger.model.uo.codiceUniUo}")
     private String codiceUniUo;
 

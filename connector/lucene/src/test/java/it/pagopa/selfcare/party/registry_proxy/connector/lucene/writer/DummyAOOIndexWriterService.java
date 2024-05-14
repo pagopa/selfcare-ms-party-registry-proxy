@@ -4,6 +4,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.AOO;
 
 import java.util.List;
+import java.util.Map;
 
 public class DummyAOOIndexWriterService implements IndexWriterService<AOO> {
 
@@ -29,6 +30,11 @@ public class DummyAOOIndexWriterService implements IndexWriterService<AOO> {
     @Override
     public void cleanIndex(String entityType) {
         indexWriterService.cleanIndex(entityType);
+    }
+
+    @Override
+    public void updateDocumentValues(AOO item, Map<String, String> fieldsToUpdate) {
+        indexWriterService.updateDocumentValues(item, fieldsToUpdate);
     }
 
 }

@@ -10,4 +10,6 @@ public interface OpenDataRestClient {
 
     String retrieveUOs();
 
+    String retrieveUOsWithSfe();
+
 }

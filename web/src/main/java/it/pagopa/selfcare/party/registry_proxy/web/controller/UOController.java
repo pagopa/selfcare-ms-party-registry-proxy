@@ -14,8 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -24,13 +23,14 @@ import java.util.stream.Collectors;
 public class UOController {
 
     private final UOService uoService;
+    private final UOMapper uoMapper;
 
-
-    public UOController(UOService uoService) {
+    public UOController(UOService uoService,
+                        UOMapper uoMapper) {
         log.trace("Initializing {}", UOController.class.getSimpleName());
         this.uoService = uoService;
+        this.uoMapper = uoMapper;
     }
-
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -45,10 +45,10 @@ public class UOController {
         log.trace("find all UO start");
         log.debug("find all UO, page = {}, limit = {}", page, limit);
         final QueryResult<UO> result = uoService.findAll(page, limit);
-        final UOsResource uosResource = UOMapper.toResource(result.getItems().stream()
-                        .map(UOMapper::toResource)
-                        .collect(Collectors.toList()),
-                result.getTotalHits());
+        final UOsResource uosResource = UOsResource.builder()
+                .count(result.getTotalHits())
+                .items(result.getItems().stream().map(uoMapper::toResource).toList())
+                .build();
         log.debug("find all UO result = {}", uosResource);
         log.trace("find all UO end");
         return uosResource;
@@ -66,7 +66,7 @@ public class UOController {
                                     List<String> categories) {
         log.trace("find UO start");
         log.debug("find UO = {}", codiceUniUo);
-        final UOResource uoResource = UOMapper.toResource(uoService.findByUnicode(codiceUniUo,categories));
+        final UOResource uoResource = uoMapper.toResource(uoService.findByUnicode(codiceUniUo,categories));
         log.debug("find UO result = {}", uoResource);
         log.trace("find UO end");
         return uoResource;

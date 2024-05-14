@@ -46,6 +46,11 @@ public class DummyUO implements UO {
     }
 
     @Override
+    public String getCodiceFiscaleSfe() {
+        return dummyEntity.getCodiceFiscaleSfe();
+    }
+
+    @Override
     public String getCodiceUniUo() {
         return dummyEntity.getCodiceUniUo();
     }

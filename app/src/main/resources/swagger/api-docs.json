@@ -2088,6 +2088,10 @@
             "type" : "string",
             "description" : "UO fiscal code"
           },
+          "codiceFiscaleSfe" : {
+            "type" : "string",
+            "description" : "UO fiscal code for billing"
+          },
           "codiceIpa" : {
             "type" : "string",
             "description" : "UO ipa code"

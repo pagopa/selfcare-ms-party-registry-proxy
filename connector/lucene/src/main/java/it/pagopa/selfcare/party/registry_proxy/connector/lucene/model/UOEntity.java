@@ -11,6 +11,7 @@ public class UOEntity implements UO {
     private String codiceIpa;
     private String denominazioneEnte;
     private String codiceFiscaleEnte;
+    private String codiceFiscaleSfe;
     private String codiceUniUo;
     private String codiceUniUoPadre;
     private String codiceUniAoo;
