@@ -57,12 +57,12 @@ public class UOController {
         return uosResource;
     }
 
-    @GetMapping("/{codiceUniAoo}")
+    @GetMapping("/{codiceUniUo}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "${swagger.api.uo.findBy.summary}",
             notes = "${swagger.api.uo.findBy.notes}")
     public UOResource findByUnicode(@ApiParam("${swagger.model.uo.codiceUniUo}")
-                                    @PathVariable("codiceUniAoo") String codiceUniUo,
+                                    @PathVariable("codiceUniUo") String codiceUniUo,
                                     @ApiParam(value = "${swagger.model.*.categories}")
                                     @RequestParam(value = "categories", required = false)
                                     List<String> categories) {
