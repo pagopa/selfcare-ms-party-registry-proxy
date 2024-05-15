@@ -1,8 +1,8 @@
 package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.pagopa.selfcare.party.registry_proxy.core.UOService;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
+import it.pagopa.selfcare.party.registry_proxy.core.UOService;
 import it.pagopa.selfcare.party.registry_proxy.web.config.WebTestConfig;
 import it.pagopa.selfcare.party.registry_proxy.web.handler.PartyRegistryProxyExceptionHandler;
 import it.pagopa.selfcare.party.registry_proxy.web.model.DummyUO;
@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
+import java.util.Optional;
 
 import static it.pagopa.selfcare.commons.utils.TestUtils.mockInstance;
 import static org.hamcrest.Matchers.notNullValue;
@@ -44,48 +45,57 @@ class UOControllerTest {
     @MockBean
     private UOService uoServiceMock;
 
-
+    /**
+     * Method under test: {@link UOController#findAll(Integer, Integer, Optional)}
+     */
     @Test
     void findUOs_defaultInputParams() throws Exception {
         // given
-        when(uoServiceMock.findAll(anyInt(), anyInt()))
+        when(uoServiceMock.findAll(any(), anyInt(), anyInt()))
                 .thenReturn(new DummyUOQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
-                .get(BASE_URL + "/uo")
-                .contentType(APPLICATION_JSON_VALUE)
-                .accept(APPLICATION_JSON_VALUE))
+                        .get(BASE_URL + "/uo")
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items", notNullValue()));
         // then
         verify(uoServiceMock, times(1))
-                .findAll( 1, 10);
+                .findAll(Optional.empty(), 1, 10);
         verifyNoMoreInteractions(uoServiceMock);
     }
 
-
+    /**
+     * Method under test: {@link UOController#findAll(Integer, Integer, Optional)}
+     */
     @Test
     void findUOs() throws Exception {
         // given
         final String page = "2";
         final String limit = "2";
-        when(uoServiceMock.findAll(anyInt(), anyInt()))
+        final String taxCodeInvoicing = "taxCodeInvoicing";
+        when(uoServiceMock.findAll(any(), anyInt(), anyInt()))
                 .thenReturn(new DummyUOQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
-                .get(BASE_URL + "/uo")
-                .queryParam("page", page)
-                .queryParam("limit", limit)
-                .contentType(APPLICATION_JSON_VALUE)
-                .accept(APPLICATION_JSON_VALUE))
+                        .get(BASE_URL + "/uo")
+                        .queryParam("page", page)
+                        .queryParam("limit", limit)
+                        .queryParam("taxCodeInvoicing", taxCodeInvoicing)
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items", notNullValue()));
         // then
         verify(uoServiceMock, times(1))
-                .findAll(Integer.parseInt(page), Integer.parseInt(limit));
+                .findAll(Optional.of("taxCodeInvoicing"), Integer.parseInt(page), Integer.parseInt(limit));
         verifyNoMoreInteractions(uoServiceMock);
     }
 
+    /**
+     * Method under test: {@link UOController#findAll(Integer, Integer, Optional)}
+     */
     @Test
     void findUo() throws Exception {
         // given
@@ -111,6 +121,9 @@ class UOControllerTest {
         verifyNoMoreInteractions(uoServiceMock);
     }
 
+    /**
+     * Method under test: {@link UOController#findByUnicode(String, List)}
+     */
     @Test
     void findUoNotFound() throws Exception {
         // given
@@ -129,6 +142,9 @@ class UOControllerTest {
         verifyNoMoreInteractions(uoServiceMock);
     }
 
+    /**
+     * Method under test: {@link UOController#findByUnicode(String, List)}
+     */
     @Test
     void findUoWithCategoriesFound() throws Exception {
         // given
@@ -154,6 +170,9 @@ class UOControllerTest {
                 .findByUnicode(code, categories);
     }
 
+    /**
+     * Method under test: {@link UOController#findByUnicode(String, List)}
+     */
     @Test
     void findUoWithCategoriesNotFound() throws Exception {
         // given

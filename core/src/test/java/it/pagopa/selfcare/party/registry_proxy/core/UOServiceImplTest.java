@@ -41,12 +41,13 @@ class UOServiceImplTest {
         // given
         final int page = 0;
         final int limit = 0;
+        final Optional<String> taxCodeInvoicing = Optional.empty();
 
         final DummyUOQueryResult queryResultMock = new DummyUOQueryResult();
         when(indexSearchService.findAll(anyInt(), anyInt(), anyString()))
                 .thenReturn(queryResultMock);
         // when
-        final QueryResult<UO> queryResult = uoService.findAll(page, limit);
+        final QueryResult<UO> queryResult = uoService.findAll(taxCodeInvoicing, page, limit);
         // then
         assertSame(queryResultMock, queryResult);
         verify(indexSearchService, times(1))
@@ -54,16 +55,16 @@ class UOServiceImplTest {
         verifyNoMoreInteractions(indexSearchService);
     }
 
-
     @Test
     void search_notEmptyOrigin() {
         final int page = 0;
         final int limit = 0;
+        final Optional<String> taxCodeInvoicing = Optional.of("pippo");
         final DummyUOQueryResult queryResultMock = new DummyUOQueryResult();
         when(indexSearchService.findAll(anyInt(), anyInt(), any(), any()))
                 .thenReturn(queryResultMock);
         // when
-        final QueryResult<UO> queryResult = uoService.findAll(page, limit);
+        final QueryResult<UO> queryResult = uoService.findAll(taxCodeInvoicing, page, limit);
         // then
         assertSame(queryResultMock, queryResult);
     }
@@ -78,7 +79,6 @@ class UOServiceImplTest {
         assertThrows(RuntimeException.class, executable);
     }
 
-
     @Test
     void findById_ResourceNotFound() {
         // given
@@ -90,7 +90,6 @@ class UOServiceImplTest {
         // then
         assertThrows(ResourceNotFoundException.class, executable);
     }
-
 
     @Test
     void findById_TooManyResourceFound() {
@@ -104,7 +103,6 @@ class UOServiceImplTest {
         // then
         assertThrows(TooManyResourceFoundException.class, executable);
     }
-
 
     @Test
     void findById_found() {
@@ -139,7 +137,8 @@ class UOServiceImplTest {
     @Test
     void updateUosIndexWithMalformedDate() {
         final String response = "id,Codice_IPA,Denominazione_ente,Codice_fiscale_ente,Codice_fiscale_sfe,Codice_uni_uo,Codice_uni_uo_padre,Codice_uni_aoo,Descrizione_uo,Mail1,Data_aggiornamento\n" +
-                "id,Codice_IPA,Denominazione_ente,Codice_fiscale_ente,Codice_fiscale_sfe,Codice_uni_uo,Codice_uni_uo_padre,Codice_uni_aoo,Descrizione_uo,Mail1,2024-15-12";        when(openDataRestClient.retrieveUOs()).thenReturn(response);
+                "id,Codice_IPA,Denominazione_ente,Codice_fiscale_ente,Codice_fiscale_sfe,Codice_uni_uo,Codice_uni_uo_padre,Codice_uni_aoo,Descrizione_uo,Mail1,2024-15-12";
+        when(openDataRestClient.retrieveUOs()).thenReturn(response);
         when(openDataRestClient.retrieveUOsWithSfe()).thenReturn(response);
         Executable executable = () -> uoService.updateUOsIndex();
         Assertions.assertDoesNotThrow(executable);

@@ -1385,6 +1385,16 @@
         "description" : "Returns the UO list",
         "operationId" : "findAllUsingGET_1",
         "parameters" : [ {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Maximum number of items per page. It is optional, and the default value is 10 when not specified",
+          "required" : false,
+          "style" : "form",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
           "name" : "page",
           "in" : "query",
           "description" : "Desired page number for result pagination. It is optional, and the default value is 1 when not specified",
@@ -1395,14 +1405,13 @@
             "format" : "int32"
           }
         }, {
-          "name" : "limit",
+          "name" : "taxCodeInvoicing",
           "in" : "query",
-          "description" : "Maximum number of items per page. It is optional, and the default value is 10 when not specified",
+          "description" : "UO fiscal code for billing",
           "required" : false,
           "style" : "form",
           "schema" : {
-            "type" : "integer",
-            "format" : "int32"
+            "type" : "string"
           }
         } ],
         "responses" : {

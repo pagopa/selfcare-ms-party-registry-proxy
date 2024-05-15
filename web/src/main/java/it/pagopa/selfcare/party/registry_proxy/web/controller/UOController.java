@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -34,17 +35,19 @@ public class UOController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.uo.findAll.summary}",
-            notes = "${swagger.api.uo.findAll.notes}")
-    public UOsResource findAll(@ApiParam(value = "${swagger.model.*.page}")
+    @ApiOperation(value = "${swagger.api.uo.findAll.summary}", notes = "${swagger.api.uo.findAll.notes}")
+    public UOsResource findAll(@ApiParam(value = "${swagger.model.*.limit}")
+                               @RequestParam(value = "limit", required = false, defaultValue = "10")
+                               Integer limit,
+                               @ApiParam(value = "${swagger.model.*.page}")
                                @RequestParam(value = "page", required = false, defaultValue = "1")
                                Integer page,
-                               @ApiParam(value = "${swagger.model.*.limit}")
-                               @RequestParam(value = "limit", required = false, defaultValue = "10")
-                               Integer limit) {
+                               @ApiParam(value = "${swagger.model.uo.taxCodeInvoicing}")
+                               @RequestParam(value = "taxCodeInvoicing", required = false)
+                               Optional<String> taxCodeInvoicing) {
         log.trace("find all UO start");
         log.debug("find all UO, page = {}, limit = {}", page, limit);
-        final QueryResult<UO> result = uoService.findAll(page, limit);
+        final QueryResult<UO> result = uoService.findAll(taxCodeInvoicing, page, limit);
         final UOsResource uosResource = UOsResource.builder()
                 .count(result.getTotalHits())
                 .items(result.getItems().stream().map(uoMapper::toResource).toList())
@@ -54,13 +57,12 @@ public class UOController {
         return uosResource;
     }
 
-
-    @GetMapping("/{codiceUniAoo}")
+    @GetMapping("/{codiceUniUo}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "${swagger.api.uo.findBy.summary}",
             notes = "${swagger.api.uo.findBy.notes}")
     public UOResource findByUnicode(@ApiParam("${swagger.model.uo.codiceUniUo}")
-                                    @PathVariable("codiceUniAoo") String codiceUniUo,
+                                    @PathVariable("codiceUniUo") String codiceUniUo,
                                     @ApiParam(value = "${swagger.model.*.categories}")
                                     @RequestParam(value = "categories", required = false)
                                     List<String> categories) {

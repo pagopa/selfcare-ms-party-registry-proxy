@@ -41,18 +41,15 @@ class UOServiceImpl implements UOService {
         this.indexSearchService = indexSearchService;
         this.institutionService = institutionService;
         this.uoIndexWriterService = uoIndexWriterService;
-
         this.openDataRestClient = openDataRestClient;
     }
 
     @Override
-    public QueryResult<UO> findAll(int page, int limit) {
+    public QueryResult<UO> findAll(Optional<String> taxCodeInvoicing, int page, int limit) {
         log.trace("find all UO start");
         log.debug("find all UO, page = {}, limit = {}", page, limit);
-        final QueryResult<UO> queryResult;
-
-        queryResult = indexSearchService.findAll(page, limit, Entity.UO.toString());
-
+        final QueryResult<UO> queryResult = taxCodeInvoicing.map(text -> indexSearchService.fullTextSearch(UO.Field.CODICE_FISCALE_SFE, text, page, limit))
+                .orElseGet(() -> indexSearchService.findAll(page, limit, Entity.UO.toString()));
         log.debug("find all UO result = {}", queryResult);
         log.trace("find all UO end");
         return queryResult;
