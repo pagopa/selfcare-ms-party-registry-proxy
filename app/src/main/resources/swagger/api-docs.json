@@ -1471,14 +1471,14 @@
         } ]
       }
     },
-    "/uo/{codiceUniAoo}" : {
+    "/uo/{codiceUniUo}" : {
       "get" : {
         "tags" : [ "uo" ],
         "summary" : "Retrieve a UO given its code",
         "description" : "Returns a UO",
         "operationId" : "findByUnicodeUsingGET_1",
         "parameters" : [ {
-          "name" : "codiceUniAoo",
+          "name" : "codiceUniUo",
           "in" : "path",
           "description" : "UO unique identifier, the same of Id",
           "required" : true,
