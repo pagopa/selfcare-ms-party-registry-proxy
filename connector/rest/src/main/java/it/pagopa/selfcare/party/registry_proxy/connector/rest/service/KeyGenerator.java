@@ -30,8 +30,8 @@ public class KeyGenerator {
     }
 
     public static RSAPublicKey getPublicKey(String key) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        key = key.replace("-----BEGIN PUBLIC KEY-----\r\n", "").replace("-----END PUBLIC KEY-----", "");
         key = key.replaceAll("\\s+","");
+        key = key.replace("-----BEGINPUBLICKEY-----", "").replace("-----ENDPUBLICKEY-----", "");
         byte[] keyBytes = Base64.decode(key.getBytes(StandardCharsets.UTF_8));
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         return (RSAPublicKey) keyFactory.generatePublic(new X509EncodedKeySpec(keyBytes));
