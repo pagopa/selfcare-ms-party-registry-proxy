@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {PDNDNationalRegistriesServiceImpl.class})
-public class PDNDNationalRegistriesServiceImplTest {
+class PDNDNationalRegistriesServiceImplTest {
 
     @Autowired
     private PDNDNationalRegistriesService pdndNationalRegistriesService;
