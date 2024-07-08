@@ -3,7 +3,7 @@ package it.pagopa.selfcare.party.registry_proxy.web.model;
 import lombok.Data;
 
 @Data
-public class PDNDBusinessResponse {
+public class PDNDBusinessResource {
     private String businessTaxId;
     private String businessName;
     private String legalNature;

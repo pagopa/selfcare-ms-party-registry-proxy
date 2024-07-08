@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface PDNDNationalRegistriesService {
 
-    List<PDNDBusiness> institutionsPdndByDescription(String description);
+    List<PDNDBusiness> retrieveInstitutionsPdndByDescription(String description);
 
 }

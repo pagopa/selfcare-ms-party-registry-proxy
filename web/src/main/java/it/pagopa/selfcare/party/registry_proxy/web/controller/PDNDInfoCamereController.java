@@ -2,9 +2,10 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
 import it.pagopa.selfcare.party.registry_proxy.core.PDNDNationalRegistriesService;
-import it.pagopa.selfcare.party.registry_proxy.web.model.PDNDBusinessResponse;
+import it.pagopa.selfcare.party.registry_proxy.web.model.PDNDBusinessResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.PDNDBusinessMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,23 +19,23 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/info-camere-pdnd", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(tags = "infocamere PDND")
-public class InfoCamerePdndController {
+public class PDNDInfoCamereController {
 
     private final PDNDNationalRegistriesService nationalRegistriesPdndService;
     private final PDNDBusinessMapper pdndBusinessMapper;
 
-    public InfoCamerePdndController (PDNDNationalRegistriesService nationalRegistriesPdndService, PDNDBusinessMapper pdndBusinessMapper) {
+    public PDNDInfoCamereController(PDNDNationalRegistriesService nationalRegistriesPdndService, PDNDBusinessMapper pdndBusinessMapper) {
         this.nationalRegistriesPdndService = nationalRegistriesPdndService;
         this.pdndBusinessMapper = pdndBusinessMapper;
     }
 
-
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.info-camere.institutions.summary}",
-            notes = "${swagger.api.info-camere.institutions.notes}")
+    @ApiOperation(value = "${swagger.api.info-camere-pdnd.institutions.summary}",
+            notes = "${swagger.api.info-camere-pdnd.institutions.notes}")
     @GetMapping("/institutions")
-    public ResponseEntity<List<PDNDBusinessResponse>> institutionsPdndByDescription(@RequestParam String description) {
-        List<PDNDBusiness> businessList = nationalRegistriesPdndService.institutionsPdndByDescription(description);
-        return ResponseEntity.ok().body(pdndBusinessMapper.toResponses(businessList));
+    public ResponseEntity<List<PDNDBusinessResource>> institutionsPdndByDescription(@ApiParam("swagger.api.info-camere-pdnd.institutions.description}")
+                                                                                        @RequestParam String description) {
+        List<PDNDBusiness> businessList = nationalRegistriesPdndService.retrieveInstitutionsPdndByDescription(description);
+        return ResponseEntity.ok().body(pdndBusinessMapper.toResources(businessList));
     }
 }
