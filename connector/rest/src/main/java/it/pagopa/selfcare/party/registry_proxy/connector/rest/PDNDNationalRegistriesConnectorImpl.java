@@ -2,7 +2,6 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
-import it.pagopa.selfcare.commons.base.logging.LogUtils;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.PDNDNationalRegistriesConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDNationalRegistriesRestClient;
@@ -31,12 +30,8 @@ public class PDNDNationalRegistriesConnectorImpl implements PDNDNationalRegistri
     @CircuitBreaker(name = "pdndNationalRegistriesCircuitbreaker", fallbackMethod = "fallbackRetrieveInstitutionByDescription")
     @Retry(name = "retryServiceUnavailable")
     public List<PDNDBusiness> retrieveInstitutionsPdndByDescription(String description) {
-        log.debug(LogUtils.CONFIDENTIAL_MARKER, "retrieveInstitutionsPdndByDescription description = {}", description);
         Assert.hasText(description, "Description is required");
-
         List<PDNDImpresa> result = pdndNationalRegistriesRestClient.retrieveInstitutionsPdndByDescription(description);
-
-        log.debug(LogUtils.CONFIDENTIAL_MARKER, "retrieveInstitutionsPdndByDescription result = {}", result);
         return pdndBusinessMapper.toPDNDBusiness(result);
     }
 
