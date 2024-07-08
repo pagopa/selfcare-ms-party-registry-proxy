@@ -2,7 +2,6 @@ package it.pagopa.selfcare.party.registry_proxy.core;
 
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.PDNDNationalRegistriesConnector;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.GeographicTaxonomy;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
