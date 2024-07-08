@@ -28,7 +28,6 @@ public class AssertionGenerator {
                 .sign(alg);
 
         log.info("END - AssertionGenerator.generateClientAssertion Timelapse: {} ms", System.currentTimeMillis() - startTime);
-        log.info("AssertionGenerator: {}", jwtToken);
         return jwtToken;
     }
 }
