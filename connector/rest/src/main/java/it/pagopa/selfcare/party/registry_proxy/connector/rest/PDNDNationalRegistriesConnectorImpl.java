@@ -50,7 +50,7 @@ public class PDNDNationalRegistriesConnectorImpl implements PDNDNationalRegistri
         return pdndBusinessMapper.toPDNDBusiness(result);
     }
 
-    public PDNDBusiness fallbackRetrieveInstitutionByTaxCode(RuntimeException e) {
+    public void fallbackRetrieveInstitutionByTaxCode(RuntimeException e) {
         log.error(String.format(ERROR_PDND_NATIONAL_REGISTRIES_REST_CLIENT_MESSAGE, e.getMessage()));
         throw new ResourceNotFoundException("");
     }
