@@ -17,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/info-camere-pdnd", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/infocamere-pdnd", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(tags = "infocamere PDND")
 public class PDNDInfoCamereController {
 

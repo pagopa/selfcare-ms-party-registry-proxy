@@ -26,7 +26,7 @@ import java.util.List;
 @ContextConfiguration(classes = {PDNDInfoCamereController.class, WebTestConfig.class})
 @WebMvcTest(value = {PDNDInfoCamereController.class}, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 class PDNDInfoCamereControllerTest {
-    private static final String BASE_URL = "/info-camere-pdnd";
+    private static final String BASE_URL = "/infocamere-pdnd";
 
     @Autowired
     protected MockMvc mvc;

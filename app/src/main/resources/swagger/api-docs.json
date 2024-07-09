@@ -1215,7 +1215,7 @@
         } ]
       }
     },
-    "/info-camere-pdnd/institutions" : {
+    "/infocamere-pdnd/institutions" : {
       "get" : {
         "tags" : [ "infocamere PDND" ],
         "summary" : "Get institutions by institution description",
