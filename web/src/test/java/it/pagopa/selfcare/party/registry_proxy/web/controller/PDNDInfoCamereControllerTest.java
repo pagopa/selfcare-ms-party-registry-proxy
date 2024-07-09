@@ -68,9 +68,41 @@ class PDNDInfoCamereControllerTest {
                 .andExpect(jsonPath("$[0].digitalAddress", is("digitalAddress")))
                 .andReturn();
 
-        // Verifica che i servizi siano stati chiamati correttamente
         verify(pdndNationalRegistriesService, times(1)).retrieveInstitutionsPdndByDescription(anyString());
         verify(pdndBusinessMapper, times(1)).toResources(pdndBusinesses);
+        verifyNoMoreInteractions(pdndNationalRegistriesService);
+        verifyNoMoreInteractions(pdndBusinessMapper);
+    }
+
+    @Test
+    void testInstitutionByTaxCode() throws Exception {
+        String taxCode = "taxCode";
+        PDNDBusiness pdndBusiness = dummyPDNDBusiness();
+        PDNDBusinessResource pdndBusinessResource = dummyPDNDBusinessResource();
+
+        when(pdndNationalRegistriesService.retrieveInstitutionPdndByTaxCode(anyString())).thenReturn(pdndBusiness);
+        when(pdndBusinessMapper.toResource(pdndBusiness)).thenReturn(pdndBusinessResource);
+
+        mvc.perform(MockMvcRequestBuilders
+                        .get(BASE_URL + "/institution/{taxCode}", taxCode)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.businessTaxId", is("taxId")))
+                .andExpect(jsonPath("$.businessName", is("description")))
+                .andExpect(jsonPath("$.legalNature", is("legalNature")))
+                .andExpect(jsonPath("$.legalNatureDescription", is("legalNatureDescription")))
+                .andExpect(jsonPath("$.cciaa", is("cciaa")))
+                .andExpect(jsonPath("$.nRea", is("nRea")))
+                .andExpect(jsonPath("$.businessStatus", is("status")))
+                .andExpect(jsonPath("$.city", is("city")))
+                .andExpect(jsonPath("$.county", is("county")))
+                .andExpect(jsonPath("$.zipCode", is("zipCode")))
+                .andExpect(jsonPath("$.address", is("address")))
+                .andExpect(jsonPath("$.digitalAddress", is("digitalAddress")))
+                .andReturn();
+
+        verify(pdndNationalRegistriesService, times(1)).retrieveInstitutionPdndByTaxCode(anyString());
+        verify(pdndBusinessMapper, times(1)).toResource(pdndBusiness);
         verifyNoMoreInteractions(pdndNationalRegistriesService);
         verifyNoMoreInteractions(pdndBusinessMapper);
     }

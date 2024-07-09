@@ -11,4 +11,6 @@ public interface PDNDBusinessMapper {
 
     List<PDNDBusinessResource> toResources(List<PDNDBusiness> pdndBusiness);
 
+    PDNDBusinessResource toResource(PDNDBusiness pdndBusiness);
+
 }

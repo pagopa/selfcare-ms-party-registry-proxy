@@ -8,4 +8,6 @@ public interface PDNDNationalRegistriesService {
 
     List<PDNDBusiness> retrieveInstitutionsPdndByDescription(String description);
 
+    PDNDBusiness retrieveInstitutionPdndByTaxCode(String taxCode);
+
 }

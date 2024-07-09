@@ -27,4 +27,10 @@ class PDNDNationalRegistriesServiceImpl implements PDNDNationalRegistriesService
         return pdndNationalRegistriesConnector.retrieveInstitutionsPdndByDescription(description);
     }
 
+    @Override
+    public PDNDBusiness retrieveInstitutionPdndByTaxCode(String taxCode){
+        Assert.hasText(taxCode, "TaxCode is required");
+        return pdndNationalRegistriesConnector.retrieveInstitutionPdndByTaxCode(taxCode);
+    }
+
 }

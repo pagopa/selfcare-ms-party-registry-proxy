@@ -38,4 +38,14 @@ public class PDNDInfoCamereController {
         List<PDNDBusiness> businessList = nationalRegistriesPdndService.retrieveInstitutionsPdndByDescription(description);
         return ResponseEntity.ok().body(pdndBusinessMapper.toResources(businessList));
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "${swagger.api.info-camere-pdnd.institutions.summary}",
+            notes = "${swagger.api.info-camere-pdnd.institutions.notes}")
+    @GetMapping("/institution/{taxCode}")
+    public ResponseEntity<PDNDBusinessResource> institutionPdndByTaxCode(@ApiParam("swagger.api.info-camere-pdnd.institutions.taxCode}")
+                                                                                    @PathVariable String taxCode) {
+        PDNDBusiness business = nationalRegistriesPdndService.retrieveInstitutionPdndByTaxCode(taxCode);
+        return ResponseEntity.ok().body(pdndBusinessMapper.toResource(business));
+    }
 }

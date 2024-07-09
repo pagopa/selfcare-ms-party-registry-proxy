@@ -29,7 +29,7 @@ class PDNDNationalRegistriesServiceImplTest {
     private PDNDNationalRegistriesConnector pdndNationalRegistriesConnector;
 
     @Test
-    void retrieveGeoTaxonomiesByDescription() {
+    void retrieveInstitutionsByDescription() {
         //given
         String description = "description";
         List<PDNDBusiness> pdndBusinesses = new ArrayList<>();
@@ -49,7 +49,7 @@ class PDNDNationalRegistriesServiceImplTest {
     }
 
     @Test
-    void retrieveGeoTaxonomiesByDescription_nullDescription() {
+    void retrieveInstitutionsByDescription_nullDescription() {
         //given
         String description = null;
         List<PDNDBusiness> pdndBusinesses = new ArrayList<>();
@@ -62,6 +62,40 @@ class PDNDNationalRegistriesServiceImplTest {
         //then
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
         assertEquals("Description is required", e.getMessage());
+        Mockito.verifyNoInteractions(pdndNationalRegistriesConnector);
+    }
+
+    @Test
+    void retrieveInstitutionByTaxCode() {
+        //given
+        String taxCode = "taxCode";
+        PDNDBusiness pdndBusiness = dummyPDNDBusiness();
+        when(pdndNationalRegistriesConnector.retrieveInstitutionPdndByTaxCode(anyString())).thenReturn(pdndBusiness);
+
+        //when
+        pdndNationalRegistriesService.retrieveInstitutionPdndByTaxCode(taxCode);
+
+        //then
+        assertNotNull(pdndBusiness);
+        assertNotNull(pdndBusiness.getClass());
+        verify(pdndNationalRegistriesConnector, times(1))
+                .retrieveInstitutionPdndByTaxCode(any());
+        verifyNoMoreInteractions(pdndNationalRegistriesConnector);
+    }
+
+    @Test
+    void retrieveInstitutionByTaxCode_nullTaxCode() {
+        //given
+        String taxCode = null;
+        PDNDBusiness pdndBusiness = dummyPDNDBusiness();
+        when(pdndNationalRegistriesConnector.retrieveInstitutionPdndByTaxCode(any())).thenReturn(pdndBusiness);
+
+        //when
+        Executable executable = () -> pdndNationalRegistriesService.retrieveInstitutionPdndByTaxCode(taxCode);
+
+        //then
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
+        assertEquals("TaxCode is required", e.getMessage());
         Mockito.verifyNoInteractions(pdndNationalRegistriesConnector);
     }
 

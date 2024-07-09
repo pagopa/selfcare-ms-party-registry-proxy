@@ -60,36 +60,14 @@ public class PDNDImpresa {
     @XmlElement(name = "PEC")
     private String digitalAddress;
 
-    private String toponimoSede;
-    private String viaSede;
-    private String ncivicoSede;
-
     @XmlElement(name = "ToponimoSede")
-    public String getToponimoSede() {
-        return toponimoSede;
-    }
-
-    public void setToponimoSede(String toponimoSede) {
-        this.toponimoSede = toponimoSede;
-    }
+    private String toponimoSede;
 
     @XmlElement(name = "ViaSede")
-    public String getViaSede() {
-        return viaSede;
-    }
-
-    public void setViaSede(String viaSede) {
-        this.viaSede = viaSede;
-    }
+    private String viaSede;
 
     @XmlElement(name = "NcivicoSede")
-    public String getNcivicoSede() {
-        return ncivicoSede;
-    }
-
-    public void setNcivicoSede(String ncivicoSede) {
-        this.ncivicoSede = ncivicoSede;
-    }
+    private String ncivicoSede;
 
     @XmlTransient
     public String getAddress() {

@@ -15,4 +15,8 @@ public interface PDNDNationalRegistriesRestClient {
     @ResponseBody
     List<PDNDImpresa> retrieveInstitutionsPdndByDescription(@RequestParam String description);
 
+    @GetMapping(value = "${rest-client.pdnd-national-registries.getTaxCode.path}", consumes = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    List<PDNDImpresa> retrieveInstitutionPdndByTaxCode(@RequestParam String taxCode);
+
 }

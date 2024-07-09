@@ -1,5 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ServiceUnavailableException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDNationalRegistriesRestClient;
@@ -41,7 +42,7 @@ class PDNDNationalRegistriesConnectorImplTest {
         pdndImpresaList.add(dummyPDNDImpresa());
 
         when(pdndNationalRegistriesRestClient.retrieveInstitutionsPdndByDescription(anyString())).thenReturn(pdndImpresaList);
-        when(pdndBusinessMapper.toPDNDBusiness(pdndImpresaList)).thenReturn(pdndBusinesses);
+        when(pdndBusinessMapper.toPDNDBusinesses(pdndImpresaList)).thenReturn(pdndBusinesses);
 
         //when
         pdndBusinesses = pdndNationalRegistriesConnector.retrieveInstitutionsPdndByDescription(description);
@@ -94,6 +95,70 @@ class PDNDNationalRegistriesConnectorImplTest {
     void fallbackGetExtByDescriptionTest(){
         List<PDNDBusiness> list = pdndNationalRegistriesConnector.fallbackRetrieveInstitutionByDescription(new ServiceUnavailableException());
         Assertions.assertTrue(list.isEmpty());
+    }
+
+    @Test
+    void testRetrieveInstitutionByTaxCode() {
+
+        //given
+        String taxCode = "taxCode";
+        PDNDBusiness pdndBusiness = dummyPDNDBusiness();
+        List<PDNDImpresa> pdndImpresaList = new ArrayList<>();
+        pdndImpresaList.add(dummyPDNDImpresa());
+
+        when(pdndNationalRegistriesRestClient.retrieveInstitutionPdndByTaxCode(anyString())).thenReturn(pdndImpresaList);
+        when(pdndBusinessMapper.toPDNDBusiness(dummyPDNDImpresa())).thenReturn(pdndBusiness);
+
+        //when
+        pdndBusiness = pdndNationalRegistriesConnector.retrieveInstitutionPdndByTaxCode(taxCode);
+
+        //then
+        assertNotNull(pdndBusiness);
+        assertNotNull(pdndBusiness.getClass());
+        assertEquals(1, pdndImpresaList.size());
+        PDNDImpresa pdndImpresa = pdndImpresaList.iterator().next();
+        assertEquals(pdndImpresa.getBusinessTaxId(), pdndBusiness.getBusinessTaxId());
+        assertEquals(pdndImpresa.getBusinessName(), pdndBusiness.getBusinessName());
+        assertEquals(pdndImpresa.getBusinessStatus(), pdndBusiness.getBusinessStatus());
+        assertEquals(pdndImpresa.getLegalNature(), pdndBusiness.getLegalNature());
+        assertEquals(pdndImpresa.getLegalNatureDescription(), pdndBusiness.getLegalNatureDescription());
+        assertEquals(pdndImpresa.getAddress(), pdndBusiness.getAddress());
+        assertEquals(pdndImpresa.getDigitalAddress(), pdndBusiness.getDigitalAddress());
+        assertEquals(pdndImpresa.getNRea(), pdndBusiness.getNRea());
+        assertEquals(pdndImpresa.getCciaa(), pdndBusiness.getCciaa());
+        assertEquals(pdndImpresa.getCity(), pdndBusiness.getCity());
+        assertEquals(pdndImpresa.getCounty(), pdndBusiness.getCounty());
+        assertEquals(pdndImpresa.getZipCode(), pdndBusiness.getZipCode());
+
+        verify(pdndNationalRegistriesRestClient, times(1))
+                .retrieveInstitutionPdndByTaxCode(anyString());
+        verifyNoMoreInteractions(pdndNationalRegistriesRestClient);
+
+    }
+
+    @Test
+    void testRetrieveInstitutionByTaxCode_nullTaxCode() {
+
+        //given
+        String taxCode = null;
+        List<PDNDImpresa> pdndImpresaList = new ArrayList<>();
+        pdndImpresaList.add(dummyPDNDImpresa());
+
+        when(pdndNationalRegistriesRestClient.retrieveInstitutionPdndByTaxCode(anyString())).thenReturn(pdndImpresaList);
+
+        //when
+        Executable executable = () -> pdndNationalRegistriesConnector.retrieveInstitutionPdndByTaxCode(taxCode);
+
+        //then
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
+        assertEquals("TaxCode is required", e.getMessage());
+        Mockito.verifyNoInteractions(pdndNationalRegistriesRestClient);
+
+    }
+
+    @Test
+    void fallbackGetExtByTaxCodeTest(){
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> pdndNationalRegistriesConnector.fallbackRetrieveInstitutionByTaxCode(new ServiceUnavailableException()));
     }
 
     private PDNDBusiness dummyPDNDBusiness(){
