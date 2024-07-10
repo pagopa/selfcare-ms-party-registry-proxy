@@ -11,6 +11,6 @@ import org.springframework.context.annotation.PropertySource;
 @Import(RestClientBaseConfig.class)
 @EnableFeignClients(clients = PDNDInfoCamereRestClient.class)
 @PropertySource("classpath:config/pdnd-infocamere-rest-client.properties")
-public class PDNDNationalRegistriesRestClientConfig {
+public class PDNDInfoCamereRestClientConfig {
 
 }
