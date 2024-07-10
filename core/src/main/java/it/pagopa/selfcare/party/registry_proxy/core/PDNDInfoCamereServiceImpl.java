@@ -1,6 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.api.PDNDNationalRegistriesConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.api.PDNDInfoCamereConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,26 +11,26 @@ import java.util.List;
 
 @Slf4j
 @Service
-class PDNDNationalRegistriesServiceImpl implements PDNDNationalRegistriesService {
+class PDNDInfoCamereServiceImpl implements PDNDInfoCamereService {
 
-    private final PDNDNationalRegistriesConnector pdndNationalRegistriesConnector;
+    private final PDNDInfoCamereConnector pdndInfoCamereConnector;
 
     @Autowired
-    PDNDNationalRegistriesServiceImpl(PDNDNationalRegistriesConnector pdndNationalRegistriesConnector) {
-        this.pdndNationalRegistriesConnector = pdndNationalRegistriesConnector;
+    PDNDInfoCamereServiceImpl(PDNDInfoCamereConnector pdndInfoCamereConnector) {
+        this.pdndInfoCamereConnector = pdndInfoCamereConnector;
     }
 
 
     @Override
     public List<PDNDBusiness> retrieveInstitutionsPdndByDescription(String description){
         Assert.hasText(description, "Description is required");
-        return pdndNationalRegistriesConnector.retrieveInstitutionsPdndByDescription(description);
+        return pdndInfoCamereConnector.retrieveInstitutionsPdndByDescription(description);
     }
 
     @Override
     public PDNDBusiness retrieveInstitutionPdndByTaxCode(String taxCode){
         Assert.hasText(taxCode, "TaxCode is required");
-        return pdndNationalRegistriesConnector.retrieveInstitutionPdndByTaxCode(taxCode);
+        return pdndInfoCamereConnector.retrieveInstitutionPdndByTaxCode(taxCode);
     }
 
 }

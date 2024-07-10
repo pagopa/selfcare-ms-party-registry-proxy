@@ -58,7 +58,7 @@ class SwaggerConfigTest {
     private UOService uoService;
 
     @MockBean
-    private PDNDNationalRegistriesService pdndNationalRegistriesService;
+    private PDNDInfoCamereService pdndNationalRegistriesService;
 
     @Autowired
     WebApplicationContext context;

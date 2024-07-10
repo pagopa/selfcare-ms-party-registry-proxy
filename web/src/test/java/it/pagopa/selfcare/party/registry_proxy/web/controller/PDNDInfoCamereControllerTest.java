@@ -6,7 +6,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
-import it.pagopa.selfcare.party.registry_proxy.core.PDNDNationalRegistriesService;
+import it.pagopa.selfcare.party.registry_proxy.core.PDNDInfoCamereService;
 import it.pagopa.selfcare.party.registry_proxy.web.config.WebTestConfig;
 import it.pagopa.selfcare.party.registry_proxy.web.model.PDNDBusinessResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.PDNDInfoCamereBusinessMapper;
@@ -31,7 +31,7 @@ class PDNDInfoCamereControllerTest {
     @Autowired
     protected MockMvc mvc;
     @MockBean
-    private PDNDNationalRegistriesService pdndNationalRegistriesService;
+    private PDNDInfoCamereService pdndInfoCamereService;
     @MockBean
     private PDNDInfoCamereBusinessMapper pdndBusinessMapper;
 
@@ -46,7 +46,7 @@ class PDNDInfoCamereControllerTest {
         List<PDNDBusinessResource> pdndBusinessResources = new ArrayList<>();
         pdndBusinessResources.add(dummyPDNDBusinessResource());
 
-        when(pdndNationalRegistriesService.retrieveInstitutionsPdndByDescription(anyString())).thenReturn(pdndBusinesses);
+        when(pdndInfoCamereService.retrieveInstitutionsPdndByDescription(anyString())).thenReturn(pdndBusinesses);
         when(pdndBusinessMapper.toResources(pdndBusinesses)).thenReturn(pdndBusinessResources);
 
         mvc.perform(MockMvcRequestBuilders
@@ -68,9 +68,9 @@ class PDNDInfoCamereControllerTest {
                 .andExpect(jsonPath("$[0].digitalAddress", is("digitalAddress")))
                 .andReturn();
 
-        verify(pdndNationalRegistriesService, times(1)).retrieveInstitutionsPdndByDescription(anyString());
+        verify(pdndInfoCamereService, times(1)).retrieveInstitutionsPdndByDescription(anyString());
         verify(pdndBusinessMapper, times(1)).toResources(pdndBusinesses);
-        verifyNoMoreInteractions(pdndNationalRegistriesService);
+        verifyNoMoreInteractions(pdndInfoCamereService);
         verifyNoMoreInteractions(pdndBusinessMapper);
     }
 
@@ -80,7 +80,7 @@ class PDNDInfoCamereControllerTest {
         PDNDBusiness pdndBusiness = dummyPDNDBusiness();
         PDNDBusinessResource pdndBusinessResource = dummyPDNDBusinessResource();
 
-        when(pdndNationalRegistriesService.retrieveInstitutionPdndByTaxCode(anyString())).thenReturn(pdndBusiness);
+        when(pdndInfoCamereService.retrieveInstitutionPdndByTaxCode(anyString())).thenReturn(pdndBusiness);
         when(pdndBusinessMapper.toResource(pdndBusiness)).thenReturn(pdndBusinessResource);
 
         mvc.perform(MockMvcRequestBuilders
@@ -101,9 +101,9 @@ class PDNDInfoCamereControllerTest {
                 .andExpect(jsonPath("$.digitalAddress", is("digitalAddress")))
                 .andReturn();
 
-        verify(pdndNationalRegistriesService, times(1)).retrieveInstitutionPdndByTaxCode(anyString());
+        verify(pdndInfoCamereService, times(1)).retrieveInstitutionPdndByTaxCode(anyString());
         verify(pdndBusinessMapper, times(1)).toResource(pdndBusiness);
-        verifyNoMoreInteractions(pdndNationalRegistriesService);
+        verifyNoMoreInteractions(pdndInfoCamereService);
         verifyNoMoreInteractions(pdndBusinessMapper);
     }
 

@@ -1,7 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
 
-import it.pagopa.selfcare.party.registry_proxy.connector.api.PDNDNationalRegistriesConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.api.PDNDInfoCamereConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,13 +20,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {PDNDNationalRegistriesServiceImpl.class})
-class PDNDNationalRegistriesServiceImplTest {
+@ContextConfiguration(classes = {PDNDInfoCamereServiceImpl.class})
+class PDNDInfoCamereServiceImplTest {
 
     @Autowired
-    private PDNDNationalRegistriesService pdndNationalRegistriesService;
+    private PDNDInfoCamereService pdndInfoCamereService;
     @MockBean
-    private PDNDNationalRegistriesConnector pdndNationalRegistriesConnector;
+    private PDNDInfoCamereConnector pdndInfoCamereConnector;
 
     @Test
     void retrieveInstitutionsByDescription() {
@@ -34,18 +34,18 @@ class PDNDNationalRegistriesServiceImplTest {
         String description = "description";
         List<PDNDBusiness> pdndBusinesses = new ArrayList<>();
         pdndBusinesses.add(dummyPDNDBusiness());
-        when(pdndNationalRegistriesConnector.retrieveInstitutionsPdndByDescription(anyString())).thenReturn(pdndBusinesses);
+        when(pdndInfoCamereConnector.retrieveInstitutionsPdndByDescription(anyString())).thenReturn(pdndBusinesses);
 
         //when
-        pdndNationalRegistriesService.retrieveInstitutionsPdndByDescription(description);
+        pdndInfoCamereService.retrieveInstitutionsPdndByDescription(description);
 
         //then
         assertNotNull(pdndBusinesses);
         assertNotNull(pdndBusinesses.getClass());
         assertEquals(1, pdndBusinesses.size());
-        verify(pdndNationalRegistriesConnector, times(1))
+        verify(pdndInfoCamereConnector, times(1))
                 .retrieveInstitutionsPdndByDescription(any());
-        verifyNoMoreInteractions(pdndNationalRegistriesConnector);
+        verifyNoMoreInteractions(pdndInfoCamereConnector);
     }
 
     @Test
@@ -54,15 +54,15 @@ class PDNDNationalRegistriesServiceImplTest {
         String description = null;
         List<PDNDBusiness> pdndBusinesses = new ArrayList<>();
         pdndBusinesses.add(dummyPDNDBusiness());
-        when(pdndNationalRegistriesConnector.retrieveInstitutionsPdndByDescription(any())).thenReturn(pdndBusinesses);
+        when(pdndInfoCamereConnector.retrieveInstitutionsPdndByDescription(any())).thenReturn(pdndBusinesses);
 
         //when
-        Executable executable = () -> pdndNationalRegistriesService.retrieveInstitutionsPdndByDescription(description);
+        Executable executable = () -> pdndInfoCamereService.retrieveInstitutionsPdndByDescription(description);
 
         //then
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
         assertEquals("Description is required", e.getMessage());
-        Mockito.verifyNoInteractions(pdndNationalRegistriesConnector);
+        Mockito.verifyNoInteractions(pdndInfoCamereConnector);
     }
 
     @Test
@@ -70,17 +70,17 @@ class PDNDNationalRegistriesServiceImplTest {
         //given
         String taxCode = "taxCode";
         PDNDBusiness pdndBusiness = dummyPDNDBusiness();
-        when(pdndNationalRegistriesConnector.retrieveInstitutionPdndByTaxCode(anyString())).thenReturn(pdndBusiness);
+        when(pdndInfoCamereConnector.retrieveInstitutionPdndByTaxCode(anyString())).thenReturn(pdndBusiness);
 
         //when
-        pdndNationalRegistriesService.retrieveInstitutionPdndByTaxCode(taxCode);
+        pdndInfoCamereService.retrieveInstitutionPdndByTaxCode(taxCode);
 
         //then
         assertNotNull(pdndBusiness);
         assertNotNull(pdndBusiness.getClass());
-        verify(pdndNationalRegistriesConnector, times(1))
+        verify(pdndInfoCamereConnector, times(1))
                 .retrieveInstitutionPdndByTaxCode(any());
-        verifyNoMoreInteractions(pdndNationalRegistriesConnector);
+        verifyNoMoreInteractions(pdndInfoCamereConnector);
     }
 
     @Test
@@ -88,15 +88,15 @@ class PDNDNationalRegistriesServiceImplTest {
         //given
         String taxCode = null;
         PDNDBusiness pdndBusiness = dummyPDNDBusiness();
-        when(pdndNationalRegistriesConnector.retrieveInstitutionPdndByTaxCode(any())).thenReturn(pdndBusiness);
+        when(pdndInfoCamereConnector.retrieveInstitutionPdndByTaxCode(any())).thenReturn(pdndBusiness);
 
         //when
-        Executable executable = () -> pdndNationalRegistriesService.retrieveInstitutionPdndByTaxCode(taxCode);
+        Executable executable = () -> pdndInfoCamereService.retrieveInstitutionPdndByTaxCode(taxCode);
 
         //then
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
         assertEquals("TaxCode is required", e.getMessage());
-        Mockito.verifyNoInteractions(pdndNationalRegistriesConnector);
+        Mockito.verifyNoInteractions(pdndInfoCamereConnector);
     }
 
     private PDNDBusiness dummyPDNDBusiness(){
