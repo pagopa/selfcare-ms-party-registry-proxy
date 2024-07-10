@@ -90,6 +90,10 @@ app_settings = [
   {
     name  = "REST_CLIENT_READ_TIMEOUT"
     value = "30000"
+  },
+  {
+    name  = "PDND_BASE_URL"
+    value = "https://auth.interop.pagopa.it"
   }
 ]
 

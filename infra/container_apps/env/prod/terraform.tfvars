@@ -107,7 +107,7 @@ app_settings = [
   },
   {
     name  = "PDND_BASE_URL"
-    value = "https://auth.uat.interop.pagopa.it"
+    value = "https://auth.interop.pagopa.it"
   }
 ]
 
