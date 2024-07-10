@@ -500,7 +500,7 @@
         "parameters" : [ {
           "name" : "geotaxId",
           "in" : "path",
-          "description" : "Geographic taxonomy unique identifier ",
+          "description" : "Geographic taxonomy unique identifier",
           "required" : true,
           "style" : "simple",
           "schema" : {
@@ -732,7 +732,7 @@
       "get" : {
         "tags" : [ "institution" ],
         "summary" : "Find institution by ID",
-        "description" : "Returns a single institution. If 'origin' param is filled, the ID to find is treated as 'originId' ($ref: '#/components/schemas/Institution'); otherwise is treated as 'id' ($ref: '#/components/schemas/Institution') ",
+        "description" : "Returns a single institution. If 'origin' param is filled, the ID to find is treated as 'originId' ($ref: '#/components/schemas/Institution'); otherwise is treated as 'id' ($ref: '#/components/schemas/Institution')",
         "operationId" : "findInstitutionUsingGET",
         "parameters" : [ {
           "name" : "id",
@@ -1224,7 +1224,7 @@
         "parameters" : [ {
           "name" : "taxCode",
           "in" : "path",
-          "description" : "swagger.api.info-camere-pdnd.institutions.taxCode}",
+          "description" : "Institution fiscal code",
           "required" : true,
           "style" : "simple",
           "schema" : {
@@ -1297,7 +1297,7 @@
         "parameters" : [ {
           "name" : "description",
           "in" : "query",
-          "description" : "swagger.api.info-camere-pdnd.institutions.description}",
+          "description" : "Institution description",
           "required" : true,
           "style" : "form",
           "schema" : {
@@ -1898,7 +1898,7 @@
         "properties" : {
           "code" : {
             "type" : "string",
-            "description" : "Geographic taxonomy unique identifier "
+            "description" : "Geographic taxonomy unique identifier"
           },
           "country" : {
             "type" : "string",

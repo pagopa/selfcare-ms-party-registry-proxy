@@ -9,7 +9,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistrie
 import it.pagopa.selfcare.party.registry_proxy.core.PDNDNationalRegistriesService;
 import it.pagopa.selfcare.party.registry_proxy.web.config.WebTestConfig;
 import it.pagopa.selfcare.party.registry_proxy.web.model.PDNDBusinessResource;
-import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.PDNDBusinessMapper;
+import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.PDNDInfoCamereBusinessMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -33,7 +33,7 @@ class PDNDInfoCamereControllerTest {
     @MockBean
     private PDNDNationalRegistriesService pdndNationalRegistriesService;
     @MockBean
-    private PDNDBusinessMapper pdndBusinessMapper;
+    private PDNDInfoCamereBusinessMapper pdndBusinessMapper;
 
 
 
