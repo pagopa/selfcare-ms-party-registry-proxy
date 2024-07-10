@@ -116,6 +116,10 @@ app_settings = [
   {
     name  = "LUCENE_INDEX_IVASS_FOLDER"
     value = "index/ivass"
+  },
+  {
+    name  = "PDND_BASE_URL"
+    value = "https://auth.uat.interop.pagopa.it"
   }
 ]
 
