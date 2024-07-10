@@ -1,8 +1,9 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ServiceUnavailableException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDNationalRegistriesRestClient;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDInfoCamereRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDImpresa;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.mapper.PDNDBusinessMapper;
 import org.junit.jupiter.api.Assertions;
@@ -21,11 +22,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-class PDNDNationalRegistriesConnectorImplTest {
+class PDNDInfoCamereConnectorImplTest {
     @InjectMocks
-    private PDNDNationalRegistriesConnectorImpl pdndNationalRegistriesConnector;
+    private PDNDInfoCamereConnectorImpl pdndInfoCamereConnector;
     @Mock
-    private PDNDNationalRegistriesRestClient pdndNationalRegistriesRestClient;
+    private PDNDInfoCamereRestClient pdndInfoCamereRestClient;
     @Mock
     private PDNDBusinessMapper pdndBusinessMapper;
 
@@ -40,11 +41,11 @@ class PDNDNationalRegistriesConnectorImplTest {
         List<PDNDImpresa> pdndImpresaList = new ArrayList<>();
         pdndImpresaList.add(dummyPDNDImpresa());
 
-        when(pdndNationalRegistriesRestClient.retrieveInstitutionsPdndByDescription(anyString())).thenReturn(pdndImpresaList);
-        when(pdndBusinessMapper.toPDNDBusiness(pdndImpresaList)).thenReturn(pdndBusinesses);
+        when(pdndInfoCamereRestClient.retrieveInstitutionsPdndByDescription(anyString())).thenReturn(pdndImpresaList);
+        when(pdndBusinessMapper.toPDNDBusinesses(pdndImpresaList)).thenReturn(pdndBusinesses);
 
         //when
-        pdndBusinesses = pdndNationalRegistriesConnector.retrieveInstitutionsPdndByDescription(description);
+        pdndBusinesses = pdndInfoCamereConnector.retrieveInstitutionsPdndByDescription(description);
 
         //then
         assertNotNull(pdndBusinesses);
@@ -64,9 +65,9 @@ class PDNDNationalRegistriesConnectorImplTest {
         assertEquals(dummyPDNDImpresa().getCounty(), pdndBusiness.getCounty());
         assertEquals(dummyPDNDImpresa().getZipCode(), pdndBusiness.getZipCode());
 
-        verify(pdndNationalRegistriesRestClient, times(1))
+        verify(pdndInfoCamereRestClient, times(1))
                 .retrieveInstitutionsPdndByDescription(anyString());
-        verifyNoMoreInteractions(pdndNationalRegistriesRestClient);
+        verifyNoMoreInteractions(pdndInfoCamereRestClient);
 
     }
 
@@ -78,22 +79,86 @@ class PDNDNationalRegistriesConnectorImplTest {
         List<PDNDImpresa> pdndImpresaList = new ArrayList<>();
         pdndImpresaList.add(dummyPDNDImpresa());
 
-        when(pdndNationalRegistriesRestClient.retrieveInstitutionsPdndByDescription(anyString())).thenReturn(pdndImpresaList);
+        when(pdndInfoCamereRestClient.retrieveInstitutionsPdndByDescription(anyString())).thenReturn(pdndImpresaList);
 
         //when
-        Executable executable = () -> pdndNationalRegistriesConnector.retrieveInstitutionsPdndByDescription(description);
+        Executable executable = () -> pdndInfoCamereConnector.retrieveInstitutionsPdndByDescription(description);
 
         //then
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
         assertEquals("Description is required", e.getMessage());
-        Mockito.verifyNoInteractions(pdndNationalRegistriesRestClient);
+        Mockito.verifyNoInteractions(pdndInfoCamereRestClient);
 
     }
 
     @Test
     void fallbackGetExtByDescriptionTest(){
-        List<PDNDBusiness> list = pdndNationalRegistriesConnector.fallbackRetrieveInstitutionByDescription(new ServiceUnavailableException());
+        List<PDNDBusiness> list = pdndInfoCamereConnector.fallbackRetrieveInstitutionByDescription(new ServiceUnavailableException());
         Assertions.assertTrue(list.isEmpty());
+    }
+
+    @Test
+    void testRetrieveInstitutionByTaxCode() {
+
+        //given
+        String taxCode = "taxCode";
+        PDNDBusiness pdndBusiness = dummyPDNDBusiness();
+        List<PDNDImpresa> pdndImpresaList = new ArrayList<>();
+        pdndImpresaList.add(dummyPDNDImpresa());
+
+        when(pdndInfoCamereRestClient.retrieveInstitutionPdndByTaxCode(anyString())).thenReturn(pdndImpresaList);
+        when(pdndBusinessMapper.toPDNDBusiness(dummyPDNDImpresa())).thenReturn(pdndBusiness);
+
+        //when
+        pdndBusiness = pdndInfoCamereConnector.retrieveInstitutionPdndByTaxCode(taxCode);
+
+        //then
+        assertNotNull(pdndBusiness);
+        assertNotNull(pdndBusiness.getClass());
+        assertEquals(1, pdndImpresaList.size());
+        PDNDImpresa pdndImpresa = pdndImpresaList.iterator().next();
+        assertEquals(pdndImpresa.getBusinessTaxId(), pdndBusiness.getBusinessTaxId());
+        assertEquals(pdndImpresa.getBusinessName(), pdndBusiness.getBusinessName());
+        assertEquals(pdndImpresa.getBusinessStatus(), pdndBusiness.getBusinessStatus());
+        assertEquals(pdndImpresa.getLegalNature(), pdndBusiness.getLegalNature());
+        assertEquals(pdndImpresa.getLegalNatureDescription(), pdndBusiness.getLegalNatureDescription());
+        assertEquals(pdndImpresa.getAddress(), pdndBusiness.getAddress());
+        assertEquals(pdndImpresa.getDigitalAddress(), pdndBusiness.getDigitalAddress());
+        assertEquals(pdndImpresa.getNRea(), pdndBusiness.getNRea());
+        assertEquals(pdndImpresa.getCciaa(), pdndBusiness.getCciaa());
+        assertEquals(pdndImpresa.getCity(), pdndBusiness.getCity());
+        assertEquals(pdndImpresa.getCounty(), pdndBusiness.getCounty());
+        assertEquals(pdndImpresa.getZipCode(), pdndBusiness.getZipCode());
+
+        verify(pdndInfoCamereRestClient, times(1))
+                .retrieveInstitutionPdndByTaxCode(anyString());
+        verifyNoMoreInteractions(pdndInfoCamereRestClient);
+
+    }
+
+    @Test
+    void testRetrieveInstitutionByTaxCode_nullTaxCode() {
+
+        //given
+        String taxCode = null;
+        List<PDNDImpresa> pdndImpresaList = new ArrayList<>();
+        pdndImpresaList.add(dummyPDNDImpresa());
+
+        when(pdndInfoCamereRestClient.retrieveInstitutionPdndByTaxCode(anyString())).thenReturn(pdndImpresaList);
+
+        //when
+        Executable executable = () -> pdndInfoCamereConnector.retrieveInstitutionPdndByTaxCode(taxCode);
+
+        //then
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
+        assertEquals("TaxCode is required", e.getMessage());
+        Mockito.verifyNoInteractions(pdndInfoCamereRestClient);
+
+    }
+
+    @Test
+    void fallbackGetExtByTaxCodeTest(){
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> pdndInfoCamereConnector.fallbackRetrieveInstitutionByTaxCode(new ServiceUnavailableException()));
     }
 
     private PDNDBusiness dummyPDNDBusiness(){

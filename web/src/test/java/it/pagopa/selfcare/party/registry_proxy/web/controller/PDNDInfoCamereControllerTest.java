@@ -6,10 +6,10 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
-import it.pagopa.selfcare.party.registry_proxy.core.PDNDNationalRegistriesService;
+import it.pagopa.selfcare.party.registry_proxy.core.PDNDInfoCamereService;
 import it.pagopa.selfcare.party.registry_proxy.web.config.WebTestConfig;
 import it.pagopa.selfcare.party.registry_proxy.web.model.PDNDBusinessResource;
-import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.PDNDBusinessMapper;
+import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.PDNDInfoCamereBusinessMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -31,9 +31,9 @@ class PDNDInfoCamereControllerTest {
     @Autowired
     protected MockMvc mvc;
     @MockBean
-    private PDNDNationalRegistriesService pdndNationalRegistriesService;
+    private PDNDInfoCamereService pdndInfoCamereService;
     @MockBean
-    private PDNDBusinessMapper pdndBusinessMapper;
+    private PDNDInfoCamereBusinessMapper pdndBusinessMapper;
 
 
 
@@ -46,7 +46,7 @@ class PDNDInfoCamereControllerTest {
         List<PDNDBusinessResource> pdndBusinessResources = new ArrayList<>();
         pdndBusinessResources.add(dummyPDNDBusinessResource());
 
-        when(pdndNationalRegistriesService.retrieveInstitutionsPdndByDescription(anyString())).thenReturn(pdndBusinesses);
+        when(pdndInfoCamereService.retrieveInstitutionsPdndByDescription(anyString())).thenReturn(pdndBusinesses);
         when(pdndBusinessMapper.toResources(pdndBusinesses)).thenReturn(pdndBusinessResources);
 
         mvc.perform(MockMvcRequestBuilders
@@ -68,10 +68,42 @@ class PDNDInfoCamereControllerTest {
                 .andExpect(jsonPath("$[0].digitalAddress", is("digitalAddress")))
                 .andReturn();
 
-        // Verifica che i servizi siano stati chiamati correttamente
-        verify(pdndNationalRegistriesService, times(1)).retrieveInstitutionsPdndByDescription(anyString());
+        verify(pdndInfoCamereService, times(1)).retrieveInstitutionsPdndByDescription(anyString());
         verify(pdndBusinessMapper, times(1)).toResources(pdndBusinesses);
-        verifyNoMoreInteractions(pdndNationalRegistriesService);
+        verifyNoMoreInteractions(pdndInfoCamereService);
+        verifyNoMoreInteractions(pdndBusinessMapper);
+    }
+
+    @Test
+    void testInstitutionByTaxCode() throws Exception {
+        String taxCode = "taxCode";
+        PDNDBusiness pdndBusiness = dummyPDNDBusiness();
+        PDNDBusinessResource pdndBusinessResource = dummyPDNDBusinessResource();
+
+        when(pdndInfoCamereService.retrieveInstitutionPdndByTaxCode(anyString())).thenReturn(pdndBusiness);
+        when(pdndBusinessMapper.toResource(pdndBusiness)).thenReturn(pdndBusinessResource);
+
+        mvc.perform(MockMvcRequestBuilders
+                        .get(BASE_URL + "/institution/{taxCode}", taxCode)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.businessTaxId", is("taxId")))
+                .andExpect(jsonPath("$.businessName", is("description")))
+                .andExpect(jsonPath("$.legalNature", is("legalNature")))
+                .andExpect(jsonPath("$.legalNatureDescription", is("legalNatureDescription")))
+                .andExpect(jsonPath("$.cciaa", is("cciaa")))
+                .andExpect(jsonPath("$.nRea", is("nRea")))
+                .andExpect(jsonPath("$.businessStatus", is("status")))
+                .andExpect(jsonPath("$.city", is("city")))
+                .andExpect(jsonPath("$.county", is("county")))
+                .andExpect(jsonPath("$.zipCode", is("zipCode")))
+                .andExpect(jsonPath("$.address", is("address")))
+                .andExpect(jsonPath("$.digitalAddress", is("digitalAddress")))
+                .andReturn();
+
+        verify(pdndInfoCamereService, times(1)).retrieveInstitutionPdndByTaxCode(anyString());
+        verify(pdndBusinessMapper, times(1)).toResource(pdndBusiness);
+        verifyNoMoreInteractions(pdndInfoCamereService);
         verifyNoMoreInteractions(pdndBusinessMapper);
     }
 

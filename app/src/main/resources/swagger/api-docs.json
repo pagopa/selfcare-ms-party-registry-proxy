@@ -500,7 +500,7 @@
         "parameters" : [ {
           "name" : "geotaxId",
           "in" : "path",
-          "description" : "Geographic taxonomy unique identifier ",
+          "description" : "Geographic taxonomy unique identifier",
           "required" : true,
           "style" : "simple",
           "schema" : {
@@ -732,7 +732,7 @@
       "get" : {
         "tags" : [ "institution" ],
         "summary" : "Find institution by ID",
-        "description" : "Returns a single institution. If 'origin' param is filled, the ID to find is treated as 'originId' ($ref: '#/components/schemas/Institution'); otherwise is treated as 'id' ($ref: '#/components/schemas/Institution') ",
+        "description" : "Returns a single institution. If 'origin' param is filled, the ID to find is treated as 'originId' ($ref: '#/components/schemas/Institution'); otherwise is treated as 'id' ($ref: '#/components/schemas/Institution')",
         "operationId" : "findInstitutionUsingGET",
         "parameters" : [ {
           "name" : "id",
@@ -1215,6 +1215,79 @@
         } ]
       }
     },
+    "/infocamere-pdnd/institution/{taxCode}" : {
+      "get" : {
+        "tags" : [ "infocamere PDND" ],
+        "summary" : "Get institution by institution taxCode",
+        "description" : "Get the company represented by taxCode of the institution passed as a parameter",
+        "operationId" : "institutionPdndByTaxCodeUsingGET",
+        "parameters" : [ {
+          "name" : "taxCode",
+          "in" : "path",
+          "description" : "Institution fiscal code",
+          "required" : true,
+          "style" : "simple",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PDNDBusinessResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
     "/infocamere-pdnd/institutions" : {
       "get" : {
         "tags" : [ "infocamere PDND" ],
@@ -1224,7 +1297,7 @@
         "parameters" : [ {
           "name" : "description",
           "in" : "query",
-          "description" : "swagger.api.info-camere-pdnd.institutions.description}",
+          "description" : "Institution description",
           "required" : true,
           "style" : "form",
           "schema" : {
@@ -1825,7 +1898,7 @@
         "properties" : {
           "code" : {
             "type" : "string",
-            "description" : "Geographic taxonomy unique identifier "
+            "description" : "Geographic taxonomy unique identifier"
           },
           "country" : {
             "type" : "string",

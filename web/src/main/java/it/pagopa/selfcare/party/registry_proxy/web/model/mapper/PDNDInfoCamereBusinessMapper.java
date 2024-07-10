@@ -7,8 +7,10 @@ import org.mapstruct.Mapper;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface PDNDBusinessMapper {
+public interface PDNDInfoCamereBusinessMapper {
 
     List<PDNDBusinessResource> toResources(List<PDNDBusiness> pdndBusiness);
+
+    PDNDBusinessResource toResource(PDNDBusiness pdndBusiness);
 
 }
