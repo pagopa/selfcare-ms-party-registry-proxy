@@ -179,62 +179,6 @@
           }
         }
       },
-      "EServiceDescriptorState": {
-        "type": "string",
-        "description": "EService State",
-        "enum": [
-          "DRAFT",
-          "PUBLISHED",
-          "DEPRECATED",
-          "SUSPENDED",
-          "ARCHIVED"
-        ]
-      },
-      "PurposeState": {
-        "type": "string",
-        "description": "Purpose State",
-        "enum": [
-          "ACTIVE",
-          "DRAFT",
-          "SUSPENDED",
-          "WAITING_FOR_APPROVAL",
-          "ARCHIVED"
-        ]
-      },
-      "AttributeKind": {
-        "type": "string",
-        "enum": [
-          "CERTIFIED",
-          "DECLARED",
-          "VERIFIED"
-        ]
-      },
-      "AttributeValidity": {
-        "type": "string",
-        "enum": [
-          "VALID",
-          "INVALID"
-        ]
-      },
-      "AttributeValidityState": {
-        "type": "object",
-        "additionalProperties": false,
-        "title": "AttributeValidityState",
-        "description": "represents the validity of a specified attribute",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "validity": {
-            "$ref": "#/components/schemas/AttributeValidity"
-          }
-        },
-        "required": [
-          "id",
-          "validity"
-        ]
-      },
       "Problem": {
         "properties": {
           "type": {
