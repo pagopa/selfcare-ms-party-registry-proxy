@@ -1,6 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.service;
 
-import org.bouncycastle.openssl.PEMException;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.InternalException;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -26,7 +26,7 @@ class KeyGeneratorTest {
     @Test
     void getPrivateKeyError() {
         privateKey = "testtesttesttesttesttesttesttesttest";
-        assertThrows(PEMException.class, () -> KeyGenerator.getPrivateKey(privateKey));
+        assertThrows(InternalException.class, () -> KeyGenerator.getPrivateKey(privateKey));
     }
 
     @Test

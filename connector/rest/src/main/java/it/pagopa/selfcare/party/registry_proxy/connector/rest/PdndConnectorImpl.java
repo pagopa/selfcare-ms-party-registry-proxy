@@ -21,7 +21,7 @@ public class PdndConnectorImpl {
 
     @Cacheable(value = PDND_TOKEN_CACHE, key = "#clientId", cacheManager = PDND_TOKEN_CACHE)
     public PdndClientCredentialsResponse createToken(String clientAssertion, String clientAssertionType, String grantType, String clientId) {
-        log.debug(LogUtils.CONFIDENTIAL_MARKER, "clientAssertion = {}, clientAssertionType = {}, grantType = {}, clientId = {}", clientAssertion, clientAssertionType, grantType, clientId);
+        log.debug(LogUtils.CONFIDENTIAL_MARKER, " clientAssertionType = {}, grantType = {}, clientId = {}", clientAssertionType, grantType, clientId);
         ResponseEntity<PdndClientCredentialsResponse> result = pdndRestClient._createToken(clientAssertion, clientAssertionType, grantType, clientId);
         log.debug(LogUtils.CONFIDENTIAL_MARKER, "PdndClientCredentialsResponse result = {}", result.getBody());
         return result.getBody();

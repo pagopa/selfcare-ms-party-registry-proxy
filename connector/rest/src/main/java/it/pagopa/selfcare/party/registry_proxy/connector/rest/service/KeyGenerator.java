@@ -1,5 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.service;
 
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.InternalException;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMKeyPair;
@@ -21,12 +22,17 @@ import java.security.spec.X509EncodedKeySpec;
 @Slf4j
 public class KeyGenerator {
     private KeyGenerator() {}
-    public static RSAPrivateKey getPrivateKey(String privateKey) throws IOException {
+    public static RSAPrivateKey getPrivateKey(String privateKey) {
         PEMParser pemParser = new PEMParser(new StringReader(privateKey));
         Security.addProvider(new BouncyCastleProvider());
         JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider("BC");
-        Object object = pemParser.readObject();
-        return (RSAPrivateKey) converter.getKeyPair((PEMKeyPair) object).getPrivate();
+        Object object;
+        try {
+            object = pemParser.readObject();
+            return (RSAPrivateKey) converter.getKeyPair((PEMKeyPair) object).getPrivate();
+        } catch (IOException e) {
+            throw new InternalException(e);
+        }
     }
 
     public static RSAPublicKey getPublicKey(String key) throws NoSuchAlgorithmException, InvalidKeySpecException {
