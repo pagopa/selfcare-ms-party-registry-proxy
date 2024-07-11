@@ -4,10 +4,10 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.InternalException;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.JwtConfig;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.interfaces.RSAPublicKey;
@@ -15,13 +15,13 @@ import java.security.interfaces.RSAPublicKey;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AssertionGeneratorTest {
-    private AssertionGenerator assertionGenerator = new AssertionGenerator();
+    private final AssertionGenerator assertionGenerator = new AssertionGenerator();
     private String privateKey;
-    private String publicKey;
+
     @Test
     void generateClientAssertionSuccess() throws Exception {
         privateKey = new String(Files.readAllBytes(Paths.get("src/test/resources/private_key.txt")));
-        publicKey = new String(Files.readAllBytes(Paths.get("src/test/resources/public_key.txt")));
+        String publicKey = new String(Files.readAllBytes(Paths.get("src/test/resources/public_key.txt")));
         JwtConfig jwtConfig = new JwtConfig();
         jwtConfig.setIssuer("Issuer");
         jwtConfig.setSubject("Subject");
@@ -54,6 +54,6 @@ class AssertionGeneratorTest {
         jwtConfig.setAudience("Audience");
         jwtConfig.setKid("Kid");
         jwtConfig.setPurposeId("PurposeId");
-        assertThrows(IOException.class, () -> assertionGenerator.generateClientAssertion(jwtConfig, privateKey));
+        assertThrows(InternalException.class, () -> assertionGenerator.generateClientAssertion(jwtConfig, privateKey));
     }
 }
