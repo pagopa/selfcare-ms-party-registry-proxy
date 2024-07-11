@@ -82,6 +82,10 @@ app_settings = [
   {
     name  = "NATIONAL_REGISTRIES_URL"
     value = "https://api-selcpg.dev.notifichedigitali.it/national-registries-private"
+  },
+  {
+    name  = "PDND_BASE_URL"
+    value = "https://auth.interop.pagopa.it"
   }
 ]
 
