@@ -11,6 +11,9 @@ import java.util.List;
 public interface PDNDBusinessMapper {
 
     @Mapping(source = "getAddress", target = "address")
+    @Mapping(source = "city", target = "businessAddress.city")
+    @Mapping(source = "county", target = "businessAddress.county")
+    @Mapping(source = "zipCode", target = "businessAddress.zipCode")
     List<PDNDBusiness> toPDNDBusinesses(List<PDNDImpresa> pdndImpresaList);
 
     PDNDBusiness toPDNDBusiness(PDNDImpresa pdndImpresa);

@@ -94,6 +94,10 @@ app_settings = [
   {
     name  = "PDND_BASE_URL"
     value = "https://auth.interop.pagopa.it"
+  },
+  {
+    name  = "PDND_INFOCAMERE_AUDIENCE"
+    value = "auth.interop.pagopa.it/client-assertion"
   }
 ]
 
@@ -102,4 +106,8 @@ secrets_names = {
   "NATIONAL_REGISTRY_API_KEY"             = "national-registry-api-key"
   "APPLICATIONINSIGHTS_CONNECTION_STRING" = "appinsights-connection-string"
   "JWT_TOKEN_PUBLIC_KEY"                  = "jwt-public-key"
+  "PDND_INFOCAMERE_PRIVATE_KEY"           = "infocamere-interop-certificate-client-private-key"
+  "PDND_INFOCAMERE_CLIENT_ID"             = "infocamere-interop-client-id"
+  "PDND_INFOCAMERE_KID"                   = "infocamere-interop-kid"
+  "PDND_INFOCAMERE_PURPOSE_ID"            = "infocamere-interop-purpose-id"
 }

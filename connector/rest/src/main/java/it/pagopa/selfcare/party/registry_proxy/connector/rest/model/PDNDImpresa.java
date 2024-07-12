@@ -1,77 +1,46 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
 
 @Data
-@XmlRootElement(name = "Impresa", namespace = "http://it.registroimprese.pcad.ws")
-@XmlType(propOrder = {
-        "businessTaxId",
-        "businessName",
-        "legalNature",
-        "legalNatureDescription",
-        "cciaa",
-        "nRea",
-        "businessStatus",
-        "provinciaSede",
-        "comuneSede",
-        "toponimoSede",
-        "viaSede",
-        "ncivicoSede",
-        "capSede",
-        "digitalAddress"
-})
 public class PDNDImpresa {
+    @JsonProperty("ProgressivoImpresa")
+    private long progressivoImpresa;
 
-    @XmlElement(name = "CodiceFiscale")
+    @JsonProperty("CodiceFiscale")
     private String businessTaxId;
 
-    @XmlElement(name = "Denominazione")
+    @JsonProperty("Denominazione")
     private String businessName;
 
-    @XmlElement(name = "NaturaGiuridica")
+    @JsonProperty("NaturaGiuridica")
     private String legalNature;
 
-    @XmlElement(name = "DescNaturaGiuridica")
+    @JsonProperty("DescNaturaGiuridica")
     private String legalNatureDescription;
 
-    @XmlElement(name = "Cciaa")
+    @JsonProperty("Cciaa")
     private String cciaa;
 
-    @XmlElement(name = "NRea")
+    @JsonProperty("NRea")
     private String nRea;
 
-    @XmlElement(name = "StatoImpresa")
+    @JsonProperty("StatoImpresa")
     private String businessStatus;
 
-    @XmlElement(name = "ComuneSede")
-    private String city;
+    @JsonProperty("IndirizzoSedeLegale")
+    private PDNDSedeImpresa businessAddress;
 
-    @XmlElement(name = "ProvinciaSede")
-    private String county;
-
-    @XmlElement(name = "CapSede")
-    private String zipCode;
-
-    @XmlElement(name = "PEC")
+    @JsonProperty("PEC")
     private String digitalAddress;
 
-    @XmlElement(name = "ToponimoSede")
-    private String toponimoSede;
-
-    @XmlElement(name = "ViaSede")
-    private String viaSede;
-
-    @XmlElement(name = "NcivicoSede")
-    private String ncivicoSede;
 
     @XmlTransient
     public String getAddress() {
-        return toponimoSede + " " + viaSede + " " + ncivicoSede;
+        return businessAddress.getToponimoSede() + " " + businessAddress.getViaSede() + " " + businessAddress.getNcivicoSede();
     }
 
 }
