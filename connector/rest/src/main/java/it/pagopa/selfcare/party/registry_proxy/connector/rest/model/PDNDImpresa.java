@@ -3,10 +3,9 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 @Data
 public class PDNDImpresa {
+
     @JsonProperty("ProgressivoImpresa")
     private long progressivoImpresa;
 
@@ -38,7 +37,6 @@ public class PDNDImpresa {
     private String digitalAddress;
 
 
-    @XmlTransient
     public String getAddress() {
         return businessAddress.getToponimoSede() + " " + businessAddress.getViaSede() + " " + businessAddress.getNcivicoSede();
     }

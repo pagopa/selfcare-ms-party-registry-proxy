@@ -10,12 +10,11 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface PDNDBusinessMapper {
 
-    @Mapping(source = "getAddress", target = "address")
-    @Mapping(source = "city", target = "businessAddress.city")
-    @Mapping(source = "county", target = "businessAddress.county")
-    @Mapping(source = "zipCode", target = "businessAddress.zipCode")
     List<PDNDBusiness> toPDNDBusinesses(List<PDNDImpresa> pdndImpresaList);
 
+    @Mapping(target = "city", source = "businessAddress.city")
+    @Mapping(target = "county", source = "businessAddress.county")
+    @Mapping(target = "zipCode", source = "businessAddress.zipCode")
     PDNDBusiness toPDNDBusiness(PDNDImpresa pdndImpresa);
 
 }

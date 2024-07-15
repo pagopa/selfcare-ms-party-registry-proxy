@@ -34,7 +34,7 @@ public class PDNDInfoCamereController {
             notes = "${swagger.api.infocamere-pdnd.institutions.notes}")
     @GetMapping("/institutions")
     public ResponseEntity<List<PDNDBusinessResource>> institutionsPdndByDescription(@ApiParam("${swagger.model.institution.description}")
-                                                                                        @RequestParam String description) {
+                                                                                    @RequestParam String description) {
         List<PDNDBusiness> businessList = pdndInfoCamereService.retrieveInstitutionsPdndByDescription(description);
         return ResponseEntity.ok().body(pdndBusinessMapper.toResources(businessList));
     }
@@ -44,7 +44,7 @@ public class PDNDInfoCamereController {
             notes = "${swagger.api.infocamere-pdnd.institution.notes}")
     @GetMapping("/institution/{taxCode}")
     public ResponseEntity<PDNDBusinessResource> institutionPdndByTaxCode(@ApiParam("${swagger.model.institution.taxCode}")
-                                                                                    @PathVariable String taxCode) {
+                                                                         @PathVariable String taxCode) {
         PDNDBusiness business = pdndInfoCamereService.retrieveInstitutionPdndByTaxCode(taxCode);
         return ResponseEntity.ok().body(pdndBusinessMapper.toResource(business));
     }
