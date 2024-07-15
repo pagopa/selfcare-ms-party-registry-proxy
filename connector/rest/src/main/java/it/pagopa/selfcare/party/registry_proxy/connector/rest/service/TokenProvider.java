@@ -1,8 +1,8 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.service;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.PdndConnectorImpl;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PdndSecretValue;
-import it.pagopa.selfcare.party.user_registry.generated.openapi.v1.dto.PdndClientCredentialsResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class TokenProvider {
         this.pdndClient = pdndClient;
     }
 
-    public PdndClientCredentialsResponse getTokenPdnd(PdndSecretValue pdndSecretValue) {
+    public ClientCredentialsResponse getTokenPdnd(PdndSecretValue pdndSecretValue) {
         log.info("START - TokenProvider.getTokenPdnd");
         String clientAssertion = assertionGenerator.generateClientAssertion(pdndSecretValue.getJwtConfig(), pdndSecretValue.getSecretKey());
         return pdndClient.createToken(clientAssertion, clientAssertionType, grantType, pdndSecretValue.getClientId());

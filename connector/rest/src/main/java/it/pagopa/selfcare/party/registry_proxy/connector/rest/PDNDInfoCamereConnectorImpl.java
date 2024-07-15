@@ -6,8 +6,11 @@ import it.pagopa.selfcare.party.registry_proxy.connector.api.PDNDInfoCamereConne
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDInfoCamereRestClient;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.*;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDInfoCamereRestClientConfig;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDImpresa;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.mapper.PDNDBusinessMapper;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -21,10 +24,14 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
 
     private final PDNDInfoCamereRestClient pdndInfoCamereRestClient;
     private final PDNDBusinessMapper pdndBusinessMapper;
+    private final TokenProvider tokenProvider;
+    private final PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig;
 
-    public PDNDInfoCamereConnectorImpl(PDNDInfoCamereRestClient pdndInfoCamereRestClient, PDNDBusinessMapper pdndBusinessMapper) {
+    public PDNDInfoCamereConnectorImpl(PDNDInfoCamereRestClient pdndInfoCamereRestClient, PDNDBusinessMapper pdndBusinessMapper, TokenProvider tokenProvider, PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig) {
         this.pdndInfoCamereRestClient = pdndInfoCamereRestClient;
         this.pdndBusinessMapper = pdndBusinessMapper;
+        this.tokenProvider = tokenProvider;
+        this.pdndInfoCamereRestClientConfig = pdndInfoCamereRestClientConfig;
     }
 
     @Override
@@ -32,7 +39,9 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
     @Retry(name = "retryServiceUnavailable")
     public List<PDNDBusiness> retrieveInstitutionsPdndByDescription(String description) {
         Assert.hasText(description, "Description is required");
-        List<PDNDImpresa> result = pdndInfoCamereRestClient.retrieveInstitutionsPdndByDescription(description);
+        ClientCredentialsResponse tokenResponse = tokenProvider.getTokenPdnd(pdndInfoCamereRestClientConfig.getPdndSecretValue());
+        String bearer = "Bearer " + tokenResponse.getAccessToken();
+        List<PDNDImpresa> result = pdndInfoCamereRestClient.retrieveInstitutionsPdndByDescription(description, bearer);
         return pdndBusinessMapper.toPDNDBusinesses(result);
     }
 
@@ -46,12 +55,14 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
     @Retry(name = "retryServiceUnavailable")
     public PDNDBusiness retrieveInstitutionPdndByTaxCode(String taxCode) {
         Assert.hasText(taxCode, "TaxCode is required");
-        PDNDImpresa result = pdndInfoCamereRestClient.retrieveInstitutionPdndByTaxCode(taxCode).get(0);
+        ClientCredentialsResponse tokenResponse = tokenProvider.getTokenPdnd(pdndInfoCamereRestClientConfig.getPdndSecretValue());
+        String bearer = "Bearer " + tokenResponse.getAccessToken();
+        PDNDImpresa result = pdndInfoCamereRestClient.retrieveInstitutionPdndByTaxCode(taxCode, bearer).get(0);
         return pdndBusinessMapper.toPDNDBusiness(result);
     }
 
     public PDNDBusiness fallbackRetrieveInstitutionByTaxCode(RuntimeException e) {
-        log.error(String.format(ERROR_PDND_INFO_CAMERE_REST_CLIENT_MESSAGE, e.getMessage()));
+        log.error(String.format(ERROR_PDND_INFO_CAMERE_REST_CLIENT_MESSAGE, e.getMessage()), e);
         throw new ResourceNotFoundException("");
     }
 

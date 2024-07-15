@@ -17,18 +17,21 @@ import static org.junit.jupiter.api.Assertions.*;
 class AssertionGeneratorTest {
     private final AssertionGenerator assertionGenerator = new AssertionGenerator();
     private String privateKey;
+    private final JwtConfig jwtConfig = JwtConfig.builder()
+            .issuer("Issuer")
+            .subject("Subject")
+            .audience("Audience")
+            .kid("Kid")
+            .purposeId("PurposeId")
+            .build();
 
     @Test
     void generateClientAssertionSuccess() throws Exception {
         privateKey = new String(Files.readAllBytes(Paths.get("src/test/resources/private_key.txt")));
         String publicKey = new String(Files.readAllBytes(Paths.get("src/test/resources/public_key.txt")));
-        JwtConfig jwtConfig = new JwtConfig();
-        jwtConfig.setIssuer("Issuer");
-        jwtConfig.setSubject("Subject");
-        jwtConfig.setAudience("Audience");
-        jwtConfig.setKid("Kid");
-        jwtConfig.setPurposeId("PurposeId");
+
         String jwt = assertionGenerator.generateClientAssertion(jwtConfig, privateKey);
+
         DecodedJWT decodecJwt = JWT.decode(jwt);
         assertEquals("RS256", decodecJwt.getAlgorithm());
         assertEquals("Issuer", decodecJwt.getIssuer());
@@ -48,12 +51,6 @@ class AssertionGeneratorTest {
     @Test
     void generateClientAssertionError() {
         privateKey = "testtesttesttesttesttesttesttesttest";
-        JwtConfig jwtConfig = new JwtConfig();
-        jwtConfig.setIssuer("Issuer");
-        jwtConfig.setSubject("Subject");
-        jwtConfig.setAudience("Audience");
-        jwtConfig.setKid("Kid");
-        jwtConfig.setPurposeId("PurposeId");
         assertThrows(InternalException.class, () -> assertionGenerator.generateClientAssertion(jwtConfig, privateKey));
     }
 }
