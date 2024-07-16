@@ -39,6 +39,10 @@
       "description": "Info Camere Controller"
     },
     {
+      "name": "infocamere PDND",
+      "description": "PDND Info Camere Controller"
+    },
+    {
       "name": "institution",
       "description": "Institution operations"
     },
@@ -60,6 +64,87 @@
     }
   ],
   "paths": {
+    "/infocamere-pdnd/institution/{taxCode}": {
+      "get": {
+        "tags": [
+          "infocamere PDND"
+        ],
+        "summary": "Get institution by institution taxCode",
+        "description": "Get the company represented by taxCode of the institution passed as a parameter",
+        "operationId": "institutionPdndByTaxCodeUsingGET",
+        "parameters": [
+          {
+            "name": "taxCode",
+            "in": "path",
+            "description": "Institution fiscal code",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PDNDBusinessResource"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": [
+              "global"
+            ]
+          }
+        ]
+      }
+    },
     "/aoo": {
       "get": {
         "tags": [
@@ -1866,6 +1951,48 @@
             "items": {
               "$ref": "#/components/schemas/UOResource"
             }
+          }
+        }
+      },
+      "PDNDBusinessResource": {
+        "title": "PDNDBusinessResource",
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string"
+          },
+          "businessName": {
+            "type": "string"
+          },
+          "businessStatus": {
+            "type": "string"
+          },
+          "businessTaxId": {
+            "type": "string"
+          },
+          "cciaa": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "county": {
+            "type": "string"
+          },
+          "digitalAddress": {
+            "type": "string"
+          },
+          "legalNature": {
+            "type": "string"
+          },
+          "legalNatureDescription": {
+            "type": "string"
+          },
+          "nrea": {
+            "type": "string"
+          },
+          "zipCode": {
+            "type": "string"
           }
         }
       }
