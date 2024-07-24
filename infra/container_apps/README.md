@@ -20,7 +20,7 @@ Deploy container on a Container App instance.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_apim_api_bff_proxy"></a> [apim\_api\_bff\_proxy](#module\_apim\_api\_bff\_proxy) | github.com/pagopa/terraform-azurerm-v3.git//api_management_api | v7.50.1 |
+| <a name="module_apim_api_bff_proxy"></a> [apim\_api\_bff\_proxy](#module\_apim\_api\_bff\_proxy) | github.com/pagopa/terraform-azurerm-v3.git//api_management_api | v8.18.0 |
 | <a name="module_container_app_party_reg_proxy"></a> [container\_app\_party\_reg\_proxy](#module\_container\_app\_party\_reg\_proxy) | github.com/pagopa/selfcare-commons//infra/terraform-modules/container_app_microservice | main |
 
 ## Resources
