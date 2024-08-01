@@ -9,6 +9,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.InsuranceCompany;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.ResourceResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -24,13 +25,16 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @PropertySource("classpath:config/ivass-config.properties")
+@ConditionalOnProperty(
+        value = "ivass.file.connector.type",
+        havingValue = "azure",
+        matchIfMissing = true)
 public class IvassDataConnectorImpl implements IvassDataConnector {
 
     private final FileStorageConnector fileStorageConnector;
     private final String sourceFilename;
     private final List<String> registryTypesAdmitted;
     private final List<String> workTypesAdmitted;
-
     public IvassDataConnectorImpl(@Value("${blobStorage.ivass.filename}") String ivassCsvFileName,
                                   @Value("#{'${ivass.registryTypes.admitted}'.split(',')}") List<String> registryTypes,
                                   @Value("#{'${ivass.workTypes.admitted}'.split(',')}") List<String> registryWorkTypes,
