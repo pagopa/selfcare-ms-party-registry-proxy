@@ -19,7 +19,8 @@ import java.util.Optional;
 @Slf4j
 @ConditionalOnProperty(
         value = "file.connector.type",
-        havingValue = "sftp")
+        havingValue = "sftp",
+        matchIfMissing = true)
 @PropertySource("classpath:config/ftp-config.properties")
 public class AnacDataFromFTPConnectorImpl implements AnacDataConnector {
 
