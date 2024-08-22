@@ -40,7 +40,7 @@ public class ANACServiceImpl implements ANACService {
         this.stationIndexWriterService = stationIndexWriterService;
     }
 
-    @Scheduled(cron = "0 0 0/6 * * *")
+    @Scheduled(cron = "0 0/10 * * * ?")
     void updateStationIndex() {
         log.trace("start update ANAC Stations index");
         List<Station> stations = getStations();
