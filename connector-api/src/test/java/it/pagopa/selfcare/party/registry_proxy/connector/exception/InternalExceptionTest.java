@@ -25,5 +25,20 @@ class InternalExceptionTest {
         assertNull(cause.getMessage());
         assertSame(suppressed, cause.getSuppressed());
     }
+
+    @Test
+    void constructorWithMessage() {
+        String message = "Error message";
+        InternalException exception = new InternalException(message);
+        assertEquals(message, exception.getMessage());
+        assertNull(exception.getCause());
+    }
+
+    @Test
+    void constructorWithMessage_nullMessage() {
+        InternalException exception = new InternalException((String) null);
+        assertNull(exception.getMessage());
+        assertNull(exception.getCause());
+    }
 }
 
