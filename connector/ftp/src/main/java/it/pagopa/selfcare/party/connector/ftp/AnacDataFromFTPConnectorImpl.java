@@ -49,11 +49,11 @@ public class AnacDataFromFTPConnectorImpl implements AnacDataConnector {
     @Override
     public Optional<ByteArrayInputStream> getANACData() {
         String fileName = createFileName();
-        log.trace("getANACData on filename: {} start", fileName);
+        log.trace("getANACDataFromFTP on filename: {} start", fileName);
         Optional<InputStream> optionalFile = ftpConnector.getFile(directory + fileName);
         return optionalFile.flatMap(inputStream -> {
             Optional<ByteArrayInputStream> opt = updateFileOnAzureStorageAndRetrieveInputStream(inputStream);
-            log.debug("getANACData on filename from ftp: {} end", fileName);
+            log.debug("getANACDataFromFTP on filename from ftp: {} end", fileName);
             return opt;
         });
 
@@ -61,13 +61,15 @@ public class AnacDataFromFTPConnectorImpl implements AnacDataConnector {
 
     private Optional<ByteArrayInputStream> updateFileOnAzureStorageAndRetrieveInputStream(InputStream inputStream){
         try {
+            log.info("START upload file on azure after download from FTP");
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             IOUtils.copy(inputStream, out);
             byte[] bytes = out.toByteArray();
             azureBlobClient.uploadFile(new ByteArrayInputStream(bytes), anacFileName);
+            log.info("END upload file on azure after download from FTP");
             return Optional.of(new ByteArrayInputStream(bytes));
         } catch (IOException e) {
-            log.error("Error during retrieving ANAC csv. Error: {}", e.getMessage(), e);
+            log.error("Error during retrieving ANAC csv from FTP. Error: {}", e.getMessage(), e);
             return Optional.empty();
         }
     }
