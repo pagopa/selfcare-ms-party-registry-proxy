@@ -22,7 +22,7 @@ class IvassRestClientTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        ivassRestClient = new IvassRestClient("http://example.com", restTemplate);
+        ivassRestClient = new IvassRestClient("http://example.com", "getInsurancesPath", restTemplate);
     }
 
     @Test

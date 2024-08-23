@@ -10,20 +10,22 @@ import org.springframework.web.client.RestTemplate;
 @Component
 @PropertySource("classpath:config/ivass-rest-config.properties")
 public class IvassRestClient {
-    public static final String GET_INSURANCES_PATH = "/RIGAInquiry-public/getAreaDownloadExport.do?referenceDate=&product=VFLUSSO_IMPRESE&language=IT&exportType=CSV&isCompressed=S";
     private final RestTemplate ivassRestTemplate;
     private final String ivassBasePath;
+    private final String getInsurancesPath;
 
     public IvassRestClient(
             @Value("${ivass.rest.endpoint}") String ivassBasePath,
+            @Value("${ivass.rest.getInsurances.path}") String getInsurancesPath,
             RestTemplate ivassRestTemplate) {
         this.ivassRestTemplate = ivassRestTemplate;
         this.ivassBasePath = ivassBasePath;
+        this.getInsurancesPath = getInsurancesPath;
     }
 
     public byte[] getInsurancesZip() {
         log.info("getInsurances start");
-        String apiPath = this.ivassBasePath + GET_INSURANCES_PATH;
+        String apiPath = this.ivassBasePath + getInsurancesPath;
         return ivassRestTemplate.getForObject(apiPath, byte[].class);
     }
 }
