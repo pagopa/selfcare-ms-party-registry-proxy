@@ -19,8 +19,7 @@ public class IvassUtils {
 
     public byte[] extractSingleFileFromZip(byte[] zipBytes) {
         try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(zipBytes);
-             ZipInputStream zipInputStream = new ZipInputStream(byteArrayInputStream)) {
-
+            ZipInputStream zipInputStream = new ZipInputStream(byteArrayInputStream)) {
             if (zipInputStream.getNextEntry() != null) {
                 return toByteArray(zipInputStream);
             } else {
