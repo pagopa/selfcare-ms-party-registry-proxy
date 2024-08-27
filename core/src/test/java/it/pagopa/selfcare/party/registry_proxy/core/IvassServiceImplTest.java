@@ -1,9 +1,12 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
+import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
+import it.pagopa.selfcare.party.registry_proxy.connector.api.IvassDataConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
 import it.pagopa.selfcare.party.registry_proxy.core.exception.TooManyResourceFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
@@ -23,7 +26,10 @@ class IvassServiceImplTest {
 
     @Mock
     private IndexSearchService<InsuranceCompany> indexSearchService;
-
+    @Mock
+    private IvassDataConnector ivassDataConnector;
+    @Mock
+    private IndexWriterService<InsuranceCompany> indexWriterService;
     @InjectMocks
     private IvassServiceImpl ivassService;
 
@@ -143,5 +149,13 @@ class IvassServiceImplTest {
         verify(indexSearchService, times(1))
                 .fullTextSearch(InsuranceCompany.Field.DESCRIPTION, searchText.get(), page, limit);
         verifyNoMoreInteractions(indexSearchService);
+    }
+
+    @Test
+    void updateIvassIndex() {
+        List<InsuranceCompany> companies = List.of(new DummyInsuranceCompany());
+        when(ivassDataConnector.getInsurances()).thenReturn(companies);
+        Executable executable = () -> ivassService.updateIvassIndex();
+        Assertions.assertDoesNotThrow(executable);
     }
 }
