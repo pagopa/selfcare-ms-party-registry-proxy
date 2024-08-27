@@ -24,45 +24,39 @@ public class IvassUtils {
             ZipEntry entry = zipInputStream.getNextEntry();
 
             if (entry != null) {
-                return toByteArray(entry, zipInputStream);
+                int totalSizeEntry = 0;
+                int THRESHOLD_SIZE = 100000000; // 100 MB
+                double THRESHOLD_RATIO = 10; // 10 times the compressed size
+
+                try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = zipInputStream.read(buffer)) != -1) {
+                        totalSizeEntry += length;
+
+                        // Check the compression ratio of the extracted file (security reasons)
+                        double compressionRatio = (double) totalSizeEntry / entry.getCompressedSize();
+                        if(compressionRatio > THRESHOLD_RATIO) {
+                            log.error("Compression ratio exceeds the maximum allowed limit of " + THRESHOLD_RATIO);
+                            return new byte[0];
+                        }
+
+                        // Check if the extracted file size exceeds the maximum allowed limit (security reasons)
+                        if(totalSizeEntry > THRESHOLD_SIZE) {
+                            log.error("Extracted file size exceeds the maximum allowed limit of " + THRESHOLD_SIZE + " bytes");
+                            return new byte[0];
+                        }
+
+                        byteArrayOutputStream.write(buffer, 0, length);
+                    }
+                    return byteArrayOutputStream.toByteArray();
+                }
             } else {
                 throw new IOException("No entries found in the zip file");
             }
         } catch (IOException e) {
             log.debug("Error extracting file from zip", e);
             return new byte[0];
-        }
-    }
-
-    private static byte[] toByteArray(ZipEntry zipEntry, ZipInputStream zipInputStream) throws IOException {
-        int totalSizeEntry = 0;
-        int THRESHOLD_SIZE = 100000000; // 100 MB
-        double THRESHOLD_RATIO = 10; // 10 times the compressed size
-
-
-        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = zipInputStream.read(buffer)) != -1) {
-                totalSizeEntry += length;
-
-                // Check the compression ratio of the extracted file (security reasons)
-                double compressionRatio = (double) totalSizeEntry / zipEntry.getCompressedSize();
-                if(compressionRatio > THRESHOLD_RATIO) {
-                    log.error("Compression ratio exceeds the maximum allowed limit of " + THRESHOLD_RATIO);
-                    return new byte[0];
-                }
-
-                // Check if the extracted file size exceeds the maximum allowed limit (security reasons)
-                if(totalSizeEntry > THRESHOLD_SIZE) {
-                    log.error("Extracted file size exceeds the maximum allowed limit of " + THRESHOLD_SIZE + " bytes");
-                    return new byte[0];
-                }
-
-                byteArrayOutputStream.write(buffer, 0, length);
-            }
-
-            return byteArrayOutputStream.toByteArray();
         }
     }
 
