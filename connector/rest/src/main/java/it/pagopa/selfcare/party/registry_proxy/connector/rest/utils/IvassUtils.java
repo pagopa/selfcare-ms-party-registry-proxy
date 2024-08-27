@@ -18,15 +18,15 @@ import java.util.zip.ZipInputStream;
 @Service
 public class IvassUtils {
 
-    public byte[] extractSingleFileFromZip(byte[] zipBytes) {
+    public byte[] extractFirstEntryByteArrayFromZip(byte[] zipBytes) {
         try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(zipBytes);
             ZipInputStream zipInputStream = new ZipInputStream(byteArrayInputStream)) {
             ZipEntry entry = zipInputStream.getNextEntry();
 
             if (entry != null) {
                 int totalSizeEntry = 0;
-                int THRESHOLD_SIZE = 100000000; // 100 MB
-                double THRESHOLD_RATIO = 10; // 10 times the compressed size
+                int thresholdSize = 100000000; // 100 MB
+                double thresholdRatio = 10; // 10 times the compressed size
 
                 try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
                     byte[] buffer = new byte[1024];
@@ -36,14 +36,14 @@ public class IvassUtils {
 
                         // Check the compression ratio of the extracted file (security reasons)
                         double compressionRatio = (double) totalSizeEntry / entry.getCompressedSize();
-                        if(compressionRatio > THRESHOLD_RATIO) {
-                            log.error("Compression ratio exceeds the maximum allowed limit of " + THRESHOLD_RATIO);
+                        if(compressionRatio > thresholdRatio) {
+                            log.error("Compression ratio exceeds the maximum allowed limit of " + thresholdRatio);
                             return new byte[0];
                         }
 
                         // Check if the extracted file size exceeds the maximum allowed limit (security reasons)
-                        if(totalSizeEntry > THRESHOLD_SIZE) {
-                            log.error("Extracted file size exceeds the maximum allowed limit of " + THRESHOLD_SIZE + " bytes");
+                        if(totalSizeEntry > thresholdSize) {
+                            log.error("Extracted file size exceeds the maximum allowed limit of " + thresholdSize + " bytes");
                             return new byte[0];
                         }
 

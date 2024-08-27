@@ -12,40 +12,40 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class IvassUtilsTest {
+class IvassUtilsTest {
 
     @InjectMocks
     private IvassUtils ivassUtil;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void extractSingleFileFromZip_shouldReturnByteArray_whenZipContainsSingleFile() throws IOException {
+    void extractSingleFileFromZip_shouldReturnByteArray_whenZipContainsSingleFile() throws IOException {
         ClassPathResource resource = new ClassPathResource("one_file.zip");
         byte[] zipBytes = java.nio.file.Files.readAllBytes(resource.getFile().toPath());
 
-        byte[] result = ivassUtil.extractSingleFileFromZip(zipBytes);
+        byte[] result = ivassUtil.extractFirstEntryByteArrayFromZip(zipBytes);
 
         assertNotNull(result);
         assertTrue(result.length > 0);
     }
 
     @Test
-    public void extractSingleFileFromZip_shouldReturnEmptyByteArray_whenZipIsEmpty() throws IOException {
+    void extractSingleFileFromZip_shouldReturnEmptyByteArray_whenZipIsEmpty() throws IOException {
         ClassPathResource resource = new ClassPathResource("empty.zip");
         byte[] zipBytes = java.nio.file.Files.readAllBytes(resource.getFile().toPath());
 
-        byte[] result = ivassUtil.extractSingleFileFromZip(zipBytes);
+        byte[] result = ivassUtil.extractFirstEntryByteArrayFromZip(zipBytes);
 
         assertNotNull(result);
         assertEquals(0, result.length);
     }
 
     @Test
-    public void readCsv_shouldReturnListOfCompanies_whenCsvIsValid() throws IOException {
+    void readCsv_shouldReturnListOfCompanies_whenCsvIsValid() throws IOException {
         ClassPathResource resource = new ClassPathResource("ivass-open-data.csv");
         byte[] csvBytes = java.nio.file.Files.readAllBytes(resource.getFile().toPath());
 
@@ -57,7 +57,7 @@ public class IvassUtilsTest {
     }
 
     @Test
-    public void readCsv_shouldReturnEmptyList_whenCsvIsEmpty() {
+    void readCsv_shouldReturnEmptyList_whenCsvIsEmpty() {
         byte[] csvBytes = new byte[0];
 
         List<InsuranceCompany> result = ivassUtil.readCsv(csvBytes);
@@ -68,7 +68,7 @@ public class IvassUtilsTest {
     }
 
     @Test
-    public void readCsv_shouldReturnEmptyList_whenCsvIsInvalid() throws IOException {
+    void readCsv_shouldReturnEmptyList_whenCsvIsInvalid() throws IOException {
         ClassPathResource resource = new ClassPathResource("ivass-open-data-malformed.csv");
         byte[] csvBytes = java.nio.file.Files.readAllBytes(resource.getFile().toPath());
 
@@ -80,7 +80,7 @@ public class IvassUtilsTest {
     }
 
     @Test
-    public void manageUTF8BOM_shouldRemoveBOM_whenBOMPresent() {
+    void manageUTF8BOM_shouldRemoveBOM_whenBOMPresent() {
         byte[] csvWithBOM = {(byte) 0xEF, (byte) 0xBB, (byte) 0xBF, 'a', 'b', 'c'};
         byte[] expectedCsv = {'a', 'b', 'c'};
 
@@ -90,7 +90,7 @@ public class IvassUtilsTest {
     }
 
     @Test
-    public void manageUTF8BOM_shouldReturnSameArray_whenBOMNotPresent() {
+    void manageUTF8BOM_shouldReturnSameArray_whenBOMNotPresent() {
         byte[] csvWithoutBOM = {'a', 'b', 'c'};
         byte[] expectedCsv = {'a', 'b', 'c'};
 
