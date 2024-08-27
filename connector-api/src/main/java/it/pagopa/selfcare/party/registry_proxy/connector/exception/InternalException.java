@@ -10,4 +10,8 @@ public class InternalException extends RuntimeException{
         super();
     }
 
+    public InternalException(String message){
+        super(message);
+    }
+
 }
