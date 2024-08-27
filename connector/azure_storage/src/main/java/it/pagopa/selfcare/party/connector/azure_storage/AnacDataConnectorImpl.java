@@ -15,8 +15,7 @@ import java.util.Optional;
 @Slf4j
 @ConditionalOnProperty(
         value = "file.connector.type",
-        havingValue = "azure",
-        matchIfMissing = true)
+        havingValue = "azure")
 public class AnacDataConnectorImpl implements AnacDataConnector {
 
     private final FileStorageConnector fileStorageConnector;

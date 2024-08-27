@@ -90,6 +90,10 @@ app_settings = [
   {
     name  = "PDND_INFOCAMERE_AUDIENCE"
     value = "auth.interop.pagopa.it/client-assertion"
+  },
+  {
+    name  = "IVASS_BASE_URL"
+    value = "https://infostat-ivass.bancaditalia.it"
   }
 ]
 

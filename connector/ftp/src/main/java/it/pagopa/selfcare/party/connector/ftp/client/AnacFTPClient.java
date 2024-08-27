@@ -38,6 +38,7 @@ public class AnacFTPClient implements FTPConnector {
 
     @Override
     public Optional<InputStream> getFile(String fileName) {
+        log.info("START retrieve {} from ftp", fileName);
         Optional<InputStream> optionalInputStream = Optional.empty();
         ChannelSftp channelSftp = new ChannelSftp();
         try {
@@ -49,6 +50,7 @@ public class AnacFTPClient implements FTPConnector {
         } finally {
             channelSftp.exit();
         }
+        log.info("END retrieve {} from ftp", fileName);
         return optionalInputStream;
     }
 
