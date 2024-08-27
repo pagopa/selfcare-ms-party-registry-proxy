@@ -48,7 +48,7 @@ class IvassConnectorImplTest {
         List<InsuranceCompany> companies = Arrays.asList(company1, company2);
 
         when(ivassRestClient.getInsurancesZip()).thenReturn(zip);
-        when(ivassUtils.extractSingleFileFromZip(zip)).thenReturn(csv);
+        when(ivassUtils.extractFirstEntryByteArrayFromZip(zip)).thenReturn(csv);
         when(ivassUtils.readCsv(csv)).thenReturn(companies);
         when(ivassUtils.manageUTF8BOM(csv)).thenReturn(csv);
 
@@ -56,7 +56,7 @@ class IvassConnectorImplTest {
 
         assertEquals(companies.size(), result.size());
         verify(ivassRestClient, times(1)).getInsurancesZip();
-        verify(ivassUtils, times(1)).extractSingleFileFromZip(zip);
+        verify(ivassUtils, times(1)).extractFirstEntryByteArrayFromZip(zip);
     }
 
     @Test
@@ -66,7 +66,7 @@ class IvassConnectorImplTest {
         List<InsuranceCompany> companies = Arrays.asList(new IvassDataTemplate(), new IvassDataTemplate());
 
         when(ivassRestClient.getInsurancesZip()).thenReturn(zip);
-        when(ivassUtils.extractSingleFileFromZip(zip)).thenReturn(csv);
+        when(ivassUtils.extractFirstEntryByteArrayFromZip(zip)).thenReturn(csv);
         when(ivassUtils.readCsv(csv)).thenReturn(companies);
 
         ivassConnector = spy(ivassConnector);
@@ -75,6 +75,6 @@ class IvassConnectorImplTest {
 
         assertEquals(0, result.size());
         verify(ivassRestClient, times(1)).getInsurancesZip();
-        verify(ivassUtils, times(1)).extractSingleFileFromZip(zip);
+        verify(ivassUtils, times(1)).extractFirstEntryByteArrayFromZip(zip);
     }
 }

@@ -41,7 +41,7 @@ public class IvassConnectorImpl implements IvassDataConnector {
     @Override
     public List<InsuranceCompany> getInsurances() {
         byte[] zip = ivassRestClient.getInsurancesZip();
-        byte[] csv = ivassUtils.extractSingleFileFromZip(zip);
+        byte[] csv = ivassUtils.extractFirstEntryByteArrayFromZip(zip);
         csv = ivassUtils.manageUTF8BOM(csv);
         List<InsuranceCompany> companies = ivassUtils.readCsv(csv);
         return filterCompanies(companies);
