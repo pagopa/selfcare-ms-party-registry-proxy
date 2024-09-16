@@ -32,26 +32,7 @@ public class IvassController {
         this.insuranceCompanyMapper = insuranceCompanyMapper;
     }
 
-    /**
-     * @deprecated since a new version has been implemented
-     */
-    @Deprecated(forRemoval = true)
-    @GetMapping("/{taxId}")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.insurance-company.search.byId.summary}", notes = "${swagger.api.insurance-company.search.byId.notes}")
-    public InsuranceCompanyResource searchByTaxCode(@ApiParam("${swagger.model.insurance-company.taxCode}")
-                                                    @PathVariable("taxId") String taxId) {
-        log.trace("searchByTaxCode start");
-        if (taxId.matches("\\w*")) {
-            log.debug("searchByTaxCode parameter = {}", taxId);
-        }
-        final InsuranceCompanyResource insuranceCompany = insuranceCompanyMapper.toResource(ivassService.findByTaxCode(taxId));
-        log.debug("searchByTaxCode result = {}", insuranceCompany);
-        log.trace("searchByTaxCode end");
-        return insuranceCompany;
-    }
-
-    @GetMapping("/origin/{originId}")
+    @GetMapping("/{originId}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "${swagger.api.insurance-company.search.byOriginId.summary}", notes = "${swagger.api.insurance-company.search.byOriginId.notes}")
     public InsuranceCompanyResource searchByOriginId(@ApiParam("${swagger.model.insurance-company.originId}")

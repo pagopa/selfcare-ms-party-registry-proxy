@@ -913,7 +913,7 @@
         } ]
       }
     },
-    "/insurance-companies/origin/{originId}" : {
+    "/insurance-companies/{originId}" : {
       "get" : {
         "tags" : [ "insurance-companies" ],
         "summary" : "Search insurance company by its IVASS code",
@@ -981,80 +981,6 @@
             }
           }
         },
-        "security" : [ {
-          "bearerAuth" : [ "global" ]
-        } ]
-      }
-    },
-    "/insurance-companies/{taxId}" : {
-      "get" : {
-        "tags" : [ "insurance-companies" ],
-        "summary" : "Search insurance company by its taxCode",
-        "description" : "Returns only one insurance company.",
-        "operationId" : "searchByTaxCodeUsingGET",
-        "parameters" : [ {
-          "name" : "taxId",
-          "in" : "path",
-          "description" : "taxCode of insurance company",
-          "required" : true,
-          "style" : "simple",
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/InsuranceCompanyResource"
-                }
-              }
-            }
-          },
-          "400" : {
-            "description" : "Bad Request",
-            "content" : {
-              "application/problem+json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Problem"
-                }
-              }
-            }
-          },
-          "401" : {
-            "description" : "Unauthorized",
-            "content" : {
-              "application/problem+json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Problem"
-                }
-              }
-            }
-          },
-          "404" : {
-            "description" : "Not Found",
-            "content" : {
-              "application/problem+json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Problem"
-                }
-              }
-            }
-          },
-          "500" : {
-            "description" : "Internal Server Error",
-            "content" : {
-              "application/problem+json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Problem"
-                }
-              }
-            }
-          }
-        },
-        "deprecated" : true,
         "security" : [ {
           "bearerAuth" : [ "global" ]
         } ]
@@ -1462,7 +1388,7 @@
         "tags" : [ "stations" ],
         "summary" : "Search station by its taxCode",
         "description" : "Returns only one station.",
-        "operationId" : "searchByTaxCodeUsingGET_1",
+        "operationId" : "searchByTaxCodeUsingGET",
         "parameters" : [ {
           "name" : "taxId",
           "in" : "path",

@@ -34,18 +34,6 @@ class IvassServiceImplTest {
     private IvassServiceImpl ivassService;
 
     @Test
-    void findById_ResourceNotFound() {
-        // given
-        final String taxId = "taxId";
-        when(indexSearchService.findById(any(), anyString()))
-                .thenReturn(List.of());
-        // when
-        final Executable executable = () -> ivassService.findByTaxCode(taxId);
-        // then
-        assertThrows(ResourceNotFoundException.class, executable);
-    }
-
-    @Test
     void findByOriginId_ResourceNotFound() {
         // given
         final String originId = "originId";
@@ -55,19 +43,6 @@ class IvassServiceImplTest {
         final Executable executable = () -> ivassService.findByOriginId(originId);
         // then
         assertThrows(ResourceNotFoundException.class, executable);
-    }
-
-    @Test
-    void findById_TooManyResourceFound() {
-        // given
-        final String taxId = "taxId";
-        final DummyInsuranceCompany dummyCompany = new DummyInsuranceCompany();
-        when(indexSearchService.findById(any(), anyString()))
-                .thenReturn(List.of(dummyCompany, dummyCompany));
-        // when
-        final Executable executable = () -> ivassService.findByTaxCode(taxId);
-        // then
-        assertThrows(TooManyResourceFoundException.class, executable);
     }
 
     @Test
@@ -81,21 +56,6 @@ class IvassServiceImplTest {
         final Executable executable = () -> ivassService.findByOriginId(originId);
         // then
         assertThrows(TooManyResourceFoundException.class, executable);
-    }
-
-    @Test
-    void findById_found() {
-        // given
-        final String taxId = "taxId";
-        final DummyInsuranceCompany dummyCompany = new DummyInsuranceCompany();
-        dummyCompany.setId("id");
-        dummyCompany.setTaxCode("taxId");
-        when(indexSearchService.findById(any(), anyString()))
-                .thenReturn(List.of(dummyCompany));
-        // when
-        final InsuranceCompany result = ivassService.findByTaxCode(taxId);
-        // then
-        assertSame(dummyCompany, result);
     }
 
     @Test
