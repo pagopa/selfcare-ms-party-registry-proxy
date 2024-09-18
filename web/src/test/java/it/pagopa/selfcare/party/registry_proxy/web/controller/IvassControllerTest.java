@@ -41,34 +41,6 @@ class IvassControllerTest {
 
     @MockBean
     private IvassService ivassService;
-
-    /**
-     * Method under test: {@link IvassController#searchByTaxCode(String)}
-     */
-    @Test
-    void findInsurance() throws Exception {
-        // given
-        final String taxId = "CODE";
-        when(ivassService.findByTaxCode(any()))
-                .thenReturn(mockInstance(new DummyInsuranceCompany()));
-        // when
-        mvc.perform(MockMvcRequestBuilders
-                        .get(BASE_URL + "/{taxId}", taxId)
-                        .contentType(APPLICATION_JSON_VALUE)
-                        .accept(APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", notNullValue()))
-                .andExpect(jsonPath("$.originId", notNullValue()))
-                .andExpect(jsonPath("$.taxCode", notNullValue()))
-                .andExpect(jsonPath("$.description", notNullValue()))
-                .andExpect(jsonPath("$.digitalAddress", notNullValue()))
-                .andExpect(jsonPath("$.address", notNullValue()));
-        // then
-
-        verify(ivassService, times(1))
-                .findByTaxCode(taxId);
-        verifyNoMoreInteractions(ivassService);
-    }
     
     /**
      * Method under test: {@link IvassController#searchByOriginId(String)}
@@ -81,7 +53,7 @@ class IvassControllerTest {
                 .thenReturn(mockInstance(new DummyInsuranceCompany()));
         // when
         mvc.perform(MockMvcRequestBuilders
-                        .get(BASE_URL + "/origin/{originId}", originId)
+                        .get(BASE_URL + "/{originId}", originId)
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
@@ -97,28 +69,6 @@ class IvassControllerTest {
                 .findByOriginId(originId);
         verifyNoMoreInteractions(ivassService);
     }
-    
-
-    /**
-     * Method under test: {@link IvassController#searchByTaxCode(String)}
-     */
-    @Test
-    void findInsuranceNotFound() throws Exception {
-        // given
-        final String taxId = "CODE";
-        when(ivassService.findByTaxCode(any()))
-                .thenThrow(ResourceNotFoundException.class);
-        // when
-        mvc.perform(MockMvcRequestBuilders
-                        .get(BASE_URL + "/{taxId}", taxId)
-                        .contentType(APPLICATION_JSON_VALUE)
-                        .accept(APPLICATION_JSON_VALUE))
-                .andExpect(status().isNotFound());
-        // then
-        verify(ivassService, times(1))
-                .findByTaxCode(taxId);
-        verifyNoMoreInteractions(ivassService);
-    }
 
     /**
      * Method under test: {@link IvassController#searchByOriginId(String)}
@@ -131,7 +81,7 @@ class IvassControllerTest {
                 .thenThrow(ResourceNotFoundException.class);
         // when
         mvc.perform(MockMvcRequestBuilders
-                        .get(BASE_URL + "/origin/{originId}", originId)
+                        .get(BASE_URL + "/{originId}", originId)
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isNotFound());

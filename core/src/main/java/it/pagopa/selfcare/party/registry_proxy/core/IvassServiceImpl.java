@@ -36,26 +36,6 @@ public class IvassServiceImpl implements IvassService {
         this.ivassDataConnector = ivassDataConnector;
     }
 
-    /**
-     * @deprecated method has been deprecated because a new method has been implemented.
-     */
-    @Deprecated(forRemoval = true)
-    @Override
-    public InsuranceCompany findByTaxCode(String taxId) {
-        log.trace("findByTaxCode start");
-        log.debug("findByTaxCode parameter = {}", taxId.toUpperCase());
-        final List<InsuranceCompany> companies = indexSearchService.findById(InsuranceCompany.Field.TAX_CODE, taxId.toUpperCase());
-        if (companies.isEmpty()) {
-            throw new ResourceNotFoundException();
-        } else if (companies.size() > 1) {
-            throw new TooManyResourceFoundException();
-        }
-        final InsuranceCompany company = companies.get(0);
-        log.debug("findByTaxCode result = {}", company);
-        log.trace("findByTaxCode end");
-        return company;
-    }
-
     @Override
     public InsuranceCompany findByOriginId(String originId) {
         log.trace("findByIvassCode start");
