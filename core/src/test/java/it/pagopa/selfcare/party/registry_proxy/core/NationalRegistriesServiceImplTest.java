@@ -6,10 +6,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultDetai
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.BadGatewayException;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.InvalidRequestException;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.Businesses;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressProfessionalResponse;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressResponse;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.VerifyLegalResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +22,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -185,12 +183,15 @@ class NationalRegistriesServiceImplTest {
     @Test
     void testInstitutionsByLegalTaxIdNotFound4() {
         Businesses businesses = new Businesses();
-        businesses.setTimestamp("2023-01-27T17:38:18.774");
+        //businesses.setTimestamp("2023-01-27T17:38:18.774");
+        businesses.setTimestamp("null");
+        businesses.setLegalTaxId("42");
+        businesses.setBusinessList(List.of(new Business()));
         when(nationalRegistriesConnector.institutionsByLegalTaxId(any())).thenReturn(businesses);
 
-        Businesses response = nationalRegistriesServiceImpl.institutionsByLegalTaxId("42");
-        assertEquals("42", response.getLegalTaxId());
-        assertEquals(0, response.getBusinessList().size());
+        Businesses response = nationalRegistriesServiceImpl.institutionsByLegalTaxId(businesses.getLegalTaxId());
+        assertEquals(businesses.getLegalTaxId(), response.getLegalTaxId());
+        assertEquals(1, response.getBusinessList().size());
         verify(nationalRegistriesConnector).institutionsByLegalTaxId(any());
     }
 }

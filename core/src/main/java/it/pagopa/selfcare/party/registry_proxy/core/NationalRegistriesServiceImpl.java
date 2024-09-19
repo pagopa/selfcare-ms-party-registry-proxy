@@ -76,7 +76,7 @@ class NationalRegistriesServiceImpl implements NationalRegistriesService {
         return (
                 response.getCode() != null && !"".equals(response.getCode())
                         || response.getDescription() != null && !"".equals(response.getDescription())
-                        || response.getTimestamp() != null && !"".equals(response.getTimestamp())
+                        //|| response.getTimestamp() != null && !"".equals(response.getTimestamp())
                         || response.getAppName() != null && !"".equals(response.getAppName())
         );
     }
