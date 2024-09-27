@@ -1,9 +1,12 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
+import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.OpenDataRestClient;
 import it.pagopa.selfcare.party.registry_proxy.core.exception.TooManyResourceFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
@@ -29,8 +32,14 @@ class AOOServiceImplTest {
     @Mock
     private InstitutionService institutionService;
 
+    @Mock
+    private OpenDataRestClient openDataRestClient;
+
     @InjectMocks
     private AOOServiceImpl aooService;
+
+    @Mock
+    private IndexWriterService<AOO> aooIndexWriterService;
 
 
     @Test
@@ -123,6 +132,15 @@ class AOOServiceImplTest {
         final AOO result = aooService.findByUnicode(id, categories);
         // then
         assertSame(AOO, result);
+    }
+
+    @Test
+    void updateAoosIndex() {
+        final String response = "id,Codice_IPA,Denominazione_ente,Codice_fiscale_ente,Codice_uni_aoo,Descrizione_aoo,Mail1,Data_aggiornamento\n" +
+                "id,Codice_IPA,Denominazione_ente,Codice_fiscale_ente,Codice_uni_aoo,Descrizione_aoo,Mail1,2024-01-01";
+        when(openDataRestClient.retrieveAOOs()).thenReturn(response);
+        Executable executable = () -> aooService.updateAOOsIndex();
+        Assertions.assertDoesNotThrow(executable);
     }
 
 }

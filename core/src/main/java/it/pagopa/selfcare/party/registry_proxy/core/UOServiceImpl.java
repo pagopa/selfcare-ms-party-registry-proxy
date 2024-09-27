@@ -74,7 +74,7 @@ class UOServiceImpl implements UOService {
         return uo;
     }
 
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 0 2 * * *")
     void updateUOsIndex() {
         log.trace("start update UOs index");
         final List<UO> uos = filterForLastUpdate(getUOs());
