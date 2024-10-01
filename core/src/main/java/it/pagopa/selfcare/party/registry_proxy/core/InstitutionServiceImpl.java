@@ -1,17 +1,21 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
+import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Entity;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution.Field;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.OpenDataRestClient;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.IPAOpenDataInstitution;
 import it.pagopa.selfcare.party.registry_proxy.core.exception.TooManyResourceFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,9 +27,15 @@ import java.util.stream.Collectors;
 class InstitutionServiceImpl implements InstitutionService {
 
     private final IndexSearchService<Institution> indexSearchService;
+    private final OpenDataRestClient openDataRestClient;
+    private final IndexWriterService<Institution> institutionIndexWriterService;
+
+
 
     @Autowired
-    InstitutionServiceImpl(IndexSearchService<Institution> indexSearchService) {
+    InstitutionServiceImpl(IndexSearchService<Institution> indexSearchService, OpenDataRestClient openDataRestClient, IndexWriterService<Institution> institutionIndexWriterService) {
+        this.openDataRestClient = openDataRestClient;
+        this.institutionIndexWriterService = institutionIndexWriterService;
         log.trace("Initializing {}", InstitutionServiceImpl.class.getSimpleName());
         this.indexSearchService = indexSearchService;
     }
@@ -85,4 +95,36 @@ class InstitutionServiceImpl implements InstitutionService {
             return institution;
         }
     }
+
+    @Scheduled(cron = "0 0 2 * * *")
+    void updateInstitutionsIndex() {
+        log.trace("start update Institutions IPA index");
+        List<Institution> institutions = getInstitutions();
+        if (!institutions.isEmpty()) {
+            institutionIndexWriterService.cleanIndex(Entity.INSTITUTION.toString());
+            institutionIndexWriterService.adds(institutions);
+        }
+        log.trace("updated Institutions IPA index end");
+    }
+
+    private List<Institution> getInstitutions() {
+        log.trace("getInstitutions start");
+        List<Institution> institutions;
+        final String csv = openDataRestClient.retrieveInstitutions();
+
+        try (Reader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(csv.getBytes())))) {
+            CsvToBean<Institution> csvToBean = new CsvToBeanBuilder<Institution>(reader)
+                    .withType(IPAOpenDataInstitution.class)
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .build();
+            institutions = csvToBean.parse();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        log.trace("getInstitutions end");
+        return institutions;
+    }
+
 }
+

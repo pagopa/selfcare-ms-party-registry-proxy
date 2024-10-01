@@ -1,10 +1,13 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
+import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution.Field;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.OpenDataRestClient;
 import it.pagopa.selfcare.party.registry_proxy.core.exception.TooManyResourceFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
@@ -30,6 +33,12 @@ class InstitutionServiceImplTest {
 
     @InjectMocks
     private InstitutionServiceImpl institutionService;
+
+    @Mock
+    private OpenDataRestClient openDataRestClient;
+
+    @Mock
+    private IndexWriterService<Institution> institutionIndexWriterService;
 
 
     @Test
@@ -298,6 +307,15 @@ class InstitutionServiceImplTest {
         verify(indexSearchService, times(1))
                 .findById(Field.ID, id);
         verifyNoMoreInteractions(indexSearchService);
+    }
+
+    @Test
+    void updateInstitutionsIndex() {
+        final String response = "id,Codice_IPA,Denominazione_ente,Codice_fiscale_ente,Mail1,Data_aggiornamento\n" +
+                "id,Codice_IPA,Denominazione_ente,Codice_fiscale_ente,Mail1,2024-01-01";
+        when(openDataRestClient.retrieveInstitutions()).thenReturn(response);
+        Executable executable = () -> institutionService.updateInstitutionsIndex();
+        Assertions.assertDoesNotThrow(executable);
     }
 
 }
