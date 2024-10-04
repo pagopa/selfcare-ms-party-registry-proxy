@@ -32,6 +32,7 @@ public class NationalRegistriesController {
     @ApiOperation(value = "${swagger.api.national-registries.summary}",
             notes = "${swagger.api.national-registries.legal-address}")
     @Tag(name = "support-pnpg")
+    @Tag(name = "national-registries")
     @GetMapping("/legal-address")
     public ResponseEntity<LegalAddressResponse> legalAddress(@RequestParam(value = "taxId") String taxId) {
         RequestValidator.validateTaxId(taxId);
