@@ -988,7 +988,7 @@
     },
     "/national-registries/legal-address" : {
       "get" : {
-        "tags" : [ "nationalRegistries" ],
+        "tags" : [ "national-registries", "support-pnpg" ],
         "summary" : "Retrieve data from AdE and InfoCamere",
         "description" : "Get the legal address of the business",
         "operationId" : "legalAddressUsingGET",
