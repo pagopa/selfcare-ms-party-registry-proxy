@@ -2,6 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressProfessionalResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.VerifyLegalResponse;
 import it.pagopa.selfcare.party.registry_proxy.core.NationalRegistriesService;
@@ -30,6 +31,7 @@ public class NationalRegistriesController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "${swagger.api.national-registries.summary}",
             notes = "${swagger.api.national-registries.legal-address}")
+    @Tag(name = "support-pnpg")
     @GetMapping("/legal-address")
     public ResponseEntity<LegalAddressResponse> legalAddress(@RequestParam(value = "taxId") String taxId) {
         RequestValidator.validateTaxId(taxId);
