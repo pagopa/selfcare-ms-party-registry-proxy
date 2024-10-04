@@ -31,6 +31,7 @@ public class InfoCamereController {
     }
     @ResponseStatus(HttpStatus.OK)
     @Tag(name = "support-pnpg")
+    @Tag(name = "infocamere")
     @ApiOperation(value = "${swagger.api.info-camere.institutions.summary}",
             notes = "${swagger.api.info-camere.institutions.notes}")
     @PostMapping("/institutions")
