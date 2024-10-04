@@ -2,6 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.core.NationalRegistriesService;
 import it.pagopa.selfcare.party.registry_proxy.web.model.BusinessesResource;
@@ -29,6 +30,8 @@ public class InfoCamereController {
         this.nationalRegistriesService = nationalRegistriesService;
     }
     @ResponseStatus(HttpStatus.OK)
+    @Tag(name = "support-pnpg")
+    @Tag(name = "infocamere")
     @ApiOperation(value = "${swagger.api.info-camere.institutions.summary}",
             notes = "${swagger.api.info-camere.institutions.notes}")
     @PostMapping("/institutions")
