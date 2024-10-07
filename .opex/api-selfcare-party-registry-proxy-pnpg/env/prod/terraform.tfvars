@@ -1,10 +1,10 @@
 prefix    = "selc"
-env       = "dev"
-env_short = "d"
+env       = "prod"
+env_short = "p"
 
 tags = {
   CreatedBy   = "Terraform"
-  Environment = "Dev"
+  Environment = "Prod"
   Owner       = "SelfCare"
   Source      = "https://github.com/pagopa/selfcare-ms-party-registry-proxy"
   CostCenter  = "TS310 - PAGAMENTI & SERVIZI"
