@@ -21,7 +21,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-22.04
-    environment: 'dev-cd'
+    environment: 'prod-cd'
 
     steps:
       - name: Checkout
@@ -44,9 +44,9 @@ jobs:
 
       - uses: pagopa/opex-dashboard-azure-action@3ad80a5e4a2d5a8f342615637072f21b687320ce
         with:
-          environment: dev
+          environment: prod
           api-name: ${{ env.API_NAME }}
-          config: .opex/${{ env.API_NAME }}/env/dev/config.yaml
+          config: .opex/${{ env.API_NAME }}/env/prod/config.yaml
           client-id: ${{ secrets.ARM_CLIENT_ID }}
           tenant-id: ${{ vars.ARM_TENANT_ID }}
           subscription-id: ${{ vars.ARM_SUBSCRIPTION_ID }}
