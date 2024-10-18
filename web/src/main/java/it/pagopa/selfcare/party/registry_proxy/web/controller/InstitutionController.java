@@ -89,7 +89,8 @@ public class InstitutionController {
         if (categories.isPresent()) {
             categoriesList = Arrays.stream(categories.get().split(",")).collect(Collectors.toList());
         }
-        final InstitutionResource institutionResource = InstitutionMapper.toResource(institutionService.findById(id, origin, categoriesList));
+        final InstitutionResource institutionResource = InstitutionMapper.toResource(institutionService.findById(id,
+                origin.isEmpty() ? Optional.of(Origin.IPA) : origin, categoriesList));
 
         log.debug("findInstitution result = {}", institutionResource);
         log.trace("findInstitution end");

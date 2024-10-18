@@ -16,11 +16,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -30,8 +28,6 @@ class InstitutionServiceImpl implements InstitutionService {
     private final OpenDataRestClient openDataRestClient;
     private final IndexWriterService<Institution> institutionIndexWriterService;
 
-
-
     @Autowired
     InstitutionServiceImpl(IndexSearchService<Institution> indexSearchService, OpenDataRestClient openDataRestClient, IndexWriterService<Institution> institutionIndexWriterService) {
         this.openDataRestClient = openDataRestClient;
@@ -39,7 +35,6 @@ class InstitutionServiceImpl implements InstitutionService {
         log.trace("Initializing {}", InstitutionServiceImpl.class.getSimpleName());
         this.indexSearchService = indexSearchService;
     }
-
 
     @Override
     public QueryResult<Institution> search(Optional<String> searchText, int page, int limit) {
@@ -59,12 +54,10 @@ class InstitutionServiceImpl implements InstitutionService {
         final QueryResult<Institution> queryResult = searchText.map(text -> indexSearchService.fullTextSearch(Field.DESCRIPTION, searchText.orElseThrow(), Field.CATEGORY, categories, page, limit))
                 .orElseGet(() -> indexSearchService.findAll(page, limit, Entity.INSTITUTION.toString()));
 
-
         log.debug("search result = {}", queryResult);
         log.trace("search end");
         return queryResult;
     }
-
 
     @Override
     public Institution findById(String id, Optional<Origin> origin, List<String> categories) {
@@ -75,15 +68,13 @@ class InstitutionServiceImpl implements InstitutionService {
         } else {
             final Supplier<List<Institution>> institutionsSupplier = () -> indexSearchService.findById(Field.ID, id);
             List<Institution> institutions;
-            if (origin.isPresent()) {
-                Origin orig = origin.get();
-                institutions = institutionsSupplier.get().stream()
-                        .filter(institution -> institution.getOrigin().equals(orig) &&
-                                (categories.isEmpty() || categories.contains(institution.getCategory())))
-                        .collect(Collectors.toList());
-            } else {
-                institutions = !categories.isEmpty() ? new ArrayList<>() : institutionsSupplier.get();
-            }
+
+            Origin orig = origin.get();
+            institutions = institutionsSupplier.get().stream()
+                    .filter(institution -> institution.getOrigin().equals(orig) &&
+                            (categories.isEmpty() || categories.contains(institution.getCategory())))
+                    .toList();
+
             if (institutions.isEmpty()) {
                 throw new ResourceNotFoundException();
             } else if (institutions.size() > 1) {
@@ -125,6 +116,4 @@ class InstitutionServiceImpl implements InstitutionService {
         log.trace("getInstitutions end");
         return institutions;
     }
-
 }
-
