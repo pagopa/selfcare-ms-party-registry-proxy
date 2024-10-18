@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static it.pagopa.selfcare.commons.utils.TestUtils.mockInstance;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.Origin.IPA;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -159,7 +160,7 @@ class InstitutionServiceImplTest {
         // given
         final String id = "pippo";
         final List<String> categories = List.of("cat1", "cat2");
-        final Optional<Origin> origin = Optional.of(Origin.IPA);
+        final Optional<Origin> origin = Optional.of(IPA);
         final DummyInstitution institution = mockInstance(new DummyInstitution());
         institution.setOrigin(Origin.MOCK);
         institution.setCategory("cat1");
@@ -179,7 +180,7 @@ class InstitutionServiceImplTest {
         // given
         final String id = "pippo";
         final List<String> categories = List.of("cat1", "cat2");
-        final Optional<Origin> origin = Optional.of(Origin.IPA);
+        final Optional<Origin> origin = Optional.of(IPA);
         final DummyInstitution institution = mockInstance(new DummyInstitution());
         institution.setOrigin(origin.get());
         institution.setCategory("cat3");
@@ -199,7 +200,7 @@ class InstitutionServiceImplTest {
         // given
         final String id = "pippo";
         final List<String> categories = Collections.emptyList();
-        final Optional<Origin> origin = Optional.of(Origin.IPA);
+        final Optional<Origin> origin = Optional.of(IPA);
         final DummyInstitution institution = mockInstance(new DummyInstitution());
         institution.setOrigin(Origin.MOCK);
         institution.setCategory("cat3");
@@ -219,7 +220,7 @@ class InstitutionServiceImplTest {
         // given
         final String id = "pippo";
         final List<String> categories = Collections.emptyList();
-        final Optional<Origin> origin = Optional.of(Origin.IPA);
+        final Optional<Origin> origin = Optional.of(IPA);
         final DummyInstitution institution = mockInstance(new DummyInstitution());
         institution.setOrigin(origin.get());
         institution.setCategory("cat3");
@@ -241,8 +242,9 @@ class InstitutionServiceImplTest {
         final String id = "pippo";
 
         final List<String> categoriesMatcher = Collections.emptyList();
-        final Optional<Origin> origin = Optional.empty();
+        final Optional<Origin> origin = Optional.of(IPA);
         final DummyInstitution institution = mockInstance(new DummyInstitution());
+        institution.setOrigin(IPA);
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of(institution, institution));
         // when
@@ -260,7 +262,7 @@ class InstitutionServiceImplTest {
         // given
         final String id = "pippo";
         final List<String> categories = List.of("cat1", "cat2");
-        final Optional<Origin> origin = Optional.of(Origin.IPA);
+        final Optional<Origin> origin = Optional.of(IPA);
         final DummyInstitution institution = mockInstance(new DummyInstitution());
         institution.setOrigin(origin.get());
         institution.setCategory("cat1");
@@ -282,10 +284,11 @@ class InstitutionServiceImplTest {
 
         final List<String> categoriesMatcher = Collections.emptyList();
         final DummyInstitution institution = mockInstance(new DummyInstitution());
+        institution.setOrigin(IPA);
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(List.of(institution, institution));
         // when
-        final Executable executable = () -> institutionService.findById(id, Optional.empty(), categoriesMatcher);
+        final Executable executable = () -> institutionService.findById(id, Optional.of(IPA), categoriesMatcher);
         // then
         assertThrows(TooManyResourceFoundException.class, executable);
         verify(indexSearchService, times(1))
@@ -301,7 +304,7 @@ class InstitutionServiceImplTest {
         when(indexSearchService.findById(any(), anyString()))
                 .thenReturn(new ArrayList<>());
         // when
-        final Executable executable = () -> institutionService.findById(id, Optional.empty(), categories);
+        final Executable executable = () -> institutionService.findById(id, Optional.of(IPA), categories);
         // then
         assertThrows(ResourceNotFoundException.class, executable);
         verify(indexSearchService, times(1))

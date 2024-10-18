@@ -221,7 +221,7 @@ class InstitutionControllerTest {
                 .andExpect(jsonPath("$.istatCode", notNullValue()));
         // then
         verify(institutionServiceMock, times(1))
-                .findById(id, Optional.empty(), categoriesMatcher);
+                .findById(id, Optional.of(Origin.IPA), categoriesMatcher);
         verifyNoMoreInteractions(institutionServiceMock);
     }
 }
