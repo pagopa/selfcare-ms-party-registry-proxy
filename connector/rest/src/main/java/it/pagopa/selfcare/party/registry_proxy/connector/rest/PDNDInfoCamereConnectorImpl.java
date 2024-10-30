@@ -51,7 +51,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
     }
 
     @Override
-    @CircuitBreaker(name = "pdndInfoCamereCircuitbreaker", fallbackMethod = "fallbackRetrieveInstitutionByTaxCode")
+    //@CircuitBreaker(name = "pdndInfoCamereCircuitbreaker", fallbackMethod = "fallbackRetrieveInstitutionByTaxCode")
     @Retry(name = "retryServiceUnavailable")
     public PDNDBusiness retrieveInstitutionPdndByTaxCode(String taxCode) {
         Assert.hasText(taxCode, "TaxCode is required");
