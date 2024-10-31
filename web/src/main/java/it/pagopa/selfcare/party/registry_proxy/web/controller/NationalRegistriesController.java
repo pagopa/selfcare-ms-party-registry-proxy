@@ -29,7 +29,7 @@ public class NationalRegistriesController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.national-registries.summary}",
+    @ApiOperation(value = "${swagger.api.national-registries.legal-address.summary}",
             notes = "${swagger.api.national-registries.legal-address}")
     @Tag(name = "support-pnpg")
     @Tag(name = "national-registries")
@@ -41,7 +41,7 @@ public class NationalRegistriesController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.national-registries.summary}",
+    @ApiOperation(value = "${swagger.api.national-registries.verify-legal.summary}",
             notes = "${swagger.api.national-registries.verify-legal}")
     @GetMapping("/verify-legal")
     public ResponseEntity<LegalVerificationResult> verifyLegal(@RequestParam(value = "taxId") String taxId,
