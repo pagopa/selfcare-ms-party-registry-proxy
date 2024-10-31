@@ -46,6 +46,6 @@ public class PDNDImpresa {
           + businessAddress.getViaSede()
           + " "
           + businessAddress.getNcivicoSede();
-    } else return "";
+    } else return null;
   }
 }
