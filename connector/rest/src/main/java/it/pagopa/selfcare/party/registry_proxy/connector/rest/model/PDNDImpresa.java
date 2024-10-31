@@ -2,6 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
 import lombok.Data;
 
 @Data
@@ -39,10 +40,12 @@ public class PDNDImpresa {
   private String digitalAddress;
 
   public String getAddress() {
-    return businessAddress.getToponimoSede()
-        + " "
-        + businessAddress.getViaSede()
-        + " "
-        + businessAddress.getNcivicoSede();
+    if (Objects.nonNull(businessAddress)) {
+      return businessAddress.getToponimoSede()
+          + " "
+          + businessAddress.getViaSede()
+          + " "
+          + businessAddress.getNcivicoSede();
+    } else return "";
   }
 }
