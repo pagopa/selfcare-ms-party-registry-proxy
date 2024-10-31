@@ -56,17 +56,6 @@ resilience4j:
     circuit-breaker-aspect-order: 1
     instances:
       geotaxCircuitbreaker:
-         wait-duration-in-open-state: 1m
-         permitted-number-of-calls-in-half-open-state: 3
-         sliding-window-type: count-based
-         sliding-window-size: 3
-         minimum-number-of-calls: 3
-         slow-call-duration-threshold: 10s
-         slow-call-rate-threshold: 60
-         failure-rate-threshold: 60
-         ignore-exceptions:
-           - it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException
-      pdndInfoCamereCircuitbreaker:
         wait-duration-in-open-state: 1m
         permitted-number-of-calls-in-half-open-state: 3
         sliding-window-type: count-based
