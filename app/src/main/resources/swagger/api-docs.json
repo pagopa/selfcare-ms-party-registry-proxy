@@ -1143,7 +1143,7 @@
     },
     "/infocamere-pdnd/institution/{taxCode}" : {
       "get" : {
-        "tags" : [ "infocamere PDND" ],
+        "tags" : [ "internal-v1" ],
         "summary" : "Get institution by institution taxCode",
         "description" : "Get the company represented by taxCode of the institution passed as a parameter",
         "operationId" : "institutionPdndByTaxCodeUsingGET",
