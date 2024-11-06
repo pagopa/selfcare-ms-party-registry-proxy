@@ -19,7 +19,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(value = "/infocamere-pdnd", produces = MediaType.APPLICATION_JSON_VALUE)
-@Api(tags = "infocamere PDND")
+@Api(tags = "infocamere-pdnd")
 public class PDNDInfoCamereController {
 
   private final PDNDInfoCamereService pdndInfoCamereService;
@@ -45,6 +45,7 @@ public class PDNDInfoCamereController {
   }
 
   @Tag(name = "internal-v1")
+  @Tag(name = "infocamere-pdnd")
   @ResponseStatus(HttpStatus.OK)
   @ApiOperation(
       value = "${swagger.api.infocamere-pdnd.institution.summary}",

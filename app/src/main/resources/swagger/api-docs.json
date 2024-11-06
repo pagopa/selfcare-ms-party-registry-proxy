@@ -32,7 +32,7 @@
     "name" : "infocamere",
     "description" : "Info Camere Controller"
   }, {
-    "name" : "infocamere PDND",
+    "name" : "infocamere-pdnd",
     "description" : "PDND Info Camere Controller"
   }, {
     "name" : "institution",
@@ -1143,7 +1143,7 @@
     },
     "/infocamere-pdnd/institution/{taxCode}" : {
       "get" : {
-        "tags" : [ "internal-v1" ],
+        "tags" : [ "infocamere-pdnd", "internal-v1" ],
         "summary" : "Get institution by institution taxCode",
         "description" : "Get the company represented by taxCode of the institution passed as a parameter",
         "operationId" : "institutionPdndByTaxCodeUsingGET",
@@ -1216,7 +1216,7 @@
     },
     "/infocamere-pdnd/institutions" : {
       "get" : {
-        "tags" : [ "infocamere PDND" ],
+        "tags" : [ "infocamere-pdnd" ],
         "summary" : "Get institutions by institution description",
         "description" : "Get the list of companies represented by description of the institutions passed as a parameter",
         "operationId" : "institutionsPdndByDescriptionUsingGET",
