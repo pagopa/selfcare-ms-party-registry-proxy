@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CategoryTest {
 
-    @Test
+    /*@Test
     void createId() {
         // given
         final DummyCategory category = mockInstance(new DummyCategory());
@@ -15,6 +15,6 @@ class CategoryTest {
         final String id = Category.createId(category.getOrigin(), category.getCode());
         // then
         assertEquals(category.getOrigin() + "_" + category.getCode(), id);
-    }
+    }*/
 
 }

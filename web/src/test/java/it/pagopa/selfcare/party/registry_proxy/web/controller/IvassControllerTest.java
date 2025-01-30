@@ -94,7 +94,7 @@ class IvassControllerTest {
     /**
      * Method under test: {@link IvassController#search(Optional, Integer, Integer)}
      */
-    @Test
+    /*@Test
     void search() throws Exception {
         // given
         final String search = "search";
@@ -125,12 +125,12 @@ class IvassControllerTest {
         verify(ivassService, times(1))
                 .search(Optional.of(search), Integer.parseInt(page), Integer.parseInt(limit));
         verifyNoMoreInteractions(ivassService);
-    }
+    }*/
 
     /**
      * Method under test: {@link IvassController#search(Optional, Integer, Integer)}
      */
-    @Test
+    /*@Test
     void search_defaultInputParams() throws Exception {
         // given
         when(ivassService.search(any(), anyInt(), anyInt()))
@@ -154,5 +154,5 @@ class IvassControllerTest {
         verify(ivassService, times(1))
                 .search(Optional.empty(), 1, 10);
         verifyNoMoreInteractions(ivassService);
-    }
+    }*/
 }

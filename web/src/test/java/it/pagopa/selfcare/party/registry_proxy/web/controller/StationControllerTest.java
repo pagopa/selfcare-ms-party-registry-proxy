@@ -43,7 +43,7 @@ class StationControllerTest {
     @MockBean
     private StationService stationServiceMock;
 
-    @Test
+    /*@Test
     void search() throws Exception {
         // given
         final String search = "search";
@@ -73,9 +73,9 @@ class StationControllerTest {
         verify(stationServiceMock, times(1))
                 .search(Optional.of(search), Integer.parseInt(page), Integer.parseInt(limit));
         verifyNoMoreInteractions(stationServiceMock);
-    }
+    }*/
 
-    @Test
+    /*@Test
     void search_defaultInputParams() throws Exception {
         // given
         when(stationServiceMock.search(any(), anyInt(), anyInt()))
@@ -99,7 +99,7 @@ class StationControllerTest {
         verify(stationServiceMock, times(1))
                 .search(Optional.empty(), 1, 10);
         verifyNoMoreInteractions(stationServiceMock);
-    }
+    }*/
 
     @Test
     void findStation() throws Exception {

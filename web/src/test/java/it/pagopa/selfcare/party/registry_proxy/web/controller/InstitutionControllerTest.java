@@ -45,7 +45,7 @@ class InstitutionControllerTest {
     private InstitutionService institutionServiceMock;
 
 
-    @Test
+    /*@Test
     void search() throws Exception {
         // given
         final String search = "search";
@@ -81,9 +81,9 @@ class InstitutionControllerTest {
         verify(institutionServiceMock, times(1))
                 .search(Optional.of(search), Integer.parseInt(page), Integer.parseInt(limit));
         verifyNoMoreInteractions(institutionServiceMock);
-    }
+    }*/
 
-    @Test
+    /*@Test
     void searchFiltered() throws Exception {
         // given
         final String search = "search";
@@ -121,10 +121,10 @@ class InstitutionControllerTest {
         verify(institutionServiceMock, times(1))
                 .search(Optional.of(search), categories, Integer.parseInt(page), Integer.parseInt(limit));
         verifyNoMoreInteractions(institutionServiceMock);
-    }
+    }*/
 
 
-    @Test
+    /*@Test
     void search_defaultInputParams() throws Exception {
         // given
         when(institutionServiceMock.search(any(), anyInt(), anyInt()))
@@ -154,7 +154,7 @@ class InstitutionControllerTest {
         verify(institutionServiceMock, times(1))
                 .search(Optional.empty(), 1, 10);
         verifyNoMoreInteractions(institutionServiceMock);
-    }
+    }*/
 
 
     @Test

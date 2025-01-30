@@ -34,8 +34,6 @@ public class GeographicTaxonomiesControllerTest {
     private GeographicTaxonomiesService geographicTaxonomiesService;
 
 
-
-
     @Test
     void retrieveGeoTaxonomiesByDescription() throws Exception {
 

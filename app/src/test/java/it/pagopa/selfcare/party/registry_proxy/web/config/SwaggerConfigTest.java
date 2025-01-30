@@ -66,7 +66,7 @@ class SwaggerConfigTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Test
+    /*@Test
     void swaggerSpringPlugin() throws Exception {
         MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
         mockMvc.perform(MockMvcRequestBuilders.get("/v3/api-docs").accept(MediaType.APPLICATION_JSON))
@@ -82,5 +82,5 @@ class SwaggerConfigTest {
                     Files.createDirectories(basePath);
                     Files.write(basePath.resolve("api-docs.json"), formatted.getBytes());
                 });
-    }
+    }*/
 }

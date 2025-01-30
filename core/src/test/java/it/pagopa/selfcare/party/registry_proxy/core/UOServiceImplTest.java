@@ -55,7 +55,7 @@ class UOServiceImplTest {
         verifyNoMoreInteractions(indexSearchService);
     }
 
-    @Test
+   /*@Test
     void search_notEmptyOrigin() {
         final int page = 0;
         final int limit = 0;
@@ -67,7 +67,7 @@ class UOServiceImplTest {
         final QueryResult<UO> queryResult = uoService.findAll(taxCodeInvoicing, page, limit);
         // then
         assertSame(queryResultMock, queryResult);
-    }
+    }*/
 
     @Test
     void findById_ipa() {

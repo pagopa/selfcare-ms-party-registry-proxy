@@ -6,6 +6,8 @@ import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFo
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 
 import java.io.IOException;
 
@@ -18,7 +20,11 @@ public class RestTemplateErrorHandler implements ResponseErrorHandler {
 
     @Override
     public void handleError(ClientHttpResponse response) throws IOException {
-        switch (response.getStatusCode()) {
+        HttpStatus status = HttpStatus.resolve(response.getStatusCode().value());
+        if (status == null) {
+            throw new InternalException("Unknown error: " + response.getStatusText());
+        }
+        switch (status) {
             case BAD_REQUEST:
                 throw new InvalidRequestException(response.getStatusText());
             case NOT_FOUND:
