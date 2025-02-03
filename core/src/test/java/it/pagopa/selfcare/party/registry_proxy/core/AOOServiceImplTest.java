@@ -59,19 +59,19 @@ class AOOServiceImplTest {
         verifyNoMoreInteractions(indexSearchService);
     }
 
-    /*@Test
+    @Test
     void search_notEmptyOrigin() {
         // given
         final int page = 0;
         final int limit = 0;
         final DummyAOOQueryResult queryResultMock = new DummyAOOQueryResult();
-        when(indexSearchService.findAll(anyInt(), anyInt(), any(), any()))
+        when(indexSearchService.findAll(anyInt(), anyInt(), any()))
                 .thenReturn(queryResultMock);
         // when
         final QueryResult<AOO> queryResult = aooService.findAll(page, limit);
         // then
         assertSame(queryResultMock, queryResult);
-    }*/
+    }
 
     @Test
     void findById_ipa() {
