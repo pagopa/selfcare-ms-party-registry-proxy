@@ -45,7 +45,7 @@ class InstitutionControllerTest {
     private InstitutionService institutionServiceMock;
 
 
-    /*@Test
+    @Test
     void search() throws Exception {
         // given
         final String search = "search";
@@ -55,7 +55,7 @@ class InstitutionControllerTest {
                 .thenReturn(new DummyInstitutionQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
-                        .get(BASE_URL + "/")
+                        .get(BASE_URL)
                         .queryParam("search", search)
                         .queryParam("page", page)
                         .queryParam("limit", limit)
@@ -81,9 +81,9 @@ class InstitutionControllerTest {
         verify(institutionServiceMock, times(1))
                 .search(Optional.of(search), Integer.parseInt(page), Integer.parseInt(limit));
         verifyNoMoreInteractions(institutionServiceMock);
-    }*/
+    }
 
-    /*@Test
+    @Test
     void searchFiltered() throws Exception {
         // given
         final String search = "search";
@@ -94,7 +94,7 @@ class InstitutionControllerTest {
                 .thenReturn(new DummyInstitutionQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
-                        .get(BASE_URL + "/")
+                        .get(BASE_URL)
                         .queryParam("search", search)
                         .queryParam("page", page)
                         .queryParam("limit", limit)
@@ -121,17 +121,17 @@ class InstitutionControllerTest {
         verify(institutionServiceMock, times(1))
                 .search(Optional.of(search), categories, Integer.parseInt(page), Integer.parseInt(limit));
         verifyNoMoreInteractions(institutionServiceMock);
-    }*/
+    }
 
 
-    /*@Test
+    @Test
     void search_defaultInputParams() throws Exception {
         // given
         when(institutionServiceMock.search(any(), anyInt(), anyInt()))
                 .thenReturn(new DummyInstitutionQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
-                        .get(BASE_URL + "/")
+                        .get(BASE_URL)
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
@@ -154,7 +154,7 @@ class InstitutionControllerTest {
         verify(institutionServiceMock, times(1))
                 .search(Optional.empty(), 1, 10);
         verifyNoMoreInteractions(institutionServiceMock);
-    }*/
+    }
 
 
     @Test

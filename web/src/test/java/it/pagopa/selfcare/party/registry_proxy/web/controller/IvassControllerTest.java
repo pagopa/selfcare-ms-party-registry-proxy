@@ -94,7 +94,7 @@ class IvassControllerTest {
     /**
      * Method under test: {@link IvassController#search(Optional, Integer, Integer)}
      */
-    /*@Test
+    @Test
     void search() throws Exception {
         // given
         final String search = "search";
@@ -104,7 +104,7 @@ class IvassControllerTest {
                 .thenReturn(new DummyInsuranceQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
-                        .get(BASE_URL + "/")
+                        .get(BASE_URL)
                         .queryParam("search", search)
                         .queryParam("page", page)
                         .queryParam("limit", limit)
@@ -125,19 +125,19 @@ class IvassControllerTest {
         verify(ivassService, times(1))
                 .search(Optional.of(search), Integer.parseInt(page), Integer.parseInt(limit));
         verifyNoMoreInteractions(ivassService);
-    }*/
+    }
 
     /**
      * Method under test: {@link IvassController#search(Optional, Integer, Integer)}
      */
-    /*@Test
+    @Test
     void search_defaultInputParams() throws Exception {
         // given
         when(ivassService.search(any(), anyInt(), anyInt()))
                 .thenReturn(new DummyInsuranceQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
-                        .get(BASE_URL + "/")
+                        .get(BASE_URL)
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
@@ -154,5 +154,5 @@ class IvassControllerTest {
         verify(ivassService, times(1))
                 .search(Optional.empty(), 1, 10);
         verifyNoMoreInteractions(ivassService);
-    }*/
+    }
 }

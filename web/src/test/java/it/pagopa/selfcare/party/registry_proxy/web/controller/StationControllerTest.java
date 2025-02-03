@@ -43,7 +43,7 @@ class StationControllerTest {
     @MockBean
     private StationService stationServiceMock;
 
-    /*@Test
+    @Test
     void search() throws Exception {
         // given
         final String search = "search";
@@ -53,7 +53,7 @@ class StationControllerTest {
                 .thenReturn(new DummyPDNDQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
-                        .get(BASE_URL + "/")
+                        .get(BASE_URL)
                         .queryParam("search", search)
                         .queryParam("page", page)
                         .queryParam("limit", limit)
@@ -73,16 +73,16 @@ class StationControllerTest {
         verify(stationServiceMock, times(1))
                 .search(Optional.of(search), Integer.parseInt(page), Integer.parseInt(limit));
         verifyNoMoreInteractions(stationServiceMock);
-    }*/
+    }
 
-    /*@Test
+    @Test
     void search_defaultInputParams() throws Exception {
         // given
         when(stationServiceMock.search(any(), anyInt(), anyInt()))
                 .thenReturn(new DummyPDNDQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
-                        .get(BASE_URL + "/")
+                        .get(BASE_URL)
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
@@ -99,7 +99,7 @@ class StationControllerTest {
         verify(stationServiceMock, times(1))
                 .search(Optional.empty(), 1, 10);
         verifyNoMoreInteractions(stationServiceMock);
-    }*/
+    }
 
     @Test
     void findStation() throws Exception {
