@@ -55,6 +55,10 @@ class SwaggerConfig {
         this.environment = environment;
     }
 
+    @Bean
+    public TypeResolver typeResolver() {
+        return new TypeResolver();
+    }
 
     @Bean
     public Docket swaggerSpringPlugin(@Autowired TypeResolver typeResolver) {
