@@ -1,20 +1,20 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.decoder;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
+
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.InternalException;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.InvalidRequestException;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
+import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.client.ClientHttpResponse;
-
-import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 class RestTemplateErrorHandlerTest {
     @Mock
@@ -26,6 +26,12 @@ class RestTemplateErrorHandlerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void handleError_shouldThrowInternalException_whenStatusNull() throws IOException {
+        when(response.getStatusCode()).thenReturn(HttpStatusCode.valueOf(999));
+        assertThrows(InternalException.class, () -> errorHandler.handleError(response));
     }
 
     @Test
