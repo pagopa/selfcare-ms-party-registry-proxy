@@ -104,7 +104,7 @@ class IvassControllerTest {
                 .thenReturn(new DummyInsuranceQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
-                        .get(BASE_URL + "/")
+                        .get(BASE_URL)
                         .queryParam("search", search)
                         .queryParam("page", page)
                         .queryParam("limit", limit)
@@ -137,7 +137,7 @@ class IvassControllerTest {
                 .thenReturn(new DummyInsuranceQueryResult());
         // when
         mvc.perform(MockMvcRequestBuilders
-                        .get(BASE_URL + "/")
+                        .get(BASE_URL)
                         .contentType(APPLICATION_JSON_VALUE)
                         .accept(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())

@@ -1,11 +1,19 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.Origin.IPA;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
+
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexSearchService;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.OpenDataRestClient;
 import it.pagopa.selfcare.party.registry_proxy.core.exception.TooManyResourceFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,15 +21,6 @@ import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static it.pagopa.selfcare.party.registry_proxy.connector.model.Origin.IPA;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AOOServiceImplTest {
@@ -60,14 +59,13 @@ class AOOServiceImplTest {
         verifyNoMoreInteractions(indexSearchService);
     }
 
-
     @Test
     void search_notEmptyOrigin() {
         // given
         final int page = 0;
         final int limit = 0;
         final DummyAOOQueryResult queryResultMock = new DummyAOOQueryResult();
-        when(indexSearchService.findAll(anyInt(), anyInt(), any(), any()))
+        when(indexSearchService.findAll(anyInt(), anyInt(), any()))
                 .thenReturn(queryResultMock);
         // when
         final QueryResult<AOO> queryResult = aooService.findAll(page, limit);

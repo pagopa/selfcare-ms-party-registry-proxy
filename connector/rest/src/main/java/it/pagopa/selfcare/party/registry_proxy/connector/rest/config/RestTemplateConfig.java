@@ -2,17 +2,17 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest.config;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.decoder.RestTemplateErrorHandler;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.interceptor.IvassInterceptor;
-import org.apache.http.client.CookieStore;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.LaxRedirectStrategy;
+import java.util.List;
+import org.apache.hc.client5.http.cookie.BasicCookieStore;
+import org.apache.hc.client5.http.cookie.CookieStore;
+import org.apache.hc.client5.http.impl.DefaultRedirectStrategy;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.protocol.RedirectStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 @Configuration
 public class RestTemplateConfig {
@@ -27,10 +27,10 @@ public class RestTemplateConfig {
     @Bean
     public RestTemplate ivassRestTemplate() {
         CookieStore cookieStore = new BasicCookieStore();
-
-        CloseableHttpClient httpClient = HttpClientBuilder.create()
+        RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+        CloseableHttpClient httpClient = HttpClients.custom()
                 .setDefaultCookieStore(cookieStore)
-                .setRedirectStrategy(new LaxRedirectStrategy())
+                .setRedirectStrategy(redirectStrategy)
                 .build();
 
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(httpClient);

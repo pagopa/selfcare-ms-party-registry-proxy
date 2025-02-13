@@ -61,7 +61,7 @@ class UOServiceImplTest {
         final int limit = 0;
         final Optional<String> taxCodeInvoicing = Optional.of("pippo");
         final DummyUOQueryResult queryResultMock = new DummyUOQueryResult();
-        when(indexSearchService.findAll(anyInt(), anyInt(), any(), any()))
+        when(indexSearchService.fullTextSearch(any(), anyString(), anyInt(), anyInt()))
                 .thenReturn(queryResultMock);
         // when
         final QueryResult<UO> queryResult = uoService.findAll(taxCodeInvoicing, page, limit);
