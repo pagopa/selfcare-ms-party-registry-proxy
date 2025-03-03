@@ -14,7 +14,7 @@ public class ApiKeyRequestInterceptor implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate template) {
         if (!template.headers().containsKey("x-api-key")) {
-            template.header("X-API-KEY", apiKey);
+            template.header("x-api-key", apiKey);
         }
     }
 }
