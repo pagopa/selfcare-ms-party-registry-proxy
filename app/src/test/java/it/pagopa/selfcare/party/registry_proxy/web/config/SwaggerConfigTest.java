@@ -1,14 +1,18 @@
 package it.pagopa.selfcare.party.registry_proxy.web.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.pagopa.selfcare.commons.web.config.SecurityConfig;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.IvassConnectorImpl;
 import it.pagopa.selfcare.party.registry_proxy.core.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -22,11 +26,7 @@ import java.nio.file.Paths;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest(classes = {
-        SwaggerConfig.class,
-        WebConfig.class,
-})
-@EnableWebMvc
+@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ComponentScan(basePackages = {"it.pagopa.selfcare.party.registry_proxy.web.controller", "it.pagopa.selfcare.party.registry_proxy.web.model.mapper"})
 @TestPropertySource(locations = "classpath:config/application.yml")
 class SwaggerConfigTest {
@@ -54,6 +54,12 @@ class SwaggerConfigTest {
 
     @MockBean
     private UOService uoService;
+
+    @MockBean
+    private ANACService anacService;
+
+    @MockBean
+    private IvassConnectorImpl ivassConnector;
 
     @MockBean
     private PDNDInfoCamereService pdndInfoCamereService;
