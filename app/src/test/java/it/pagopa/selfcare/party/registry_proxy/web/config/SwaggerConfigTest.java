@@ -3,6 +3,7 @@ package it.pagopa.selfcare.party.registry_proxy.web.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.pagopa.selfcare.commons.web.config.SecurityConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.IvassConnectorImpl;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.GeoTaxonomiesRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.core.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,9 @@ class SwaggerConfigTest {
 
     @MockBean
     private GeographicTaxonomiesService geographicTaxonomiesService;
+
+    @MockBean
+    private GeoTaxonomiesRestClientConfig geoTaxonomiesRestClientConfig;
 
     @MockBean
     private AOOService aooService;
