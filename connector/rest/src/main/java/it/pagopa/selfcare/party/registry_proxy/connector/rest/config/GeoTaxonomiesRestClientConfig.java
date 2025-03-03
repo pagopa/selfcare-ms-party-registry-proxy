@@ -19,7 +19,7 @@ public class GeoTaxonomiesRestClientConfig {
     private String apiKey;
 
     @Bean
-    public ApiKeyRequestInterceptor userRegistryApiKeyInterceptor() {
+    public ApiKeyRequestInterceptor geoTaxonomiesApiKeyInterceptor() {
         return new ApiKeyRequestInterceptor(apiKey);
     }
 
