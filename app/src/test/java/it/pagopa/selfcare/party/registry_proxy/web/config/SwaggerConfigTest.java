@@ -1,32 +1,29 @@
 package it.pagopa.selfcare.party.registry_proxy.web.config;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.pagopa.selfcare.commons.web.config.SecurityConfig;
+import it.pagopa.selfcare.party.registry_proxy.connector.api.GeoTaxonomiesConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.api.NationalRegistriesConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.IvassConnectorImpl;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.GeoTaxonomiesRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.NationalRegistriesRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.core.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ComponentScan(basePackages = {"it.pagopa.selfcare.party.registry_proxy.web.controller", "it.pagopa.selfcare.party.registry_proxy.web.model.mapper"})
@@ -47,6 +44,12 @@ class SwaggerConfigTest {
 
     @MockBean
     private NationalRegistriesService nationalRegistriesService;
+
+    @MockBean
+    private GeoTaxonomiesConnector geoTaxonomiesConnectorImpl;
+
+    @MockBean
+    private NationalRegistriesConnector nationalRegistriesConnectorImpl;
 
     @MockBean
     private GeographicTaxonomiesService geographicTaxonomiesService;

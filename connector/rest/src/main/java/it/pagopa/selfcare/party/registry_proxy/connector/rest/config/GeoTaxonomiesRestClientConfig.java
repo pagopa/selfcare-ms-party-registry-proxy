@@ -15,7 +15,7 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:config/geo-taxonomies-rest-client.properties")
 public class GeoTaxonomiesRestClientConfig {
 
-    @Value("${GEOTAXONOMY_API_KEY}")
+    @Value("${GEOTAXONOMY_API_KEY:test}")
     private String apiKey;
 
     @Bean
