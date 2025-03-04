@@ -15,7 +15,7 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:config/national-registries-rest-client.properties")
 public class NationalRegistriesRestClientConfig {
 
-    @Value("${NATIONAL_REGISTRY_API_KEY}")
+    @Value("${NATIONAL_REGISTRY_API_KEY:test}")
     private String apiKey;
 
     @Bean
