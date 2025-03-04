@@ -2,6 +2,9 @@ package it.pagopa.selfcare.party.registry_proxy.web.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.pagopa.selfcare.commons.web.config.SecurityConfig;
+import it.pagopa.selfcare.party.registry_proxy.connector.api.GeoTaxonomiesConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.api.NationalRegistriesConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.GeoTaxonomiesConnectorImpl;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.IvassConnectorImpl;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.GeoTaxonomiesRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.NationalRegistriesRestClientConfig;
@@ -47,6 +50,12 @@ class SwaggerConfigTest {
 
     @MockBean
     private NationalRegistriesService nationalRegistriesService;
+
+    @MockBean
+    private GeoTaxonomiesConnector geoTaxonomiesConnectorImpl;
+
+    @MockBean
+    private NationalRegistriesConnector nationalRegistriesConnectorImpl;
 
     @MockBean
     private GeographicTaxonomiesService geographicTaxonomiesService;

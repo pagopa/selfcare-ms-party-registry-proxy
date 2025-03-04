@@ -1480,10 +1480,10 @@
           "mail1" : {
             "type" : "string"
           },
-          "cap" : {
+          "uriprotocolloInformatico" : {
             "type" : "string"
           },
-          "uriprotocolloInformatico" : {
+          "cap" : {
             "type" : "string"
           }
         }
