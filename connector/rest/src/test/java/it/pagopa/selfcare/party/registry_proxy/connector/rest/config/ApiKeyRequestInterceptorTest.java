@@ -48,6 +48,26 @@ public class ApiKeyRequestInterceptorTest {
         assertEquals("api-key-value", headerValue.get());
     }
 
+    @Test
+    void applyWithDuplicatedKey() {
+        // given
+        RequestTemplate requestTemplate = new RequestTemplate();
+        requestTemplate.header("x-api-key", "test");
+
+        // when
+        interceptor.apply(requestTemplate);
+
+        // then
+        Map<String, Collection<String>> headers = requestTemplate.headers();
+        assertNotNull(headers);
+        Collection<String> headerValues = headers.get("x-api-key");
+        assertNotNull(headerValues);
+        assertEquals(1, headerValues.size());
+        Optional<String> headerValue = headerValues.stream().findAny();
+        assertTrue(headerValue.isPresent());
+        assertEquals("test", headerValue.get());
+    }
+
 }
 
 

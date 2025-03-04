@@ -1,8 +1,9 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.client;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressRequest;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.GeoTaxonomiesRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.NationalRegistriesRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.AdELegalOKDto;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.AdELegalRequestBodyDto;
@@ -12,8 +13,6 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @FeignClient(name = "${rest-client.national-registries.serviceCode}", url = "${rest-client.national-registries.base-url}", configuration = NationalRegistriesRestClientConfig.class)
 public interface NationalRegistriesRestClient {
