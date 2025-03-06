@@ -16,9 +16,16 @@ public interface UO {
     String getCodiceUniAoo();
     String getDescrizioneUo();
 
-    String getMail1();
+
     Origin getOrigin();
 
+    String getMail1();
+    String getMail2();
+    String getMail3();
+
+    String getTipoMail1();
+    String getTipoMail2();
+    String getTipoMail3();
 
     String getDataIstituzione();
     String getNomeResponsabile();
@@ -31,7 +38,6 @@ public interface UO {
     String getIndirizzo();
     String getTelefono();
     String getFax();
-    String getTipoMail1();
     String getUrl();
     String getDataAggiornamento();
 
@@ -46,6 +52,8 @@ public interface UO {
         CODICE_UNI_AOO("codiceUniAoo"),
         DESCRIZIONE_UO("descrizioneUo"),
         MAIL1("mail1"),
+        MAIL2("mail2"),
+        MAIL3("mail3"),
         ORIGIN("origin"),
 
         DATA_ISTITUTIONE("dataIstituzione"),
@@ -60,6 +68,8 @@ public interface UO {
         TELEFONO("telefono"),
         FAX("fax"),
         TIPO_MAIL1("tipoMail1"),
+        TIPO_MAIL2("tipoMail2"),
+        TIPO_MAIL3("tipoMail3"),
         URL("url"),
         DATA_AGGIORNAMENTO("dataAggiornamento");
 

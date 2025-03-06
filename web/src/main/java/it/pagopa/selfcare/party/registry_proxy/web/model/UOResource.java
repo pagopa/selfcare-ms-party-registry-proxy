@@ -36,8 +36,9 @@ public class UOResource implements UO {
     @ApiModelProperty(value = "${swagger.model.uo.description}")
     private String descrizioneUo;
 
-    @ApiModelProperty()
     private String mail1;
+    private String mail2;
+    private String mail3;
 
     @ApiModelProperty(value = "${swagger.model.*.origin}")
     private Origin origin;
@@ -76,6 +77,8 @@ public class UOResource implements UO {
     private String fax;
 
     private String tipoMail1;
+    private String tipoMail2;
+    private String tipoMail3;
 
     @ApiModelProperty(value = "${swagger.model.uo.url}")
     private String url;

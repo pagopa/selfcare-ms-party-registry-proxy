@@ -58,7 +58,7 @@ public class AOOToDocumentConverter implements Function<AOO, Document> {
         String email = StringUtils.EMPTY;
         String typeEmail = StringUtils.EMPTY;
         AOO.Field fieldMail = MAIL1;
-        AOO.Field fieldType = TIPO_MAIL1;
+        AOO.Field fieldTypeMail = TIPO_MAIL1;
 
         if (aoo.getTipoMail1().equalsIgnoreCase("Pec")) {
             email = aoo.getMail1();
@@ -67,16 +67,16 @@ public class AOOToDocumentConverter implements Function<AOO, Document> {
             email = aoo.getMail2();
             typeEmail = aoo.getMail2();
             fieldMail = MAIL2;
-            fieldType = TIPO_MAIL2;
+            fieldTypeMail = TIPO_MAIL2;
         } else if (aoo.getTipoMail3().equalsIgnoreCase("Pec")) {
             email = aoo.getMail3();
             typeEmail = aoo.getMail3();
             fieldMail = MAIL3;
-            fieldType = TIPO_MAIL3;
+            fieldTypeMail = TIPO_MAIL3;
         }
 
         doc.add(new StringField(fieldMail.toString(), email, Field.Store.YES));
-        doc.add(new StringField(fieldType.toString(), typeEmail, Field.Store.YES));
+        doc.add(new StringField(fieldTypeMail.toString(), typeEmail, Field.Store.YES));
     }
 
 }
