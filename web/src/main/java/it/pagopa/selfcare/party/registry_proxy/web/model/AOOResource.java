@@ -77,4 +77,10 @@ public class AOOResource implements AOO {
 
     private String tipoMail1;
     private String mail1;
+
+    private String tipoMail2;
+    private String mail2;
+
+    private String tipoMail3;
+    private String mail3;
 }

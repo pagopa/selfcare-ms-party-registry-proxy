@@ -3,6 +3,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.lucene.converter;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.AOO;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Entity;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
@@ -30,7 +31,6 @@ public class AOOToDocumentConverter implements Function<AOO, Document> {
 
             doc.add(new StringField(DENOMINAZIONE_ENTE.toString(), aoo.getDenominazioneEnte(), Field.Store.YES));
             doc.add(new StringField(DENOMINAZIONE_AOO.toString(), aoo.getDenominazioneAoo(), Field.Store.YES));
-            doc.add(new StringField(MAIL1.toString(), aoo.getMail1(), Field.Store.YES));
 
             doc.add(new StringField(DATA_ISTITUTIONE.toString(), aoo.getDataIstituzione(), Field.Store.YES));
             doc.add(new StringField(NOME_RESPONSABILE.toString(), aoo.getNomeResponsabile(), Field.Store.YES));
@@ -44,13 +44,39 @@ public class AOOToDocumentConverter implements Function<AOO, Document> {
             doc.add(new StringField(TELEFONO.toString(), aoo.getTelefono(), Field.Store.YES));
             doc.add(new StringField(FAX.toString(), aoo.getFax(), Field.Store.YES));
 
-            doc.add(new StringField(TIPO_MAIL1.toString(), aoo.getTipoMail1(), Field.Store.YES));
             doc.add(new StringField(PROTOCOLLO_INFORMATICO.toString(), aoo.getProtocolloInformatico(), Field.Store.YES));
             doc.add(new StringField(URI_PROTOCOLLO_INFORMATICO.toString(), aoo.getURIProtocolloInformatico(), Field.Store.YES));
             doc.add(new StringField(DATA_AGGIORNAMENTO.toString(), aoo.getDataAggiornamento(), Field.Store.YES));
 
+            appendContact(doc, aoo);
         }
         return doc;
+    }
+
+    void appendContact(Document doc, AOO aoo) {
+
+        String email = StringUtils.EMPTY;
+        String typeEmail = StringUtils.EMPTY;
+        AOO.Field fieldMail = MAIL1;
+        AOO.Field fieldType = TIPO_MAIL1;
+
+        if (aoo.getTipoMail1().equalsIgnoreCase("Pec")) {
+            email = aoo.getMail1();
+            typeEmail = aoo.getMail1();
+        } else if (aoo.getTipoMail2().equalsIgnoreCase("Pec")) {
+            email = aoo.getMail2();
+            typeEmail = aoo.getMail2();
+            fieldMail = MAIL2;
+            fieldType = TIPO_MAIL2;
+        } else if (aoo.getTipoMail3().equalsIgnoreCase("Pec")) {
+            email = aoo.getMail3();
+            typeEmail = aoo.getMail3();
+            fieldMail = MAIL3;
+            fieldType = TIPO_MAIL3;
+        }
+
+        doc.add(new StringField(fieldMail.toString(), email, Field.Store.YES));
+        doc.add(new StringField(fieldType.toString(), typeEmail, Field.Store.YES));
     }
 
 }

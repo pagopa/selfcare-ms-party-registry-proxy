@@ -1480,6 +1480,18 @@
           "mail1" : {
             "type" : "string"
           },
+          "tipoMail2" : {
+            "type" : "string"
+          },
+          "mail2" : {
+            "type" : "string"
+          },
+          "tipoMail3" : {
+            "type" : "string"
+          },
+          "mail3" : {
+            "type" : "string"
+          },
           "cap" : {
             "type" : "string"
           },

@@ -121,6 +121,26 @@ public class DummyAOO implements AOO {
     }
 
     @Override
+    public String getMail2() {
+        return dummyEntity.getMail2();
+    }
+
+    @Override
+    public String getTipoMail2() {
+        return dummyEntity.getTipoMail2();
+    }
+
+    @Override
+    public String getMail3() {
+        return dummyEntity.getMail3();
+    }
+
+    @Override
+    public String getTipoMail3() {
+        return dummyEntity.getTipoMail3();
+    }
+
+    @Override
     public String getProtocolloInformatico() {
         return dummyEntity.getProtocolloInformatico();
     }
