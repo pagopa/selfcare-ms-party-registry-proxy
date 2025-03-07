@@ -15,6 +15,8 @@ public class DummyUO implements UO {
     private String codiceUniAoo;
     private String descrizioneUo;
     private String mail1;
+    private String mail2;
+    private String mail3;
     private Origin origin;
 
     private String dataIstituzione;
@@ -29,6 +31,8 @@ public class DummyUO implements UO {
     private String telefono;
     private String fax;
     private String tipoMail1;
+    private String tipoMail2;
+    private String tipoMail3;
     private String url;
     private String dataAggiornamento;
 }

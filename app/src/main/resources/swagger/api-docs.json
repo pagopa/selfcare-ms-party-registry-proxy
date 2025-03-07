@@ -1059,6 +1059,12 @@
           "mail1" : {
             "type" : "string"
           },
+          "mail2" : {
+            "type" : "string"
+          },
+          "mail3" : {
+            "type" : "string"
+          },
           "origin" : {
             "type" : "string",
             "enum" : [ "static", "IPA", "ANAC", "IVASS", "INFOCAMERE" ]
@@ -1094,6 +1100,12 @@
             "type" : "string"
           },
           "tipoMail1" : {
+            "type" : "string"
+          },
+          "tipoMail2" : {
+            "type" : "string"
+          },
+          "tipoMail3" : {
             "type" : "string"
           },
           "url" : {
