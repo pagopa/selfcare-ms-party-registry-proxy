@@ -62,15 +62,15 @@ public class AOOToDocumentConverter implements Function<AOO, Document> {
 
         if (aoo.getTipoMail1().equalsIgnoreCase("Pec")) {
             email = aoo.getMail1();
-            typeEmail = aoo.getMail1();
+            typeEmail = aoo.getTipoMail1();
         } else if (aoo.getTipoMail2().equalsIgnoreCase("Pec")) {
             email = aoo.getMail2();
-            typeEmail = aoo.getMail2();
+            typeEmail = aoo.getTipoMail2();
             fieldMail = MAIL2;
             fieldTypeMail = TIPO_MAIL2;
         } else if (aoo.getTipoMail3().equalsIgnoreCase("Pec")) {
             email = aoo.getMail3();
-            typeEmail = aoo.getMail3();
+            typeEmail = aoo.getTipoMail3();
             fieldMail = MAIL3;
             fieldTypeMail = TIPO_MAIL3;
         }

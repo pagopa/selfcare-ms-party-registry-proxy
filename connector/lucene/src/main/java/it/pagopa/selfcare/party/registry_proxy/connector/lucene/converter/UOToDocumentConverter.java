@@ -92,15 +92,15 @@ public class UOToDocumentConverter implements Function<UO, Document> {
 
         if (uo.getTipoMail1().equalsIgnoreCase("Pec")) {
             email = uo.getMail1();
-            typeEmail = uo.getMail1();
+            typeEmail = uo.getTipoMail1();
         } else if (uo.getTipoMail2().equalsIgnoreCase("Pec")) {
             email = uo.getMail2();
-            typeEmail = uo.getMail2();
+            typeEmail = uo.getTipoMail2();
             fieldMail = MAIL2;
             fieldTypeMail = TIPO_MAIL2;
         } else if (uo.getTipoMail3().equalsIgnoreCase("Pec")) {
             email = uo.getMail3();
-            typeEmail = uo.getMail3();
+            typeEmail = uo.getTipoMail3();
             fieldMail = MAIL3;
             fieldTypeMail = TIPO_MAIL3;
         }
