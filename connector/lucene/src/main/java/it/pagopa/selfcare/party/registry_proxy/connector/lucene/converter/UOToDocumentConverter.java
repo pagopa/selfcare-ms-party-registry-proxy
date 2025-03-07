@@ -87,8 +87,6 @@ public class UOToDocumentConverter implements Function<UO, Document> {
 
         String email = StringUtils.EMPTY;
         String typeEmail = StringUtils.EMPTY;
-        UO.Field fieldMail = MAIL1;
-        UO.Field fieldTypeMail = TIPO_MAIL1;
 
         if (uo.getTipoMail1().equalsIgnoreCase("Pec")) {
             email = uo.getMail1();
@@ -96,17 +94,13 @@ public class UOToDocumentConverter implements Function<UO, Document> {
         } else if (uo.getTipoMail2().equalsIgnoreCase("Pec")) {
             email = uo.getMail2();
             typeEmail = uo.getTipoMail2();
-            fieldMail = MAIL2;
-            fieldTypeMail = TIPO_MAIL2;
         } else if (uo.getTipoMail3().equalsIgnoreCase("Pec")) {
             email = uo.getMail3();
             typeEmail = uo.getTipoMail3();
-            fieldMail = MAIL3;
-            fieldTypeMail = TIPO_MAIL3;
         }
 
-        doc.add(new StringField(fieldMail.toString(), email, Field.Store.YES));
-        doc.add(new StringField(fieldTypeMail.toString(), typeEmail, Field.Store.YES));
+        doc.add(new StringField(MAIL1.toString(), email, Field.Store.YES));
+        doc.add(new StringField(TIPO_MAIL1.toString(), typeEmail, Field.Store.YES));
     }
 
 }

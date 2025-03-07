@@ -1,17 +1,38 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.converter;
 
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.CAP;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.CODICE_CATASTALE_COMUNE;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.CODICE_COMUNE_ISTAT;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.CODICE_FISCALE_ENTE;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.CODICE_IPA;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.CODICE_UNI_AOO;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.COD_AOO;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.COGNOME_RESPONSABILE;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.DATA_AGGIORNAMENTO;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.DATA_ISTITUTIONE;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.DENOMINAZIONE_AOO;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.DENOMINAZIONE_ENTE;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.FAX;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.INDIRIZZO;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.MAIL1;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.MAIL_RESPONSABILE;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.NOME_RESPONSABILE;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.ORIGIN;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.PROTOCOLLO_INFORMATICO;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.TELEFONO;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.TELEFONO_RESPONSABILE;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.TIPO_MAIL1;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.URI_PROTOCOLLO_INFORMATICO;
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.Category.Field.ID;
+
 import it.pagopa.selfcare.party.registry_proxy.connector.model.AOO;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Entity;
+import java.util.function.Function;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
-
-import java.util.function.Function;
-
-import static it.pagopa.selfcare.party.registry_proxy.connector.model.AOO.Field.*;
-import static it.pagopa.selfcare.party.registry_proxy.connector.model.Category.Field.ID;
 
 @Slf4j
 public class AOOToDocumentConverter implements Function<AOO, Document> {
@@ -57,8 +78,6 @@ public class AOOToDocumentConverter implements Function<AOO, Document> {
 
         String email = StringUtils.EMPTY;
         String typeEmail = StringUtils.EMPTY;
-        AOO.Field fieldMail = MAIL1;
-        AOO.Field fieldTypeMail = TIPO_MAIL1;
 
         if (aoo.getTipoMail1().equalsIgnoreCase("Pec")) {
             email = aoo.getMail1();
@@ -66,17 +85,13 @@ public class AOOToDocumentConverter implements Function<AOO, Document> {
         } else if (aoo.getTipoMail2().equalsIgnoreCase("Pec")) {
             email = aoo.getMail2();
             typeEmail = aoo.getTipoMail2();
-            fieldMail = MAIL2;
-            fieldTypeMail = TIPO_MAIL2;
         } else if (aoo.getTipoMail3().equalsIgnoreCase("Pec")) {
             email = aoo.getMail3();
             typeEmail = aoo.getTipoMail3();
-            fieldMail = MAIL3;
-            fieldTypeMail = TIPO_MAIL3;
         }
 
-        doc.add(new StringField(fieldMail.toString(), email, Field.Store.YES));
-        doc.add(new StringField(fieldTypeMail.toString(), typeEmail, Field.Store.YES));
+        doc.add(new StringField(MAIL1.toString(), email, Field.Store.YES));
+        doc.add(new StringField(TIPO_MAIL1.toString(), typeEmail, Field.Store.YES));
     }
 
 }
