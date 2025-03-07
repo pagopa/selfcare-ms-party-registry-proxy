@@ -18,16 +18,12 @@ import static it.pagopa.selfcare.party.registry_proxy.connector.model.UO.Field.D
 import static it.pagopa.selfcare.party.registry_proxy.connector.model.UO.Field.FAX;
 import static it.pagopa.selfcare.party.registry_proxy.connector.model.UO.Field.INDIRIZZO;
 import static it.pagopa.selfcare.party.registry_proxy.connector.model.UO.Field.MAIL1;
-import static it.pagopa.selfcare.party.registry_proxy.connector.model.UO.Field.MAIL2;
-import static it.pagopa.selfcare.party.registry_proxy.connector.model.UO.Field.MAIL3;
 import static it.pagopa.selfcare.party.registry_proxy.connector.model.UO.Field.MAIL_RESPONSABILE;
 import static it.pagopa.selfcare.party.registry_proxy.connector.model.UO.Field.NOME_RESPONSABILE;
 import static it.pagopa.selfcare.party.registry_proxy.connector.model.UO.Field.ORIGIN;
 import static it.pagopa.selfcare.party.registry_proxy.connector.model.UO.Field.TELEFONO;
 import static it.pagopa.selfcare.party.registry_proxy.connector.model.UO.Field.TELEFONO_RESPONSABILE;
 import static it.pagopa.selfcare.party.registry_proxy.connector.model.UO.Field.TIPO_MAIL1;
-import static it.pagopa.selfcare.party.registry_proxy.connector.model.UO.Field.TIPO_MAIL2;
-import static it.pagopa.selfcare.party.registry_proxy.connector.model.UO.Field.TIPO_MAIL3;
 import static it.pagopa.selfcare.party.registry_proxy.connector.model.UO.Field.URL;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Entity;
