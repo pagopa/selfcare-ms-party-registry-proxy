@@ -12,6 +12,8 @@ public class DummyAOO implements AOO {
     private String codiceUniAoo;
     private String denominazioneAoo;
     private String mail1;
+    private String mail2;
+    private String mail3;
     private String codAoo;
     private Origin origin;
 
@@ -27,6 +29,8 @@ public class DummyAOO implements AOO {
     private String telefono;
     private String fax;
     private String tipoMail1;
+    private String tipoMail2;
+    private String tipoMail3;
     private String protocolloInformatico;
     private String URIProtocolloInformatico;
     private String dataAggiornamento;

@@ -1,14 +1,14 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.lucene.model;
 
+import static it.pagopa.selfcare.commons.utils.TestUtils.mockInstance;
+import static org.springframework.test.util.ReflectionTestUtils.invokeGetterMethod;
+import static org.springframework.util.StringUtils.capitalize;
+
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.UO;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.StringField;
-
-import static it.pagopa.selfcare.commons.utils.TestUtils.mockInstance;
-import static org.springframework.test.util.ReflectionTestUtils.invokeGetterMethod;
-import static org.springframework.util.StringUtils.capitalize;
 
 public class DummyUO implements UO {
 
@@ -76,6 +76,16 @@ public class DummyUO implements UO {
     }
 
     @Override
+    public String getMail2() {
+        return dummyEntity.getMail2();
+    }
+
+    @Override
+    public String getMail3() {
+        return dummyEntity.getMail3();
+    }
+
+    @Override
     public Origin getOrigin() {
         return dummyEntity.getOrigin();
     }
@@ -140,6 +150,16 @@ public class DummyUO implements UO {
     @Override
     public String getTipoMail1() {
         return dummyEntity.getTipoMail1();
+    }
+
+    @Override
+    public String getTipoMail2() {
+        return dummyEntity.getTipoMail2();
+    }
+
+    @Override
+    public String getTipoMail3() {
+        return dummyEntity.getTipoMail3();
     }
 
     @Override

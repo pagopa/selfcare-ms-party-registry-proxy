@@ -28,6 +28,10 @@ public abstract class IPAOpenDataUOTemplate implements UO {
     private String descrizioneUo;
     @CsvBindByName(column = "Mail1")
     private String mail1;
+    @CsvBindByName(column = "Mail2")
+    private String mail2;
+    @CsvBindByName(column = "Mail3")
+    private String mail3;
 
     @CsvBindByName(column = "Data_istituzione")
     private String dataIstituzione;
@@ -53,6 +57,10 @@ public abstract class IPAOpenDataUOTemplate implements UO {
     private String fax;
     @CsvBindByName(column = "Tipo_Mail1")
     private String tipoMail1;
+    @CsvBindByName(column = "Tipo_Mail2")
+    private String tipoMail2;
+    @CsvBindByName(column = "Tipo_Mail3")
+    private String tipoMail3;
     @CsvBindByName(column = "Url")
     private String url;
     @CsvBindByName(column = "Data_aggiornamento")

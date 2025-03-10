@@ -21,6 +21,10 @@ public abstract class IPAOpenDataAOOTemplate implements AOO {
     private String denominazioneAoo;
     @CsvBindByName(column = "Mail1")
     private String mail1;
+    @CsvBindByName(column = "Mail2")
+    private String mail2;
+    @CsvBindByName(column = "Mail3")
+    private String mail3;
     @CsvBindByName(column = "cod_aoo")
     private String codAoo;
 
@@ -48,6 +52,10 @@ public abstract class IPAOpenDataAOOTemplate implements AOO {
     private String fax;
     @CsvBindByName(column = "Tipo_Mail1")
     private String tipoMail1;
+    @CsvBindByName(column = "Tipo_Mail2")
+    private String tipoMail2;
+    @CsvBindByName(column = "Tipo_Mail3")
+    private String tipoMail3;
     @CsvBindByName(column = "Protocollo_informatico")
     private String protocolloInformatico;
     @CsvBindByName(column = "URI_Protocollo_informatico")
