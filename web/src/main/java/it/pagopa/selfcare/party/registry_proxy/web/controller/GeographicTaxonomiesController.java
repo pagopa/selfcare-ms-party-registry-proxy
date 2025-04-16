@@ -1,25 +1,23 @@
 package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
+import static it.pagopa.selfcare.party.registry_proxy.connector.constant.GenericError.RETRIEVE_GEO_TAXONOMIES_ERROR;
+import static it.pagopa.selfcare.party.registry_proxy.connector.constant.GenericError.RETRIEVE_GEO_TAXONOMY_ERROR;
+
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.GeographicTaxonomy;
 import it.pagopa.selfcare.party.registry_proxy.core.GeographicTaxonomiesService;
 import it.pagopa.selfcare.party.registry_proxy.web.model.GeographicTaxonomyResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.GeographicTaxonomyMapper;
 import it.pagopa.selfcare.party.registry_proxy.web.utils.CustomExceptionMessage;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static it.pagopa.selfcare.party.registry_proxy.connector.constant.GenericError.RETRIEVE_GEO_TAXONOMIES_ERROR;
-import static it.pagopa.selfcare.party.registry_proxy.connector.constant.GenericError.RETRIEVE_GEO_TAXONOMY_ERROR;
-
 
 @Slf4j
 @RestController
@@ -44,7 +42,9 @@ public class GeographicTaxonomiesController {
      * * Code: 404, Message: GeographicTaxonomies not found, DataType: Problem
      */
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomiesByDescription}", notes = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomiesByDescription}")
+    @Operation(description = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomiesByDescription}",
+            summary = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomiesByDescription}",
+            operationId = "retrieveGeoTaxonomiesByDescriptionUsingGET")
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<GeographicTaxonomyResource>> retrieveGeoTaxonomiesByDescription(@ApiParam("${swagger.api.geotaxonomy.model.description}")
                                                                                                @RequestParam(value = "description") String description,
@@ -70,7 +70,9 @@ public class GeographicTaxonomiesController {
      * * Code: 404, Message: GeographicTaxonomies not found, DataType: Problem
      */
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomyByCode}", notes = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomyByCode}")
+    @Operation(description = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomyByCode}",
+            summary = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomyByCode}",
+            operationId = "retrieveGeoTaxonomiesByCodeUsingGET")
     @GetMapping(value = "/{geotaxId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public GeographicTaxonomyResource retrieveGeoTaxonomiesByCode(@ApiParam("${swagger.geographicTaxonomy.model.geotaxId}")
                                                                   @PathVariable("geotaxId") String code) {

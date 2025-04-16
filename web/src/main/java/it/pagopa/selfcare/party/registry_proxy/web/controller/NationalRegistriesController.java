@@ -1,7 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressProfessionalResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.VerifyLegalResponse;
@@ -29,8 +29,8 @@ public class NationalRegistriesController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.national-registries.legal-address.summary}",
-            notes = "${swagger.api.national-registries.legal-address}")
+    @Operation(summary = "${swagger.api.national-registries.legal-address.summary}",
+            description = "${swagger.api.national-registries.legal-address}")
     @Tag(name = "support-pnpg")
     @Tag(name = "national-registries")
     @GetMapping("/legal-address")
@@ -41,8 +41,9 @@ public class NationalRegistriesController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.national-registries.verify-legal.summary}",
-            notes = "${swagger.api.national-registries.verify-legal}")
+    @Operation(summary = "${swagger.api.national-registries.verify-legal.summary}",
+            description = "${swagger.api.national-registries.verify-legal}",
+            operationId = "verifyLegalUsingGET")
     @GetMapping("/verify-legal")
     public ResponseEntity<LegalVerificationResult> verifyLegal(@RequestParam(value = "taxId") String taxId,
                                                                @RequestParam(value = "vatNumber") String vatNumber) {

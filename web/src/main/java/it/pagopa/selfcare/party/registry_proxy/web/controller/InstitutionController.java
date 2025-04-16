@@ -1,8 +1,8 @@
 package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
@@ -11,17 +11,16 @@ import it.pagopa.selfcare.party.registry_proxy.web.model.InstitutionResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.InstitutionsResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.InstitutionMapper;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.InstitutionsMapper;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -31,18 +30,17 @@ public class InstitutionController {
 
     private final InstitutionService institutionService;
 
-
     @Autowired
     public InstitutionController(InstitutionService institutionService) {
         log.trace("Initializing {}", InstitutionController.class.getSimpleName());
         this.institutionService = institutionService;
     }
 
-
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.institution.search.summary}",
-            notes = "${swagger.api.institution.search.notes}")
+    @Operation(summary = "${swagger.api.institution.search.summary}",
+            description = "${swagger.api.institution.search.notes}",
+            operationId = "searchInstitutionsUsingGET")
     public InstitutionsResource search(@ApiParam("${swagger.model.institution.search}")
                                        @RequestParam(value = "search", required = false)
                                        Optional<String> search,
@@ -71,11 +69,11 @@ public class InstitutionController {
         return institutionsResource;
     }
 
-
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.institution.findInstitution.summary}",
-            notes = "${swagger.api.institution.findInstitution.notes}")
+    @Operation(summary = "${swagger.api.institution.findInstitution.summary}",
+            description = "${swagger.api.institution.findInstitution.notes}",
+            operationId = "findInstitutionUsingGET")
     public InstitutionResource findInstitution(@ApiParam("${swagger.api.institution.findInstitution.param.id}")
                                                @PathVariable("id") String id,
                                                @ApiParam("${swagger.model.*.origin}")
