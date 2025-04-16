@@ -33,7 +33,8 @@ public class InfoCamereController {
     @Tag(name = "support-pnpg")
     @Tag(name = "infocamere")
     @Operation(summary = "${swagger.api.info-camere.institutions.summary}",
-            description = "${swagger.api.info-camere.institutions.notes}")
+            description = "${swagger.api.info-camere.institutions.notes}",
+            operationId = "institutionsByLegalTaxIdUsingPOST")
     @PostMapping("/institutions")
     public ResponseEntity<BusinessesResource> institutionsByLegalTaxId(@RequestBody GetInstitutionsByLegalDto getInstitutionsByLegalDto) {
         RequestValidator.validateTaxId(getInstitutionsByLegalDto.getFilter().getLegalTaxId());

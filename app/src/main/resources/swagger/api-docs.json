@@ -29,7 +29,7 @@
         "tags" : [ "infocamere", "support-pnpg" ],
         "summary" : "Get institutions by legal tax id",
         "description" : "Get the list of companies represented by the tax code of the person (physical or juridical) passed as a parameter",
-        "operationId" : "institutionsByLegalTaxId",
+        "operationId" : "institutionsByLegalTaxIdUsingPOST",
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -74,7 +74,7 @@
         "tags" : [ "uo-controller" ],
         "summary" : "Retrieve all UO from IPA",
         "description" : "Returns the UO list",
-        "operationId" : "findAll",
+        "operationId" : "findUosUsingGET",
         "parameters" : [ {
           "name" : "limit",
           "in" : "query",
@@ -135,7 +135,7 @@
         "tags" : [ "uo-controller" ],
         "summary" : "Retrieve a UO given its code",
         "description" : "Returns a UO",
-        "operationId" : "findByUnicode",
+        "operationId" : "findUoByUnicodeUsingGET",
         "parameters" : [ {
           "name" : "codiceUniUo",
           "in" : "path",
@@ -188,7 +188,7 @@
         "tags" : [ "station-controller" ],
         "summary" : "Search station",
         "description" : "Returns a list of station.",
-        "operationId" : "search",
+        "operationId" : "searchStationsUsingGET",
         "parameters" : [ {
           "name" : "search",
           "in" : "query",
@@ -249,7 +249,7 @@
         "tags" : [ "station-controller" ],
         "summary" : "Search station by its taxCode",
         "description" : "Returns only one station.",
-        "operationId" : "searchByTaxCode",
+        "operationId" : "searchStationByTaxCodeUsingGET",
         "parameters" : [ {
           "name" : "taxId",
           "in" : "path",
@@ -292,7 +292,7 @@
         "tags" : [ "category-controller" ],
         "summary" : "Get a category",
         "description" : "Returns a category",
-        "operationId" : "findCategory",
+        "operationId" : "findCategoryUsingGET",
         "parameters" : [ {
           "name" : "origin",
           "in" : "path",
@@ -343,7 +343,7 @@
         "tags" : [ "national-registries-controller" ],
         "summary" : "Verify legal status from AdE",
         "description" : "verify if given taxId is legal of given institution identified with vatNumber",
-        "operationId" : "verifyLegal",
+        "operationId" : "verifyLegalUsingGET",
         "parameters" : [ {
           "name" : "taxId",
           "in" : "query",
@@ -436,7 +436,7 @@
         "tags" : [ "ivass-controller" ],
         "summary" : "Search insurance company",
         "description" : "Returns a list of insurance companies",
-        "operationId" : "search_1",
+        "operationId" : "searchInsuranceByIvassCode",
         "parameters" : [ {
           "name" : "search",
           "in" : "query",
@@ -497,7 +497,7 @@
         "tags" : [ "ivass-controller" ],
         "summary" : "Search insurance company by its IVASS code",
         "description" : "Returns only one insurance company.",
-        "operationId" : "searchByOriginId",
+        "operationId" : "searchInsurancesUsingGET",
         "parameters" : [ {
           "name" : "originId",
           "in" : "path",
@@ -540,7 +540,7 @@
         "tags" : [ "institution-controller" ],
         "summary" : "Search institutions",
         "description" : "Returns a list of Institutions.",
-        "operationId" : "search_2",
+        "operationId" : "searchInstitutionsUsingGET",
         "parameters" : [ {
           "name" : "search",
           "in" : "query",
@@ -608,7 +608,7 @@
         "tags" : [ "institution-controller" ],
         "summary" : "Find institution by ID",
         "description" : "Returns a single institution. If 'origin' param is filled, the ID to find is treated as 'originId' ($ref: '#/components/schemas/Institution'); otherwise is treated as 'id' ($ref: '#/components/schemas/Institution')",
-        "operationId" : "findInstitution",
+        "operationId" : "findInstitutionUsingGET",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -666,7 +666,7 @@
         "tags" : [ "pdnd-info-camere-controller" ],
         "summary" : "Get institutions by institution description",
         "description" : "Get the list of companies represented by description of the institutions passed as a parameter",
-        "operationId" : "institutionsPdndByDescription",
+        "operationId" : "institutionPdndByTaxCodeUsingGET",
         "parameters" : [ {
           "name" : "description",
           "in" : "query",
@@ -712,7 +712,7 @@
         "tags" : [ "internal-v1", "infocamere-pdnd" ],
         "summary" : "Get institution by institution taxCode",
         "description" : "Get the company represented by taxCode of the institution passed as a parameter",
-        "operationId" : "institutionPdndByTaxCode",
+        "operationId" : "institutionsPdndByDescriptionUsingGET",
         "parameters" : [ {
           "name" : "taxCode",
           "in" : "path",
@@ -755,7 +755,7 @@
         "tags" : [ "geographic-taxonomies-controller" ],
         "summary" : "retrieves the geographic taxonomies by description",
         "description" : "retrieves the geographic taxonomies by description",
-        "operationId" : "retrieveGeoTaxonomiesByDescription",
+        "operationId" : "retrieveGeoTaxonomiesByDescriptionUsingGET",
         "parameters" : [ {
           "name" : "description",
           "in" : "query",
@@ -817,7 +817,7 @@
         "tags" : [ "geographic-taxonomies-controller" ],
         "summary" : "retrieves the geographic taxonomy by code",
         "description" : "retrieves the geographic taxonomy by code",
-        "operationId" : "retrieveGeoTaxonomiesByCode",
+        "operationId" : "retrieveGeoTaxonomiesByCodeUsingGET",
         "parameters" : [ {
           "name" : "geotaxId",
           "in" : "path",
@@ -860,7 +860,7 @@
         "tags" : [ "category-controller" ],
         "summary" : "Get all categories",
         "description" : "Returns the categories list",
-        "operationId" : "findCategories",
+        "operationId" : "findCategoriesUsingGET",
         "parameters" : [ {
           "name" : "origin",
           "in" : "query",
@@ -922,7 +922,7 @@
         "tags" : [ "aoo-controller" ],
         "summary" : "Retrieve all AOO from IPA",
         "description" : "Returns the AOO list",
-        "operationId" : "findAll_1",
+        "operationId" : "findAOOUsingGET",
         "parameters" : [ {
           "name" : "page",
           "in" : "query",
@@ -976,7 +976,7 @@
         "tags" : [ "aoo-controller" ],
         "summary" : "Retrieve an AOO given its code",
         "description" : "Returns an AOO",
-        "operationId" : "findByUnicode_1",
+        "operationId" : "findAOOByUnicodeUsingGET",
         "parameters" : [ {
           "name" : "codiceUniAoo",
           "in" : "path",

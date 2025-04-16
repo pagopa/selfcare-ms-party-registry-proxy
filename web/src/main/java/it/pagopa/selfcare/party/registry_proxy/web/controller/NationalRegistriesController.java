@@ -42,7 +42,8 @@ public class NationalRegistriesController {
 
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "${swagger.api.national-registries.verify-legal.summary}",
-            description = "${swagger.api.national-registries.verify-legal}")
+            description = "${swagger.api.national-registries.verify-legal}",
+            operationId = "verifyLegalUsingGET")
     @GetMapping("/verify-legal")
     public ResponseEntity<LegalVerificationResult> verifyLegal(@RequestParam(value = "taxId") String taxId,
                                                                @RequestParam(value = "vatNumber") String vatNumber) {

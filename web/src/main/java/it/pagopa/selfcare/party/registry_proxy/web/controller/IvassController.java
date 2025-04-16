@@ -33,7 +33,9 @@ public class IvassController {
 
     @GetMapping("/{originId}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "${swagger.api.insurance-company.search.byOriginId.summary}", description = "${swagger.api.insurance-company.search.byOriginId.notes}")
+    @Operation(summary = "${swagger.api.insurance-company.search.byOriginId.summary}",
+            description = "${swagger.api.insurance-company.search.byOriginId.notes}",
+            operationId = "searchInsurancesUsingGET")
     public InsuranceCompanyResource searchByOriginId(@ApiParam("${swagger.model.insurance-company.originId}")
                                                      @PathVariable("originId") String originId) {
         log.trace("searchByOriginId start");
@@ -48,7 +50,9 @@ public class IvassController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "${swagger.api.insurance-company.search.summary}", description = "${swagger.api.insurance-company.search.notes}")
+    @Operation(summary = "${swagger.api.insurance-company.search.summary}",
+            description = "${swagger.api.insurance-company.search.notes}",
+            operationId = "searchInsuranceByIvassCode")
     public InsuranceCompaniesResource search(@ApiParam("${swagger.model.*.search}")
                                              @RequestParam(value = "search", required = false)
                                              Optional<String> search,

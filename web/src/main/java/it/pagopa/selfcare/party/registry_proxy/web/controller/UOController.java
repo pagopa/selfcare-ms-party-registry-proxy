@@ -34,7 +34,9 @@ public class UOController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "${swagger.api.uo.findAll.summary}", description = "${swagger.api.uo.findAll.notes}")
+    @Operation(summary = "${swagger.api.uo.findAll.summary}",
+            description = "${swagger.api.uo.findAll.notes}",
+            operationId = "findUosUsingGET")
     public UOsResource findAll(@ApiParam(value = "${swagger.model.*.limit}")
                                @RequestParam(value = "limit", required = false, defaultValue = "10")
                                Integer limit,
@@ -58,7 +60,9 @@ public class UOController {
 
     @GetMapping("/{codiceUniUo}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "${swagger.api.uo.findBy.summary}", description = "${swagger.api.uo.findBy.notes}")
+    @Operation(summary = "${swagger.api.uo.findBy.summary}",
+            description = "${swagger.api.uo.findBy.notes}",
+            operationId = "findUoByUnicodeUsingGET")
     public UOResource findByUnicode(@ApiParam("${swagger.model.uo.codiceUniUo}")
                                     @PathVariable("codiceUniUo") String codiceUniUo,
                                     @ApiParam(value = "${swagger.model.*.categories}")

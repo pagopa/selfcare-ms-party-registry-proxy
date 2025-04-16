@@ -36,7 +36,9 @@ public class StationController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "${swagger.api.station.search.summary}", description = "${swagger.api.station.search.notes}")
+    @Operation(summary = "${swagger.api.station.search.summary}",
+            description = "${swagger.api.station.search.notes}",
+            operationId = "searchStationsUsingGET")
     public StationsResource search(@ApiParam("${swagger.model.*.search}")
                                    @RequestParam(value = "search", required = false)
                                    Optional<String> search,
@@ -62,7 +64,9 @@ public class StationController {
 
     @GetMapping("/{taxId}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "${swagger.api.station.search.byId.summary}", description = "${swagger.api.station.search.byId.notes}")
+    @Operation(summary = "${swagger.api.station.search.byId.summary}",
+            description = "${swagger.api.station.search.byId.notes}",
+            operationId = "searchStationByTaxCodeUsingGET")
     public StationResource searchByTaxCode(@ApiParam("${swagger.model.station.taxCode}")
                                            @PathVariable("taxId") String taxId) {
         log.trace("find SA start");

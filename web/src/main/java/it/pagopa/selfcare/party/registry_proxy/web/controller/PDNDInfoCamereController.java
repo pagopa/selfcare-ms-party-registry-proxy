@@ -25,21 +25,22 @@ public class PDNDInfoCamereController {
   private final PDNDInfoCamereBusinessMapper pdndBusinessMapper;
 
   public PDNDInfoCamereController(
-      PDNDInfoCamereService pdndInfoCamereService,
-      PDNDInfoCamereBusinessMapper pdndBusinessMapper) {
+          PDNDInfoCamereService pdndInfoCamereService,
+          PDNDInfoCamereBusinessMapper pdndBusinessMapper) {
     this.pdndInfoCamereService = pdndInfoCamereService;
     this.pdndBusinessMapper = pdndBusinessMapper;
   }
 
   @ResponseStatus(HttpStatus.OK)
   @Operation(
-      summary = "${swagger.api.infocamere-pdnd.institutions.summary}",
-      description = "${swagger.api.infocamere-pdnd.institutions.notes}")
+          summary = "${swagger.api.infocamere-pdnd.institutions.summary}",
+          description = "${swagger.api.infocamere-pdnd.institutions.notes}",
+          operationId = "institutionPdndByTaxCodeUsingGET")
   @GetMapping("/institutions")
   public ResponseEntity<List<PDNDBusinessResource>> institutionsPdndByDescription(
-      @ApiParam("${swagger.model.institution.description}") @RequestParam String description) {
+          @ApiParam("${swagger.model.institution.description}") @RequestParam String description) {
     List<PDNDBusiness> businessList =
-        pdndInfoCamereService.retrieveInstitutionsPdndByDescription(description);
+            pdndInfoCamereService.retrieveInstitutionsPdndByDescription(description);
     return ResponseEntity.ok().body(pdndBusinessMapper.toResources(businessList));
   }
 
@@ -47,11 +48,12 @@ public class PDNDInfoCamereController {
   @Tag(name = "infocamere-pdnd")
   @ResponseStatus(HttpStatus.OK)
   @Operation(
-      summary = "${swagger.api.infocamere-pdnd.institution.summary}",
-      description = "${swagger.api.infocamere-pdnd.institution.notes}")
+          summary = "${swagger.api.infocamere-pdnd.institution.summary}",
+          description = "${swagger.api.infocamere-pdnd.institution.notes}",
+          operationId = "institutionsPdndByDescriptionUsingGET")
   @GetMapping("/institution/{taxCode}")
   public ResponseEntity<PDNDBusinessResource> institutionPdndByTaxCode(
-      @ApiParam("${swagger.model.institution.taxCode}") @PathVariable String taxCode) {
+          @ApiParam("${swagger.model.institution.taxCode}") @PathVariable String taxCode) {
     PDNDBusiness business = pdndInfoCamereService.retrieveInstitutionPdndByTaxCode(taxCode);
     return ResponseEntity.ok().body(pdndBusinessMapper.toResource(business));
   }

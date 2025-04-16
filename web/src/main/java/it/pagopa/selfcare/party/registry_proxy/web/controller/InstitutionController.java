@@ -39,7 +39,8 @@ public class InstitutionController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "${swagger.api.institution.search.summary}",
-            description = "${swagger.api.institution.search.notes}")
+            description = "${swagger.api.institution.search.notes}",
+            operationId = "searchInstitutionsUsingGET")
     public InstitutionsResource search(@ApiParam("${swagger.model.institution.search}")
                                        @RequestParam(value = "search", required = false)
                                        Optional<String> search,
@@ -71,7 +72,8 @@ public class InstitutionController {
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "${swagger.api.institution.findInstitution.summary}",
-            description = "${swagger.api.institution.findInstitution.notes}")
+            description = "${swagger.api.institution.findInstitution.notes}",
+            operationId = "findInstitutionUsingGET")
     public InstitutionResource findInstitution(@ApiParam("${swagger.api.institution.findInstitution.param.id}")
                                                @PathVariable("id") String id,
                                                @ApiParam("${swagger.model.*.origin}")

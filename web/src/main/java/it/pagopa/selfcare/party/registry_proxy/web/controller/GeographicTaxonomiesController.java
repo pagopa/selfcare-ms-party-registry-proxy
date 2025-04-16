@@ -42,7 +42,9 @@ public class GeographicTaxonomiesController {
      * * Code: 404, Message: GeographicTaxonomies not found, DataType: Problem
      */
     @ResponseStatus(HttpStatus.OK)
-    @Operation(description = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomiesByDescription}", summary = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomiesByDescription}")
+    @Operation(description = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomiesByDescription}",
+            summary = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomiesByDescription}",
+            operationId = "retrieveGeoTaxonomiesByDescriptionUsingGET")
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<GeographicTaxonomyResource>> retrieveGeoTaxonomiesByDescription(@ApiParam("${swagger.api.geotaxonomy.model.description}")
                                                                                                @RequestParam(value = "description") String description,
@@ -68,7 +70,9 @@ public class GeographicTaxonomiesController {
      * * Code: 404, Message: GeographicTaxonomies not found, DataType: Problem
      */
     @ResponseStatus(HttpStatus.OK)
-    @Operation(description = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomyByCode}", summary = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomyByCode}")
+    @Operation(description = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomyByCode}",
+            summary = "${swagger.registry-proxy.api.geotaxonomies.getGeographicTaxonomyByCode}",
+            operationId = "retrieveGeoTaxonomiesByCodeUsingGET")
     @GetMapping(value = "/{geotaxId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public GeographicTaxonomyResource retrieveGeoTaxonomiesByCode(@ApiParam("${swagger.geographicTaxonomy.model.geotaxId}")
                                                                   @PathVariable("geotaxId") String code) {

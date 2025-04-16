@@ -1,7 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.AOO;
@@ -10,13 +9,12 @@ import it.pagopa.selfcare.party.registry_proxy.core.AOOService;
 import it.pagopa.selfcare.party.registry_proxy.web.model.AOOResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.AOOsResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.AOOMapper;
+import java.util.*;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -34,7 +32,8 @@ public class AOOController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "${swagger.api.aoo.findAll.summary}",
-            description = "${swagger.api.aoo.findAll.notes}")
+            description = "${swagger.api.aoo.findAll.notes}",
+            operationId = "findAOOUsingGET")
     public AOOsResource findAll(@ApiParam(value = "${swagger.model.*.page}")
                                 @RequestParam(value = "page", required = false, defaultValue = "1")
                                 Integer page,
@@ -56,7 +55,8 @@ public class AOOController {
     @GetMapping("/{codiceUniAoo}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "${swagger.api.aoo.findBy.summary}",
-            description = "${swagger.api.aoo.findBy.notes}")
+            description = "${swagger.api.aoo.findBy.notes}",
+            operationId = "findAOOByUnicodeUsingGET")
     public AOOResource findByUnicode(@ApiParam("${swagger.model.aoo.codiceUniAoo}")
                                      @PathVariable("codiceUniAoo") String codiceUniAoo,
                                      @ApiParam(value = "${swagger.model.*.categories}")
