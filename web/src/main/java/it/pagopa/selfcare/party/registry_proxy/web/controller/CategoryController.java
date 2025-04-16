@@ -3,6 +3,7 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Category;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
@@ -28,18 +29,16 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-
     @Autowired
     public CategoryController(CategoryService categoryService) {
         log.trace("Initializing {}", CategoryController.class.getSimpleName());
         this.categoryService = categoryService;
     }
 
-
     @GetMapping("categories")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.category.findCategories.summary}",
-            notes = "${swagger.api.category.findCategories.notes}")
+    @Operation(summary = "${swagger.api.category.findCategories.summary}",
+            description = "${swagger.api.category.findCategories.notes}")
     public CategoriesResource findCategories(@ApiParam("${swagger.model.*.origin}")
                                              @RequestParam(value = "origin", required = false) Optional<Origin> origin,
                                              @ApiParam(value = "${swagger.model.*.page}")
@@ -59,11 +58,10 @@ public class CategoryController {
         return categoriesResource;
     }
 
-
     @GetMapping("origins/{origin}/categories/{code}")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.category.findCategory.summary}",
-            notes = "${swagger.api.category.findCategory.notes}")
+    @Operation(summary = "${swagger.api.category.findCategory.summary}",
+            description = "${swagger.api.category.findCategory.notes}")
     public CategoryResource findCategory(@ApiParam("${swagger.model.*.origin}")
                                          @PathVariable("origin") Origin origin,
                                          @ApiParam("${swagger.model.category.code}")

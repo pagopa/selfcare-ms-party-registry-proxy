@@ -1,21 +1,20 @@
 package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.InsuranceCompany;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
 import it.pagopa.selfcare.party.registry_proxy.core.IvassService;
 import it.pagopa.selfcare.party.registry_proxy.web.model.InsuranceCompaniesResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.InsuranceCompanyResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.InsuranceCompanyMapper;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -34,7 +33,7 @@ public class IvassController {
 
     @GetMapping("/{originId}")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.insurance-company.search.byOriginId.summary}", notes = "${swagger.api.insurance-company.search.byOriginId.notes}")
+    @Operation(summary = "${swagger.api.insurance-company.search.byOriginId.summary}", description = "${swagger.api.insurance-company.search.byOriginId.notes}")
     public InsuranceCompanyResource searchByOriginId(@ApiParam("${swagger.model.insurance-company.originId}")
                                                      @PathVariable("originId") String originId) {
         log.trace("searchByOriginId start");
@@ -49,7 +48,7 @@ public class IvassController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.insurance-company.search.summary}", notes = "${swagger.api.insurance-company.search.notes}")
+    @Operation(summary = "${swagger.api.insurance-company.search.summary}", description = "${swagger.api.insurance-company.search.notes}")
     public InsuranceCompaniesResource search(@ApiParam("${swagger.model.*.search}")
                                              @RequestParam(value = "search", required = false)
                                              Optional<String> search,

@@ -1,21 +1,20 @@
 package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.UO;
 import it.pagopa.selfcare.party.registry_proxy.core.UOService;
 import it.pagopa.selfcare.party.registry_proxy.web.model.UOResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.UOsResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.UOMapper;
+import java.util.List;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -35,7 +34,7 @@ public class UOController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.uo.findAll.summary}", notes = "${swagger.api.uo.findAll.notes}")
+    @Operation(summary = "${swagger.api.uo.findAll.summary}", description = "${swagger.api.uo.findAll.notes}")
     public UOsResource findAll(@ApiParam(value = "${swagger.model.*.limit}")
                                @RequestParam(value = "limit", required = false, defaultValue = "10")
                                Integer limit,
@@ -59,8 +58,7 @@ public class UOController {
 
     @GetMapping("/{codiceUniUo}")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.uo.findBy.summary}",
-            notes = "${swagger.api.uo.findBy.notes}")
+    @Operation(summary = "${swagger.api.uo.findBy.summary}", description = "${swagger.api.uo.findBy.notes}")
     public UOResource findByUnicode(@ApiParam("${swagger.model.uo.codiceUniUo}")
                                     @PathVariable("codiceUniUo") String codiceUniUo,
                                     @ApiParam(value = "${swagger.model.*.categories}")

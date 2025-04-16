@@ -1,7 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.core.NationalRegistriesService;
@@ -32,8 +32,8 @@ public class InfoCamereController {
     @ResponseStatus(HttpStatus.OK)
     @Tag(name = "support-pnpg")
     @Tag(name = "infocamere")
-    @ApiOperation(value = "${swagger.api.info-camere.institutions.summary}",
-            notes = "${swagger.api.info-camere.institutions.notes}")
+    @Operation(summary = "${swagger.api.info-camere.institutions.summary}",
+            description = "${swagger.api.info-camere.institutions.notes}")
     @PostMapping("/institutions")
     public ResponseEntity<BusinessesResource> institutionsByLegalTaxId(@RequestBody GetInstitutionsByLegalDto getInstitutionsByLegalDto) {
         RequestValidator.validateTaxId(getInstitutionsByLegalDto.getFilter().getLegalTaxId());

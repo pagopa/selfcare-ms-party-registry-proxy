@@ -3,6 +3,7 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.AOO;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
 import it.pagopa.selfcare.party.registry_proxy.core.AOOService;
@@ -30,11 +31,10 @@ public class AOOController {
         this.aooService = aooService;
     }
 
-
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.aoo.findAll.summary}",
-            notes = "${swagger.api.aoo.findAll.notes}")
+    @Operation(summary = "${swagger.api.aoo.findAll.summary}",
+            description = "${swagger.api.aoo.findAll.notes}")
     public AOOsResource findAll(@ApiParam(value = "${swagger.model.*.page}")
                                 @RequestParam(value = "page", required = false, defaultValue = "1")
                                 Integer page,
@@ -53,11 +53,10 @@ public class AOOController {
         return aoosResource;
     }
 
-
     @GetMapping("/{codiceUniAoo}")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.aoo.findBy.summary}",
-            notes = "${swagger.api.aoo.findBy.notes}")
+    @Operation(summary = "${swagger.api.aoo.findBy.summary}",
+            description = "${swagger.api.aoo.findBy.notes}")
     public AOOResource findByUnicode(@ApiParam("${swagger.model.aoo.codiceUniAoo}")
                                      @PathVariable("codiceUniAoo") String codiceUniAoo,
                                      @ApiParam(value = "${swagger.model.*.categories}")

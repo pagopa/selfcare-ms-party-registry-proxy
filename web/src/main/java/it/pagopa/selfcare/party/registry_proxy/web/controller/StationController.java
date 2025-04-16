@@ -1,22 +1,21 @@
 package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
+import io.swagger.v3.oas.annotations.Operation;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Station;
 import it.pagopa.selfcare.party.registry_proxy.core.StationService;
 import it.pagopa.selfcare.party.registry_proxy.web.model.StationResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.StationsResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.StationMapper;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -37,7 +36,7 @@ public class StationController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.station.search.summary}", notes = "${swagger.api.station.search.notes}")
+    @Operation(summary = "${swagger.api.station.search.summary}", description = "${swagger.api.station.search.notes}")
     public StationsResource search(@ApiParam("${swagger.model.*.search}")
                                    @RequestParam(value = "search", required = false)
                                    Optional<String> search,
@@ -63,7 +62,7 @@ public class StationController {
 
     @GetMapping("/{taxId}")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "${swagger.api.station.search.byId.summary}", notes = "${swagger.api.station.search.byId.notes}")
+    @Operation(summary = "${swagger.api.station.search.byId.summary}", description = "${swagger.api.station.search.byId.notes}")
     public StationResource searchByTaxCode(@ApiParam("${swagger.model.station.taxCode}")
                                            @PathVariable("taxId") String taxId) {
         log.trace("find SA start");
