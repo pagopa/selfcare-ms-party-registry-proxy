@@ -72,7 +72,7 @@ public class InstitutionController {
 
     @GetMapping("{id}")
     @Tag(name = "internal-v1")
-    @Tag(name = "institution")
+    @Tag(name = "institution-controller")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "${swagger.api.institution.findInstitution.summary}",
             description = "${swagger.api.institution.findInstitution.notes}",

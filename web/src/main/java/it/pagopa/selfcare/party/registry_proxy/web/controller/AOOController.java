@@ -55,7 +55,7 @@ public class AOOController {
 
     @GetMapping("/{codiceUniAoo}")
     @Tag(name = "internal-v1")
-    @Tag(name = "aoo")
+    @Tag(name = "aoo-controller")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "${swagger.api.aoo.findBy.summary}",
             description = "${swagger.api.aoo.findBy.notes}",

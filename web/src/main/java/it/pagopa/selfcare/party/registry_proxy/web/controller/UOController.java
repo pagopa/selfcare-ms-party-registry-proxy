@@ -61,7 +61,7 @@ public class UOController {
 
     @GetMapping("/{codiceUniUo}")
     @Tag(name = "internal-v1")
-    @Tag(name = "uo")
+    @Tag(name = "uo-controller")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "${swagger.api.uo.findBy.summary}",
             description = "${swagger.api.uo.findBy.notes}",
