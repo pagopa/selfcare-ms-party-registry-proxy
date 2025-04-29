@@ -3,6 +3,7 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.UO;
 import it.pagopa.selfcare.party.registry_proxy.core.UOService;
@@ -59,6 +60,8 @@ public class UOController {
     }
 
     @GetMapping("/{codiceUniUo}")
+    @Tag(name = "internal-v1")
+    @Tag(name = "uo")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "${swagger.api.uo.findBy.summary}",
             description = "${swagger.api.uo.findBy.notes}",

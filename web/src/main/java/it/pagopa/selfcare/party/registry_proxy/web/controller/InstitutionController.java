@@ -3,6 +3,7 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Institution;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
@@ -70,6 +71,8 @@ public class InstitutionController {
     }
 
     @GetMapping("{id}")
+    @Tag(name = "internal-v1")
+    @Tag(name = "institution")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "${swagger.api.institution.findInstitution.summary}",
             description = "${swagger.api.institution.findInstitution.notes}",
