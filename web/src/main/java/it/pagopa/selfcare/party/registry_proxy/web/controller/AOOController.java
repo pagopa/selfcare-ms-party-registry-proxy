@@ -3,7 +3,6 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.AOO;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
 import it.pagopa.selfcare.party.registry_proxy.core.AOOService;
@@ -54,12 +53,11 @@ public class AOOController {
     }
 
     @GetMapping("/{codiceUniAoo}")
-    @Tag(name = "internal-v1")
-    @Tag(name = "aoo-controller")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "${swagger.api.aoo.findBy.summary}",
             description = "${swagger.api.aoo.findBy.notes}",
-            operationId = "findAOOByUnicodeUsingGET")
+            operationId = "findAOOByUnicodeUsingGET",
+            tags = { "internal-v1", "aoo-controller" })
     public AOOResource findByUnicode(@ApiParam("${swagger.model.aoo.codiceUniAoo}")
                                      @PathVariable("codiceUniAoo") String codiceUniAoo,
                                      @ApiParam(value = "${swagger.model.*.categories}")
