@@ -56,7 +56,8 @@ public class AOOController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "${swagger.api.aoo.findBy.summary}",
             description = "${swagger.api.aoo.findBy.notes}",
-            operationId = "findAOOByUnicodeUsingGET")
+            operationId = "findAOOByUnicodeUsingGET",
+            tags = { "internal-v1", "aoo-controller" })
     public AOOResource findByUnicode(@ApiParam("${swagger.model.aoo.codiceUniAoo}")
                                      @PathVariable("codiceUniAoo") String codiceUniAoo,
                                      @ApiParam(value = "${swagger.model.*.categories}")

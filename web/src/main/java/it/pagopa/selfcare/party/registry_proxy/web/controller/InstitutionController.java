@@ -73,7 +73,8 @@ public class InstitutionController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "${swagger.api.institution.findInstitution.summary}",
             description = "${swagger.api.institution.findInstitution.notes}",
-            operationId = "findInstitutionUsingGET")
+            operationId = "findInstitutionUsingGET",
+            tags = { "internal-v1", "institution-controller" })
     public InstitutionResource findInstitution(@ApiParam("${swagger.api.institution.findInstitution.param.id}")
                                                @PathVariable("id") String id,
                                                @ApiParam("${swagger.model.*.origin}")

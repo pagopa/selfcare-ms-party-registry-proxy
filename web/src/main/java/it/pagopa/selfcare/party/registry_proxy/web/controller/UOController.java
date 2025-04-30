@@ -62,7 +62,8 @@ public class UOController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "${swagger.api.uo.findBy.summary}",
             description = "${swagger.api.uo.findBy.notes}",
-            operationId = "findUoByUnicodeUsingGET")
+            operationId = "findUoByUnicodeUsingGET",
+            tags = { "internal-v1", "uo-controller" })
     public UOResource findByUnicode(@ApiParam("${swagger.model.uo.codiceUniUo}")
                                     @PathVariable("codiceUniUo") String codiceUniUo,
                                     @ApiParam(value = "${swagger.model.*.categories}")
