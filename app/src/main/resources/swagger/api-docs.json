@@ -605,7 +605,7 @@
     },
     "/institutions/{id}" : {
       "get" : {
-        "tags" : [ "internal-v1", "institution-controller" ],
+        "tags" : [ "institution-controller" ],
         "summary" : "Find institution by ID",
         "description" : "Returns a single institution. If 'origin' param is filled, the ID to find is treated as 'originId' ($ref: '#/components/schemas/Institution'); otherwise is treated as 'id' ($ref: '#/components/schemas/Institution')",
         "operationId" : "findInstitutionUsingGET",
@@ -1549,10 +1549,10 @@
           "mail3" : {
             "type" : "string"
           },
-          "uriprotocolloInformatico" : {
+          "cap" : {
             "type" : "string"
           },
-          "cap" : {
+          "uriprotocolloInformatico" : {
             "type" : "string"
           }
         }
