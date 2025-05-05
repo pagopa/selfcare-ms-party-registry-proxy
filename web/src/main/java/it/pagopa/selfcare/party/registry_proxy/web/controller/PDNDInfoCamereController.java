@@ -35,7 +35,7 @@ public class PDNDInfoCamereController {
   @Operation(
           summary = "${swagger.api.infocamere-pdnd.institutions.summary}",
           description = "${swagger.api.infocamere-pdnd.institutions.notes}",
-          operationId = "institutionPdndByTaxCodeUsingGET")
+          operationId = "institutionsPdndByDescriptionUsingGET")
   @GetMapping("/institutions")
   public ResponseEntity<List<PDNDBusinessResource>> institutionsPdndByDescription(
           @ApiParam("${swagger.model.institution.description}") @RequestParam String description) {
@@ -50,7 +50,7 @@ public class PDNDInfoCamereController {
   @Operation(
           summary = "${swagger.api.infocamere-pdnd.institution.summary}",
           description = "${swagger.api.infocamere-pdnd.institution.notes}",
-          operationId = "institutionsPdndByDescriptionUsingGET")
+          operationId = "institutionPdndByTaxCodeUsingGET")
   @GetMapping("/institution/{taxCode}")
   public ResponseEntity<PDNDBusinessResource> institutionPdndByTaxCode(
           @ApiParam("${swagger.model.institution.taxCode}") @PathVariable String taxCode) {
