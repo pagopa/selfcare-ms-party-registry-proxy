@@ -44,7 +44,6 @@ class InstitutionControllerTest {
     @MockBean
     private InstitutionService institutionServiceMock;
 
-
     @Test
     void search() throws Exception {
         // given
