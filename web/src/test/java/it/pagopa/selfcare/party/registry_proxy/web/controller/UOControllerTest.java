@@ -185,9 +185,9 @@ class UOControllerTest {
         final String code = "CODE";
         List<String> categories = List.of("L4");
         var uo = new DummyUO();
-        uo.setMail1(null);
         when(uoServiceMock.findByUnicode(any(), eq(categories)))
                 .thenReturn(mockInstance(uo));
+        uo.setMail1(null);
         var institution = new DummyInstitution();
         institution.setDigitalAddress("test@address.it");
         when(institutionServiceMock.findById(any(), any(), any()))
