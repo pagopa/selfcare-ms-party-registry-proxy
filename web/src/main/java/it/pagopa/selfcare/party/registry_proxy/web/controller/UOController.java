@@ -31,7 +31,6 @@ public class UOController {
     private final UOMapper uoMapper;
     private final InstitutionService institutionService;
 
-
     public UOController(UOService uoService,
                         UOMapper uoMapper, InstitutionService institutionService) {
         this.institutionService = institutionService;

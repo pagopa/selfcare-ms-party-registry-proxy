@@ -2,9 +2,12 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
+import it.pagopa.selfcare.party.registry_proxy.core.InstitutionService;
 import it.pagopa.selfcare.party.registry_proxy.core.UOService;
 import it.pagopa.selfcare.party.registry_proxy.web.config.WebTestConfig;
 import it.pagopa.selfcare.party.registry_proxy.web.handler.PartyRegistryProxyExceptionHandler;
+import it.pagopa.selfcare.party.registry_proxy.web.model.DummyInstitution;
 import it.pagopa.selfcare.party.registry_proxy.web.model.DummyUO;
 import it.pagopa.selfcare.party.registry_proxy.web.model.DummyUOQueryResult;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.UOMapperImpl;
@@ -44,6 +47,9 @@ class UOControllerTest {
 
     @MockBean
     private UOService uoServiceMock;
+
+    @MockBean
+    private InstitutionService institutionServiceMock;
 
     /**
      * Method under test: {@link UOController#findAll(Integer, Integer, Optional)}
@@ -165,6 +171,41 @@ class UOControllerTest {
                 .andExpect(jsonPath("$.denominazioneEnte", notNullValue()))
                 .andExpect(jsonPath("$.codiceFiscaleEnte", notNullValue()))
                 .andExpect(jsonPath("$.descrizioneUo", notNullValue()));
+
+        verify(uoServiceMock, times(1))
+                .findByUnicode(code, categories);
+    }
+
+    /**
+     * Method under test: {@link UOController#findByUnicode(String, List)}
+     */
+    @Test
+    void findUoWithEmptyMail() throws Exception {
+        // given
+        final String code = "CODE";
+        List<String> categories = List.of("L4");
+        var uo = new DummyUO();
+        uo.setMail1(null);
+        when(uoServiceMock.findByUnicode(any(), eq(categories)))
+                .thenReturn(mockInstance(uo));
+        var institution = new DummyInstitution();
+        institution.setDigitalAddress("test@address.it");
+        when(institutionServiceMock.findById(any(), any(), any()))
+                .thenReturn(mockInstance(new DummyInstitution()));
+        // when
+        mvc.perform(MockMvcRequestBuilders
+                        .get(BASE_URL + "/uo/{codiceUniUo}", code)
+                        .param("categories","L4")
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .accept(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.codiceUniUo", Matchers.matchesPattern("setCodiceUniUo")))
+                .andExpect(jsonPath("$.origin", notNullValue()))
+                .andExpect(jsonPath("$.codiceIpa", notNullValue()))
+                .andExpect(jsonPath("$.denominazioneEnte", notNullValue()))
+                .andExpect(jsonPath("$.codiceFiscaleEnte", notNullValue()))
+                .andExpect(jsonPath("$.descrizioneUo", notNullValue()))
+                .andExpect(jsonPath("$.mail1", notNullValue()));
 
         verify(uoServiceMock, times(1))
                 .findByUnicode(code, categories);
