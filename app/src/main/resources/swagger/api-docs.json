@@ -10,18 +10,8 @@
     "version" : "0.1.0-SNAPSHOT"
   },
   "servers" : [ {
-    "url" : "{url}:{port}{basePath}",
-    "variables" : {
-      "url" : {
-        "default" : "http:localhost"
-      },
-      "port" : {
-        "default" : "80"
-      },
-      "basePath" : {
-        "default" : ""
-      }
-    }
+    "url" : "http://localhost",
+    "description" : "Generated server url"
   } ],
   "paths" : {
     "/info-camere/institutions" : {
@@ -1549,10 +1539,10 @@
           "mail3" : {
             "type" : "string"
           },
-          "uriprotocolloInformatico" : {
+          "cap" : {
             "type" : "string"
           },
-          "cap" : {
+          "uriprotocolloInformatico" : {
             "type" : "string"
           }
         }
