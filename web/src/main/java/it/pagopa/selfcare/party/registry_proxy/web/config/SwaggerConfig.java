@@ -59,7 +59,6 @@ public class SwaggerConfig {
                     .description(environment.getProperty("swagger.description", "API and Models"))
                     .version(environment.getProperty("swagger.version", "0.1.0-SNAPSHOT"))
                     .contact(new Contact().name("PagoPA").url("https://www.pagopa.gov.it")))
-            //.servers(List.of(setupServerConfig()))
             .components(
                 new Components()
                     .addSecuritySchemes(
@@ -95,17 +94,5 @@ public class SwaggerConfig {
                     new io.swagger.v3.oas.models.responses.ApiResponse()
                         .description("Internal Server Error"));
             }));
-    }
-
-    private static Server setupServerConfig() {
-        Server server = new Server();
-        ServerVariables variables = new ServerVariables();
-        //variables.addServerVariable("url", new ServerVariable()._default("http:localhost"));
-        //variables.addServerVariable("port", new ServerVariable()._default("8080"));
-        //variables.addServerVariable("basePath", new ServerVariable()._default(""));
-        server.variables(variables);
-        //server.setUrl("{url}:{port}{basePath}");
-
-        return server;
     }
 }
