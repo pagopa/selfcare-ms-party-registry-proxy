@@ -7,7 +7,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDInfoCam
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDImpresa;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.mapper.PDNDBusinessMapper;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProvider;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderPDND;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -20,13 +20,13 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
 
   private final PDNDInfoCamereRestClient pdndInfoCamereRestClient;
   private final PDNDBusinessMapper pdndBusinessMapper;
-  private final TokenProvider tokenProvider;
+  private final TokenProviderPDND tokenProvider;
   private final PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig;
 
   public PDNDInfoCamereConnectorImpl(
       PDNDInfoCamereRestClient pdndInfoCamereRestClient,
       PDNDBusinessMapper pdndBusinessMapper,
-      TokenProvider tokenProvider,
+      TokenProviderPDND tokenProvider,
       PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig) {
     this.pdndInfoCamereRestClient = pdndInfoCamereRestClient;
     this.pdndBusinessMapper = pdndBusinessMapper;
@@ -53,6 +53,17 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
     String bearer = "Bearer " + tokenResponse.getAccessToken();
     PDNDImpresa result =
         pdndInfoCamereRestClient.retrieveInstitutionPdndByTaxCode(taxCode, bearer).get(0);
+    return pdndBusinessMapper.toPDNDBusiness(result);
+  }
+
+  @Override
+  public PDNDBusiness retrieveInstitutionDetail(String taxCode, String rea) {
+    Assert.hasText(taxCode, "TaxCode is required");
+    ClientCredentialsResponse tokenResponse =
+            tokenProvider.getTokenPdnd(pdndInfoCamereRestClientConfig.getPdndSecretValue());
+    String bearer = "Bearer " + tokenResponse.getAccessToken();
+    PDNDImpresa result =
+            pdndInfoCamereRestClient.retrieveInstitutionPdndByTaxCode(taxCode, bearer).get(0);
     return pdndBusinessMapper.toPDNDBusiness(result);
   }
 }

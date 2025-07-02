@@ -10,4 +10,6 @@ public interface PDNDInfoCamereService {
 
     PDNDBusiness retrieveInstitutionPdndByTaxCode(String taxCode);
 
+    PDNDBusiness retrieveInstitutionDetail(String taxCode, String rea);
+
 }

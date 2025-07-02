@@ -33,4 +33,9 @@ class PDNDInfoCamereServiceImpl implements PDNDInfoCamereService {
         return pdndInfoCamereConnector.retrieveInstitutionPdndByTaxCode(taxCode);
     }
 
+    @Override
+    public PDNDBusiness retrieveInstitutionDetail(String taxCode, String rea) {
+        return pdndInfoCamereConnector.retrieveInstitutionDetail(taxCode, rea);
+    }
+
 }

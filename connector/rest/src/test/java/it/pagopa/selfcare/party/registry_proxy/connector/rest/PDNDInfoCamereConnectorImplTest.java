@@ -7,7 +7,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCreden
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDImpresa;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDSedeImpresa;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.mapper.PDNDBusinessMapper;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProvider;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderPDND;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
@@ -27,7 +27,7 @@ class PDNDInfoCamereConnectorImplTest {
 
   @InjectMocks private PDNDInfoCamereConnectorImpl pdndInfoCamereConnector;
   @Mock private PDNDInfoCamereRestClient pdndInfoCamereRestClient;
-  @Mock private TokenProvider tokenProvider;
+  @Mock private TokenProviderPDND tokenProvider;
   @Mock private PDNDBusinessMapper pdndBusinessMapper;
   @Mock private PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig;
 
