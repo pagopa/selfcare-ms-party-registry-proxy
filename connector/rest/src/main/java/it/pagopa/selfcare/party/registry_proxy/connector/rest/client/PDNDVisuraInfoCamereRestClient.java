@@ -18,7 +18,7 @@ public interface PDNDVisuraInfoCamereRestClient {
 
     @GetMapping(value = "${rest-client.pdnd-visura-infocamere.getTaxCode.path}", consumes = APPLICATION_XML_VALUE)
     @ResponseBody
-    PDNDVisuraImpresa retrieveInstitutionPdnd(@RequestParam(value = "codiceFiscale") String taxCode, @RequestHeader("Authorization") String accessToken);
+    PDNDVisuraImpresa retrieveInstitutionDetail(@RequestParam(value = "codiceFiscale") String taxCode, @RequestHeader("Authorization") String accessToken);
 
     @GetMapping(value = "${rest-client.pdnd-visura-infocamere.getRea.path}", consumes = APPLICATION_XML_VALUE)
     @ResponseBody

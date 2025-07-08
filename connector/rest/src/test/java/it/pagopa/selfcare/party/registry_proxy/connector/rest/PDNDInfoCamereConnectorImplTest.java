@@ -1,13 +1,19 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDInfoCamereRestClient;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDVisuraInfoCamereRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDInfoCamereRestClientConfig;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDImpresa;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDSedeImpresa;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDVisuraInfoCamereRestClientConfig;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.mapper.PDNDBusinessMapper;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProvider;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderPDND;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderVisura;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
@@ -16,20 +22,17 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(SpringExtension.class)
 class PDNDInfoCamereConnectorImplTest {
 
   @InjectMocks private PDNDInfoCamereConnectorImpl pdndInfoCamereConnector;
   @Mock private PDNDInfoCamereRestClient pdndInfoCamereRestClient;
-  @Mock private TokenProvider tokenProvider;
+  @Mock private PDNDVisuraInfoCamereRestClient pdndVisuraInfoCamereRestClient;
+  @Mock private TokenProviderPDND tokenProviderPDND;
+  @Mock private TokenProviderVisura tokenProviderVisura;
   @Mock private PDNDBusinessMapper pdndBusinessMapper;
   @Mock private PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig;
+  @Mock private PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig;
 
   @Test
   void testRetrieveInstitutionsByDescription() {
@@ -75,6 +78,45 @@ class PDNDInfoCamereConnectorImplTest {
   }
 
   @Test
+  void testRetrieveInstitutionsByRea() {
+
+    // given
+    final String rea = "rea";
+    final String county = "county";
+    PDNDBusiness pdndBusiness = dummyPDNDBusiness();
+    PDNDImpresa pdndImpresa = dummyPDNDImpresa();
+
+    mockPdndVisuraSecretValue();
+    mockPdndVisuraToken();
+    when(pdndVisuraInfoCamereRestClient.retrieveInstitutionPdndFromRea(anyString(), anyString(), anyString()))
+            .thenReturn(List.of(pdndImpresa));
+    when(pdndBusinessMapper.toPDNDBusiness(pdndImpresa)).thenReturn(pdndBusiness);
+
+    // when
+    PDNDBusiness result = pdndInfoCamereConnector.retrieveInstitutionFromRea(rea, county);
+
+    // then
+    assertNotNull(result);
+    assertEquals(dummyPDNDImpresa().getBusinessTaxId(), result.getBusinessTaxId());
+    assertEquals(dummyPDNDImpresa().getBusinessName(), result.getBusinessName());
+    assertEquals(dummyPDNDImpresa().getBusinessStatus(), result.getBusinessStatus());
+    assertEquals(dummyPDNDImpresa().getLegalNature(), result.getLegalNature());
+    assertEquals(
+            dummyPDNDImpresa().getLegalNatureDescription(), result.getLegalNatureDescription());
+    assertEquals(dummyPDNDImpresa().getAddress(), result.getAddress());
+    assertEquals(dummyPDNDImpresa().getDigitalAddress(), result.getDigitalAddress());
+    assertEquals(dummyPDNDImpresa().getNRea(), result.getNRea());
+    assertEquals(dummyPDNDImpresa().getCciaa(), result.getCciaa());
+    assertEquals(dummyPDNDImpresa().getBusinessAddress().getCity(), result.getCity());
+    assertEquals(dummyPDNDImpresa().getBusinessAddress().getCounty(), result.getCounty());
+    assertEquals(dummyPDNDImpresa().getBusinessAddress().getZipCode(), result.getZipCode());
+
+    verify(pdndVisuraInfoCamereRestClient, times(1))
+            .retrieveInstitutionPdndFromRea(anyString(), anyString(), anyString());
+    verifyNoMoreInteractions(pdndVisuraInfoCamereRestClient);
+  }
+
+  @Test
   void testRetrieveInstitutionsByDescription_nullDescription() {
 
     // given
@@ -93,6 +135,27 @@ class PDNDInfoCamereConnectorImplTest {
     IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
     assertEquals("Description is required", e.getMessage());
     Mockito.verifyNoInteractions(pdndInfoCamereRestClient);
+  }
+
+  @Test
+  void testRetrieveInstitutionsByRea_nullRea() {
+
+    // given
+    final String rea = null;
+    List<PDNDImpresa> pdndImpresaList = new ArrayList<>();
+    pdndImpresaList.add(dummyPDNDImpresa());
+
+    when(pdndVisuraInfoCamereRestClient.retrieveInstitutionPdndFromRea(anyString(), anyString(), anyString()))
+            .thenReturn(pdndImpresaList);
+
+    // when
+    Executable executable =
+            () -> pdndInfoCamereConnector.retrieveInstitutionFromRea(rea, "county");
+
+    // then
+    IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
+    assertEquals("Rea is required", e.getMessage());
+    Mockito.verifyNoInteractions(pdndVisuraInfoCamereRestClient);
   }
 
   @Test
@@ -134,6 +197,35 @@ class PDNDInfoCamereConnectorImplTest {
     verify(pdndInfoCamereRestClient, times(1))
         .retrieveInstitutionPdndByTaxCode(anyString(), anyString());
     verifyNoMoreInteractions(pdndInfoCamereRestClient);
+  }
+
+  @Test
+  void testRetrieveInstitutionDetail() {
+
+    // given
+    final String taxCode = "taxCode";
+    PDNDBusiness pdndBusiness = dummyPDNDBusiness();
+    PDNDVisuraImpresa pdndVisuraImpresa = dummyPDNDVisuraImpresa();
+
+    mockPdndVisuraToken();
+    mockPdndVisuraSecretValue();
+    when(pdndVisuraInfoCamereRestClient.retrieveInstitutionDetail(anyString(), anyString()))
+            .thenReturn(pdndVisuraImpresa);
+    when(pdndBusinessMapper.toPDNDBusiness(pdndVisuraImpresa)).thenReturn(pdndBusiness);
+
+    // when
+    var result = pdndInfoCamereConnector.retrieveInstitutionDetail(taxCode);
+
+    // then
+    assertNotNull(pdndBusiness);
+    assertEquals(pdndVisuraImpresa.getDatiIdentificativiImpresa().getBusinessTaxId(), result.getBusinessTaxId());
+    assertEquals(pdndVisuraImpresa.getDatiIdentificativiImpresa().getNRea(), result.getNRea());
+    assertEquals(pdndVisuraImpresa.getDatiIdentificativiImpresa().getCciaa(), result.getCciaa());
+    assertEquals(pdndVisuraImpresa.getDatiIdentificativiImpresa().getDigitalAddress(), result.getDigitalAddress());
+
+    verify(pdndVisuraInfoCamereRestClient, times(1))
+            .retrieveInstitutionDetail(anyString(), anyString());
+    verifyNoMoreInteractions(pdndVisuraInfoCamereRestClient);
   }
 
   @Test
@@ -187,6 +279,18 @@ class PDNDInfoCamereConnectorImplTest {
     return pdndImpresa;
   }
 
+  public PDNDVisuraImpresa dummyPDNDVisuraImpresa() {
+    PDNDVisuraImpresa pdndImpresa = new PDNDVisuraImpresa();
+    DatiIdentificativiImpresa datiIdentificativiImpresa = new DatiIdentificativiImpresa();
+    datiIdentificativiImpresa.setBusinessTaxId("12345678901");
+    datiIdentificativiImpresa.setCciaa("MI123456");
+    datiIdentificativiImpresa.setBusinessName("Dummy Business Name");
+    datiIdentificativiImpresa.setNRea("MI67890");
+    datiIdentificativiImpresa.setDigitalAddress("dummy@example.com");
+    pdndImpresa.setDatiIdentificativiImpresa(datiIdentificativiImpresa);
+    return pdndImpresa;
+  }
+
   public PDNDSedeImpresa dummyPDNDSedeImpresa() {
     PDNDSedeImpresa pdndSedeImpresa = new PDNDSedeImpresa();
     pdndSedeImpresa.setToponimoSede("Via");
@@ -201,10 +305,20 @@ class PDNDInfoCamereConnectorImplTest {
   private void mockPdndToken() {
     ClientCredentialsResponse clientCredentialsResponse = new ClientCredentialsResponse();
     clientCredentialsResponse.setAccessToken("accessToken");
-    when(tokenProvider.getTokenPdnd(any())).thenReturn(clientCredentialsResponse);
+    when(tokenProviderPDND.getTokenPdnd(any())).thenReturn(clientCredentialsResponse);
+  }
+
+  private void mockPdndVisuraToken() {
+    ClientCredentialsResponse clientCredentialsResponse = new ClientCredentialsResponse();
+    clientCredentialsResponse.setAccessToken("accessToken");
+    when(tokenProviderVisura.getTokenPdnd(any())).thenReturn(clientCredentialsResponse);
   }
 
   private void mockPdndSecretValue() {
     when(pdndInfoCamereRestClientConfig.getPdndSecretValue()).thenReturn(null);
+  }
+
+  private void mockPdndVisuraSecretValue() {
+    when(pdndVisuraInfoCamereRestClientConfig.getPdndSecretValue()).thenReturn(null);
   }
 }

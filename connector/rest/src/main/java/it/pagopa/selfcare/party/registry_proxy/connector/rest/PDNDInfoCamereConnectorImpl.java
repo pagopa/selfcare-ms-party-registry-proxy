@@ -68,7 +68,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
     Assert.hasText(taxCode, "TaxCode is required");
     ClientCredentialsResponse tokenResponse = tokenProviderVisura.getTokenPdnd(pdndVisuraInfoCamereRestClientConfig.getPdndSecretValue());
     String bearer = "Bearer " + tokenResponse.getAccessToken();
-    PDNDVisuraImpresa result = pdndVisuraInfoCamereRestClient.retrieveInstitutionPdnd(taxCode, bearer);
+    PDNDVisuraImpresa result = pdndVisuraInfoCamereRestClient.retrieveInstitutionDetail(taxCode, bearer);
     return pdndBusinessMapper.toPDNDBusiness(result);
   }
 
