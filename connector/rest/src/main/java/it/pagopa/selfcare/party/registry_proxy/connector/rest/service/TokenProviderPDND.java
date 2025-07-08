@@ -20,8 +20,8 @@ public class TokenProviderPDND implements TokenProvider {
 
     public TokenProviderPDND(AssertionGenerator assertionGenerator,
                              PdndConnectorImpl pdndClient,
-                             @Value("${rest-client.pdnd.visura.client-assertion-type}") String clientAssertionType,
-                             @Value("${rest-client.pdnd.visura.grant-type}") String grantType) {
+                             @Value("${rest-client.pdnd.client-assertion-type}") String clientAssertionType,
+                             @Value("${rest-client.pdnd.grant-type}") String grantType) {
         this.assertionGenerator = assertionGenerator;
         this.clientAssertionType = clientAssertionType;
         this.grantType = grantType;
