@@ -40,6 +40,8 @@ class PDNDInfoCamereServiceImpl implements PDNDInfoCamereService {
 
     @Override
     public PDNDBusiness retrieveInstitutionFromRea(String rea, String county) {
+        Assert.hasText(rea, "Rea is required");
+        Assert.hasText(county, "county is required");
         return pdndInfoCamereConnector.retrieveInstitutionFromRea(rea, county);
     }
 

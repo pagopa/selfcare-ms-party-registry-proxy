@@ -3,14 +3,11 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
-import it.pagopa.selfcare.party.registry_proxy.connector.exception.InvalidRequestException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
 import it.pagopa.selfcare.party.registry_proxy.core.PDNDInfoCamereService;
 import it.pagopa.selfcare.party.registry_proxy.web.model.PDNDBusinessResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.PDNDInfoCamereBusinessMapper;
 
-import java.util.List;
-import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,12 +18,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/visura-infocamere-pdnd", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(tags = "visura-infocamere-pdnd")
-public class VisuraInfoCamereController {
+public class PDNDVisuraInfoCamereController {
 
   private final PDNDInfoCamereService pdndInfoCamereService;
   private final PDNDInfoCamereBusinessMapper pdndBusinessMapper;
 
-  public VisuraInfoCamereController(
+  public PDNDVisuraInfoCamereController(
           PDNDInfoCamereService pdndInfoCamereService,
           PDNDInfoCamereBusinessMapper pdndBusinessMapper) {
     this.pdndInfoCamereService = pdndInfoCamereService;
