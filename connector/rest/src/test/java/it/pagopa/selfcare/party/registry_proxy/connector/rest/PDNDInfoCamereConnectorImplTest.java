@@ -10,6 +10,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDInfoCam
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDVisuraInfoCamereRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.mapper.PDNDBusinessMapper;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.DatiIdentificativiImpresa;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderPDND;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderVisura;
 import java.util.ArrayList;

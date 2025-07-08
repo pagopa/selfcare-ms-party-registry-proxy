@@ -1,7 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.model.mapper;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.Localizzazione;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.Localizzazione;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDImpresa;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDVisuraImpresa;
 import java.util.List;

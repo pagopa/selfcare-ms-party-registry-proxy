@@ -1,4 +1,4 @@
-package it.pagopa.selfcare.party.registry_proxy.connector.rest.model;
+package it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

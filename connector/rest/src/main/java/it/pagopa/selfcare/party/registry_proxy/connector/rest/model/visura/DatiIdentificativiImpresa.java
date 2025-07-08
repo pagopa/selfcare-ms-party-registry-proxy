@@ -1,8 +1,8 @@
-package it.pagopa.selfcare.party.registry_proxy.connector.rest.model;
+package it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.Localizzazione;
 import lombok.Data;
 
 @Data
