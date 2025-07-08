@@ -1,6 +1,5 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.utils;
 
-import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const.PDND_TOKEN_CACHE;
 import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const.PDND_VISURA_TOKEN_CACHE;
 
 import it.pagopa.selfcare.commons.base.logging.LogUtils;
