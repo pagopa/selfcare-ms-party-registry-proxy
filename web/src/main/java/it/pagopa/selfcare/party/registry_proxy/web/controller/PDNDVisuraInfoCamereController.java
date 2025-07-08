@@ -48,8 +48,8 @@ public class PDNDVisuraInfoCamereController {
           operationId = "institutionsPdndByReaGET")
   @GetMapping("/institutions")
   public ResponseEntity<PDNDBusinessResource> institutionsPdndByRea(
-          @ApiParam("${swagger.model.institution.description}") @RequestParam String rea,
-          @ApiParam("${swagger.model.institution.description}") @RequestParam String county) {
+          @ApiParam("${swagger.model.institution.rea}") @RequestParam String rea,
+          @ApiParam("${swagger.model.institution.county}") @RequestParam String county) {
     PDNDBusiness business = pdndInfoCamereService.retrieveInstitutionFromRea(rea, county);
     return ResponseEntity.ok().body(pdndBusinessMapper.toResource(business));
   }
