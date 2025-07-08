@@ -1,8 +1,8 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.service;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.PdndConnectorImpl;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PdndSecretValue;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.PdndVisuraConnectorImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,24 +15,24 @@ public class TokenProviderVisura implements TokenProvider {
 
     private final String clientAssertionType;
     private final String grantType;
-    private final AssertionGenerator assertionGenerator;
-    private final PdndConnectorImpl pdndClient;
+    private final AssertionGeneratorVisura assertionGeneratorVisura;
+    private final PdndVisuraConnectorImpl pdndVisuraClient;
 
-    public TokenProviderVisura(AssertionGenerator assertionGenerator,
-                               PdndConnectorImpl pdndClient,
+    public TokenProviderVisura(AssertionGeneratorVisura assertionGeneratorVisura,
+                               PdndVisuraConnectorImpl pdndVisuraClient,
                                @Value("${rest-client.pdnd.client-assertion-type}") String clientAssertionType,
                                @Value("${rest-client.pdnd.grant-type}") String grantType) {
-        this.assertionGenerator = assertionGenerator;
+        this.assertionGeneratorVisura = assertionGeneratorVisura;
         this.clientAssertionType = clientAssertionType;
         this.grantType = grantType;
-        this.pdndClient = pdndClient;
+        this.pdndVisuraClient = pdndVisuraClient;
     }
 
     @Override
     public ClientCredentialsResponse getTokenPdnd(PdndSecretValue pdndSecretValue) {
-        log.info("START - TokenProvider.getTokenVisura");
-        String clientAssertion = assertionGenerator.generateClientAssertion(pdndSecretValue.getJwtConfig(), pdndSecretValue.getSecretKey());
-        return pdndClient.createToken(clientAssertion, clientAssertionType, grantType, pdndSecretValue.getClientId());
+        log.info("START - TokenProviderVisura.getTokenPdnd");
+        String clientAssertion = assertionGeneratorVisura.generateClientAssertion(pdndSecretValue.getJwtConfig(), pdndSecretValue.getSecretKey());
+        return pdndVisuraClient.createToken(clientAssertion, clientAssertionType, grantType, pdndSecretValue.getClientId());
     }
 
 }

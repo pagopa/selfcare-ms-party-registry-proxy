@@ -3,10 +3,12 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.PDNDInfoCamereConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDInfoCamereRestClient;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDInfoCamereVisuraRestClient;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDVisuraInfoCamereRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDInfoCamereRestClientConfig;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDVisuraInfoCamereRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.mapper.PDNDBusinessMapper;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProvider;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderPDND;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderVisura;
 import java.util.List;
@@ -19,25 +21,28 @@ import org.springframework.util.Assert;
 public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
 
   private final PDNDInfoCamereRestClient pdndInfoCamereRestClient;
-  private final PDNDInfoCamereVisuraRestClient pdndInfoCamereVisuraRestClient;
+  private final PDNDVisuraInfoCamereRestClient pdndVisuraInfoCamereRestClient;
   private final PDNDBusinessMapper pdndBusinessMapper;
-  private final TokenProviderPDND tokenProviderPDND;
+  private final TokenProvider tokenProviderPDND;
   private final TokenProviderVisura tokenProviderVisura;
   private final PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig;
+  private final PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig;
 
   public PDNDInfoCamereConnectorImpl(
           PDNDInfoCamereRestClient pdndInfoCamereRestClient,
-          PDNDInfoCamereVisuraRestClient pdndInfoCamereVisuraRestClient,
+          PDNDVisuraInfoCamereRestClient pdndVisuraInfoCamereRestClient,
           PDNDBusinessMapper pdndBusinessMapper,
           TokenProviderPDND tokenProviderPDND,
           TokenProviderVisura tokenProviderVisura,
-          PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig) {
+          PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig,
+          PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig) {
     this.pdndInfoCamereRestClient = pdndInfoCamereRestClient;
-    this.pdndInfoCamereVisuraRestClient = pdndInfoCamereVisuraRestClient;
+    this.pdndVisuraInfoCamereRestClient = pdndVisuraInfoCamereRestClient;
     this.pdndBusinessMapper = pdndBusinessMapper;
     this.tokenProviderPDND = tokenProviderPDND;
     this.tokenProviderVisura = tokenProviderVisura;
     this.pdndInfoCamereRestClientConfig = pdndInfoCamereRestClientConfig;
+    this.pdndVisuraInfoCamereRestClientConfig = pdndVisuraInfoCamereRestClientConfig;
   }
 
   @Override
@@ -61,9 +66,9 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
   @Override
   public PDNDBusiness retrieveInstitutionDetail(String taxCode) {
     Assert.hasText(taxCode, "TaxCode is required");
-    ClientCredentialsResponse tokenResponse = tokenProviderVisura.getTokenPdnd(pdndInfoCamereRestClientConfig.getPdndSecretValue());
+    ClientCredentialsResponse tokenResponse = tokenProviderVisura.getTokenPdnd(pdndVisuraInfoCamereRestClientConfig.getPdndSecretValue());
     String bearer = "Bearer " + tokenResponse.getAccessToken();
-    PDNDVisuraImpresa result = pdndInfoCamereVisuraRestClient.retrieveInstitutionPdnd(taxCode, bearer);
+    PDNDVisuraImpresa result = pdndVisuraInfoCamereRestClient.retrieveInstitutionPdnd(taxCode, bearer);
     return pdndBusinessMapper.toPDNDBusiness(result);
   }
 
@@ -71,9 +76,9 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
   public PDNDBusiness retrieveInstitutionFromRea(String rea, String county) {
     Assert.hasText(rea, "Rea is required");
     Assert.hasText(rea, "County is required");
-    ClientCredentialsResponse tokenResponse = tokenProviderVisura.getTokenPdnd(pdndInfoCamereRestClientConfig.getPdndSecretValue());
+    ClientCredentialsResponse tokenResponse = tokenProviderVisura.getTokenPdnd(pdndVisuraInfoCamereRestClientConfig.getPdndSecretValue());
     String bearer = "Bearer " + tokenResponse.getAccessToken();
-    PDNDImpresa result = pdndInfoCamereVisuraRestClient.retrieveInstitutionPdndFromRea(rea, county, bearer).get(0);
+    PDNDImpresa result = pdndVisuraInfoCamereRestClient.retrieveInstitutionPdndFromRea(rea, county, bearer).get(0);
     return pdndBusinessMapper.toPDNDBusiness(result);
   }
 }

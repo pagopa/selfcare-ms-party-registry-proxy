@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
-@FeignClient(name = "${rest-client.pdnd-infocamere-visura.serviceCode}", url = "${rest-client.pdnd-infocamere-visura.base-url}", configuration = FeignXmlDecoder.class)
-public interface PDNDInfoCamereVisuraRestClient {
+@FeignClient(name = "${rest-client.pdnd-visura-infocamere.serviceCode}", url = "${rest-client.pdnd-visura-infocamere.base-url}", configuration = FeignXmlDecoder.class)
+public interface PDNDVisuraInfoCamereRestClient {
 
-    @GetMapping(value = "${rest-client.pdnd-infocamere-visura.getTaxCode.path}", consumes = APPLICATION_XML_VALUE)
+    @GetMapping(value = "${rest-client.pdnd-visura-infocamere.getTaxCode.path}", consumes = APPLICATION_XML_VALUE)
     @ResponseBody
     PDNDVisuraImpresa retrieveInstitutionPdnd(@RequestParam(value = "codiceFiscale") String taxCode, @RequestHeader("Authorization") String accessToken);
 
-    @GetMapping(value = "${rest-client.pdnd-infocamere-visura.getRea.path}", consumes = APPLICATION_XML_VALUE)
+    @GetMapping(value = "${rest-client.pdnd-visura-infocamere.getRea.path}", consumes = APPLICATION_XML_VALUE)
     @ResponseBody
     List<PDNDImpresa> retrieveInstitutionPdndFromRea(@RequestParam(value = "numeroRea") String rea, @RequestParam("siglaProvincia") String siglaProvincia, @RequestHeader("Authorization") String accessToken);
 

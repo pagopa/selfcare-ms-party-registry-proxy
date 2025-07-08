@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 class TokenProviderTest {
 
     @InjectMocks
-    TokenProviderPDND tokenProvider;
+    TokenProvider tokenProvider;
     @Mock
     AssertionGenerator assertionGenerator;
     @Mock
