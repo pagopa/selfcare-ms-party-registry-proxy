@@ -44,8 +44,8 @@ public class PDNDVisuraInfoCamereController {
 
   @ResponseStatus(HttpStatus.OK)
   @Operation(
-          summary = "${swagger.api.infocamere-pdnd.institutions.summary}",
-          description = "${swagger.api.infocamere-pdnd.institutions.notes}",
+          summary = "${swagger.api.visura-infocamere-pdnd.institutions.summary}",
+          description = "${swagger.api.visura-infocamere-pdnd.institution.notes}",
           operationId = "institutionsPdndByReaGET")
   @GetMapping("/institutions")
   public ResponseEntity<PDNDBusinessResource> institutionsPdndByRea(

@@ -1,10 +1,17 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.model.mapper;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.ClassificazioneAteco;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.ClassificazioniAteco;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.Localizzazione;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDImpresa;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDVisuraImpresa;
+
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -23,9 +30,22 @@ public interface PDNDBusinessMapper {
     @Mapping(target = "city", source = "datiIdentificativiImpresa.localizzazione.comune")
     @Mapping(target = "county", source = "datiIdentificativiImpresa.localizzazione.provincia")
     @Mapping(target = "zipCode", source = "datiIdentificativiImpresa.localizzazione.cap")
-    @Mapping(target = "atecoCode", source = "infoAttivita.classificazioniAteco.classificazioneAteco.codiceAttivita")
+    @Mapping(target = "atecoCodes", source = "infoAttivita.classificazioniAteco", qualifiedByName = "mapAtecoCodes")
     @Mapping(target = "address", source = "datiIdentificativiImpresa.localizzazione", qualifiedByName = "mapAddress")
     PDNDBusiness toPDNDBusiness(PDNDVisuraImpresa pdndImpresa);
+
+    @Named("mapAtecoCodes")
+    default List<String> mapAtecoCodes(ClassificazioniAteco classificazioniAteco) {
+        if (classificazioniAteco == null || classificazioniAteco.getClassificazioniAteco() == null) {
+            return Collections.emptyList();
+        }
+
+        return classificazioniAteco.getClassificazioniAteco().stream()
+                .map(ClassificazioneAteco::getCodiceAttivita)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
 
     @Named("mapAddress")
     default String mapAddress(Localizzazione localizzazione) {

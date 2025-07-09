@@ -74,12 +74,13 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
   }
 
   @Override
-  public PDNDBusiness retrieveInstitutionFromRea(String rea, String county) {
+  public PDNDBusiness retrieveInstitutionFromRea(String county, String rea) {
     Assert.hasText(rea, "Rea is required");
     Assert.hasText(rea, "County is required");
     ClientCredentialsResponse tokenResponse = tokenProviderVisura.getTokenPdnd(pdndVisuraInfoCamereRestClientConfig.getPdndSecretValue());
     String bearer = BEARER + tokenResponse.getAccessToken();
     PDNDImpresa result = pdndVisuraInfoCamereRestClient.retrieveInstitutionPdndFromRea(rea, county, bearer).get(0);
-    return pdndBusinessMapper.toPDNDBusiness(result);
+    PDNDVisuraImpresa visuraImpresa = pdndVisuraInfoCamereRestClient.retrieveInstitutionDetail(result.getBusinessTaxId(), bearer);
+    return pdndBusinessMapper.toPDNDBusiness(visuraImpresa);
   }
 }

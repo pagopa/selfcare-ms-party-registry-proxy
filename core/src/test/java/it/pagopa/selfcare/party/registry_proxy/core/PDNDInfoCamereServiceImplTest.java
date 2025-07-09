@@ -74,7 +74,7 @@ class PDNDInfoCamereServiceImplTest {
         when(pdndInfoCamereConnector.retrieveInstitutionFromRea(any(), any())).thenReturn(pdndBusiness);
 
         //when
-        Executable executable = () -> pdndInfoCamereService.retrieveInstitutionFromRea(rea, "county");
+        Executable executable = () -> pdndInfoCamereService.retrieveInstitutionFromRea("county", rea);
 
         //then
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);

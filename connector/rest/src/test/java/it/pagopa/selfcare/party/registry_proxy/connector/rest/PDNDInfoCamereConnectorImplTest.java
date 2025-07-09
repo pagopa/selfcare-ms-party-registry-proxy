@@ -86,12 +86,15 @@ class PDNDInfoCamereConnectorImplTest {
     final String county = "county";
     PDNDBusiness pdndBusiness = dummyPDNDBusiness();
     PDNDImpresa pdndImpresa = dummyPDNDImpresa();
+    PDNDVisuraImpresa pdndVisuraImpresa = dummyPDNDVisuraImpresa();
 
     mockPdndVisuraSecretValue();
     mockPdndVisuraToken();
     when(pdndVisuraInfoCamereRestClient.retrieveInstitutionPdndFromRea(anyString(), anyString(), anyString()))
             .thenReturn(List.of(pdndImpresa));
-    when(pdndBusinessMapper.toPDNDBusiness(pdndImpresa)).thenReturn(pdndBusiness);
+    when(pdndVisuraInfoCamereRestClient.retrieveInstitutionDetail(anyString(), anyString()))
+            .thenReturn(pdndVisuraImpresa);
+    when(pdndBusinessMapper.toPDNDBusiness(pdndVisuraImpresa)).thenReturn(pdndBusiness);
 
     // when
     PDNDBusiness result = pdndInfoCamereConnector.retrieveInstitutionFromRea(rea, county);
@@ -114,6 +117,8 @@ class PDNDInfoCamereConnectorImplTest {
 
     verify(pdndVisuraInfoCamereRestClient, times(1))
             .retrieveInstitutionPdndFromRea(anyString(), anyString(), anyString());
+    verify(pdndVisuraInfoCamereRestClient, times(1))
+            .retrieveInstitutionDetail(anyString(), anyString());
     verifyNoMoreInteractions(pdndVisuraInfoCamereRestClient);
   }
 
@@ -151,7 +156,7 @@ class PDNDInfoCamereConnectorImplTest {
 
     // when
     Executable executable =
-            () -> pdndInfoCamereConnector.retrieveInstitutionFromRea(rea, "county");
+            () -> pdndInfoCamereConnector.retrieveInstitutionFromRea("county", rea);
 
     // then
     IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
