@@ -3,6 +3,7 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.InvalidRequestException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
 import it.pagopa.selfcare.party.registry_proxy.core.PDNDInfoCamereService;
 import it.pagopa.selfcare.party.registry_proxy.web.model.PDNDBusinessResource;
@@ -48,9 +49,13 @@ public class PDNDVisuraInfoCamereController {
           operationId = "institutionsPdndByReaGET")
   @GetMapping("/institutions")
   public ResponseEntity<PDNDBusinessResource> institutionsPdndByRea(
-          @ApiParam("${swagger.model.institution.rea}") @RequestParam String rea,
-          @ApiParam("${swagger.model.institution.county}") @RequestParam String county) {
-    PDNDBusiness business = pdndInfoCamereService.retrieveInstitutionFromRea(rea, county);
+          @ApiParam("${swagger.model.institution.rea}") @RequestParam String rea) {
+    String[] parameters = rea.split("-");
+    if (parameters.length != 2) {
+      throw new InvalidRequestException(
+          "Rea parameter is malformed. It should be in form of XX-123456");
+    }
+    PDNDBusiness business = pdndInfoCamereService.retrieveInstitutionFromRea(parameters[0], parameters[1]);
     return ResponseEntity.ok().body(pdndBusinessMapper.toResource(business));
   }
 }

@@ -1,6 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -18,6 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @ContextConfiguration(classes = {PDNDVisuraInfoCamereController.class, WebTestConfig.class})
@@ -33,12 +35,11 @@ class PDNDVisuraInfoCamereControllerTest {
     private PDNDInfoCamereBusinessMapper pdndBusinessMapper;
 
     /**
-     * Method under test: {@link PDNDVisuraInfoCamereController#institutionsPdndByRea(String, String)}
+     * Method under test: {@link PDNDVisuraInfoCamereController#institutionsPdndByRea(String)}
      */
     @Test
     void testInstitutionsByRea() throws Exception {
-        final String rea = "rea";
-        final String county = "county";
+        final String rea = "XX-123456";
         PDNDBusiness pdndBusinesses = dummyPDNDBusiness();
         PDNDBusinessResource pdndBusinessResource = dummyPDNDBusinessResource();
 
@@ -48,7 +49,6 @@ class PDNDVisuraInfoCamereControllerTest {
         mvc.perform(MockMvcRequestBuilders
                         .get(BASE_URL + "/institutions")
                         .param("rea", rea)
-                        .param("county", county)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.businessTaxId", is("taxId")))
@@ -71,8 +71,27 @@ class PDNDVisuraInfoCamereControllerTest {
         verifyNoMoreInteractions(pdndBusinessMapper);
     }
 
+
+    @Test
+    void testInstitutionsByRea_malformedParameter() throws Exception {
+        final String malformedRea = "rea";
+
+        MvcResult result = mvc.perform(MockMvcRequestBuilders
+                        .get(BASE_URL + "/institutions")
+                        .param("rea", malformedRea)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        String responseBody = result.getResponse().getContentAsString();
+        assertTrue(responseBody.contains("Rea parameter is malformed. It should be in form of XX-123456"));
+
+        verifyNoInteractions(pdndInfoCamereService);
+        verifyNoInteractions(pdndBusinessMapper);
+    }
+
+
     /**
-     * Method under test: {@link PDNDVisuraInfoCamereController#getInstitution(String)} 
+     * Method under test: {@link PDNDVisuraInfoCamereController#getInstitution(String)}
      */
     @Test
     void testInstitutionByTaxCode() throws Exception {
