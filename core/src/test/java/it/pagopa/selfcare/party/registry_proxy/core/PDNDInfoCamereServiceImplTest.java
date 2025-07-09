@@ -49,6 +49,40 @@ class PDNDInfoCamereServiceImplTest {
     }
 
     @Test
+    void retrieveInstitutionsByRea() {
+        //given
+        final String rea = "rea";
+        final String county = "county";
+        PDNDBusiness pdndBusiness = dummyPDNDBusiness();
+        when(pdndInfoCamereConnector.retrieveInstitutionFromRea(anyString(), anyString())).thenReturn(pdndBusiness);
+
+        //when
+        pdndInfoCamereService.retrieveInstitutionFromRea(rea, county);
+
+        //then
+        assertNotNull(pdndBusiness);
+        verify(pdndInfoCamereConnector, times(1))
+                .retrieveInstitutionFromRea(anyString(), anyString());
+        verifyNoMoreInteractions(pdndInfoCamereConnector);
+    }
+
+    @Test
+    void retrieveInstitutionsByRea_nullRea() {
+        //given
+        String rea = null;
+        PDNDBusiness pdndBusiness = dummyPDNDBusiness();
+        when(pdndInfoCamereConnector.retrieveInstitutionFromRea(any(), any())).thenReturn(pdndBusiness);
+
+        //when
+        Executable executable = () -> pdndInfoCamereService.retrieveInstitutionFromRea(rea, "county");
+
+        //then
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
+        assertEquals("Rea is required", e.getMessage());
+        Mockito.verifyNoInteractions(pdndInfoCamereConnector);
+    }
+
+    @Test
     void retrieveInstitutionsByDescription_nullDescription() {
         //given
         String description = null;
@@ -80,6 +114,24 @@ class PDNDInfoCamereServiceImplTest {
         assertNotNull(pdndBusiness.getClass());
         verify(pdndInfoCamereConnector, times(1))
                 .retrieveInstitutionPdndByTaxCode(any());
+        verifyNoMoreInteractions(pdndInfoCamereConnector);
+    }
+
+    @Test
+    void retrieveInstitutionDetail() {
+        //given
+        final String taxCode = "taxCode";
+        PDNDBusiness pdndBusiness = dummyPDNDBusiness();
+        when(pdndInfoCamereConnector.retrieveInstitutionDetail(anyString())).thenReturn(pdndBusiness);
+
+        //when
+        pdndInfoCamereService.retrieveInstitutionDetail(taxCode);
+
+        //then
+        assertNotNull(pdndBusiness);
+        assertNotNull(pdndBusiness.getClass());
+        verify(pdndInfoCamereConnector, times(1))
+                .retrieveInstitutionDetail(any());
         verifyNoMoreInteractions(pdndInfoCamereConnector);
     }
 

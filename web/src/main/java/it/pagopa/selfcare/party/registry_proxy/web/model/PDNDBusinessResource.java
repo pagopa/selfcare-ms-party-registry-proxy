@@ -16,4 +16,5 @@ public class PDNDBusinessResource {
     private String zipCode;
     private String address;
     private String digitalAddress;
+    private String atecoCode;
 }

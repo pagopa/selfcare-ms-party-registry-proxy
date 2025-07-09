@@ -10,4 +10,8 @@ public interface PDNDInfoCamereService {
 
     PDNDBusiness retrieveInstitutionPdndByTaxCode(String taxCode);
 
+    PDNDBusiness retrieveInstitutionDetail(String taxCode);
+
+    PDNDBusiness retrieveInstitutionFromRea(String rea, String county);
+
 }

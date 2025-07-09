@@ -1,7 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.config;
 
 import it.pagopa.selfcare.commons.connector.rest.config.RestClientBaseConfig;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDInfoCamereRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDVisuraInfoCamereRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.JwtConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PdndSecretValue;
@@ -13,16 +12,17 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @Import(RestClientBaseConfig.class)
-@EnableFeignClients(clients = PDNDInfoCamereRestClient.class )
-@PropertySource("classpath:config/pdnd-infocamere-rest-client.properties")
-public class PDNDInfoCamereRestClientConfig {
+@EnableFeignClients(clients = PDNDVisuraInfoCamereRestClient.class )
+@PropertySource("classpath:config/pdnd-visura-infocamere-rest-client.properties")
+public class PDNDVisuraInfoCamereRestClientConfig {
     private final PdndSecretValue pdndSecretValue;
-    public PDNDInfoCamereRestClientConfig(
-            @Value("${rest-client.pdnd-infocamere.privateKey}") String privateKey,
-            @Value("${rest-client.pdnd-infocamere.clientId}") String clientId,
-            @Value("${rest-client.pdnd-infocamere.kid}") String kid,
-            @Value("${rest-client.pdnd-infocamere.audience}") String audience,
-            @Value("${rest-client.pdnd-infocamere.purposeId}") String purposeId
+
+    public PDNDVisuraInfoCamereRestClientConfig(
+            @Value("${rest-client.pdnd-visura-infocamere.privateKey}") String privateKey,
+            @Value("${rest-client.pdnd-visura-infocamere.clientId}") String clientId,
+            @Value("${rest-client.pdnd-visura-infocamere.kid}") String kid,
+            @Value("${rest-client.pdnd-visura-infocamere.audience}") String audience,
+            @Value("${rest-client.pdnd-visura-infocamere.purposeId}") String purposeId
     ) {
 
         JwtConfig jwtConfig = JwtConfig.builder()
