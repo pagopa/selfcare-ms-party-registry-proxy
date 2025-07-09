@@ -32,6 +32,9 @@ class PDNDVisuraInfoCamereControllerTest {
     @MockBean
     private PDNDInfoCamereBusinessMapper pdndBusinessMapper;
 
+    /**
+     * Method under test: {@link PDNDVisuraInfoCamereController#institutionsPdndByRea(String, String)}
+     */
     @Test
     void testInstitutionsByRea() throws Exception {
         final String rea = "rea";
@@ -68,6 +71,9 @@ class PDNDVisuraInfoCamereControllerTest {
         verifyNoMoreInteractions(pdndBusinessMapper);
     }
 
+    /**
+     * Method under test: {@link PDNDVisuraInfoCamereController#getInstitution(String)} 
+     */
     @Test
     void testInstitutionByTaxCode() throws Exception {
         final String taxCode = "taxCode";
