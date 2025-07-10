@@ -2,6 +2,8 @@ package it.pagopa.selfcare.party.registry_proxy.web.model;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class PDNDBusinessResource {
     private String businessTaxId;
@@ -16,5 +18,5 @@ public class PDNDBusinessResource {
     private String zipCode;
     private String address;
     private String digitalAddress;
-    private String atecoCode;
+    private List<String> atecoCodes;
 }
