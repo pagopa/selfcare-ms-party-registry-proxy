@@ -2,7 +2,6 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.Localizzazione;
 import lombok.Data;
 
 @Data
@@ -26,5 +25,11 @@ public class DatiIdentificativiImpresa {
 
     @JacksonXmlProperty(localName = "indirizzo-localizzazione")
     private Localizzazione localizzazione;
+
+    @JacksonXmlProperty(localName = "forma-giuridica")
+    private String legalForm;
+
+    @JacksonXmlProperty(isAttribute = true, localName = "partita-iva")
+    private String vatNumber;
 
 }
