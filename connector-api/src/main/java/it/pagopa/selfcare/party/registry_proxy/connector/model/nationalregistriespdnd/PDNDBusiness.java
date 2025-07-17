@@ -1,17 +1,19 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd;
 
-import lombok.Data;
-
 import java.util.List;
+import lombok.Data;
 
 @Data
 public class PDNDBusiness {
+
     private String businessTaxId;
     private String businessName;
     private String legalNature;
     private String legalNatureDescription;
     private String cciaa;
     private String nRea;
+    private String vatNumber;
+    private String legalForm;
     private String businessStatus;
     private String city;
     private String county;
@@ -19,4 +21,5 @@ public class PDNDBusiness {
     private String address;
     private String digitalAddress;
     private List<String> atecoCodes;
+
 }
