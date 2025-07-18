@@ -3,6 +3,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDInfoCamereRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDVisuraInfoCamereRestClient;
@@ -14,6 +15,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.DatiI
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderPDND;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderVisura;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -162,6 +164,48 @@ class PDNDInfoCamereConnectorImplTest {
     IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
     assertEquals("Rea is required", e.getMessage());
     Mockito.verifyNoInteractions(pdndVisuraInfoCamereRestClient);
+  }
+
+  @Test
+  void testRetrieveInstitutionsByRea_notFound() {
+
+    // given
+    final String rea = "test";
+    final String county = "county";
+    when(pdndVisuraInfoCamereRestClient.retrieveInstitutionPdndFromRea(
+            anyString(), anyString(), anyString()))
+        .thenReturn(Collections.emptyList());
+
+    mockPdndVisuraToken();
+    mockPdndVisuraSecretValue();
+    // when
+    Executable executable =
+            () -> pdndInfoCamereConnector.retrieveInstitutionFromRea(county, rea);
+
+    // then
+    ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
+    assertEquals("No institution found with rea: " + county + "-" + rea, e.getMessage());
+  }
+
+  @Test
+  void testRetrieveInstitutionsByRea_notFoundAndNull() {
+
+    // given
+    final String rea = "test";
+    final String county = "county";
+    when(pdndVisuraInfoCamereRestClient.retrieveInstitutionPdndFromRea(
+            anyString(), anyString(), anyString()))
+            .thenReturn(null);
+
+    mockPdndVisuraToken();
+    mockPdndVisuraSecretValue();
+    // when
+    Executable executable =
+            () -> pdndInfoCamereConnector.retrieveInstitutionFromRea(county, rea);
+
+    // then
+    ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
+    assertEquals("No institution found with rea: " + county + "-" + rea, e.getMessage());
   }
 
   @Test

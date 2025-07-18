@@ -1,6 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.PDNDInfoCamereConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDInfoCamereRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDVisuraInfoCamereRestClient;
@@ -12,6 +13,8 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProvi
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderPDND;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderVisura;
 import java.util.List;
+import java.util.Objects;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -79,7 +82,11 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
     Assert.hasText(rea, "County is required");
     ClientCredentialsResponse tokenResponse = tokenProviderVisura.getTokenPdnd(pdndVisuraInfoCamereRestClientConfig.getPdndSecretValue());
     String bearer = BEARER + tokenResponse.getAccessToken();
-    PDNDImpresa result = pdndVisuraInfoCamereRestClient.retrieveInstitutionPdndFromRea(rea, county, bearer).get(0);
+    List<PDNDImpresa> institutions = pdndVisuraInfoCamereRestClient.retrieveInstitutionPdndFromRea(rea, county, bearer);
+    if (Objects.isNull(institutions) || institutions.isEmpty()) {
+      throw new ResourceNotFoundException("No institution found with rea: " + county + "-" + rea);
+    }
+    PDNDImpresa result  = institutions.get(0);
     PDNDVisuraImpresa visuraImpresa = pdndVisuraInfoCamereRestClient.retrieveInstitutionDetail(result.getBusinessTaxId(), bearer);
     return pdndBusinessMapper.toPDNDBusiness(visuraImpresa);
   }
