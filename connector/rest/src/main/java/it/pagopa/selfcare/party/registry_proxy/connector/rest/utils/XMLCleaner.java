@@ -19,6 +19,8 @@ public class XMLCleaner {
 
     public static byte[] cleanXml(byte[] rawXml, List<String> nodesToRemove) throws Exception {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setXIncludeAware(false);
+        dbf.setExpandEntityReferences(false);
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.parse(new ByteArrayInputStream(rawXml));
 
@@ -38,4 +40,5 @@ public class XMLCleaner {
         transformer.transform(new DOMSource(doc), new StreamResult(output));
         return output.toByteArray();
     }
+
 }
