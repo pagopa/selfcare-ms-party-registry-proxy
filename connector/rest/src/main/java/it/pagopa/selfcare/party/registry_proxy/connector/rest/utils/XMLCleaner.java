@@ -3,9 +3,11 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest.utils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -35,10 +37,18 @@ public class XMLCleaner {
             }
         }
 
-        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        enableProtectionXXE(transformerFactory);
+        Transformer transformer = transformerFactory.newTransformer();
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         transformer.transform(new DOMSource(doc), new StreamResult(output));
         return output.toByteArray();
+    }
+
+    private static void enableProtectionXXE(TransformerFactory transformerFactory) throws TransformerConfigurationException {
+        transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+        transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
     }
 
 }
