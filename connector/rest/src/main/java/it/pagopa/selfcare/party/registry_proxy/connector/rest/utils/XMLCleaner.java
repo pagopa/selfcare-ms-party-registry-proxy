@@ -15,6 +15,8 @@ import org.w3c.dom.NodeList;
 
 public class XMLCleaner {
 
+    private XMLCleaner() {}
+
     public static byte[] cleanXml(byte[] rawXml, List<String> nodesToRemove) throws Exception {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();

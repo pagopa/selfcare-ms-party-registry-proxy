@@ -24,7 +24,7 @@ import org.springframework.util.Assert;
 @Slf4j
 @Service
 public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
-
+  private static final String TAX_CODE_REQUIRED_MESSAGE = "TaxCode is required":
   private final PDNDInfoCamereRestClient pdndInfoCamereRestClient;
   private final PDNDVisuraInfoCamereRawRestClient pdndVisuraInfoCamereRawRestClient;
   private final PDNDVisuraInfoCamereRestClient pdndVisuraInfoCamereRestClient;
@@ -65,7 +65,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
 
   @Override
   public PDNDBusiness retrieveInstitutionPdndByTaxCode(String taxCode) {
-    Assert.hasText(taxCode, "TaxCode is required");
+    Assert.hasText(taxCode, TAX_CODE_REQUIRED_MESSAGE);
     ClientCredentialsResponse tokenResponse = tokenProviderPDND.getTokenPdnd(pdndInfoCamereRestClientConfig.getPdndSecretValue());
     String bearer = BEARER + tokenResponse.getAccessToken();
     PDNDImpresa result = pdndInfoCamereRestClient.retrieveInstitutionPdndByTaxCode(taxCode, bearer).get(0);
@@ -74,7 +74,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
 
   @Override
   public PDNDBusiness retrieveInstitutionDetail(String taxCode) {
-    Assert.hasText(taxCode, "TaxCode is required");
+    Assert.hasText(taxCode, TAX_CODE_REQUIRED_MESSAGE);
     ClientCredentialsResponse tokenResponse = tokenProviderVisura.getTokenPdnd(pdndVisuraInfoCamereRestClientConfig.getPdndSecretValue());
     String bearer = BEARER + tokenResponse.getAccessToken();
     PDNDVisuraImpresa result = pdndVisuraInfoCamereRestClient.retrieveInstitutionDetail(taxCode, bearer);
@@ -83,7 +83,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
 
   @Override
   public byte[] retrieveInstitutionDocument(String taxCode) {
-    Assert.hasText(taxCode, "TaxCode is required");
+    Assert.hasText(taxCode, TAX_CODE_REQUIRED_MESSAGE);
     ClientCredentialsResponse tokenResponse = tokenProviderVisura.getTokenPdnd(pdndVisuraInfoCamereRestClientConfig.getPdndSecretValue());
     String bearer = BEARER + tokenResponse.getAccessToken();
     byte[] result = pdndVisuraInfoCamereRawRestClient.getRawInstitutionDetail(taxCode, bearer);
