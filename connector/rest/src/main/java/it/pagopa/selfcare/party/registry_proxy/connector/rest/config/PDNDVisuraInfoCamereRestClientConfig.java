@@ -1,6 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.config;
 
 import it.pagopa.selfcare.commons.connector.rest.config.RestClientBaseConfig;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDVisuraInfoCamereRawRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDVisuraInfoCamereRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.JwtConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PdndSecretValue;
@@ -12,7 +13,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @Import(RestClientBaseConfig.class)
-@EnableFeignClients(clients = PDNDVisuraInfoCamereRestClient.class )
+@EnableFeignClients(clients = { PDNDVisuraInfoCamereRestClient.class, PDNDVisuraInfoCamereRawRestClient.class })
 @PropertySource("classpath:config/pdnd-visura-infocamere-rest-client.properties")
 public class PDNDVisuraInfoCamereRestClientConfig {
     private final PdndSecretValue pdndSecretValue;

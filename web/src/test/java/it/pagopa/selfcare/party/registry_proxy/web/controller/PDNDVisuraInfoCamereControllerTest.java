@@ -22,6 +22,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.nio.charset.StandardCharsets;
+
 @ContextConfiguration(classes = {PDNDVisuraInfoCamereController.class, WebTestConfig.class})
 @WebMvcTest(value = {PDNDVisuraInfoCamereController.class}, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 class PDNDVisuraInfoCamereControllerTest {
@@ -124,6 +126,26 @@ class PDNDVisuraInfoCamereControllerTest {
         verify(pdndBusinessMapper, times(1)).toResource(pdndBusiness);
         verifyNoMoreInteractions(pdndInfoCamereService);
         verifyNoMoreInteractions(pdndBusinessMapper);
+    }
+
+    /**
+     * Method under test: {@link PDNDVisuraInfoCamereController#getInstitutionDocument(String)}
+     */
+    @Test
+    void testInstitutionDocumentByTaxCode() throws Exception {
+        final String taxCode = "taxCode";
+        final String document = "document";
+
+        when(pdndInfoCamereService.retrieveInstitutionDocument(anyString())).thenReturn(document.getBytes(StandardCharsets.UTF_8));
+
+        mvc.perform(MockMvcRequestBuilders
+                        .get(BASE_URL + "/institutions/{taxCode}/document", taxCode)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        verify(pdndInfoCamereService, times(1)).retrieveInstitutionDocument(anyString());
+        verifyNoMoreInteractions(pdndInfoCamereService);
     }
 
     private PDNDBusiness dummyPDNDBusiness(){

@@ -39,6 +39,11 @@ class PDNDInfoCamereServiceImpl implements PDNDInfoCamereService {
     }
 
     @Override
+    public byte[] retrieveInstitutionDocument(String taxCode) {
+        return pdndInfoCamereConnector.retrieveInstitutionDocument(taxCode);
+    }
+
+    @Override
     public PDNDBusiness retrieveInstitutionFromRea(String county, String rea) {
         Assert.hasText(rea, "Rea is required");
         Assert.hasText(county, "county is required");

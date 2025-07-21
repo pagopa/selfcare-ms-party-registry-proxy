@@ -44,6 +44,20 @@ public class PDNDVisuraInfoCamereController {
 
   @ResponseStatus(HttpStatus.OK)
   @Operation(
+          summary = "${swagger.api.infocamere-pdnd.institution.summary}",
+          description = "${swagger.api.infocamere-pdnd.institution.notes}",
+          operationId = "institutionVisuraDocumentByTaxCodeUsingGET")
+  @GetMapping(value = "/institutions/{taxCode}/document", produces = MediaType.APPLICATION_XML_VALUE)
+  public ResponseEntity<byte[]> getInstitutionDocument(@ApiParam("${swagger.model.institution.taxCode}") @PathVariable String taxCode) {
+    var document = pdndInfoCamereService.retrieveInstitutionDocument(taxCode);
+    return ResponseEntity
+            .ok()
+            .contentType(MediaType.APPLICATION_XML)
+            .body(document);
+  }
+
+  @ResponseStatus(HttpStatus.OK)
+  @Operation(
           summary = "${swagger.api.visura-infocamere-pdnd.institutions.summary}",
           description = "${swagger.api.visura-infocamere-pdnd.institution.notes}",
           operationId = "institutionsPdndByReaGET")
