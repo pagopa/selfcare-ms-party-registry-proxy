@@ -24,7 +24,7 @@ import org.springframework.util.Assert;
 @Slf4j
 @Service
 public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
-  private static final String TAX_CODE_REQUIRED_MESSAGE = "TaxCode is required":
+  private static final String TAX_CODE_REQUIRED_MESSAGE = "TaxCode is required";
   private final PDNDInfoCamereRestClient pdndInfoCamereRestClient;
   private final PDNDVisuraInfoCamereRawRestClient pdndVisuraInfoCamereRawRestClient;
   private final PDNDVisuraInfoCamereRestClient pdndVisuraInfoCamereRestClient;
