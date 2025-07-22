@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDInfoCamereRestClient;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDVisuraInfoCamereRawRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDVisuraInfoCamereRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDInfoCamereRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDVisuraInfoCamereRestClientConfig;
@@ -14,6 +15,8 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.mapper.PDNDB
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.DatiIdentificativiImpresa;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderPDND;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderVisura;
+
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,6 +34,7 @@ class PDNDInfoCamereConnectorImplTest {
   @InjectMocks private PDNDInfoCamereConnectorImpl pdndInfoCamereConnector;
   @Mock private PDNDInfoCamereRestClient pdndInfoCamereRestClient;
   @Mock private PDNDVisuraInfoCamereRestClient pdndVisuraInfoCamereRestClient;
+  @Mock private PDNDVisuraInfoCamereRawRestClient pdndVisuraInfoCamereRawRestClient;
   @Mock private TokenProviderPDND tokenProviderPDND;
   @Mock private TokenProviderVisura tokenProviderVisura;
   @Mock private PDNDBusinessMapper pdndBusinessMapper;
@@ -296,6 +300,112 @@ class PDNDInfoCamereConnectorImplTest {
     IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
     assertEquals("TaxCode is required", e.getMessage());
     Mockito.verifyNoInteractions(pdndInfoCamereRestClient);
+  }
+
+  @Test
+  void testRetrieveInstitutionDocument() {
+
+    // given
+    final String taxCode = "taxCode";
+    final String document =
+            """
+                    <?xml version="1.0" encoding="UTF-8"?>
+                    <Impresa>
+                        <Denominazione>ABC S.p.A.</Denominazione>
+                        <PartitaIVA>01234567890</PartitaIVA>
+                        <CodiceFiscale>ABCDEF12G34H567I</CodiceFiscale>
+                        <Indirizzo>
+                            <Via>Via Roma 1</Via>
+                            <CAP>00100</CAP>
+                            <Comune>Roma</Comune>
+                        </Indirizzo>
+                        <NodoDaRimuovere1>
+                            <Campo>Valore1</Campo>
+                        </NodoDaRimuovere1>
+                        <NodoDaRimuovere2>
+                            <Campo>Valore2</Campo>
+                        </NodoDaRimuovere2>
+                    </Impresa>""";
+    // given
+    mockPdndVisuraToken();
+    mockPdndVisuraSecretValue();
+    when(pdndVisuraInfoCamereRawRestClient.getRawInstitutionDetail(anyString(), anyString()))
+            .thenReturn(document.getBytes(StandardCharsets.UTF_8));
+    // when
+    var result = pdndInfoCamereConnector.retrieveInstitutionDocument(taxCode);
+
+    // then
+    assertNotNull(result);
+    assertNotEquals(0, result.length);
+
+    verify(pdndVisuraInfoCamereRawRestClient, times(1))
+            .getRawInstitutionDetail(anyString(), anyString());
+    verifyNoMoreInteractions(pdndVisuraInfoCamereRawRestClient);
+  }
+
+  @Test
+  void testRetrieveInstitutionDocument_withNodeToRemove() {
+
+    // given
+    final String taxCode = "taxCode";
+    final String document =
+            """
+                    <?xml version="1.0" encoding="UTF-8"?>
+                    <Impresa>
+                        <Denominazione>ABC S.p.A.</Denominazione>
+                        <PartitaIVA>01234567890</PartitaIVA>
+                        <CodiceFiscale>ABCDEF12G34H567I</CodiceFiscale>
+                        <Indirizzo>
+                            <Via>Via Roma 1</Via>
+                            <CAP>00100</CAP>
+                            <Comune>Roma</Comune>
+                        </Indirizzo>
+                        <elenco-soci>
+                            <Campo>Valore1</Campo>
+                        </elenco-soci>
+                    </Impresa>""";
+    // given
+    mockPdndVisuraToken();
+    mockPdndVisuraSecretValue();
+    when(pdndVisuraInfoCamereRawRestClient.getRawInstitutionDetail(anyString(), anyString()))
+            .thenReturn(document.getBytes(StandardCharsets.UTF_8));
+    // when
+    var result = pdndInfoCamereConnector.retrieveInstitutionDocument(taxCode);
+
+    // then
+    assertNotNull(result);
+    assertNotEquals(0, result.length);
+
+    String cleanedXml = new String(result, StandardCharsets.UTF_8);
+    assertFalse(cleanedXml.contains("<elenco-soci>"), "L'XML non dovrebbe contenere <elenco-soci>");
+
+    verify(pdndVisuraInfoCamereRawRestClient, times(1))
+            .getRawInstitutionDetail(anyString(), anyString());
+    verifyNoMoreInteractions(pdndVisuraInfoCamereRawRestClient);
+  }
+
+  @Test
+  void testRetrieveInstitutionDocument_throws() {
+
+    // given
+    final String taxCode = "taxCode";
+    final var document = "document";
+
+    // given
+    mockPdndVisuraToken();
+    mockPdndVisuraSecretValue();
+    when(pdndVisuraInfoCamereRawRestClient.getRawInstitutionDetail(anyString(), anyString()))
+            .thenReturn(document.getBytes(StandardCharsets.UTF_8));
+
+    // when
+    Executable executable = () -> pdndInfoCamereConnector.retrieveInstitutionDocument(taxCode);
+
+    // then
+    IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
+    assertEquals(
+        "Impossible to parse document for institution with taxCode: " + taxCode, e.getMessage());
+    verify(pdndVisuraInfoCamereRawRestClient, times(1))
+            .getRawInstitutionDetail(anyString(), anyString());
   }
 
   private PDNDBusiness dummyPDNDBusiness() {

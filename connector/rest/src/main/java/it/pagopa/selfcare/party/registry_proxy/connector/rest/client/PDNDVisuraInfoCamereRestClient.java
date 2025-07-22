@@ -23,5 +23,4 @@ public interface PDNDVisuraInfoCamereRestClient {
     @GetMapping(value = "${rest-client.pdnd-visura-infocamere.getRea.path}", consumes = APPLICATION_XML_VALUE)
     @ResponseBody
     List<PDNDImpresa> retrieveInstitutionPdndFromRea(@RequestParam(value = "numeroRea") String rea, @RequestParam("siglaProvincia") String siglaProvincia, @RequestHeader("Authorization") String accessToken);
-
 }

@@ -6,6 +6,9 @@ This Spring Boot-based microservice is designed to handle several key functional
 - IPA data for PA, AOO and UO
 - ANAC
 - IVASS 
+- INFOCAMERE
+- PDND_INFOCAMERE
+- ADE
 
 ## Prerequisites
 Before running the microservice, ensure you have installed:

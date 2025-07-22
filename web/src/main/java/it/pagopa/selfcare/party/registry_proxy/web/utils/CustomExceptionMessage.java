@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 @NoArgsConstructor(access = AccessLevel.NONE)
 public class CustomExceptionMessage {
 
-
     public static void setCustomMessage(GenericError genericError){
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getRequest();

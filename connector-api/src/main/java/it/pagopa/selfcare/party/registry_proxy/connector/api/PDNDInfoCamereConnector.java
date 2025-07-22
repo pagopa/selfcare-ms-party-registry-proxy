@@ -11,6 +11,8 @@ public interface PDNDInfoCamereConnector {
 
     PDNDBusiness retrieveInstitutionDetail(String taxCode);
 
+    byte[] retrieveInstitutionDocument(String taxCode);
+
     PDNDBusiness retrieveInstitutionFromRea(String county, String rea);
 
 }
