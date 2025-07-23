@@ -3,6 +3,9 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.InvalidRequestException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
 import it.pagopa.selfcare.party.registry_proxy.core.PDNDInfoCamereService;
@@ -46,10 +49,18 @@ public class PDNDVisuraInfoCamereController {
   @Operation(
           summary = "${swagger.api.infocamere-pdnd.institution.summary}",
           description = "${swagger.api.infocamere-pdnd.institution.notes}",
-          operationId = "institutionVisuraDocumentByTaxCodeUsingGET")
+          operationId = "institutionVisuraDocumentByTaxCodeUsingGET",
+          responses =  @ApiResponse(
+                  responseCode = "200",
+                  description = "Document successfully retrieved",
+                  content = @Content(
+                          mediaType = "application/xml",
+                          schema = @Schema(type = "string", format = "byte")
+                  )
+          ))
   @GetMapping(value = "/institutions/{taxCode}/document", produces = MediaType.APPLICATION_XML_VALUE)
   public ResponseEntity<byte[]> getInstitutionDocument(@ApiParam("${swagger.model.institution.taxCode}") @PathVariable String taxCode) {
-    var document = pdndInfoCamereService.retrieveInstitutionDocument(taxCode);
+    byte[] document = pdndInfoCamereService.retrieveInstitutionDocument(taxCode);
     return ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_XML)
@@ -67,7 +78,7 @@ public class PDNDVisuraInfoCamereController {
     String[] parameters = rea.split("-");
     if (parameters.length != 2) {
       throw new InvalidRequestException(
-          "Rea parameter is malformed. It should be in form of XX-123456");
+              "Rea parameter is malformed. It should be in form of XX-123456");
     }
     PDNDBusiness business = pdndInfoCamereService.retrieveInstitutionFromRea(parameters[0], parameters[1]);
     return ResponseEntity.ok().body(pdndBusinessMapper.toResource(business));

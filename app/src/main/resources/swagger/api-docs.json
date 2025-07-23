@@ -161,15 +161,12 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "OK",
+            "description" : "Document successfully retrieved",
             "content" : {
               "application/xml" : {
                 "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "type" : "string",
-                    "format" : "byte"
-                  }
+                  "type" : "string",
+                  "format" : "byte"
                 }
               }
             }
