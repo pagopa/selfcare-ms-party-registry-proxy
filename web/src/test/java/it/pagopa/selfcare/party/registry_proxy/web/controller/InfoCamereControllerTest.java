@@ -1,7 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.Businesses;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.core.NationalRegistriesService;
 import it.pagopa.selfcare.party.registry_proxy.web.model.GetInstitutionsByLegalDto;
 import it.pagopa.selfcare.party.registry_proxy.web.model.GetInstitutionsByLegalFilterDto;

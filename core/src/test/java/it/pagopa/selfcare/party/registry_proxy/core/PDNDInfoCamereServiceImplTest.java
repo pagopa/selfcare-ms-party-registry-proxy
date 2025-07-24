@@ -2,7 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.core;
 
 
 import it.pagopa.selfcare.party.registry_proxy.connector.api.PDNDInfoCamereConnector;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries_pdnd.PDNDBusiness;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;

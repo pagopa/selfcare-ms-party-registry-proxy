@@ -1,7 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.web.model.mapper;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressProfessionalResponse;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.VerifyLegalResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries.LegalAddressProfessionalResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries.VerifyLegalResponse;
 import it.pagopa.selfcare.party.registry_proxy.web.model.LegalAddressResponse;
 import it.pagopa.selfcare.party.registry_proxy.web.model.LegalVerificationResult;
 import org.springframework.util.StringUtils;

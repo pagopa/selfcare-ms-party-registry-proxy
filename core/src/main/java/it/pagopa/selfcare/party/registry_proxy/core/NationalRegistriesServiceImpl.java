@@ -5,10 +5,10 @@ import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultDetai
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.BadGatewayException;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.InvalidRequestException;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.Businesses;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressProfessionalResponse;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressResponse;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.VerifyLegalResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries.Businesses;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries.LegalAddressProfessionalResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries.LegalAddressResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries.VerifyLegalResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.MaskDataUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

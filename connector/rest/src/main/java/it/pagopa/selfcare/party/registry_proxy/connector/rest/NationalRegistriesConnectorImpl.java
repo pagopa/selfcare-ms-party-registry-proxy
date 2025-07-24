@@ -2,7 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
 import io.github.resilience4j.retry.annotation.Retry;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.NationalRegistriesConnector;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.*;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.NationalRegistriesRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.*;
 import lombok.extern.slf4j.Slf4j;

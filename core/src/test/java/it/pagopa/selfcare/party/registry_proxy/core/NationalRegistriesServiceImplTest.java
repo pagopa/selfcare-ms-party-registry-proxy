@@ -6,7 +6,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultDetai
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.BadGatewayException;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.InvalidRequestException;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.*;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

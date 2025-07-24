@@ -3,7 +3,7 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.Businesses;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.core.NationalRegistriesService;
 import it.pagopa.selfcare.party.registry_proxy.web.model.BusinessesResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.GetInstitutionsByLegalDto;

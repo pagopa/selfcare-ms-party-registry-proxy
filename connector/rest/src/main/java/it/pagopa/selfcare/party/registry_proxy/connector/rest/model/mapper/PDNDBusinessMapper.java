@@ -1,6 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.model.mapper;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistriespdnd.PDNDBusiness;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries_pdnd.PDNDBusiness;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.ClassificazioneAteco;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.ClassificazioniAteco;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.Localizzazione;
