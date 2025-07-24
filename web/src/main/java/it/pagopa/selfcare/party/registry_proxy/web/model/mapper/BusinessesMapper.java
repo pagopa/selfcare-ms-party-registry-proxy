@@ -1,7 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.web.model.mapper;
 
 
-import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.Businesses;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries.Businesses;
 import it.pagopa.selfcare.party.registry_proxy.web.model.BusinessesResource;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

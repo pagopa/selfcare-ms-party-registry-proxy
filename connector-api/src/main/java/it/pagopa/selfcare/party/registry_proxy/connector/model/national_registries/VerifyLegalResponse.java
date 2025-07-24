@@ -1,4 +1,4 @@
-package it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries;
+package it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultCodeEnum;
 import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultDetailEnum;

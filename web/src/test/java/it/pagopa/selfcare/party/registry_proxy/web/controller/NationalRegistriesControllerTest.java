@@ -2,8 +2,8 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultCodeEnum;
 import it.pagopa.selfcare.party.registry_proxy.connector.constant.AdEResultDetailEnum;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.LegalAddressProfessionalResponse;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.nationalregistries.VerifyLegalResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries.LegalAddressProfessionalResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries.VerifyLegalResponse;
 import it.pagopa.selfcare.party.registry_proxy.core.NationalRegistriesService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
