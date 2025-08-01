@@ -1,5 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
+import feign.FeignException;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.PDNDInfoCamereConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries_pdnd.PDNDBusiness;
@@ -77,8 +78,19 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
     Assert.hasText(taxCode, TAX_CODE_REQUIRED_MESSAGE);
     ClientCredentialsResponse tokenResponse = tokenProviderVisura.getTokenPdnd(pdndVisuraInfoCamereRestClientConfig.getPdndSecretValue());
     String bearer = BEARER + tokenResponse.getAccessToken();
-    PDNDVisuraImpresa result = pdndVisuraInfoCamereRestClient.retrieveInstitutionDetail(taxCode, bearer);
-    return pdndBusinessMapper.toPDNDBusiness(result);
+    try {
+      PDNDVisuraImpresa result = pdndVisuraInfoCamereRestClient.retrieveInstitutionDetail(taxCode, bearer);
+      return pdndBusinessMapper.toPDNDBusiness(result);
+    } catch (FeignException e) {
+      if (e instanceof FeignException.BadRequest) {
+        throw new ResourceNotFoundException("No institution found for taxCode: " + taxCode);
+      }
+      log.error("FeignException occurred while retrieving institution detail", e);
+      throw e;
+    } catch (Exception e) {
+      log.error("Unexpected exception occurred while retrieving institution detail", e);
+      throw new RuntimeException("Unexpected error while retrieving institution detail", e);
+    }
   }
 
   @Override
