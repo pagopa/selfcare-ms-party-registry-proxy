@@ -89,7 +89,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
       throw e;
     } catch (Exception e) {
       log.error("Unexpected exception occurred while retrieving institution detail", e);
-      throw new RuntimeException("Unexpected error while retrieving institution detail", e);
+      throw new IllegalArgumentException("Unexpected error while retrieving institution detail", e);
     }
   }
 
