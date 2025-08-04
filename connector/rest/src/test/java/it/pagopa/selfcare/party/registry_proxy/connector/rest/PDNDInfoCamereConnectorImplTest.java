@@ -3,6 +3,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import feign.FeignException;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries_pdnd.PDNDBusiness;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDInfoCamereRestClient;
@@ -280,6 +281,64 @@ class PDNDInfoCamereConnectorImplTest {
     verify(pdndVisuraInfoCamereRestClient, times(1))
             .retrieveInstitutionDetail(anyString(), anyString());
     verifyNoMoreInteractions(pdndVisuraInfoCamereRestClient);
+  }
+
+  @Test
+  void testRetrieveInstitutionDetail_FeignExceptionBadRequest() {
+
+    // given
+    final String taxCode = "taxCode";
+
+    mockPdndVisuraToken();
+    mockPdndVisuraSecretValue();
+    when(pdndVisuraInfoCamereRestClient.retrieveInstitutionDetail(anyString(), anyString()))
+            .thenThrow(FeignException.BadRequest.class);
+
+    // when
+    Executable executable = () -> pdndInfoCamereConnector.retrieveInstitutionDetail(taxCode);
+
+    // then
+    ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
+    assertEquals("No institution found for taxCode: " + taxCode, e.getMessage());
+    Mockito.verifyNoInteractions(pdndInfoCamereRestClient);
+  }
+
+  @Test
+  void testRetrieveInstitutionDetail_FeignExceptionBadGateway() {
+
+    // given
+    final String taxCode = "taxCode";
+
+    mockPdndVisuraToken();
+    mockPdndVisuraSecretValue();
+    when(pdndVisuraInfoCamereRestClient.retrieveInstitutionDetail(anyString(), anyString()))
+            .thenThrow(FeignException.BadGateway.class);
+
+    // when
+    Executable executable = () -> pdndInfoCamereConnector.retrieveInstitutionDetail(taxCode);
+
+    // then
+    assertThrows(FeignException.BadGateway.class, executable);
+    Mockito.verifyNoInteractions(pdndInfoCamereRestClient);
+  }
+
+  @Test
+  void testRetrieveInstitutionDetail_Exception() {
+
+    // given
+    final String taxCode = "taxCode";
+
+    mockPdndVisuraToken();
+    mockPdndVisuraSecretValue();
+    when(pdndVisuraInfoCamereRestClient.retrieveInstitutionDetail(anyString(), anyString()))
+            .thenThrow(ResourceNotFoundException.class);
+
+    // when
+    Executable executable = () -> pdndInfoCamereConnector.retrieveInstitutionDetail(taxCode);
+
+    // then
+    assertThrows(RuntimeException.class, executable);
+    Mockito.verifyNoInteractions(pdndInfoCamereRestClient);
   }
 
   @Test
