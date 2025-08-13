@@ -77,7 +77,7 @@ provider "restapi" {
 resource "restapi_object" "search_index" {
   provider   = restapi.search
   query_string = "api-version=2023-11-01"
-  id_attribute = "selc-index"
+  id_attribute = "name"
   path         = "/indexes"
 
   data      = jsonencode({
@@ -119,7 +119,7 @@ resource "restapi_object" "search_index" {
         "retrievable": true,
         "searchable": true,
         "filterable": true,
-        "sortable": true,
+        "sortable": false,
         "facetable": true
       },{
         "name": "institutionTypes",
@@ -127,7 +127,7 @@ resource "restapi_object" "search_index" {
         "retrievable": true,
         "searchable": true,
         "filterable": true,
-        "sortable": true,
+        "sortable": false,
         "facetable": true
       },
       # {
@@ -173,8 +173,7 @@ resource "restapi_object" "search_datasource" {
     name = "${var.project}-cosmosdb-aisearch-datasource"
     type = "cosmosdb"
     credentials = {
-      # Usa l'identità gestita per l'autenticazione
-      connectionString = "ResourceId=${data.azurerm_cosmosdb_account.cosmosdb.id};ApiKind=MongoDb;Initial Catalog=${var.database_name};"
+      connectionString = "ResourceId=${data.azurerm_cosmosdb_account.cosmosdb.id};Database=${var.database_name};"
     }
     container = {
       name = var.collection_name
@@ -217,14 +216,10 @@ resource "restapi_object" "search_indexer" {
         dataToExtract           = "contentAndMetadata"
         imageAction            = "none"
         parsingMode            = "default"
-
-        # Configurazioni per gestione errori
-        maxFailedItems         = 10
-        maxFailedItemsPerBatch = 5
-
-        # Batch size per performance
-        batchSize              = 50
       }
+      batchSize              = 50
+      maxFailedItems         = 10
+      maxFailedItemsPerBatch = 5
     }
     # Mappatura dei campi da MongoDB all'indice Azure AI Search
     fieldMappings = [
