@@ -37,24 +37,24 @@ resource "azurerm_search_shared_private_link_service" "srch_to_cosmos" {
   request_message    = "Enable access from AI Search to CMS services CosmosDB"
 }
 
-data "azurerm_subnet" "cosmosdb" {
-  name                 = "${var.prefix}-${var.env_short}-cosmosb-mongodb-snet"
-  virtual_network_name = "${var.prefix}-${var.env_short}-vnet"
-  resource_group_name  = "${var.prefix}-${var.env_short}-vnet-rg"
-}
+# data "azurerm_subnet" "cosmosdb" {
+#   name                 = "${var.prefix}-${var.env_short}-cosmosb-mongodb-snet"
+#   virtual_network_name = "${var.prefix}-${var.env_short}-vnet"
+#   resource_group_name  = "${var.prefix}-${var.env_short}-vnet-rg"
+# }
 
-resource "azurerm_private_endpoint" "search_pe" {
-  name                = "${var.prefix}-${var.env_short}-search-service-pe"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.search_engine_rg.name
-  subnet_id           = data.azurerm_subnet.cosmosdb.id
-
-  private_service_connection {
-    name                           = "search-service-connection"
-    is_manual_connection           = false
-    private_connection_resource_id = azurerm_search_service.search_engine_service.id
-
-    # Per AI Search, la sotto-risorsa è sempre "searchService"
-    subresource_names              = ["searchService"]
-  }
-}
+# resource "azurerm_private_endpoint" "search_pe" {
+#   name                = "${var.prefix}-${var.env_short}-search-service-pe"
+#   location            = var.location
+#   resource_group_name = azurerm_resource_group.search_engine_rg.name
+#   subnet_id           = data.azurerm_subnet.cosmosdb.id
+#
+#   private_service_connection {
+#     name                           = "search-service-connection"
+#     is_manual_connection           = false
+#     private_connection_resource_id = azurerm_search_service.search_engine_service.id
+#
+#     # Per AI Search, la sotto-risorsa è sempre "searchService"
+#     subresource_names              = ["searchService"]
+#   }
+# }

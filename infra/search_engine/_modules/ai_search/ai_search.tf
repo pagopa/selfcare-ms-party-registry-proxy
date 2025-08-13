@@ -14,7 +14,7 @@ resource "azurerm_search_service" "search_engine_service" {
   # Configurazioni opzionali
   replica_count                 = 1
   partition_count               = 1
-  public_network_access_enabled = false
+  public_network_access_enabled = true
   allowed_ips                   = [] # Lista di IP consentiti
 
   local_authentication_enabled = true
