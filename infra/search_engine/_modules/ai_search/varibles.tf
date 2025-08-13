@@ -23,16 +23,16 @@ variable "database_name" {
 #   description = "Domain"
 # }
 
-# variable "env_short" {
-#   description = "Environment short name"
-#   type        = string
-#   validation {
-#     condition = (
-#       length(var.env_short) <= 1
-#     )
-#     error_message = "Max length is 1 chars."
-#   }
-# }
+variable "env_short" {
+  description = "Environment short name"
+  type        = string
+  validation {
+    condition = (
+      length(var.env_short) <= 1
+    )
+    error_message = "Max length is 1 chars."
+  }
+}
 
 # variable "instance_number" {
 #   type        = string
@@ -44,15 +44,20 @@ variable "location" {
   default = "westeurope"
 }
 
-# variable "key_vault_resource_group_name" {
-#   type        = string
-#   description = "Name of Key Vault resource group"
-# }
+variable "key_vault_resource_group_name" {
+  type        = string
+  description = "Name of Key Vault resource group"
+}
 
-# variable "key_vault_name" {
-#   type        = string
-#   description = "Name of Key Vault"
-# }
+variable "key_vault_name" {
+  type        = string
+  description = "Name of Key Vault"
+}
+
+variable "key_vault_cosmosdb_key" {
+  type        = string
+  description = "Name of Key Vault"
+}
 
 variable "prefix" {
   description = "Domain prefix"

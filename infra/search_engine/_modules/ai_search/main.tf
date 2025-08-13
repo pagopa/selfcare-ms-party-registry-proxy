@@ -20,3 +20,20 @@ terraform {
 provider "azurerm" {
   features {}
 }
+
+provider "restapi" {
+  alias                = "search"
+  uri                  = "https://${azurerm_search_service.search_engine_service.name}.search.windows.net"
+  write_returns_object = true
+  debug                = true
+  insecure             = true
+
+  headers = {
+    "api-key"      = azurerm_search_service.search_engine_service.primary_key,
+    "Content-Type" = "application/json"
+  }
+
+  create_method  = "POST"
+  update_method  = "PUT"
+  destroy_method = "DELETE"
+}
