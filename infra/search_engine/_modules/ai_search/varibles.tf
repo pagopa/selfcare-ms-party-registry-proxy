@@ -1,7 +1,7 @@
-# variable "app_name" {
-#   type        = string
-#   description = "App name"
-# }
+variable "app_name" {
+  type        = string
+  description = "App name"
+}
 
 variable "collection_name" {
   type        = string

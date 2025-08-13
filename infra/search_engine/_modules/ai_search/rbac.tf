@@ -4,6 +4,12 @@ resource "azurerm_role_assignment" "search_to_cosmodb" {
   principal_id         = azurerm_search_service.search_engine_service.identity[0].principal_id
 }
 
+resource "azurerm_role_assignment" "identity_to_cosmodb" {
+  scope                = data.azurerm_cosmosdb_account.cosmosdb.id
+  role_definition_name = "Cosmos DB Account Reader Role"
+  principal_id         = azurerm_user_assigned_identity.srch_identity.principal_id
+}
+
 # resource "azurerm_cosmosdb_mongo_role_definition" "search_to_cosmos_data_reader_read_only_role" {
 #   role_name                = "${var.project}-ReadOnlyRole"
 #   cosmos_mongo_database_id = data.azurerm_cosmosdb_mongo_database.cosmosdb_database.id

@@ -15,7 +15,7 @@ provider "azurerm" {
 
 module "ai_search" {
   source = "../../_modules/ai_search"
-
+  app_name = "${local.prefix}-srch"
   prefix = local.prefix
   env_short = local.env_short
   project = local.project

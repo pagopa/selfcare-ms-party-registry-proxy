@@ -21,8 +21,19 @@ resource "azurerm_search_service" "search_engine_service" {
   authentication_failure_mode  = "http403"
 
   identity {
-    type = "SystemAssigned"
+    type = "UserAssigned"
+    identity_ids = [
+      azurerm_user_assigned_identity.srch_identity.id
+    ]
   }
+
+  tags = var.tags
+}
+
+resource "azurerm_user_assigned_identity" "srch_identity" {
+  name                = "${var.app_name}-mi"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.search_engine_rg.name
 
   tags = var.tags
 }

@@ -28,14 +28,14 @@
 #   tags = var.tags
 # }
 
-# Must be approved manually in cosmosdb networking page
-resource "azurerm_search_shared_private_link_service" "srch_to_cosmos" {
-  name               = "${var.project}-search-service-spl-01"
-  search_service_id  = azurerm_search_service.search_engine_service.id
-  subresource_name   = "mongodb"
-  target_resource_id = data.azurerm_cosmosdb_account.cosmosdb.id
-  request_message    = "Enable access from AI Search to CMS services CosmosDB"
-}
+# # Must be approved manually in cosmosdb networking page
+# resource "azurerm_search_shared_private_link_service" "srch_to_cosmos" {
+#   name               = "${var.project}-search-service-spl-01"
+#   search_service_id  = azurerm_search_service.search_engine_service.id
+#   subresource_name   = "mongodb"
+#   target_resource_id = data.azurerm_cosmosdb_account.cosmosdb.id
+#   request_message    = "Enable access from AI Search to CMS services CosmosDB"
+# }
 
 # data "azurerm_subnet" "cosmosdb" {
 #   name                 = "${var.prefix}-${var.env_short}-cosmosb-mongodb-snet"
