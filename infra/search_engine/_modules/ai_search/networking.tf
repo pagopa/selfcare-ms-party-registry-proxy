@@ -1,69 +1,78 @@
-# module "srch_snet" {
-#   source               = "github.com/pagopa/terraform-azurerm-v4//subnet?ref=v7.20.0"
-#   name                 = "${var.project}-srch-snet-01"
-#   resource_group_name  = var.virtual_network.resource_group_name
-#   virtual_network_name = var.virtual_network.name
-#   address_prefixes     = local.snet_cidrs
-# }
-#
-# resource "azurerm_private_endpoint" "srch" {
-#   depends_on          = [azurerm_search_service.srch]
-#   name                = "${var.project}-${var.application_basename}-srch-pep-01"
-#   resource_group_name = var.resource_group_name
-#   location            = var.location
-#   subnet_id           = var.peps_snet_id
-#
-#   private_service_connection {
-#     name                           = azurerm_search_service.srch.name
-#     private_connection_resource_id = azurerm_search_service.srch.id
-#     is_manual_connection           = false
-#     subresource_names              = ["searchService"]
-#   }
-#
-#   private_dns_zone_group {
-#     name                 = "${var.project}-${var.application_basename}-dns-zone-group-01"
-#     private_dns_zone_ids = [data.azurerm_private_dns_zone.privatelink_srch.id]
-#   }
-#
-#   tags = var.tags
-# }
-
-# # Must be approved manually in cosmosdb networking page
-# resource "azurerm_search_shared_private_link_service" "srch_to_cosmos" {
-#   name               = "${var.project}-search-service-spl-01"
-#   search_service_id  = azurerm_search_service.search_engine_service.id
-#   subresource_name   = "mongodb"
-#   target_resource_id = data.azurerm_cosmosdb_account.cosmosdb.id
-#   request_message    = "Enable access from AI Search to CMS services CosmosDB"
-# }
-data "azurerm_private_dns_zone" "cosmosdb" {
-  name                = "privatelink.mongo.cosmos.azure.com"
-  resource_group_name = "${var.prefix}-${var.env_short}-vnet-rg"
+resource "azurerm_subnet" "srch_snet" {
+  name                 = "${var.prefix}-${var.env_short}-srch-snet"
+  resource_group_name  = data.azurerm_resource_group.rg_vnet.name
+  virtual_network_name = data.azurerm_virtual_network.vnet.name
+  address_prefixes     = var.cidr_subnet
 }
 
-data "azurerm_subnet" "cosmosdb" {
-  name                 = "${var.prefix}-${var.env_short}-cosmosb-mongodb-snet"
-  virtual_network_name = "${var.prefix}-${var.env_short}-vnet"
-  resource_group_name  = "${var.prefix}-${var.env_short}-vnet-rg"
+resource "azurerm_private_dns_zone" "privatelink_srch_azure_com" {
+  name                = "privatelink.srch.azure.com"
+  resource_group_name = data.azurerm_resource_group.rg_vnet.name
+
+  tags = var.tags
 }
 
-resource "azurerm_private_endpoint" "search_pe" {
-  name                = "${var.prefix}-${var.env_short}-search-service-pe"
+resource "azurerm_private_dns_zone_virtual_network_link" "privatelink_srch_azure_com_vnet" {
+  name                  = "${data.azurerm_virtual_network.vnet.name}-dns-link"
+  resource_group_name   = data.azurerm_resource_group.rg_vnet.name
+  private_dns_zone_name = azurerm_private_dns_zone.privatelink_srch_azure_com.name
+  virtual_network_id    = data.azurerm_virtual_network.vnet.id
+  registration_enabled  = false
+
+  tags = var.tags
+}
+
+
+resource "azurerm_private_endpoint" "srch_pe" {
+  name                = "${var.prefix}-${var.env_short}-srch-pep-01"
   location            = var.location
-  resource_group_name = azurerm_resource_group.search_engine_rg.name
-  subnet_id           = data.azurerm_subnet.cosmosdb.id
+  resource_group_name = data.azurerm_resource_group.rg_vnet.name
+  subnet_id           = azurerm_subnet.srch_snet.id
 
   private_service_connection {
-    name                           = "search-service-connection"
+    name                           = azurerm_search_service.search_engine_service.name
     is_manual_connection           = false
     private_connection_resource_id = azurerm_search_service.search_engine_service.id
-
-    # Per AI Search, la sotto-risorsa è sempre "searchService"
     subresource_names              = ["searchService"]
   }
 
   private_dns_zone_group {
-    name                 = "private-dns-zone-group"
-    private_dns_zone_ids = [data.azurerm_private_dns_zone.cosmosdb.id]
+    name                 = "default"
+    private_dns_zone_ids = [azurerm_private_dns_zone.privatelink_srch_azure_com.id]
   }
 }
+
+resource "azurerm_private_dns_a_record" "dns_a_record" {
+  name                = azurerm_search_service.search_engine_service.name
+  zone_name           = azurerm_private_dns_zone.privatelink_srch_azure_com.name
+  resource_group_name = data.azurerm_resource_group.rg_vnet.name
+  ttl                 = 10
+  records             = [azurerm_private_endpoint.srch_pe.private_service_connection[0].private_ip_address]
+}
+
+# Network Security Group per la subnet degli endpoint
+resource "azurerm_network_security_group" "nsg_private_endpoints" {
+  name                = "${var.prefix}-${var.env_short}-srch-nsg-pep-01"
+  location            = var.location
+  resource_group_name = data.azurerm_resource_group.rg_vnet.name
+
+  security_rule {
+    name                       = "AllowHTTPS"
+    priority                   = 1001
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    source_address_prefix      = "VirtualNetwork"
+    destination_address_prefix = "*"
+  }
+}
+
+# Associazione NSG alla subnet
+resource "azurerm_subnet_network_security_group_association" "nsg_private_endpoints" {
+  subnet_id                 = azurerm_subnet.srch_snet.id
+  network_security_group_id = azurerm_network_security_group.nsg_private_endpoints.id
+}
+
+

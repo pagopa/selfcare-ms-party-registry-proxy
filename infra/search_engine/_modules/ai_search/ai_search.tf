@@ -14,26 +14,32 @@ resource "azurerm_search_service" "search_engine_service" {
   # Configurazioni opzionali
   replica_count                 = 1
   partition_count               = 1
-  public_network_access_enabled = true
+  public_network_access_enabled = false
   allowed_ips                   = [] # Lista di IP consentiti
 
   local_authentication_enabled = true
   authentication_failure_mode  = "http403"
 
   identity {
-    type = "UserAssigned"
-    identity_ids = [
-      azurerm_user_assigned_identity.srch_identity.id
-    ]
+    type = "SystemAssigned"
   }
 
+  # apz0
+  # identity { 
+  #   type = "UserAssigned"
+  #   identity_ids = [
+  #     azurerm_user_assigned_identity.srch_identity.id
+  #   ]
+  # }
+
   tags = var.tags
 }
 
-resource "azurerm_user_assigned_identity" "srch_identity" {
-  name                = "${var.app_name}-mi"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.search_engine_rg.name
+# apz0
+# resource "azurerm_user_assigned_identity" "srch_identity" {
+#   name                = "${var.app_name}-mi"
+#   location            = var.location
+#   resource_group_name = azurerm_resource_group.search_engine_rg.name
 
-  tags = var.tags
-}
+#   tags = var.tags
+# }

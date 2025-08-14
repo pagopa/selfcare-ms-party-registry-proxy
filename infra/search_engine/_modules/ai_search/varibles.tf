@@ -3,6 +3,11 @@ variable "app_name" {
   description = "App name"
 }
 
+variable "cidr_subnet" {
+  type        = list(string)
+  description = "Application gateway address space."
+}
+
 variable "collection_name" {
   type        = string
   description = "Cosmos db collection name to be indexed on ai search"
