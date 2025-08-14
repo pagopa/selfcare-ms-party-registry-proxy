@@ -6,7 +6,7 @@ resource "azurerm_subnet" "srch_snet" {
 }
 
 resource "azurerm_private_dns_zone" "privatelink_srch_azure_com" {
-  name                = "privatelink.srch.azure.com"
+  name                = "privatelink.search.windows.net"
   resource_group_name = data.azurerm_resource_group.rg_vnet.name
 
   tags = var.tags
