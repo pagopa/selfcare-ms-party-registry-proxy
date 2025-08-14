@@ -1,8 +1,8 @@
-resource "azurerm_role_assignment" "search_to_cosmodb" {
-  scope                = data.azurerm_cosmosdb_account.cosmosdb.id
-  role_definition_name = "Cosmos DB Account Reader Role"
-  principal_id         = azurerm_search_service.search_engine_service.identity[0].principal_id
-}
+# resource "azurerm_role_assignment" "search_to_cosmodb" {
+#   scope                = data.azurerm_cosmosdb_account.cosmosdb.id
+#   role_definition_name = "Cosmos DB Account Reader Role"
+#   principal_id         = azurerm_search_service.search_engine_service.identity[0].principal_id
+# }
 
 resource "azurerm_role_assignment" "identity_to_cosmodb" {
   scope                = data.azurerm_cosmosdb_account.cosmosdb.id

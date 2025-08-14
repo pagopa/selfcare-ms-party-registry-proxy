@@ -63,7 +63,7 @@ resource "restapi_object" "search_index" {
       # }
       {
         name         = "systemLastModified"
-        type         = "Edm.DateTimeOffset"
+        type         = "Edm.Int64"
         searchable   = false
         filterable   = true
         sortable     = true
@@ -137,7 +137,7 @@ resource "restapi_object" "search_indexer" {
 
     fieldMappings = [
       {
-        sourceFieldName = "_id"
+        sourceFieldName = "id"
         targetFieldName = "id"
         mappingFunction = {
           name = "base64Encode"
