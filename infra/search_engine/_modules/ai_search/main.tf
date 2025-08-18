@@ -23,13 +23,13 @@ provider "azurerm" {
 
 provider "restapi" {
   alias                = "search"
-  uri                  = "https://${azurerm_search_service.search_engine_service.name}.search.windows.net"
+  uri                  = "https://${azurerm_search_service.srch_service.name}.search.windows.net"
   write_returns_object = true
   debug                = true
   insecure             = true
 
   headers = {
-    "api-key"      = azurerm_search_service.search_engine_service.primary_key,
+    "api-key"      = azurerm_search_service.srch_service.primary_key,
     "Content-Type" = "application/json"
   }
 

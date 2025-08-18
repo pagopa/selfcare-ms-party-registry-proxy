@@ -1,80 +1,80 @@
-# resource "restapi_object" "search_index" {
-#   provider   = restapi.search
-#   query_string = "api-version=2023-11-01"
-#   id_attribute = "name"
-#   path         = "/indexes"
+resource "restapi_object" "search_index" {
+  provider   = restapi.search
+  query_string = "api-version=2023-11-01"
+  id_attribute = "name"
+  path         = "/indexes"
 
-#   data      = jsonencode({
-#     "name": "institution-index",
-#     "fields": [
-#       {
-#         "name": "id",
-#         "type": "Edm.String",
-#         "key": true,
-#         "searchable": false,
-#         "filterable": true,
-#         "sortable": true,
-#         "facetable": false,
-#         "retrievable": true
-#       },
-#       {
-#         "name": "description",
-#         "type": "Edm.String",
-#         "key": false,
-#         "searchable": true,
-#         "filterable": false,
-#         "sortable": true,
-#         "facetable": false,
-#         "retrievable": true,
-#         "analyzer": "it.microsoft"
-#       },
-#       {
-#         "name": "taxCode",
-#         "type": "Edm.String",
-#         "searchable": true,
-#         "filterable": true,
-#         "sortable": true,
-#         "facetable": false,
-#         "analyzer": "standard.lucene"
-#       },
-#       {
-#         "name": "products",
-#         "type": "Collection(Edm.String)",
-#         "retrievable": true,
-#         "searchable": true,
-#         "filterable": true,
-#         "sortable": false,
-#         "facetable": true
-#       },{
-#         "name": "institutionTypes",
-#         "type": "Collection(Edm.String)",
-#         "retrievable": true,
-#         "searchable": true,
-#         "filterable": true,
-#         "sortable": false,
-#         "facetable": true
-#       },
-#       # {
-#       #   "name": "lastModified",
-#       #   "type": "Edm.DateTimeOffset",
-#       #   "retrievable": true,
-#       #   "filterable": true,
-#       #   "sortable": true
-#       # }
-#       {
-#         name         = "systemLastModified"
-#         type         = "Edm.Int64"
-#         searchable   = false
-#         filterable   = true
-#         sortable     = true
-#         facetable    = false
-#         retrievable  = true
-#       },
-#     ]
-#   })
+  data      = jsonencode({
+    "name": "institution-index",
+    "fields": [
+      {
+        "name": "id",
+        "type": "Edm.String",
+        "key": true,
+        "searchable": false,
+        "filterable": true,
+        "sortable": true,
+        "facetable": false,
+        "retrievable": true
+      },
+      {
+        "name": "description",
+        "type": "Edm.String",
+        "key": false,
+        "searchable": true,
+        "filterable": false,
+        "sortable": true,
+        "facetable": false,
+        "retrievable": true,
+        "analyzer": "it.microsoft"
+      },
+      {
+        "name": "taxCode",
+        "type": "Edm.String",
+        "searchable": true,
+        "filterable": true,
+        "sortable": true,
+        "facetable": false,
+        "analyzer": "standard.lucene"
+      },
+      {
+        "name": "products",
+        "type": "Collection(Edm.String)",
+        "retrievable": true,
+        "searchable": true,
+        "filterable": true,
+        "sortable": false,
+        "facetable": true
+      },{
+        "name": "institutionTypes",
+        "type": "Collection(Edm.String)",
+        "retrievable": true,
+        "searchable": true,
+        "filterable": true,
+        "sortable": false,
+        "facetable": true
+      },
+      # {
+      #   "name": "lastModified",
+      #   "type": "Edm.DateTimeOffset",
+      #   "retrievable": true,
+      #   "filterable": true,
+      #   "sortable": true
+      # }
+      {
+        name         = "systemLastModified"
+        type         = "Edm.Int64"
+        searchable   = false
+        filterable   = true
+        sortable     = true
+        facetable    = false
+        retrievable  = true
+      },
+    ]
+  })
 
-#   depends_on = [azurerm_search_service.search_engine_service]
-# }
+  depends_on = [azurerm_search_service.srch_service]
+}
 
 # resource "restapi_object" "search_datasource" {
 #   provider = restapi.search
@@ -111,7 +111,7 @@
 #   })
 
 #   depends_on = [
-#     azurerm_search_service.search_engine_service
+#     azurerm_search_service.srch_service
 #     # ,azurerm_role_assignment.search_to_cosmodb
 #   ]
 # }

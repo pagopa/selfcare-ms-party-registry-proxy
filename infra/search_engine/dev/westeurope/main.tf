@@ -31,4 +31,6 @@ module "ai_search" {
   key_vault_name                = local.key_vault_name
   key_vault_resource_group_name = local.key_vault_resource_group_name
   key_vault_cosmosdb_key        = local.key_vault_cosmosdb_key
+
+  srch_private_endpoint_enabled = true
 }

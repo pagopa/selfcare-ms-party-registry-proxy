@@ -76,6 +76,11 @@ variable "prefix" {
   }
 }
 
+variable "srch_private_endpoint_enabled" {
+  type    = bool
+  default = true
+}
+
 variable "project" {
   type        = string
   description = "Selfcare prefix and short environment"

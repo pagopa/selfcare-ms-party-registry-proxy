@@ -52,10 +52,16 @@ data "azurerm_subnet" "cosmosdb" {
 
 # data "azurerm_user_assigned_identity" "managed_identity_infra_ci" {
 #   name                = "${var.prefix}-${var.env_short}-ms-github-ci-identity"
-#   resource_group_name = azurerm_resource_group.search_engine_rg.name
+#   resource_group_name = azurerm_resource_group.srch_rg.name
 # }
 #
 # data "azurerm_user_assigned_identity" "managed_identity_infra_cd" {
 #   name                = "${var.prefix}-${var.env_short}-ms-github-cd-identity"
-#   resource_group_name = azurerm_resource_group.search_engine_rg.name
+#   resource_group_name = azurerm_resource_group.srch_rg.name
+# }
+
+# Should be used until pep is fixed
+# data "azurerm_public_ip" "outbound_ip_aks_platform" {
+#   name                = "${var.prefix}-${var.env_short}-aksoutbound-pip-01"
+#   resource_group_name = "${var.prefix}-${var.env_short}-vnet-rg"
 # }
