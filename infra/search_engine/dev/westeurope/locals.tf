@@ -10,9 +10,10 @@ locals {
   database_name    = "selcMsCore"
   collection_name  = "Institution"
   
-  key_vault_resource_group_name = "selc-${local.env_short}-sec-rg"
-  key_vault_name                = "selc-${local.env_short}-kv"
-  key_vault_cosmosdb_key        = "mongodb-connection-key"
+  key_vault_resource_group_name    = "selc-${local.env_short}-sec-rg"
+  key_vault_name                   = "selc-${local.env_short}-kv"
+  key_vault_cosmosdb_key           = "mongodb-connection-key"
+  key_vault_event_hub_consumer_key = "eventhub-sc-contracts-selc-proxy-key-lc"
 
   tags = {
     CostCenter  = "TS310 - PAGAMENTI & SERVIZI"

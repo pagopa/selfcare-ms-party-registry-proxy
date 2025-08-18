@@ -54,13 +54,14 @@ resource "restapi_object" "search_index" {
         "sortable": false,
         "facetable": true
       },
-      # {
-      #   "name": "lastModified",
-      #   "type": "Edm.DateTimeOffset",
-      #   "retrievable": true,
-      #   "filterable": true,
-      #   "sortable": true
-      # }
+      {
+        "name": "lastModified",
+        "type": "Edm.DateTimeOffset",
+        "retrievable": true,
+        "filterable": true,
+        "sortable": true,
+        "searchable": false
+      },
       {
         name         = "systemLastModified"
         type         = "Edm.Int64"
@@ -69,7 +70,7 @@ resource "restapi_object" "search_index" {
         sortable     = true
         facetable    = false
         retrievable  = true
-      },
+      }
     ]
   })
 

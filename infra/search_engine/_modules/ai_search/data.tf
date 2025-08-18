@@ -14,22 +14,6 @@ data "azurerm_key_vault" "key_vault" {
   name                = var.key_vault_name
 }
 
-data "azurerm_key_vault_secret" "cosmosdb_connection_key" {
-  name         = var.key_vault_cosmosdb_key
-  key_vault_id = data.azurerm_key_vault.key_vault.id
-}
-
-data "azurerm_cosmosdb_account" "cosmosdb" {
-  name                = "${var.cosmosdb_prefix}-cosmosdb-mongodb-account"
-  resource_group_name = "${var.cosmosdb_prefix}-cosmosdb-mongodb-rg"
-}
-
-data "azurerm_cosmosdb_mongo_database" "cosmosdb_database" {
-  name                = var.database_name
-  resource_group_name = data.azurerm_cosmosdb_account.cosmosdb.resource_group_name
-  account_name        = data.azurerm_cosmosdb_account.cosmosdb.name
-}
-
 data "azuread_group" "adgroup_admin" {
   display_name = "${var.prefix}-${var.env_short}-adgroup-admin"
 }

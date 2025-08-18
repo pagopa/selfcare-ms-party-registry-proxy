@@ -34,3 +34,25 @@ module "ai_search" {
 
   srch_private_endpoint_enabled = true
 }
+
+module "dapr" {
+  source = "../../_modules/dapr"
+    
+  project   = local.project
+  env_short = local.env_short
+
+  cae_name    = "selc-${local.env_short}-cae-002"
+  cae_rg_name = "selc-${local.env_short}-container-app-002-rg"
+  ca_name     = "selc-${local.env_short}-party-reg-proxy-ca"
+  ca_rg_name  = "selc-${local.env_short}-container-app-002-rg"
+
+  key_vault_name                   = local.key_vault_name
+  key_vault_resource_group_name    = local.key_vault_resource_group_name
+  key_vault_event_hub_consumer_key = local.key_vault_event_hub_consumer_key
+
+  search_service_name = module.ai_search.search_service_name
+  search_service_key  = module.ai_search.search_service_admin_key
+
+  tags = local.tags
+
+}
