@@ -27,7 +27,7 @@ public class EventController {
     this.searchService = searchService;
   }
 
-  @PostMapping("/events/subscribe")
+  @PostMapping("/dapr/subscribe")
   public List<Map<String, Object>> subscribe() {
     List<Map<String, Object>> subscriptions = new ArrayList<>();
     Map<String, Object> subscription = new HashMap<>();
