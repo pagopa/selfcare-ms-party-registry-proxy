@@ -13,6 +13,8 @@ import it.pagopa.selfcare.party.registry_proxy.core.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import it.pagopa.selfcare.party.registry_proxy.web.controller.EventController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -74,6 +76,9 @@ class SwaggerConfigTest {
 
     @MockBean
     private PDNDInfoCamereService pdndInfoCamereService;
+
+    @MockBean
+    private EventController eventController;
 
     @Autowired
     WebApplicationContext context;

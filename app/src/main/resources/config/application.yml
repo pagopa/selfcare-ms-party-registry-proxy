@@ -39,16 +39,16 @@ app:
     http-endpoint: http://localhost:3500
     grpc-endpoint: http://localhost:50001
 
-  azure:
-    search:
-      service-name: ${AZURE_SEARCH_NAME:https://selc-d-weu-ar-search-service.search.windows.net}
-      index-name: institution-index
-      api-version: "2023-11-01"
-
-    eventhub:
-      namespace: ${KAFKA_NAMESPACE:selc-d-eventhub-ns.servicebus.windows.net}
-      topic: ${KAFKA_TOPIC:SC-Contracts}
-      consumer-group: ${KAFKA_CONSUMER_GROUP:party-proxy}
+#  azure:
+#    search:
+#      service-name: ${AZURE_SEARCH_NAME:https://selc-d-weu-ar-search-service.search.windows.net}
+#      index-name: institution-index
+#      api-version: "2023-11-01"
+#
+#    eventhub:
+#      namespace: ${KAFKA_NAMESPACE:selc-d-eventhub-ns.servicebus.windows.net}
+#      topic: ${KAFKA_TOPIC:SC-Contracts}
+#      consumer-group: ${KAFKA_CONSUMER_GROUP:party-proxy}
 
 logging:
   level:

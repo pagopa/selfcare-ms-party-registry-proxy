@@ -16,8 +16,8 @@ import java.util.*;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "events", produces = MediaType.APPLICATION_JSON_VALUE)
-@Api(tags = "events")
+@RequestMapping(value = "")
+@Api(tags = "dapr")
 public class EventController {
   private final ObjectMapper objectMapper = new ObjectMapper();
   private final SearchServiceImpl searchService;
