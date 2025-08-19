@@ -46,3 +46,15 @@ mvn spring-boot:run -pl app
 After starting, the microservice will be available at `http://localhost:8080/`.
 
 To use the API, refer to the Swagger UI documentation (if available) at `http://localhost:8080/swagger-ui.html`.
+
+## DAPR
+```shell script
+dapr init
+dapr run --app-id dapr-consumer --app-port 8080 --dapr-http-port 3500 --components-path ./.dapr/components
+```
+
+### Logs
+```shell script
+az containerapp logs show --name ca-dapr-consumer-dev --resource-group rg-dapr-consumer --container daprd
+```
+
