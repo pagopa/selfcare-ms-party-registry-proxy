@@ -1,5 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -35,15 +38,18 @@ public class SearchServiceImpl implements SearchService{
 
   @Override
   public void indexInstitution(String institutionId) {
+    Institution institution = institutionConnector.getById(institutionId);
+    InstitutionIndex institutionIndex = InstitutionIndex.createFromInstitution(institution);
+    String institutionToIndex = null;
     try {
-      Institution institution = institutionConnector.getById(institutionId);
-      InstitutionIndex institutionIndex = InstitutionIndex.createFromInstitution(institution);
-      String institutionToIndex = objectMapper.writeValueAsString(institutionIndex);
-      daprClient.invokeBinding("selc-http-search-binding", "create", institutionToIndex).retry(10).block();
-      log.info("Document " + institutionToIndex + " indexed via Dapr binding.");
-    } catch (Exception e) {
-      log.error("Error creating search document", e);
+      institutionToIndex = objectMapper.writeValueAsString(institutionIndex);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
     }
+    Optional.ofNullable(institutionToIndex).ifPresent(value -> {
+      daprClient.invokeBinding("selc-http-search-binding", "create", value).retry(10).block();
+      log.info("Document {} indexed.", value);
+    });
   }
 
   @Data
