@@ -30,7 +30,7 @@ resource "azurerm_container_app_environment_dapr_component" "http_search_binding
 
   metadata {
     name  = "url"
-    value = "https://${var.search_service_name}.search.windows.net/indexes/documents-index/docs/index?api-version=2023-11-01"
+    value = "https://${var.search_service_name}.search.windows.net/indexes/institution-index/docs/index?api-version=2023-11-01"
   }
 
   metadata {
