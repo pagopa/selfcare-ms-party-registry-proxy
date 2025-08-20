@@ -16,7 +16,7 @@ import java.util.*;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "")
+@RequestMapping(value = "/dapr")
 @Api(tags = "dapr")
 public class EventController {
   private final ObjectMapper objectMapper = new ObjectMapper();
@@ -27,13 +27,13 @@ public class EventController {
     this.searchService = searchService;
   }
 
-  @PostMapping("/dapr/subscribe")
+  @PostMapping("/subscribe")
   public List<Map<String, Object>> subscribe() {
     List<Map<String, Object>> subscriptions = new ArrayList<>();
     Map<String, Object> subscription = new HashMap<>();
     subscription.put("pubsubname", "eventhub-pubsub");
     subscription.put("topic", "party-proxy");
-    subscription.put("route", "/events");
+    subscription.put("route", "/dapr/events");
     subscriptions.add(subscription);
 
     log.info("Dapr subscriptions configured: {}", subscriptions);
@@ -46,13 +46,8 @@ public class EventController {
     try {
       log.info("Received event: {}", event);
 
-      // Estrai i dati dall'evento
-      Object data = event.get("data");
-      String eventData = objectMapper.writeValueAsString(data);
-      JsonNode eventNode = objectMapper.readTree(eventData);
-
-      // Processa e indicizza i dati
-      processAndIndex(eventNode);
+      String institutionId = event.getOrDefault("institutionId", "").toString();
+      searchService.indexInstitution(institutionId);
 
       return ResponseEntity.ok("Event processed successfully");
 
@@ -63,41 +58,10 @@ public class EventController {
     }
   }
 
-  private void processAndIndex(JsonNode eventData) {
-    try {
-      SearchDocument document = createSearchDocument(eventData);
-      searchService.indexDocument(document);
-    } catch (Exception e) {
-      log.error("Error processing and indexing event data", e);
-    }
-  }
 
-  private SearchDocument createSearchDocument(JsonNode eventData) {
-    SearchDocument document = new SearchDocument();
-    document.setId(UUID.randomUUID().toString());
-    document.setTimestamp(new Date());
-
-    if (eventData.has("description")) {
-      document.setTitle(eventData.get("description").asText());
-    }
-    if (eventData.has("taxCode")) {
-      document.setContent(eventData.get("taxCode").asText());
-    }
-    if (eventData.has("category")) {
-      document.setCategory(eventData.get("category").asText());
-    }
-    if (eventData.has("tags") && eventData.get("tags").isArray()) {
-      List<String> tags = new ArrayList<>();
-      eventData.get("tags").forEach(tag -> tags.add(tag.asText()));
-      document.setTags(tags);
-    }
-
-    return document;
-  }
 
   @GetMapping("/health")
   public ResponseEntity<String> health() {
     return ResponseEntity.ok("Healthy");
   }
-
 }

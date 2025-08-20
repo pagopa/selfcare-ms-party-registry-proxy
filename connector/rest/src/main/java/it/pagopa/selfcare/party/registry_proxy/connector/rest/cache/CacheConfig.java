@@ -38,6 +38,13 @@ public class CacheConfig {
         return caffeineCacheManager;
     }
 
+  @Bean(name = INSTITUTION_CACHE)
+  public CacheManager cacheInstitution(@Value("${rest-client.selc-institution.deadline}") Integer institutionDeadlineInSeconds) {
+    CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager();
+    caffeineCacheManager.setCaffeine(Caffeine.newBuilder().expireAfterWrite(institutionDeadlineInSeconds, TimeUnit.SECONDS));
+    return caffeineCacheManager;
+  }
+
     @Bean(name = PDND_VISURA_CLIENT_ASSERTION_CACHE)
     public CacheManager cacheManagerVisuraClientAssertion(@Value("${rest-client.pdnd.token.deadline}") Integer pdndTokenDeadlineInSeconds) {
         CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager();
