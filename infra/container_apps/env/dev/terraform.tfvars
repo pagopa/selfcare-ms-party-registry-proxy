@@ -133,7 +133,7 @@ app_settings = [
   },
   {
     name  = "SELC_INSTITUTION_URL"
-    value = "https://selc-d-ms-core-ca"
+    value = "https://selc-d-ms-core-ca.whitemoss-eb7ef327.westeurope.azurecontainerapps.io"
   }
 ]
 

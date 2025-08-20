@@ -39,7 +39,7 @@ public class SearchServiceImpl implements SearchService{
       Institution institution = institutionConnector.getById(institutionId);
       InstitutionIndex institutionIndex = InstitutionIndex.createFromInstitution(institution);
       String institutionToIndex = objectMapper.writeValueAsString(institutionIndex);
-      daprClient.invokeBinding("azure-search-binding", "create", institutionToIndex).retry(10).block();
+      daprClient.invokeBinding("selc-http-search-binding", "create", institutionToIndex).retry(10).block();
       log.info("Document " + institutionToIndex + " indexed via Dapr binding.");
     } catch (Exception e) {
       log.error("Error creating search document", e);
