@@ -29,16 +29,7 @@ public class EventController {
 
   @PostMapping("/subscribe")
   public List<Map<String, Object>> subscribe() {
-    List<Map<String, Object>> subscriptions = new ArrayList<>();
-    Map<String, Object> subscription = new HashMap<>();
-    subscription.put("pubsubname", "eventhub-pubsub");
-    subscription.put("topic", "party-proxy");
-    subscription.put("route", "/dapr/events");
-    subscriptions.add(subscription);
-
-    log.info("Dapr subscriptions configured: {}", subscriptions);
-
-    return subscriptions;
+    return searchService.subscribe();
   }
 
   @PostMapping("/events")
