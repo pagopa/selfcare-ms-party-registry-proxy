@@ -6,5 +6,5 @@ import java.util.Map;
 public interface SearchService {
 
   List<Map<String, Object>> subscribe();
-  void indexInstitution(String institutionId);
+  boolean indexInstitution(String institutionId);
 }
