@@ -11,14 +11,11 @@ import it.pagopa.selfcare.party.registry_proxy.connector.exception.ServiceUnavai
 import it.pagopa.selfcare.party.registry_proxy.connector.model.AzureSearchStatus;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.AzureSearchValue;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.institution.Institution;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.institution.Onboarding;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,14 +46,13 @@ public class SearchServiceImpl implements SearchService {
   }
 
   @Override
-  public List<Map<String, Object>> subscribe() {
-    List<Map<String, Object>> subscriptions = new ArrayList<>();
-    Map<String, Object> subscription = new HashMap<>();
+  public List<Map<String, String>> subscribe() {
+    List<Map<String, String>> subscriptions = new ArrayList<>();
+    Map<String, String> subscription = new HashMap<>();
     subscription.put("pubsubname", queueBindingName);
     subscription.put("topic", "kafkaTopic");
     subscription.put("route", "/dapr/events");
     subscriptions.add(subscription);
-
     log.info("Dapr subscriptions configured: {}", subscriptions);
     return subscriptions;
   }

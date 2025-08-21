@@ -5,7 +5,7 @@ import io.dapr.Topic;
 import io.swagger.annotations.Api;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ServiceUnavailableException;
-import it.pagopa.selfcare.party.registry_proxy.core.SearchServiceImpl;
+import it.pagopa.selfcare.party.registry_proxy.core.SearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +23,15 @@ public class EventController {
   public static final String RESPONSE_FAILED = "FAILED";
   public static final String RESPONSE_SUCCESS = "SUCCESS";
   private final ObjectMapper objectMapper = new ObjectMapper();
-  private final SearchServiceImpl searchService;
+  private final SearchService searchService;
 
   @Autowired
-  public EventController(SearchServiceImpl searchService) {
+  public EventController(SearchService searchService) {
     this.searchService = searchService;
   }
 
   @PostMapping("/subscribe")
-  public List<Map<String, Object>> subscribe() {
+  public List<Map<String, String>> subscribe() {
     return searchService.subscribe();
   }
 
