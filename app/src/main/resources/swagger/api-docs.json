@@ -335,52 +335,6 @@
         } ]
       }
     },
-    "/events" : {
-      "post" : {
-        "tags" : [ "event-controller" ],
-        "operationId" : "handleEvent",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "type" : "object",
-                "additionalProperties" : {
-                  "type" : "object"
-                }
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "type" : "string"
-                }
-              }
-            }
-          },
-          "400" : {
-            "description" : "Bad Request"
-          },
-          "401" : {
-            "description" : "Unauthorized"
-          },
-          "404" : {
-            "description" : "Not Found"
-          },
-          "500" : {
-            "description" : "Internal Server Error"
-          }
-        },
-        "security" : [ {
-          "bearerAuth" : [ "global" ]
-        } ]
-      }
-    },
     "/dapr/subscribe" : {
       "get" : {
         "tags" : [ "dapr-controller" ],
@@ -430,8 +384,57 @@
                   "items" : {
                     "type" : "object",
                     "additionalProperties" : {
-                      "type" : "object"
+                      "type" : "string"
                     }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "404" : {
+            "description" : "Not Found"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/dapr/events" : {
+      "post" : {
+        "tags" : [ "event-controller" ],
+        "operationId" : "handleEvent",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "additionalProperties" : {
+                  "type" : "object"
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "object",
+                  "additionalProperties" : {
+                    "type" : "object"
                   }
                 }
               }
@@ -1292,39 +1295,6 @@
         } ]
       }
     },
-    "/health" : {
-      "get" : {
-        "tags" : [ "event-controller" ],
-        "operationId" : "health",
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "type" : "string"
-                }
-              }
-            }
-          },
-          "400" : {
-            "description" : "Bad Request"
-          },
-          "401" : {
-            "description" : "Unauthorized"
-          },
-          "404" : {
-            "description" : "Not Found"
-          },
-          "500" : {
-            "description" : "Internal Server Error"
-          }
-        },
-        "security" : [ {
-          "bearerAuth" : [ "global" ]
-        } ]
-      }
-    },
     "/geotaxonomies" : {
       "get" : {
         "tags" : [ "geographic-taxonomies-controller" ],
@@ -1408,6 +1378,42 @@
               "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/GeographicTaxonomyResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "404" : {
+            "description" : "Not Found"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/dapr/health" : {
+      "get" : {
+        "tags" : [ "event-controller" ],
+        "operationId" : "health",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "object",
+                  "additionalProperties" : {
+                    "type" : "string"
+                  }
                 }
               }
             }
