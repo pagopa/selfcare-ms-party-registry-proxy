@@ -39,8 +39,6 @@ public class EventController {
   @PostMapping("/events")
   public ResponseEntity<Map<String, Object>> handleEvent(@RequestBody Map<String, Object> event) {
     try {
-      log.info("Received event: {}", event);
-
       String institutionId = event.getOrDefault("institutionId", "").toString();
       if (institutionId == null || institutionId.trim().isEmpty()) {
         log.error("Institution ID is missing or empty in event data");
