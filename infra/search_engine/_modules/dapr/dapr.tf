@@ -21,7 +21,7 @@ resource "azurerm_container_app_environment_dapr_component" "eventhub_pubsub" {
 
   metadata {
     name  = "consumerGroup"
-    value = var.consumer_group
+    value = var.queue_consumer_group
   }
 
   metadata {

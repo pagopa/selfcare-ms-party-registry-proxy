@@ -25,7 +25,7 @@ variable "cae_rg_name" {
 variable "consumer_group" {
   type        = string
   description = "Eventhub consumer group"
-  default     = "selc-proxy"
+  default     = "party-proxy"
 }
 
 variable "env_short" {
