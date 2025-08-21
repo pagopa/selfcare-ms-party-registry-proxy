@@ -78,6 +78,22 @@ variable "project" {
   description = "Selfcare prefix and short environment"
 }
 
+variable "queue_port" {
+  type    = string
+  description = "Queue base url port"
+}
+
+variable "queue_consumer_group" {
+  type    = string
+  description = "Queue consumer group"
+}
+
+variable "queue_topic" {
+  type    = string
+  description = "Queue topic"
+}
+
+
 variable "queue_url" {
   type    = string
   description = "Queue base url"

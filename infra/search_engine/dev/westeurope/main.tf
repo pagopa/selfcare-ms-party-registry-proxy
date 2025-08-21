@@ -48,9 +48,12 @@ module "dapr" {
 
   key_vault_name                   = "selc-${local.env_short}-kv"
   key_vault_resource_group_name    = "selc-${local.env_short}-sec-rg"
-  key_vault_event_hub_consumer_key = "eventhub-sc-contracts-selc-proxy-connection-string-lc"
+  key_vault_event_hub_consumer_key = "eventhub-sc-contracts-selc-proxy-key-lc"
 
-  queue_url = "selc-${local.env_short}-eventhub-ns.servicebus.windows.net:9093"
+  queue_url = "selc-${local.env_short}-eventhub-ns.servicebus.windows.net"
+  queue_port = "9093"
+  queue_consumer_group = "party-proxy"
+  queue_topic = "SC-Contracts"
 
   search_service_name = module.ai_search.search_service_name
   search_service_key  = module.ai_search.search_service_admin_key

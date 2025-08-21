@@ -16,7 +16,7 @@ resource "azurerm_container_app_environment_dapr_component" "eventhub_pubsub" {
 
   metadata {
     name  = "saslPassword"
-    value = data.azurerm_key_vault_secret.event_hub_consumer_key.value
+    value = "Endpoint=sb://${var.queue_url};SharedAccessKeyName=${var.queue_consumer_group};SharedAccessKey=${data.azurerm_key_vault_secret.event_hub_consumer_key.value};EntityPath=${var.queue_topic}"
   }
 
   metadata {
@@ -26,7 +26,7 @@ resource "azurerm_container_app_environment_dapr_component" "eventhub_pubsub" {
 
   metadata {
     name  = "brokers"
-    value = var.queue_url
+    value = "${var.queue_url}:${var.queue_port}"
   }
 
   scopes = [data.azurerm_container_app.ca.dapr[0].app_id]
