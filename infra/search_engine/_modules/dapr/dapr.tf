@@ -1,11 +1,21 @@
 resource "azurerm_container_app_environment_dapr_component" "eventhub_pubsub" {
   name                         = "${var.prefix}-eventhub-pubsub"
   container_app_environment_id = data.azurerm_container_app_environment.cae.id
-  component_type               = "pubsub.azure.eventhubs"
+  component_type               = "pubsub.kafka"
   version                      = "v1"
 
   metadata {
-    name  = "connectionString"
+    name  = "authType"
+    value = "password"
+  }
+
+  metadata {
+    name  = "saslUsername"
+    value = "$ConnectionString"
+  }
+
+  metadata {
+    name  = "saslPassword"
     value = data.azurerm_key_vault_secret.event_hub_consumer_key.value
   }
 
@@ -15,8 +25,8 @@ resource "azurerm_container_app_environment_dapr_component" "eventhub_pubsub" {
   }
 
   metadata {
-    name  = "enableEntityManagement"
-    value = "true"
+    name  = "brokers"
+    value = var.queue_url
   }
 
   scopes = [data.azurerm_container_app.ca.dapr[0].app_id]

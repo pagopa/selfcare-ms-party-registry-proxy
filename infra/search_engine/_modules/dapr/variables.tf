@@ -78,6 +78,11 @@ variable "project" {
   description = "Selfcare prefix and short environment"
 }
 
+variable "queue_url" {
+  type    = string
+  description = "Queue base url"
+}
+
 variable "search_service_name" {
   type    = string
   description = "Name of ai search service"

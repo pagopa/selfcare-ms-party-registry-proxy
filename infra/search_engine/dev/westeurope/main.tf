@@ -28,9 +28,9 @@ module "ai_search" {
   database_name   = local.database_name
   collection_name = local.collection_name
 
-  key_vault_name                = local.key_vault_name
-  key_vault_resource_group_name = local.key_vault_resource_group_name
-  key_vault_cosmosdb_key        = local.key_vault_cosmosdb_key
+  key_vault_name                = "selc-${local.env_short}-kv"
+  key_vault_resource_group_name = "selc-${local.env_short}-sec-rg"
+  key_vault_cosmosdb_key        = "mongodb-connection-key"
 
   srch_private_endpoint_enabled = true
 }
@@ -46,9 +46,11 @@ module "dapr" {
   ca_name     = "selc-${local.env_short}-party-reg-proxy-ca"
   ca_rg_name  = "selc-${local.env_short}-container-app-002-rg"
 
-  key_vault_name                   = local.key_vault_name
-  key_vault_resource_group_name    = local.key_vault_resource_group_name
-  key_vault_event_hub_consumer_key = local.key_vault_event_hub_consumer_key
+  key_vault_name                   = "selc-${local.env_short}-kv"
+  key_vault_resource_group_name    = "selc-${local.env_short}-sec-rg"
+  key_vault_event_hub_consumer_key = "eventhub-sc-contracts-selc-proxy-connection-string-lc"
+
+  queue_url = "selc-${local.env_short}-eventhub-ns.servicebus.windows.net:9093"
 
   search_service_name = module.ai_search.search_service_name
   search_service_key  = module.ai_search.search_service_admin_key

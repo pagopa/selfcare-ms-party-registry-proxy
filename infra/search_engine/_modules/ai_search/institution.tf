@@ -61,15 +61,6 @@ resource "restapi_object" "search_index" {
         "filterable": true,
         "sortable": true,
         "searchable": false
-      },
-      {
-        name         = "systemLastModified"
-        type         = "Edm.Int64"
-        searchable   = false
-        filterable   = true
-        sortable     = true
-        facetable    = false
-        retrievable  = true
       }
     ]
   })

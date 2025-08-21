@@ -25,3 +25,11 @@ resource "azurerm_search_service" "srch_service" {
 
   tags = var.tags
 }
+
+
+resource "azurerm_key_vault_secret" "azure_search_api_key" {
+  name         = "azure-search-api-key"
+  value        = azurerm_search_service.srch_service.primary_key
+  key_vault_id = data.azurerm_key_vault.key_vault.id
+  content_type = "text/plain"
+}
