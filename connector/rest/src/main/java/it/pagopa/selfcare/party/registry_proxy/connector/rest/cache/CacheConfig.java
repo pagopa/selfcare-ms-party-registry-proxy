@@ -18,35 +18,35 @@ public class CacheConfig {
 
     @Primary
     @Bean(name = PDND_CLIENT_ASSERTION_CACHE)
-    public CacheManager cacheManagerClientAssertion(@Value("${rest-client.pdnd.client-assertion.deadline}") Integer pdndClientAssertionDeadlineInSeconds) {
+    public CacheManager cacheManagerClientAssertion(@Value("${rest-client.pdnd.client-assertion.deadline:3300}") Integer pdndClientAssertionDeadlineInSeconds) {
         CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager();
         caffeineCacheManager.setCaffeine(Caffeine.newBuilder().expireAfterWrite(pdndClientAssertionDeadlineInSeconds, TimeUnit.SECONDS));
         return caffeineCacheManager;
     }
 
     @Bean(name = PDND_TOKEN_CACHE)
-    public CacheManager cacheManagerToken(@Value("${rest-client.pdnd.token.deadline}") Integer pdndTokenDeadlineInSeconds) {
+    public CacheManager cacheManagerToken(@Value("${rest-client.pdnd.token.deadline:60}") Integer pdndTokenDeadlineInSeconds) {
         CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager();
         caffeineCacheManager.setCaffeine(Caffeine.newBuilder().expireAfterWrite(pdndTokenDeadlineInSeconds, TimeUnit.SECONDS));
         return caffeineCacheManager;
     }
 
     @Bean(name = PDND_VISURA_TOKEN_CACHE)
-    public CacheManager cacheManagerVisuraToken(@Value("${rest-client.pdnd.token.deadline}") Integer pdndTokenDeadlineInSeconds) {
+    public CacheManager cacheManagerVisuraToken(@Value("${rest-client.pdnd.token.deadline:60}") Integer pdndTokenDeadlineInSeconds) {
         CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager();
         caffeineCacheManager.setCaffeine(Caffeine.newBuilder().expireAfterWrite(pdndTokenDeadlineInSeconds, TimeUnit.SECONDS));
         return caffeineCacheManager;
     }
 
   @Bean(name = INSTITUTION_CACHE)
-  public CacheManager cacheInstitution(@Value("${rest-client.selc-institution.deadline}") Integer institutionDeadlineInSeconds) {
+  public CacheManager cacheInstitution(@Value("${rest-client.selc-institution.deadline:600}") Integer institutionDeadlineInSeconds) {
     CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager();
     caffeineCacheManager.setCaffeine(Caffeine.newBuilder().expireAfterWrite(institutionDeadlineInSeconds, TimeUnit.SECONDS));
     return caffeineCacheManager;
   }
 
     @Bean(name = PDND_VISURA_CLIENT_ASSERTION_CACHE)
-    public CacheManager cacheManagerVisuraClientAssertion(@Value("${rest-client.pdnd.token.deadline}") Integer pdndTokenDeadlineInSeconds) {
+    public CacheManager cacheManagerVisuraClientAssertion(@Value("${rest-client.pdnd.token.deadline:60}") Integer pdndTokenDeadlineInSeconds) {
         CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager();
         caffeineCacheManager.setCaffeine(Caffeine.newBuilder().expireAfterWrite(pdndTokenDeadlineInSeconds, TimeUnit.SECONDS));
         return caffeineCacheManager;
