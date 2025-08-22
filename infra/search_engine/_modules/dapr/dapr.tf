@@ -54,9 +54,14 @@ resource "azurerm_container_app_environment_dapr_component" "http_search_binding
   scopes = [data.azurerm_container_app.ca.dapr[0].app_id]
 }
 
-# Dapr Component per State Store (Redis - opzionale per caching)
+resource "azurerm_resource_group" "redis_rg" {
+  name     = "${var.project}-dapr-redis-rg"
+  location = var.location
+  tags     = var.tags
+}
+
 resource "azurerm_redis_cache" "redis_cache" {
-  count               = var.env_short == "p" ? 1 : 0
+  count               = var.env_short == "d" ? 1 : 0
   name                = "${var.project}-dapr-redis"
   location            = var.location
   resource_group_name = "${var.project}-dapr-redis-rg"
@@ -68,7 +73,7 @@ resource "azurerm_redis_cache" "redis_cache" {
 }
 
 resource "azurerm_container_app_environment_dapr_component" "redis_state" {
-  count                        = var.env_short == "prod" ? 1 : 0
+  count                        = var.env_short == "d" ? 1 : 0
   name                         = "redis-state"
   container_app_environment_id = data.azurerm_container_app_environment.cae.id
   component_type               = "state.redis"

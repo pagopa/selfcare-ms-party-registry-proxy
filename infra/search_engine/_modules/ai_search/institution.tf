@@ -1,72 +1,72 @@
-# resource "restapi_object" "search_index" {
-#   provider   = restapi.search
-#   query_string = "api-version=2023-11-01"
-#   id_attribute = "name"
-#   path         = "/indexes"
-#
-#   data      = jsonencode({
-#     "name": "institution-index",
-#     "fields": [
-#       {
-#         "name": "id",
-#         "type": "Edm.String",
-#         "key": true,
-#         "searchable": false,
-#         "filterable": true,
-#         "sortable": true,
-#         "facetable": false,
-#         "retrievable": true
-#       },
-#       {
-#         "name": "description",
-#         "type": "Edm.String",
-#         "key": false,
-#         "searchable": true,
-#         "filterable": false,
-#         "sortable": true,
-#         "facetable": false,
-#         "retrievable": true,
-#         "analyzer": "it.microsoft"
-#       },
-#       {
-#         "name": "taxCode",
-#         "type": "Edm.String",
-#         "searchable": true,
-#         "filterable": true,
-#         "sortable": true,
-#         "facetable": false,
-#         "analyzer": "standard.lucene"
-#       },
-#       {
-#         "name": "products",
-#         "type": "Collection(Edm.String)",
-#         "retrievable": true,
-#         "searchable": true,
-#         "filterable": true,
-#         "sortable": false,
-#         "facetable": true
-#       },{
-#         "name": "institutionTypes",
-#         "type": "Collection(Edm.String)",
-#         "retrievable": true,
-#         "searchable": true,
-#         "filterable": true,
-#         "sortable": false,
-#         "facetable": true
-#       },
-#       {
-#         "name": "lastModified",
-#         "type": "Edm.DateTimeOffset",
-#         "retrievable": true,
-#         "filterable": true,
-#         "sortable": true,
-#         "searchable": false
-#       }
-#     ]
-#   })
-#
-#   depends_on = [azurerm_search_service.srch_service]
-# }
+resource "restapi_object" "search_index" {
+  provider   = restapi.search
+  query_string = "api-version=2023-11-01"
+  id_attribute = "name"
+  path         = "/indexes"
+
+  data      = jsonencode({
+    "name": "institution-index",
+    "fields": [
+      {
+        "name": "id",
+        "type": "Edm.String",
+        "key": true,
+        "searchable": false,
+        "filterable": true,
+        "sortable": true,
+        "facetable": false,
+        "retrievable": true
+      },
+      {
+        "name": "description",
+        "type": "Edm.String",
+        "key": false,
+        "searchable": true,
+        "filterable": false,
+        "sortable": true,
+        "facetable": false,
+        "retrievable": true,
+        "analyzer": "it.microsoft"
+      },
+      {
+        "name": "taxCode",
+        "type": "Edm.String",
+        "searchable": true,
+        "filterable": true,
+        "sortable": true,
+        "facetable": false,
+        "analyzer": "standard.lucene"
+      },
+      {
+        "name": "products",
+        "type": "Collection(Edm.String)",
+        "retrievable": true,
+        "searchable": true,
+        "filterable": true,
+        "sortable": false,
+        "facetable": true
+      },{
+        "name": "institutionTypes",
+        "type": "Collection(Edm.String)",
+        "retrievable": true,
+        "searchable": true,
+        "filterable": true,
+        "sortable": false,
+        "facetable": true
+      },
+      {
+        "name": "lastModified",
+        "type": "Edm.DateTimeOffset",
+        "retrievable": true,
+        "filterable": true,
+        "sortable": true,
+        "searchable": false
+      }
+    ]
+  })
+
+  depends_on = [azurerm_search_service.srch_service, azurerm_role_assignment.admins_group_to_ai_search_reader, azurerm_role_assignment.developers_group_to_ai_search_reader, azurerm_role_assignment.infra_ci_to_ai_search_service_contributor, azurerm_role_assignment.infra_cd_to_ai_search_service_contributor]
+}
 
 # resource "restapi_object" "search_datasource" {
 #   provider = restapi.search

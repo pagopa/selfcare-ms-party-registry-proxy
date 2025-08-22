@@ -18,10 +18,10 @@ variable "cidr_subnet" {
 #   description = "Cosmos db account name prefix"
 # }
 
-variable "database_name" {
-  type        = string
-  description = "Database to be indexed on ai search"
-}
+# variable "database_name" {
+#   type        = string
+#   description = "Database to be indexed on ai search"
+# }
 
 # variable "domain" {
 #   type        = string
