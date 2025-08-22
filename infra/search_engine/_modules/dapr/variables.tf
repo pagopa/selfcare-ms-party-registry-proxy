@@ -99,6 +99,42 @@ variable "queue_url" {
   description = "Queue base url"
 }
 
+variable "redis_capacity" {
+  type    = number
+  default = 0
+}
+
+variable "redis_version" {
+  type    = number
+  default = 6
+}
+
+variable "redis_sku_name" {
+  type    = string
+  default = "Basic"
+}
+
+variable "redis_family" {
+  type    = string
+  default = "C"
+}
+
+variable "redis_enable" {
+  type    = bool
+  default = false
+}
+
+variable "redis_private_endpoint_enabled" {
+  type    = bool
+  default = true
+}
+
+variable "cidr_subnet_redis" {
+  type        = list(string)
+  description = "Redis network address space."
+  default     = []
+}
+
 variable "search_service_name" {
   type    = string
   description = "Name of ai search service"

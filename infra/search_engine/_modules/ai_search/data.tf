@@ -22,17 +22,6 @@ data "azuread_group" "adgroup_developers" {
   display_name = "${var.prefix}-${var.env_short}-adgroup-developers"
 }
 
-# data "azurerm_private_dns_zone" "cosmosdb" {
-#   name                = "privatelink.mongo.cosmos.azure.com"
-#   resource_group_name = "${var.prefix}-${var.env_short}-vnet-rg"
-# }
-#
-# data "azurerm_subnet" "cosmosdb" {
-#   name                 = "${var.prefix}-${var.env_short}-cosmosb-mongodb-snet"
-#   virtual_network_name = data.azurerm_virtual_network.vnet.name
-#   resource_group_name  = "${var.prefix}-${var.env_short}-vnet-rg"
-# }
-
 data "azurerm_user_assigned_identity" "managed_identity_infra_ci" {
   name                = "${var.prefix}-${var.env_short}-ms-github-ci-identity"
   resource_group_name = "${var.prefix}-${var.env_short}-identity-rg"

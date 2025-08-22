@@ -32,4 +32,5 @@ resource "azurerm_key_vault_secret" "azure_srch_api_key" {
   value        = azurerm_search_service.srch_service.primary_key
   key_vault_id = data.azurerm_key_vault.key_vault.id
   content_type = "text/plain"
+  depends_on = [azurerm_search_service.srch_service]
 }

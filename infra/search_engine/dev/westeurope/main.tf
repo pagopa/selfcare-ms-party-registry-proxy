@@ -50,6 +50,14 @@ module "dapr" {
   queue_consumer_group = "party-proxy"
   queue_topic = "SC-Contracts"
 
+  #redis
+  redis_enable                   = true
+  redis_private_endpoint_enabled = false
+  redis_capacity                 = 0
+  redis_version                  = 6
+  redis_family                   = "C"
+  redis_sku_name                 = "Basic"
+
   search_service_name = module.ai_search.search_service_name
   search_service_key  = module.ai_search.search_service_admin_key
 
