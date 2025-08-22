@@ -10,10 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const.INSTITUTION_CACHE;
 
@@ -75,18 +75,19 @@ public class InstitutionConnectorImpl implements InstitutionConnector {
 
   private List<Onboarding> toOnboardingFromResponse(List<OnboardedProductResponse> onboardingsResponse) {
     List<Onboarding> onboardings = new ArrayList<>();
-
-    for (OnboardedProductResponse onboardedProductResponse : onboardingsResponse) {
-      Onboarding onboarding = new Onboarding();
-      onboarding.setProductId(onboardedProductResponse.getProductId());
-      onboarding.setTokenId(onboardedProductResponse.getTokenId());
-      onboarding.setStatus(onboardedProductResponse.getStatus().name());
-      onboarding.setOrigin(onboardedProductResponse.getOrigin());
-      onboarding.setOriginId(onboardedProductResponse.getOriginId());
-      onboarding.setInstitutionType(onboardedProductResponse.getInstitutionType());
-      onboarding.setIsAggregator(onboardedProductResponse.getIsAggregator());
-      onboardings.add(onboarding);
-    }
+    Optional.ofNullable(onboardingsResponse).ifPresent(onboardedProductResponses -> {
+      for (OnboardedProductResponse onboardedProductResponse : onboardedProductResponses) {
+        Onboarding onboarding = new Onboarding();
+        onboarding.setProductId(onboardedProductResponse.getProductId());
+        onboarding.setTokenId(onboardedProductResponse.getTokenId());
+        onboarding.setStatus(onboardedProductResponse.getStatus().name());
+        onboarding.setOrigin(onboardedProductResponse.getOrigin());
+        onboarding.setOriginId(onboardedProductResponse.getOriginId());
+        onboarding.setInstitutionType(onboardedProductResponse.getInstitutionType());
+        onboarding.setIsAggregator(onboardedProductResponse.getIsAggregator());
+        onboardings.add(onboarding);
+      }
+    });
 
     return onboardings;
   }
