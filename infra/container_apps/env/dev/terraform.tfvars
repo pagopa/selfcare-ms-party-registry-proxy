@@ -130,6 +130,18 @@ app_settings = [
   {
     name  = "IVASS_BASE_URL"
     value = "https://infostat-ivass.bancaditalia.it"
+  },
+  {
+    name  = "SELC_INSTITUTION_URL"
+    value = "https://selc-d-ms-core-ca.whitemoss-eb7ef327.westeurope.azurecontainerapps.io"
+  },
+  {
+    name  = "AZURE_SEARCH_URL"
+    value = "https://selc-d-weu-ar-srch.search.windows.net/"
+  },
+  {
+    name  = "AZURE_SEARCH_INSTITUTION_INDEX"
+    value = "institution-index"
   }
 ]
 
@@ -145,5 +157,7 @@ secrets_names = {
   "PDND_INFOCAMERE_CLIENT_ID"             = "infocamere-interop-client-id"
   "PDND_INFOCAMERE_KID"                   = "infocamere-interop-kid"
   "PDND_INFOCAMERE_PURPOSE_ID"            = "infocamere-interop-purpose-id"
+  "JWT-BEARER-TOKEN-FUNCTIONS"            = "jwt-bearer-token-functions"
+  "AZURE_SEARCH_API_KEY"                  = "azure-search-api-key"
 }
 

@@ -46,3 +46,67 @@ mvn spring-boot:run -pl app
 After starting, the microservice will be available at `http://localhost:8080/`.
 
 To use the API, refer to the Swagger UI documentation (if available) at `http://localhost:8080/swagger-ui.html`.
+
+## DAPR
+### Configure
+Before run DAPR add:
+.dapr/components/eventhub-pubsub.yaml
+```shell script
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: eventhub-pubsub
+spec:
+  type: pubsub.azure.eventhubs
+  version: v1
+  metadata:
+    - name: brokers
+      value: "selc-ENV-eventhub-ns.servicebus.windows.net:9093"
+    - name: authType
+      value: "password"
+    - name: saslUsername
+      value: "$ConnectionString"
+    - name: saslPassword
+      value: "Endpoint=sb://selc-ENV-eventhub-ns.servicebus.windows.net/;SharedAccessKeyName=selc-proxy;SharedAccessKey=SHARED_ACCESS_KEY=;EntityPath=sc-contracts"
+    - name: consumerGroup
+      value: "party-proxy"
+```
+
+
+.dapr/config/config.yaml
+```shell script
+apiVersion: dapr.io/v1alpha1
+kind: Configuration
+metadata:
+  name: dapr-config
+  namespace: default
+spec:
+  tracing:
+    samplingRate: "1"
+    zipkin:
+      endpointAddress: "http://localhost:9411/api/v2/spans"
+  logging:
+    apiLogging:
+      enabled: true
+  httpPipeline:
+    handlers:
+      - name: cors
+        type: middleware.http.cors
+        spec:
+          allowedOrigins: ["*"]
+          allowedMethods: ["GET", "POST", "PUT", "DELETE"]
+          allowedHeaders: ["*"]
+```
+
+### Run
+
+```shell script
+dapr init
+dapr run --app-id dapr-consumer --app-port 8080 --dapr-http-port 3500 --components-path ./.dapr/components
+```
+
+### Logs
+```shell script
+az containerapp logs show --name ca-dapr-consumer-dev --resource-group rg-dapr-consumer --container daprd
+```
+

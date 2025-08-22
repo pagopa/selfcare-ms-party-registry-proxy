@@ -34,6 +34,10 @@ info:
     description: "@project.description@"
     version: "@project.version@"
 
+app:
+  dapr:
+    http-endpoint: http://localhost:3500
+    grpc-endpoint: http://localhost:50001
 
 logging:
   level:

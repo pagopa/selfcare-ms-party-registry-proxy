@@ -54,26 +54,18 @@ resource "restapi_object" "search_index" {
         "sortable": false,
         "facetable": true
       },
-      # {
-      #   "name": "lastModified",
-      #   "type": "Edm.DateTimeOffset",
-      #   "retrievable": true,
-      #   "filterable": true,
-      #   "sortable": true
-      # }
       {
-        name         = "systemLastModified"
-        type         = "Edm.Int64"
-        searchable   = false
-        filterable   = true
-        sortable     = true
-        facetable    = false
-        retrievable  = true
-      },
+        "name": "lastModified",
+        "type": "Edm.DateTimeOffset",
+        "retrievable": true,
+        "filterable": true,
+        "sortable": true,
+        "searchable": false
+      }
     ]
   })
 
-  depends_on = [azurerm_search_service.srch_service]
+  depends_on = [azurerm_search_service.srch_service, azurerm_role_assignment.admins_group_to_ai_search_reader, azurerm_role_assignment.developers_group_to_ai_search_reader, azurerm_role_assignment.infra_ci_to_ai_search_service_contributor, azurerm_role_assignment.infra_cd_to_ai_search_service_contributor]
 }
 
 # resource "restapi_object" "search_datasource" {
