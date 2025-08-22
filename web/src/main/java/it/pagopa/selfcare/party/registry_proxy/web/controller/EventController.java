@@ -39,8 +39,8 @@ public class EventController {
   @PostMapping("/events")
   public ResponseEntity<Map<String, Object>> handleEvent(@RequestBody Map<String, Object> event) {
     try {
-      String eventJson = objectMapper.writeValueAsString(event).replaceAll("[\\r\\n]", " ");
-      log.info("Received event: {}", eventJson);
+      String eventJson = objectMapper.writeValueAsString(event);
+      log.info("Received event: {}", sanitizeForLog(eventJson));
 
       String institutionId = event.getOrDefault("institutionId", "").toString();
       if (institutionId == null || institutionId.trim().isEmpty()) {
@@ -98,5 +98,17 @@ public class EventController {
     response.put("timestamp", String.valueOf(System.currentTimeMillis()));
 
     return ResponseEntity.ok(response);
+  }
+
+  /**
+   * Sanitize user-provided input to prevent log injection.
+   * Removes CR, LF, TAB, VT, FF, Unicode LS, PS and replaces them with a space.
+   */
+  private static String sanitizeForLog(String input) {
+    if (input == null) {
+      return null;
+    }
+    // Replace CR, LF, TAB, VT, FF, Unicode line/paragraph separators with space
+    return input.replaceAll("[\\r\\n\\t\\u000B\\f\\u2028\\u2029]", " ");
   }
 }
