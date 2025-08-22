@@ -60,33 +60,18 @@ spec:
   type: pubsub.azure.eventhubs
   version: v1
   metadata:
-    - name: connectionString
-      value: "CONNECTION_STRING"
+    - name: brokers
+      value: "selc-ENV-eventhub-ns.servicebus.windows.net:9093"
+    - name: authType
+      value: "password"
+    - name: saslUsername
+      value: "$ConnectionString"
+    - name: saslPassword
+      value: "Endpoint=sb://selc-ENV-eventhub-ns.servicebus.windows.net/;SharedAccessKeyName=selc-proxy;SharedAccessKey=SHARED_ACCESS_KEY=;EntityPath=sc-contracts"
     - name: consumerGroup
-      value: "CONSUMER_GROUP"
-    - name: enableEntityManagement
-      value: "false"
+      value: "party-proxy"
 ```
 
-.dapr/config/azure-search-binding.yaml
-```shell script
-apiVersion: dapr.io/v1alpha1
-kind: Component
-metadata:
-name: azure-search-binding
-spec:
-type: bindings.http
-version: v1
-metadata:
-- name: url
-value: "AZURE_SEARCH_URL"
-- name: headers
-value: |
-{
-"api-key": "AZURE_SEARCH_AKY_KEY",
-"Content-Type": "application/json"
-}
-```
 
 .dapr/config/config.yaml
 ```shell script

@@ -22,30 +22,23 @@ data "azuread_group" "adgroup_developers" {
   display_name = "${var.prefix}-${var.env_short}-adgroup-developers"
 }
 
-data "azurerm_private_dns_zone" "cosmosdb" {
-  name                = "privatelink.mongo.cosmos.azure.com"
-  resource_group_name = "${var.prefix}-${var.env_short}-vnet-rg"
-}
-
-data "azurerm_subnet" "cosmosdb" {
-  name                 = "${var.prefix}-${var.env_short}-cosmosb-mongodb-snet"
-  virtual_network_name = data.azurerm_virtual_network.vnet.name
-  resource_group_name  = "${var.prefix}-${var.env_short}-vnet-rg"
-}
-
-
-# data "azurerm_user_assigned_identity" "managed_identity_infra_ci" {
-#   name                = "${var.prefix}-${var.env_short}-ms-github-ci-identity"
-#   resource_group_name = azurerm_resource_group.srch_rg.name
-# }
-#
-# data "azurerm_user_assigned_identity" "managed_identity_infra_cd" {
-#   name                = "${var.prefix}-${var.env_short}-ms-github-cd-identity"
-#   resource_group_name = azurerm_resource_group.srch_rg.name
-# }
-
-# Should be used until pep is fixed
-# data "azurerm_public_ip" "outbound_ip_aks_platform" {
-#   name                = "${var.prefix}-${var.env_short}-aksoutbound-pip-01"
+# data "azurerm_private_dns_zone" "cosmosdb" {
+#   name                = "privatelink.mongo.cosmos.azure.com"
 #   resource_group_name = "${var.prefix}-${var.env_short}-vnet-rg"
 # }
+#
+# data "azurerm_subnet" "cosmosdb" {
+#   name                 = "${var.prefix}-${var.env_short}-cosmosb-mongodb-snet"
+#   virtual_network_name = data.azurerm_virtual_network.vnet.name
+#   resource_group_name  = "${var.prefix}-${var.env_short}-vnet-rg"
+# }
+
+data "azurerm_user_assigned_identity" "managed_identity_infra_ci" {
+  name                = "${var.prefix}-${var.env_short}-ms-github-ci-identity"
+  resource_group_name = "${var.prefix}-${var.env_short}-identity-rg"
+}
+
+data "azurerm_user_assigned_identity" "managed_identity_infra_cd" {
+  name                = "${var.prefix}-${var.env_short}-ms-github-cd-identity"
+  resource_group_name = "${var.prefix}-${var.env_short}-identity-rg"
+}

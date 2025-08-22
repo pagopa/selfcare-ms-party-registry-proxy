@@ -137,7 +137,7 @@ app_settings = [
   },
   {
     name  = "AZURE_SEARCH_URL"
-    value = "https://selc-d-weu-ar-search-service.search.windows.net/"
+    value = "https://selc-d-weu-ar-srch.search.windows.net/"
   },
   {
     name  = "AZURE_SEARCH_INSTITUTION_INDEX"

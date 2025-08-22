@@ -5,7 +5,6 @@ locals {
   location_short   = "weu"
   domain           = "ar"
   project          = "${local.prefix}-${local.env_short}-${local.location_short}-${local.domain}"
-  sku              = "basic"
   cosmosdb_prefix  = "${local.prefix}-${local.env_short}"
   database_name    = "selcMsCore"
   collection_name  = "Institution"

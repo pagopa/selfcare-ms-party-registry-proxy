@@ -8,15 +8,15 @@ variable "cidr_subnet" {
   description = "Application gateway address space."
 }
 
-variable "collection_name" {
-  type        = string
-  description = "Cosmos db collection name to be indexed on ai search"
-}
-
-variable "cosmosdb_prefix" {
-  type        = string
-  description = "Cosmos db account name prefix"
-}
+# variable "collection_name" {
+#   type        = string
+#   description = "Cosmos db collection name to be indexed on ai search"
+# }
+#
+# variable "cosmosdb_prefix" {
+#   type        = string
+#   description = "Cosmos db account name prefix"
+# }
 
 variable "database_name" {
   type        = string
@@ -59,10 +59,10 @@ variable "key_vault_name" {
   description = "Name of Key Vault"
 }
 
-variable "key_vault_cosmosdb_key" {
-  type        = string
-  description = "Name of Key Vault"
-}
+# variable "key_vault_cosmosdb_key" {
+#   type        = string
+#   description = "Name of Key Vault"
+# }
 
 variable "prefix" {
   description = "Domain prefix"
@@ -74,6 +74,11 @@ variable "prefix" {
     )
     error_message = "Max length is 6 chars."
   }
+}
+
+variable "public_network_access_enabled" {
+  type    = bool
+  default = false
 }
 
 variable "srch_private_endpoint_enabled" {

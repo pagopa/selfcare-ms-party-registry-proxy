@@ -20,18 +20,18 @@ module "ai_search" {
   env_short = local.env_short
   project = local.project
   location = local.location
-  sku = local.sku
+  sku = "basic"
   tags = local.tags
   cidr_subnet = ["10.1.145.0/29"]
 
-  cosmosdb_prefix = local.cosmosdb_prefix
+  # cosmosdb_prefix = local.cosmosdb_prefix
   database_name   = local.database_name
-  collection_name = local.collection_name
+  # collection_name = local.collection_name
 
   key_vault_name                = "selc-${local.env_short}-kv"
   key_vault_resource_group_name = "selc-${local.env_short}-sec-rg"
-  key_vault_cosmosdb_key        = "mongodb-connection-key"
-
+  # key_vault_cosmosdb_key        = "mongodb-connection-key"
+  public_network_access_enabled = false
   srch_private_endpoint_enabled = true
 }
 
