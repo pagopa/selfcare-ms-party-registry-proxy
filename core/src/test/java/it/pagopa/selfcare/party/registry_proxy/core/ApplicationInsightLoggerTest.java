@@ -613,4 +613,44 @@ class ApplicationInsightsLoggerTest {
     assertEquals(2, map2.size());
     assertEquals("value2", map2.get("key2"));
   }
+
+  @Test
+  void createBaseLogEntry_shouldPopulateAllFields() throws Exception {
+    // Arrange
+    String eventType = "MyTestEvent";
+
+    // 1. Get the private method 'createBaseLogEntry' using reflection
+    Method createBaseLogEntryMethod = ApplicationInsightsLogger.class
+      .getDeclaredMethod("createBaseLogEntry", String.class);
+    createBaseLogEntryMethod.setAccessible(true); // Make it accessible
+
+    // Act
+    // 2. Invoke the private method to get the LogDataBuilder instance
+    Object logDataBuilder = createBaseLogEntryMethod.invoke(applicationInsightsLogger, eventType);
+
+    // 3. Get the public 'build()' method from the private inner LogDataBuilder class
+    Method buildMethod = logDataBuilder.getClass().getDeclaredMethod("build");
+    buildMethod.setAccessible(true);
+
+    // 4. Invoke build() to get the final Map
+    @SuppressWarnings("unchecked")
+    Map<String, Object> result = (Map<String, Object>) buildMethod.invoke(logDataBuilder);
+
+    // Assert
+    assertNotNull(result);
+    assertEquals(7, result.size()); // Verify the number of fields added
+
+    // Assert deterministic values
+    assertEquals(eventType, result.get("eventType"));
+    assertEquals("test-app", result.get("applicationName"));
+    assertEquals("test-key", result.get("iKey"));
+    assertEquals("Microsoft.ApplicationInsights.test-key", result.get("name"));
+    assertEquals("1.0", result.get("version"));
+
+    // Assert non-deterministic values (check for presence and non-null)
+    assertTrue(result.containsKey("timestamp"));
+    assertNotNull(result.get("timestamp"));
+    assertTrue(result.containsKey("correlationId"));
+    assertNotNull(result.get("correlationId"));
+  }
 }
