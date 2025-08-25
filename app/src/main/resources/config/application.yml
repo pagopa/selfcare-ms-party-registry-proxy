@@ -41,9 +41,9 @@ app:
     appinsights:
       binding:
         name: ${DAPR_APPINSIGHTS_BINDING_NAME:appinsights-binding}
-  appinsights:
-    connection:
-      string: ${APPINSIGHTS_CONNECTION_STRING:connection_string}
+appinsights:
+  connection:
+    string: ${APPINSIGHTS_CONNECTION_STRING:InstrumentationKey=00000000-0000-0000-0000-000000000000"}
 
 logging:
   level:
