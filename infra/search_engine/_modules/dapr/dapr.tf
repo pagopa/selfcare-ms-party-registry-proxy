@@ -32,21 +32,35 @@ resource "azurerm_container_app_environment_dapr_component" "eventhub_pubsub" {
   scopes = [data.azurerm_container_app.ca.dapr[0].app_id]
 }
 
-resource "azurerm_container_app_environment_dapr_component" "http_search_binding" {
-  name                         = "${var.prefix}-http-search-binding"
+resource "azurerm_container_app_environment_dapr_component" "appinsight_binding" {
+  name                         = "${var.prefix}-appinsights-binding"
   container_app_environment_id = data.azurerm_container_app_environment.cae.id
   component_type               = "bindings.http"
   version                      = "v1"
 
   metadata {
     name  = "url"
-    value = "https://${var.search_service_name}.search.windows.net/indexes/institution-index/docs/index?api-version=2023-11-01"
+    value = "https://dc.applicationinsights.azure.com/v2/track"
+  }
+
+  metadata {
+    name  = "maxBatchSize"
+    value = "100"
+  }
+
+  metadata {
+    name  = "maxBatchInterval"
+    value = "10s"
+  }
+
+  metadata {
+    name  = "method"
+    value = "POST"
   }
 
   metadata {
     name  = "headers"
     value = jsonencode({
-      "api-key"      = var.search_service_key
       "Content-Type" = "application/json"
     })
   }
