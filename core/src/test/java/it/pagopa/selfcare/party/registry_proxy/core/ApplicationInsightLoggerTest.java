@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import reactor.core.publisher.Mono;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -34,9 +35,12 @@ class ApplicationInsightsLoggerTest {
 
   private ApplicationInsightsLogger applicationInsightsLogger;
   private ObjectMapper objectMapper;
+  private Constructor<?> logDataBuilderConstructor;
+  private Method putMethod;
+  private Method buildMethod;
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws Exception {
     applicationInsightsLogger = new ApplicationInsightsLogger();
     objectMapper = new ObjectMapper();
 
@@ -47,6 +51,20 @@ class ApplicationInsightsLoggerTest {
     ReflectionTestUtils.setField(applicationInsightsLogger, "applicationName", "test-app");
     ReflectionTestUtils.setField(applicationInsightsLogger, "appInsightsLoggingEnabled", true);
     ReflectionTestUtils.setField(applicationInsightsLogger, "connectionString", "InstrumentationKey=test-key;IngestionEndpoint=https://test.com/");
+
+    Class<?> logDataBuilderClass = Class.forName("it.pagopa.selfcare.party.registry_proxy.core.ApplicationInsightsLogger$LogDataBuilder");
+
+    // Get the constructor (it has no arguments)
+    logDataBuilderConstructor = logDataBuilderClass.getDeclaredConstructor();
+    logDataBuilderConstructor.setAccessible(true); // Make it accessible
+
+    // Get the 'put' method
+    putMethod = logDataBuilderClass.getDeclaredMethod("put", String.class, Object.class);
+    putMethod.setAccessible(true);
+
+    // Get the 'build' method
+    buildMethod = logDataBuilderClass.getDeclaredMethod("build");
+    buildMethod.setAccessible(true);
   }
 
   @Test
@@ -529,5 +547,70 @@ class ApplicationInsightsLoggerTest {
     InvokeBindingRequest capturedRequest = requestCaptor.getValue();
     assertEquals("test-binding", capturedRequest.getName());
     assertEquals("create", capturedRequest.getOperation());
+  }
+
+  @Test
+  void putAndBuild_shouldAddValuesCorrectly() throws Exception {
+    // Arrange
+    Object builderInstance = logDataBuilderConstructor.newInstance();
+
+    // Act
+    // Use reflection to call the 'put' method multiple times (fluent chaining)
+    putMethod.invoke(builderInstance, "key1", "value1");
+    putMethod.invoke(builderInstance, "key2", 123);
+
+    // Use reflection to call the 'build' method
+    @SuppressWarnings("unchecked")
+    Map<String, Object> result = (Map<String, Object>) buildMethod.invoke(builderInstance);
+
+    // Assert
+    assertNotNull(result);
+    assertEquals(2, result.size());
+    assertEquals("value1", result.get("key1"));
+    assertEquals(123, result.get("key2"));
+  }
+
+  @Test
+  void put_shouldIgnoreNullValues() throws Exception {
+    // Arrange
+    Object builderInstance = logDataBuilderConstructor.newInstance();
+
+    // Act
+    putMethod.invoke(builderInstance, "key1", "value1");
+    putMethod.invoke(builderInstance, "key_null", null); // This should be ignored
+
+    @SuppressWarnings("unchecked")
+    Map<String, Object> result = (Map<String, Object>) buildMethod.invoke(builderInstance);
+
+    // Assert
+    assertEquals(1, result.size());
+    assertTrue(result.containsKey("key1"));
+    assertFalse(result.containsKey("key_null"));
+  }
+
+  @Test
+  void build_shouldReturnACopyOfInternalData() throws Exception {
+    // Arrange
+    Object builderInstance = logDataBuilderConstructor.newInstance();
+    putMethod.invoke(builderInstance, "key1", "value1");
+
+    // Act
+    @SuppressWarnings("unchecked")
+    Map<String, Object> map1 = (Map<String, Object>) buildMethod.invoke(builderInstance);
+
+    // Modify the builder after the first build
+    putMethod.invoke(builderInstance, "key2", "value2");
+
+    @SuppressWarnings("unchecked")
+    Map<String, Object> map2 = (Map<String, Object>) buildMethod.invoke(builderInstance);
+
+    // Assert
+    // The first map should not have been modified, proving it's a copy
+    assertEquals(1, map1.size());
+    assertEquals("value1", map1.get("key1"));
+
+    // The second map should have the new data
+    assertEquals(2, map2.size());
+    assertEquals("value2", map2.get("key2"));
   }
 }
