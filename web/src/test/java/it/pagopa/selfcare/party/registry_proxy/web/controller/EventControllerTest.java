@@ -119,7 +119,7 @@ public class EventControllerTest {
         .content(mapper.writeValueAsString(event)))
       .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity()) // 422
       .andExpect(jsonPath("$.status").value("FAILED"))
-      .andExpect(jsonPath("$.error").value("Missing institution ID"))
+      .andExpect(jsonPath("$.error").value("Indexing failed - Missing institution ID"))
       .andExpect(jsonPath("$.details").value("Institution not found"));
 
     verify(searchService, times(1)).indexInstitution(institutionId);
