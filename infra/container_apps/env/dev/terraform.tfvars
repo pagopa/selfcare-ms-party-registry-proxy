@@ -159,5 +159,6 @@ secrets_names = {
   "PDND_INFOCAMERE_PURPOSE_ID"            = "infocamere-interop-purpose-id"
   "JWT-BEARER-TOKEN-FUNCTIONS"            = "jwt-bearer-token-functions"
   "AZURE_SEARCH_API_KEY"                  = "azure-search-api-key"
+  "APPINSIGHTS_CONNECTION_STRING"         = "appinsights-connection-string"
 }
 
