@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+import static it.pagopa.selfcare.party.registry_proxy.core.ApplicationInsightsLogger.EVENT_PROCESSING_ERROR;
+
 @Slf4j
 @RestController
 @RequestMapping(value = "/dapr")
@@ -52,62 +54,33 @@ public class EventController {
       if (institutionId == null || institutionId.trim().isEmpty()) {
         String error = "Institution ID is missing or empty in event data";
         log.error(error);
-        appInsightsLogger.logEventProcessingError(
-          eventId,
-          institutionId,
-          error,
-          "The event must contain 'institutionId' field",
-          null
-        );
+        appInsightsLogger.logEventProcessingError(EVENT_PROCESSING_ERROR, eventId, institutionId, error, "The event must contain 'institutionId' field", null);
         return createErrorResponse("Missing institution id", "The event must contain 'institutionId' field");
       }
 
       searchService.indexInstitution(institutionId);
       long processingTime = System.currentTimeMillis() - startTime;
 
-      appInsightsLogger.logPerformanceMetric(
-        "InstitutionIndexProcessing",
-        processingTime,
-        true,
-        Map.of("institutionId", institutionId, "eventId", eventId)
-      );
+      appInsightsLogger.logPerformanceMetric("InstitutionIndexProcessing", processingTime, true, Map.of("institutionId", institutionId, "eventId", eventId));
       return createSuccessResponse(eventId, institutionId, "Event processed and institution indexed successfully");
 
     } catch (ResourceNotFoundException e) {
       String error = "Indexing failed - Missing institution ID";
       logIndexError(e, error, institutionId, eventId);
-      appInsightsLogger.logEventProcessingError(
-        eventId,
-        institutionId,
-        error,
-        e.getMessage(),
-        e
-      );
+      appInsightsLogger.logEventProcessingError(EVENT_PROCESSING_ERROR, eventId, institutionId, error, e.getMessage(), e);
 
       return createErrorResponse(error, e.getMessage());
     } catch (ServiceUnavailableException e) {
       String error = "Indexing failed - Service unavailable";
       logIndexError(e, error, institutionId, eventId);
-      appInsightsLogger.logEventProcessingError(
-        eventId,
-        institutionId,
-        error,
-        e.getMessage(),
-        e
-      );
+      appInsightsLogger.logEventProcessingError(EVENT_PROCESSING_ERROR, eventId, institutionId, error, e.getMessage(), e);
 
       return createServerErrorResponse("Error processing event", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
     catch (Exception e) {
       String error = "Indexing failed - Failed to parse event payload";
       logIndexError(e, error, institutionId, eventId);
-      appInsightsLogger.logEventProcessingError(
-        eventId,
-        institutionId,
-        error,
-        e.getMessage(),
-        e
-      );
+      appInsightsLogger.logEventProcessingError(EVENT_PROCESSING_ERROR, eventId, institutionId, error, e.getMessage(), e);
 
       return createErrorResponse("Invalid JSON payload", e.getMessage());
     }

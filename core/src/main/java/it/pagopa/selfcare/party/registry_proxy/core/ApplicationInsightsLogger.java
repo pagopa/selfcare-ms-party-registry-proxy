@@ -19,9 +19,9 @@ import java.util.*;
 public class ApplicationInsightsLogger {
   private static final Logger logger = LoggerFactory.getLogger(ApplicationInsightsLogger.class);
   public static final String PERFORMANCE_INDEX_METRIC = "PerformanceIndexMetric";
-  public static final String EVENT_PROCESSING_ERROR = "EventProcessingError";
-  public static final String EVENT_PROCESSING_SUCCESS = "EventProcessingSuccess";
-  public static final String EVENT_PROCESSING_WARNING = "EventProcessingWarning";
+  public static final String EVENT_PROCESSING_ERROR = "IndexInstitutionProcessingError";
+  public static final String EVENT_PROCESSING_SUCCESS = "IndexInstitutionProcessingSuccess";
+  public static final String EVENT_PROCESSING_WARNING = "IndexInstitutionProcessingWarning";
 
   private static final String AI_CUSTOM_EVENTS_TYPE = "Microsoft.ApplicationInsights.Event";
   private static final String AI_EXCEPTIONS_TYPE = "Microsoft.ApplicationInsights.Exception";
@@ -50,7 +50,7 @@ public class ApplicationInsightsLogger {
   public static final String PROPERTIES = "properties";
   public static final String MEASUREMENTS = "measurements";
   public static final String BASE_TYPE = "baseType";
-  public static final String EVENT_INDEX_INSTITUTION = "EventIndexInstitution";
+  public static final String EVENT_DATA = "EventData";
   public static final String BASE_DATA = "baseData";
   public static final String ID = "id";
   public static final String OUTER_ID = "outerId";
@@ -58,7 +58,7 @@ public class ApplicationInsightsLogger {
   public static final String HAS_FULL_STACK = "hasFullStack";
   public static final String STACK = "stack";
   public static final String EXCEPTIONS = "exceptions";
-  public static final String EXCEPTION_INDEX_INSTITUTION = "ExceptionIndexInstitution";
+  public static final String EXCEPTION_DATA = "ExceptionData";
   public static final String CONTENT_TYPE = "Content-Type";
   public static final String APPLICATION_JSON = "application/json";
   public static final String OPERATION_CREATE = "create";
@@ -78,7 +78,7 @@ public class ApplicationInsightsLogger {
   @Value("${logging.appinsights.enabled:true}")
   private boolean appInsightsLoggingEnabled;
 
-  @Value("${applicationinsights.connection.string}")
+  @Value("${appinsights.connection.string}")
   private String connectionString;
 
   public ApplicationInsightsLogger() {
@@ -86,7 +86,7 @@ public class ApplicationInsightsLogger {
     this.objectMapper = new ObjectMapper();
   }
 
-  public void logEventProcessingError(String eventId, String institutionId, String error, String details, Throwable exception) {
+  public void logEventProcessingError(String eventType, String eventId, String institutionId, String error, String details, Throwable exception) {
     if (!appInsightsLoggingEnabled) {
       return;
     }
@@ -98,7 +98,7 @@ public class ApplicationInsightsLogger {
           INSTITUTION_ID, institutionId != null ? institutionId : "",
           ERROR, error != null ? error : "",
           DETAILS, details != null ? details : "",
-          EVENT_TYPE, EVENT_PROCESSING_ERROR
+          EVENT_TYPE, eventType
         ));
       } else {
         Map<String, String> properties = new HashMap<>();
@@ -107,7 +107,7 @@ public class ApplicationInsightsLogger {
         properties.put(ERROR, error != null ? error : "");
         properties.put(DETAILS, details != null ? details : "");
         properties.put(SEVERITY_LEVEL, SEVERITY_LEVEL_ERROR);
-        sendCustomEvent(EVENT_PROCESSING_ERROR, properties, null);
+        sendCustomEvent(eventType, properties, null);
       }
     } catch (Exception e) {
       logger.error("Failed to send error log to Application Insights: {}", e.getMessage(), e);
@@ -128,7 +128,7 @@ public class ApplicationInsightsLogger {
     }
 
     Map<String, Object> data = new HashMap<>();
-    data.put(BASE_TYPE, EVENT_INDEX_INSTITUTION);
+    data.put(BASE_TYPE, EVENT_DATA);
     data.put(BASE_DATA, baseData);
 
     Map<String, Object> telemetryItem = createBaseTelemetryItem(AI_CUSTOM_EVENTS_TYPE, data);
@@ -154,7 +154,7 @@ public class ApplicationInsightsLogger {
     }
 
     Map<String, Object> data = new HashMap<>();
-    data.put(BASE_TYPE, EXCEPTION_INDEX_INSTITUTION);
+    data.put(BASE_TYPE, EXCEPTION_DATA);
     data.put(BASE_DATA, baseData);
 
     Map<String, Object> telemetryItem = createBaseTelemetryItem(AI_EXCEPTIONS_TYPE, data);
@@ -210,7 +210,7 @@ public class ApplicationInsightsLogger {
     return telemetryItem;
   }
 
-  public void logEventProcessingSuccess(String eventId, String institutionId, long processingTimeMs) {
+  public void logEventProcessingSuccess(String eventType, String eventId, String institutionId, long processingTimeMs) {
     if (!appInsightsLoggingEnabled) {
       return;
     }
@@ -221,12 +221,10 @@ public class ApplicationInsightsLogger {
       logData.put(INSTITUTION_ID, institutionId);
       logData.put(SEVERITY_LEVEL, SEVERITY_LEVEL_INFORMATION);
 
-
       Map<String, Double> measurements = new HashMap<>();
       measurements.put(PROCESSING_TIME_MS, (double) processingTimeMs);
 
-      sendCustomEvent(EVENT_PROCESSING_SUCCESS, logData, measurements);
-
+      sendCustomEvent(eventType, logData, measurements);
     } catch (Exception e) {
       logger.error("Failed to send success log to Application Insights: {}", e.getMessage(), e);
     }
@@ -290,6 +288,7 @@ public class ApplicationInsightsLogger {
       Map<String, String> properties = new HashMap<>();
       properties.put(OPERATION, operation);
       properties.put(SUCCESS, String.valueOf(success));
+      properties.put(APPLICATION_NAME, applicationName);
       properties.put(SEVERITY_LEVEL, SEVERITY_LEVEL_INFORMATION);
 
       if (additionalProperties != null) {
