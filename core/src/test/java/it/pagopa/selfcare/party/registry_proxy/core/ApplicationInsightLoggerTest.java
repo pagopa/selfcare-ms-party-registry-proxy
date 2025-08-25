@@ -15,7 +15,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import reactor.core.publisher.Mono;
 
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -506,5 +508,26 @@ class ApplicationInsightsLoggerTest {
     assertEquals("1.0.0", tags.get("ai.application.ver"));
     assertEquals("test-app", tags.get("ai.cloud.role"));
     assertEquals("java:dapr:1.0.0", tags.get("ai.internal.sdkVersion"));
+  }
+
+  @Test
+  void testSendLogAsync() throws Exception {
+    // Arrange
+    Map<String, Object> logData = new HashMap<>();
+    logData.put("testKey", "testValue");
+    ArgumentCaptor<InvokeBindingRequest> requestCaptor = ArgumentCaptor.forClass(InvokeBindingRequest.class);
+
+    Method privateMethod = ApplicationInsightsLogger.class.getDeclaredMethod("sendLogAsync", Map.class);
+    privateMethod.setAccessible(true);
+
+    when(mockDaprClient.invokeBinding(any(InvokeBindingRequest.class), any()))
+      .thenReturn(Mono.empty());
+
+    privateMethod.invoke(applicationInsightsLogger, logData);
+    verify(mockDaprClient).invokeBinding(requestCaptor.capture(), any(TypeRef.class));
+
+    InvokeBindingRequest capturedRequest = requestCaptor.getValue();
+    assertEquals("test-binding", capturedRequest.getName());
+    assertEquals("create", capturedRequest.getOperation());
   }
 }
