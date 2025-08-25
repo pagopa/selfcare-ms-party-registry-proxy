@@ -87,7 +87,7 @@ class ApplicationInsightsLoggerTest {
 
     @SuppressWarnings("unchecked")
     Map<String, Object> data = (Map<String, Object>) telemetryItem.get("data");
-    assertEquals("EventIndexInstitution", data.get("baseType"));
+    assertEquals("EventData", data.get("baseType"));
 
     @SuppressWarnings("unchecked")
     Map<String, Object> baseData = (Map<String, Object>) data.get("baseData");
@@ -137,7 +137,7 @@ class ApplicationInsightsLoggerTest {
 
     @SuppressWarnings("unchecked")
     Map<String, Object> data = (Map<String, Object>) telemetryItem.get("data");
-    assertEquals("ExceptionIndexInstitution", data.get("baseType"));
+    assertEquals("ExceptionData", data.get("baseType"));
 
     @SuppressWarnings("unchecked")
     Map<String, Object> baseData = (Map<String, Object>) data.get("baseData");
@@ -197,7 +197,7 @@ class ApplicationInsightsLoggerTest {
 
     @SuppressWarnings("unchecked")
     Map<String, Object> data = (Map<String, Object>) telemetryItem.get("data");
-    assertEquals("EventIndexInstitution", data.get("baseType"));
+    assertEquals("EventData", data.get("baseType"));
 
     @SuppressWarnings("unchecked")
     Map<String, Object> baseData = (Map<String, Object>) data.get("baseData");
@@ -244,7 +244,7 @@ class ApplicationInsightsLoggerTest {
     Map<String, Object> data = (Map<String, Object>) telemetryItem.get("data");
     @SuppressWarnings("unchecked")
     Map<String, Object> baseData = (Map<String, Object>) data.get("baseData");
-    assertEquals("EventProcessingWarning", baseData.get("name"));
+    assertEquals("IndexInstitutionProcessingWarning", baseData.get("name"));
 
     @SuppressWarnings("unchecked")
     Map<String, String> properties = (Map<String, String>) baseData.get("properties");

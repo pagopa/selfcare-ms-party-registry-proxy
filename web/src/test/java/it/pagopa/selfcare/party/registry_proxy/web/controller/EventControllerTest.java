@@ -2,6 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
+import it.pagopa.selfcare.party.registry_proxy.core.ApplicationInsightsLogger;
 import it.pagopa.selfcare.party.registry_proxy.core.SearchService;
 import it.pagopa.selfcare.party.registry_proxy.web.config.WebTestConfig;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,10 @@ public class EventControllerTest {
 
   @MockBean
   private SearchService searchService;
+
+  @MockBean
+  private ApplicationInsightsLogger applicationInsightsLogger;
+
 
   @Test
   void handleSubscribe_shouldProcessSuccessfully() throws Exception {
