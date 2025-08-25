@@ -33,7 +33,7 @@ resource "azurerm_container_app_environment_dapr_component" "eventhub_pubsub" {
 }
 
 resource "azurerm_container_app_environment_dapr_component" "appinsight_binding" {
-  name                         = "${var.prefix}-appinsights-binding"
+  name                         = "appinsights-binding"
   container_app_environment_id = data.azurerm_container_app_environment.cae.id
   component_type               = "bindings.http"
   version                      = "v1"
