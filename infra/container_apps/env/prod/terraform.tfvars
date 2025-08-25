@@ -133,4 +133,5 @@ secrets_names = {
   "PDND_INFOCAMERE_CLIENT_ID"             = "infocamere-interop-client-id"
   "PDND_INFOCAMERE_KID"                   = "infocamere-interop-kid"
   "PDND_INFOCAMERE_PURPOSE_ID"            = "infocamere-interop-purpose-id"
+  "APPINSIGHTS_CONNECTION_STRING"         = "appinsights-connection-string"
 }

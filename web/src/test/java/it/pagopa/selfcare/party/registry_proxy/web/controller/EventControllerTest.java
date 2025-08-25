@@ -2,6 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
+import it.pagopa.selfcare.party.registry_proxy.core.ApplicationInsightsLogger;
 import it.pagopa.selfcare.party.registry_proxy.core.SearchService;
 import it.pagopa.selfcare.party.registry_proxy.web.config.WebTestConfig;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,10 @@ public class EventControllerTest {
 
   @MockBean
   private SearchService searchService;
+
+  @MockBean
+  private ApplicationInsightsLogger applicationInsightsLogger;
+
 
   @Test
   void handleSubscribe_shouldProcessSuccessfully() throws Exception {
@@ -114,7 +119,7 @@ public class EventControllerTest {
         .content(mapper.writeValueAsString(event)))
       .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity()) // 422
       .andExpect(jsonPath("$.status").value("FAILED"))
-      .andExpect(jsonPath("$.error").value("Missing institution ID"))
+      .andExpect(jsonPath("$.error").value("Indexing failed - Missing institution ID"))
       .andExpect(jsonPath("$.details").value("Institution not found"));
 
     verify(searchService, times(1)).indexInstitution(institutionId);

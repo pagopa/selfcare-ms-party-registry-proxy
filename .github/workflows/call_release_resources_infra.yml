@@ -81,16 +81,29 @@ jobs:
         working-directory: ${{ inputs.dir }}
         run: terraform init
 
-      - name: Terraform Plan
-        uses: pagopa/terraform-preapply-azure-action@54ded8cda3437c3f6a9f46baf69cb321ce82f5cd
+      - name: Cache terraform modules
+        id: cache-terraform-modules
+        uses: actions/cache@6fd2d4538ca777f67fccddb233cf1a8ff1339012
         with:
-          client_id: ${{ secrets.ARM_CLIENT_ID }}
-          tenant_id: ${{ vars.ARM_TENANT_ID }}
-          subscription_id: ${{ vars.ARM_SUBSCRIPTION_ID }}
-          dir: ${{ inputs.dir }}
-          azure_environment: ${{ env.TERRAFORM_ENVIRONMENT }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          path: ${{ inputs.dir }}/.terraform
+          key: terraform-${{ inputs.dir }}-${{ github.sha }}
+          restore-keys: |
+            terraform-${{ inputs.dir }}
+
+      - name: Terraform plan
+        shell: bash
+        run: |
+          export PATH="${HOME}/bin:$PATH"
+          export ARM_CLIENT_ID=${{ secrets.ARM_CLIENT_ID }}
+          export ARM_TENANT_ID=${{ vars.ARM_TENANT_ID }}
+          export ARM_SUBSCRIPTION_ID=${{ vars.ARM_SUBSCRIPTION_ID }}
+          export ARM_USE_OIDC=true
+          export ARM_USE_AZUREAD=true
+          export ARM_STORAGE_USE_AZUREAD=true
+          
+          cd ${{ inputs.dir }}
+          
+          terraform plan -lock-timeout=3000s -out=tfplan-${{ inputs.env.TERRAFORM_ENVIRONMENT }}-${{ github.sha }} -input=false
 
       - name: "Upload Terraform Plan as Artifact"
         uses: actions/upload-artifact@694cdabd8bdb0f10b2cea11669e1bf5453eed0a6 # v4.2.0

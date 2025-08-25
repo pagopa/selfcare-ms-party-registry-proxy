@@ -38,12 +38,24 @@ app:
   dapr:
     http-endpoint: http://localhost:3500
     grpc-endpoint: http://localhost:50001
+    appinsights:
+      binding:
+        name: ${DAPR_APPINSIGHTS_BINDING_NAME:appinsights-binding}
+appinsights:
+  connection:
+    string: ${APPINSIGHTS_CONNECTION_STRING:InstrumentationKey=00000000-0000-0000-0000-000000000000"}
 
 logging:
   level:
     it.pagopa.selfcare.party.registry_proxy: ${MS_PARTY_REGISTRY_PROXY_LOG_LEVEL:DEBUG}
   pattern:
     additional-info: ",%X{X-Client-Ip:-}]"
+  appinsights:
+    enabled: ${LOGGING_APPINSIGHTS_ENABLED:true}
+    batch:
+      size: ${LOGGING_APPINSIGHTS_BATCH_SIZE:50}
+    flush:
+      interval: ${LOGGING_APPINSIGHTS_FLUSH_INTERVAL:10000}
 
 resilience4j:
   retry:
