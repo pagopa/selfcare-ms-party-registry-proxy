@@ -14,15 +14,15 @@ provider "azurerm" {
 
 
 module "ai_search" {
-  source = "../../_modules/ai_search"
-  app_name = "${local.prefix}-srch"
-  prefix = local.prefix
-  env_short = local.env_short
-  project = local.project
-  location = local.location
-  domain = "ar"
-  sku = "basic"
-  tags = local.tags
+  source      = "../../_modules/ai_search"
+  app_name    = "${local.prefix}-srch"
+  prefix      = local.prefix
+  env_short   = local.env_short
+  project     = local.project
+  location    = local.location
+  domain      = "ar"
+  sku         = "basic"
+  tags        = local.tags
   cidr_subnet = ["10.1.145.0/29"]
 
   key_vault_name                = "selc-${local.env_short}-kv"
@@ -33,7 +33,7 @@ module "ai_search" {
 
 module "dapr" {
   source = "../../_modules/dapr"
-    
+
   project   = local.project
   env_short = local.env_short
 
@@ -46,10 +46,10 @@ module "dapr" {
   key_vault_resource_group_name    = "selc-${local.env_short}-sec-rg"
   key_vault_event_hub_consumer_key = "eventhub-sc-contracts-selc-proxy-key-lc"
 
-  queue_url = "selc-${local.env_short}-eventhub-ns.servicebus.windows.net"
-  queue_port = "9093"
+  queue_url            = "selc-${local.env_short}-eventhub-ns.servicebus.windows.net"
+  queue_port           = "9093"
   queue_consumer_group = "party-proxy"
-  queue_topic = "SC-Contracts"
+  queue_topic          = "SC-Contracts"
 
   #redis
   redis_enable                   = false

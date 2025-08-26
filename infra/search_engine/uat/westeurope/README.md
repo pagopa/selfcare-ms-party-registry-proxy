@@ -3,9 +3,7 @@
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
-| Name | Version |
-|------|---------|
-| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | > 4.0.0 |
+No requirements.
 
 ## Providers
 
@@ -13,7 +11,10 @@ No providers.
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_ai_search"></a> [ai\_search](#module\_ai\_search) | ../../_modules/ai_search | n/a |
+| <a name="module_dapr"></a> [dapr](#module\_dapr) | ../../_modules/dapr | n/a |
 
 ## Resources
 
