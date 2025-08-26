@@ -59,7 +59,7 @@ resource "azurerm_container_app_environment_dapr_component" "appinsight_binding"
   }
 
   metadata {
-    name  = "headers"
+    name = "headers"
     value = jsonencode({
       "Content-Type" = "application/json"
     })

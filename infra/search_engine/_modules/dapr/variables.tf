@@ -79,23 +79,23 @@ variable "project" {
 }
 
 variable "queue_port" {
-  type    = string
+  type        = string
   description = "Queue base url port"
 }
 
 variable "queue_consumer_group" {
-  type    = string
+  type        = string
   description = "Queue consumer group"
 }
 
 variable "queue_topic" {
-  type    = string
+  type        = string
   description = "Queue topic"
 }
 
 
 variable "queue_url" {
-  type    = string
+  type        = string
   description = "Queue base url"
 }
 
@@ -136,12 +136,12 @@ variable "cidr_subnet_redis" {
 }
 
 variable "search_service_name" {
-  type    = string
+  type        = string
   description = "Name of ai search service"
 }
 
 variable "search_service_key" {
-  type    = string
+  type        = string
   description = "Key of ai search service"
 }
 

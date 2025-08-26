@@ -23,10 +23,10 @@ variable "cidr_subnet" {
 #   description = "Database to be indexed on ai search"
 # }
 
-# variable "domain" {
-#   type        = string
-#   description = "Domain"
-# }
+variable "domain" {
+  type        = string
+  description = "Domain"
+}
 
 variable "env_short" {
   description = "Environment short name"

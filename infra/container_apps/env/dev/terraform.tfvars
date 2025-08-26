@@ -141,7 +141,7 @@ app_settings = [
   },
   {
     name  = "AZURE_SEARCH_INSTITUTION_INDEX"
-    value = "institution-index"
+    value = "institution-index-ar"
   }
 ]
 

@@ -12,7 +12,7 @@ resource "azurerm_private_dns_zone" "privatelink_srch_azure_com" {
   count               = var.srch_private_endpoint_enabled ? 1 : 0
   name                = "privatelink.search.windows.net"
   resource_group_name = data.azurerm_resource_group.rg_vnet.name
-  tags = var.tags
+  tags                = var.tags
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "privatelink_srch_windows_net_vnet" {

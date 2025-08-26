@@ -1,10 +1,10 @@
 locals {
-  prefix           = "selc"
-  env_short        = "p"
-  location         = "westeurope"
-  location_short   = "weu"
-  domain           = "ar"
-  project          = "${local.prefix}-${local.env_short}-${local.location_short}-${local.domain}"
+  prefix         = "selc"
+  env_short      = "p"
+  location       = "westeurope"
+  location_short = "weu"
+  domain         = "ar"
+  project        = "${local.prefix}-${local.env_short}-${local.location_short}-${local.domain}"
 
   tags = {
     CostCenter  = "TS310 - PAGAMENTI & SERVIZI"

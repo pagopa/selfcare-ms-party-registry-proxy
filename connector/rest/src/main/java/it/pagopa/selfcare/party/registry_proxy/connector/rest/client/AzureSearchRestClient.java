@@ -3,7 +3,6 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest.client;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.AzureSearchStatus;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.InstitutionIndexValue;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.AzureSearchRestClientConfig;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.NationalRegistriesRestClientConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
