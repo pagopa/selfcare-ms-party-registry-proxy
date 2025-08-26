@@ -20,6 +20,7 @@ module "ai_search" {
   env_short = local.env_short
   project = local.project
   location = local.location
+  domain = "ar"
   sku = "basic"
   tags = local.tags
   cidr_subnet = ["10.1.145.0/29"]
