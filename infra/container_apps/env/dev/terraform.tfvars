@@ -161,4 +161,3 @@ secrets_names = {
   "AZURE_SEARCH_API_KEY"                  = "azure-search-api-key"
   "APPINSIGHTS_CONNECTION_STRING"         = "appinsights-connection-string"
 }
-

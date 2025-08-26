@@ -72,6 +72,18 @@ app_settings = [
     value = "/uo-open-data-mock.csv"
   },
   {
+    name  = "INFO_CAMERE_URL"
+    value = "https://icapiscl.infocamere.it"
+  },
+  {
+    name  = "INFO_CAMERE_INSTITUTIONS_BY_LEGAL_ENDPOINT"
+    value = "/ic/ce/wspa/wspa/rest/listaLegaleRappresentante/{taxId}"
+  },
+  {
+    name  = "INFO_CAMERE_AUTHENTICATION_ENDPOINT"
+    value = "/ic/ce/wspa/wspa/rest/authentication"
+  },
+  {
     name  = "ANAC_FTP_IP"
     value = "93.43.119.85"
   },
@@ -118,6 +130,18 @@ app_settings = [
   {
     name  = "IVASS_BASE_URL"
     value = "https://infostat-ivass.bancaditalia.it"
+  },
+  {
+    name  = "SELC_INSTITUTION_URL"
+    value = "https://selc-p-ms-core-ca.lemonpond-bb0b750e.westeurope.azurecontainerapps.io"
+  },
+  {
+    name  = "AZURE_SEARCH_URL"
+    value = "https://selc-p-weu-ar-srch.search.windows.net/"
+  },
+  {
+    name  = "AZURE_SEARCH_INSTITUTION_INDEX"
+    value = "institution-index-ar"
   }
 ]
 
@@ -133,5 +157,7 @@ secrets_names = {
   "PDND_INFOCAMERE_CLIENT_ID"             = "infocamere-interop-client-id"
   "PDND_INFOCAMERE_KID"                   = "infocamere-interop-kid"
   "PDND_INFOCAMERE_PURPOSE_ID"            = "infocamere-interop-purpose-id"
+  "JWT-BEARER-TOKEN-FUNCTIONS"            = "jwt-bearer-token-functions"
+  "AZURE_SEARCH_API_KEY"                  = "azure-search-api-key"
   "APPINSIGHTS_CONNECTION_STRING"         = "appinsights-connection-string"
 }
