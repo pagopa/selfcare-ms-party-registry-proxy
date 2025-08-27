@@ -10,10 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const.INSTITUTION_CACHE;
 
@@ -27,12 +24,11 @@ public class InstitutionConnectorImpl implements InstitutionConnector {
   }
 
   @Cacheable(value = INSTITUTION_CACHE, key = "#id", cacheManager = INSTITUTION_CACHE)
-  public Institution getById(String id) {
+  public Map<String, Object> getById(String id) {
     log.debug("InstitutionId = {}", id);
-    InstitutionResponse result = restClient.getById(id);
-    Institution institution = institutionResponseToInstitution(result);
-    log.debug("Institution = {}", institution);
-    return institution;
+    Map<String, Object> result = restClient.getById(id);
+    log.debug("Institution = {}", result);
+    return result;
   }
 
   private Institution institutionResponseToInstitution(InstitutionResponse institutionResponse) {

@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Map;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @FeignClient(name = "${rest-client.selc-institution.serviceCode}", url = "${rest-client.selc-institution.base-url}", configuration = InstitutionRestClientConfig.class)
@@ -14,5 +16,5 @@ public interface InstitutionRestClient {
 
   @GetMapping(value = "${rest-client.selc-institution.getById.path}", produces = APPLICATION_JSON_VALUE)
   @ResponseBody
-  InstitutionResponse getById(@PathVariable("id") String id);
+  Map<String, Object> getById(@PathVariable("id") String id);
 }
