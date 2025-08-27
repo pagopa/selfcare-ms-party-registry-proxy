@@ -1,13 +1,13 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.dapr.client.DaprClient;
-import it.pagopa.selfcare.party.registry_proxy.connector.api.AzureSearchConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.InstitutionConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.api.SearchServiceConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ServiceUnavailableException;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.AzureSearchStatus;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.AzureSearchValue;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceInstitution;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceStatus;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.institution.Institution;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,14 +29,12 @@ import static org.mockito.Mockito.*;
 @ContextConfiguration(classes = {SearchServiceImplTest.class})
 @ExtendWith(MockitoExtension.class)
 public class SearchServiceImplTest {
-  @Mock
-  private DaprClient daprClient;
 
   @Mock
   private InstitutionConnector institutionConnector;
 
   @Mock
-  private AzureSearchConnector azureSearchConnector;
+  private SearchServiceConnector searchServiceConnector;
 
   @InjectMocks
   private SearchServiceImpl searchService;
@@ -73,11 +71,11 @@ public class SearchServiceImplTest {
     Institution mockInstitution = new Institution(); // Assume a valid institution object
     AzureSearchValue mockSearchValue = new AzureSearchValue();
     mockSearchValue.setStatus(true);
-    AzureSearchStatus mockSearchStatus = new AzureSearchStatus();
+    SearchServiceStatus mockSearchStatus = new SearchServiceStatus();
     mockSearchStatus.setValue(Collections.singletonList(mockSearchValue));
 
     when(institutionConnector.getById(institutionId)).thenReturn(mockInstitution);
-    when(azureSearchConnector.indexInstitution(mockInstitution)).thenReturn(mockSearchStatus);
+    when(searchServiceConnector.indexInstitution(mockInstitution)).thenReturn(mockSearchStatus);
 
     // Act
     boolean result = searchService.indexInstitution(institutionId);
@@ -85,7 +83,7 @@ public class SearchServiceImplTest {
     // Assert
     assertTrue(result);
     verify(institutionConnector, times(1)).getById(institutionId);
-    verify(azureSearchConnector, times(1)).indexInstitution(mockInstitution);
+    verify(searchServiceConnector, times(1)).indexInstitution(mockInstitution);
   }
 
   @Test
@@ -97,7 +95,7 @@ public class SearchServiceImplTest {
     // Act & Assert
     assertThrows(ResourceNotFoundException.class, () -> searchService.indexInstitution(institutionId));
     verify(institutionConnector, times(1)).getById(institutionId);
-    verify(azureSearchConnector, never()).indexInstitution(any());
+    verify(searchServiceConnector, never()).indexInstitution(any());
   }
 
   @Test
@@ -106,7 +104,7 @@ public class SearchServiceImplTest {
     String institutionId = "test-id";
     Institution mockInstitution = new Institution();
     when(institutionConnector.getById(institutionId)).thenReturn(mockInstitution);
-    when(azureSearchConnector.indexInstitution(mockInstitution)).thenReturn(null);
+    when(searchServiceConnector.indexInstitution(mockInstitution)).thenReturn(null);
 
     // Act & Assert
     assertThrows(ServiceUnavailableException.class, () -> searchService.indexInstitution(institutionId));
@@ -117,10 +115,10 @@ public class SearchServiceImplTest {
     // Arrange
     String institutionId = "test-id";
     Institution mockInstitution = new Institution();
-    AzureSearchStatus emptyStatus = new AzureSearchStatus();
+    SearchServiceStatus emptyStatus = new SearchServiceStatus();
     emptyStatus.setValue(Collections.emptyList());
     when(institutionConnector.getById(institutionId)).thenReturn(mockInstitution);
-    when(azureSearchConnector.indexInstitution(mockInstitution)).thenReturn(emptyStatus);
+    when(searchServiceConnector.indexInstitution(mockInstitution)).thenReturn(emptyStatus);
 
     // Act & Assert
     assertThrows(ServiceUnavailableException.class, () -> searchService.indexInstitution(institutionId));
@@ -133,12 +131,105 @@ public class SearchServiceImplTest {
     Institution mockInstitution = new Institution();
     AzureSearchValue failedValue = new AzureSearchValue();
     failedValue.setStatus(false);
-    AzureSearchStatus failedStatus = new AzureSearchStatus();
+    SearchServiceStatus failedStatus = new SearchServiceStatus();
     failedStatus.setValue(Collections.singletonList(failedValue));
     when(institutionConnector.getById(institutionId)).thenReturn(mockInstitution);
-    when(azureSearchConnector.indexInstitution(mockInstitution)).thenReturn(failedStatus);
+    when(searchServiceConnector.indexInstitution(mockInstitution)).thenReturn(failedStatus);
 
     // Act & Assert
     assertThrows(ServiceUnavailableException.class, () -> searchService.indexInstitution(institutionId));
   }
+
+  @Test
+  void buildFilter_withAllParameters() {
+    // Arrange
+    List<String> products = List.of("prod-io", "prod-pagopa");
+    List<String> institutionTypes = List.of("PA", "GSP");
+    String taxCode = "12345678901";
+    String expectedFilter = "products/any(p: p eq 'prod-io' or p eq 'prod-pagopa') and institutionTypes/any(t: t eq 'PA' or t eq 'GSP') and taxCode eq '12345678901'";
+
+    // Act
+    String result = searchService.buildFilter(products, institutionTypes, taxCode);
+
+    // Assert
+    assertEquals(expectedFilter, result);
+  }
+
+  @Test
+  void buildFilter_withOnlyProducts() {
+    // Arrange
+    List<String> products = List.of("prod-io");
+    String expectedFilter = "products/any(p: p eq 'prod-io')";
+
+    // Act
+    String result = searchService.buildFilter(products, null, null);
+
+    // Assert
+    assertEquals(expectedFilter, result);
+  }
+
+  @Test
+  void buildFilter_withOnlyInstitutionTypes() {
+    // Arrange
+    List<String> institutionTypes = List.of("PA");
+    String expectedFilter = "institutionTypes/any(t: t eq 'PA')";
+
+    // Act
+    String result = searchService.buildFilter(null, institutionTypes, null);
+
+    // Assert
+    assertEquals(expectedFilter, result);
+  }
+
+  @Test
+  void buildFilter_withOnlyTaxCode() {
+    // Arrange
+    String taxCode = "12345678901";
+    String expectedFilter = "taxCode eq '12345678901'";
+
+    // Act
+    String result = searchService.buildFilter(null, null, taxCode);
+
+    // Assert
+    assertEquals(expectedFilter, result);
+  }
+
+  @Test
+  void buildFilter_withNullAndEmptyParameters() {
+    // Arrange & Act
+    String result = searchService.buildFilter(null, Collections.emptyList(), "");
+
+    // Assert
+    assertEquals("", result);
+  }
+
+
+  // --- Test for searchInstitution ---
+
+  @Test
+  void searchInstitution_shouldCallConnectorWithCorrectFilter() {
+    // Arrange
+    String search = "Comune";
+    List<String> products = List.of("prod-io");
+    List<String> institutionTypes = List.of("PA");
+    String taxCode = "12345678901";
+    Integer top = 10;
+    Integer skip = 0;
+
+    String expectedFilter = "products/any(p: p eq 'prod-io') and institutionTypes/any(t: t eq 'PA') and taxCode eq '12345678901'";
+    List<SearchServiceInstitution> mockResponse = Collections.singletonList(new SearchServiceInstitution());
+
+    when(searchServiceConnector.searchInstitution(search, expectedFilter, top, skip, null, null))
+      .thenReturn(mockResponse);
+
+    // Act
+    List<SearchServiceInstitution> result = searchService.searchInstitution(search, products, institutionTypes, taxCode, top, skip, null, null);
+
+    // Assert
+    assertNotNull(result);
+    assertEquals(mockResponse, result);
+
+    verify(searchServiceConnector, times(1)).searchInstitution(search, expectedFilter, top, skip, null, null);
+  }
+
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 
 import java.util.List;
 @Data
-public class AzureSearchStatus {
+public class SearchServiceStatus {
   @JsonProperty("value")
   List<AzureSearchValue> value;
 }

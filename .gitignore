@@ -48,3 +48,4 @@ override.tf.json
 **/app/_*
 **/app/write.lock
 **/app/segments_*
+/.run.prod/SelfCarePartyRegistryProxyApplicationPROD.run.xml
