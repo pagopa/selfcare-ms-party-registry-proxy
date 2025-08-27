@@ -19,6 +19,7 @@ public class SearchServiceInstitutionRequest extends SearchServiceInstitution {
     SearchServiceInstitutionRequest searchServiceInstitutionRequest = new SearchServiceInstitutionRequest();
     searchServiceInstitutionRequest.setId(institution.getId());
     searchServiceInstitutionRequest.setDescription(institution.getDescription());
+    searchServiceInstitutionRequest.setParentDescription(institution.getParentDescription());
     searchServiceInstitutionRequest.setTaxCode(institution.getTaxCode());
     searchServiceInstitutionRequest.setProducts(institution.getOnboarding().stream().map(Onboarding::getProductId).toList());
     searchServiceInstitutionRequest.setInstitutionTypes(institution.getOnboarding().stream().map(onboarding -> onboarding.getInstitutionType().toString()).collect(Collectors.toSet()).stream().toList());

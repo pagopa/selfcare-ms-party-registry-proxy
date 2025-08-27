@@ -9,6 +9,7 @@ import java.util.List;
 public class SearchServiceInstitution {
   String id;
   String description;
+  String parentDescription;
   String taxCode;
   List<String> products;
   List<String> institutionTypes;
@@ -18,6 +19,7 @@ public class SearchServiceInstitution {
     SearchServiceInstitution searchServiceInstitution = new SearchServiceInstitution();
     searchServiceInstitution.setId(id);
     searchServiceInstitution.setDescription(description);
+    searchServiceInstitution.setParentDescription(parentDescription);
     searchServiceInstitution.setTaxCode(taxCode);
     searchServiceInstitution.setProducts(products);
     searchServiceInstitution.setInstitutionTypes(institutionTypes);

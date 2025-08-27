@@ -1903,6 +1903,9 @@
           "description" : {
             "type" : "string"
           },
+          "parentDescription" : {
+            "type" : "string"
+          },
           "taxCode" : {
             "type" : "string"
           },

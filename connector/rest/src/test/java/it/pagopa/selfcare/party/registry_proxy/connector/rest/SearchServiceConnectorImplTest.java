@@ -97,6 +97,43 @@ public class SearchServiceConnectorImplTest {
   }
 
   @Test
+  void searchInstitution_shouldReturnInstitutionsAoo_whenValidResponse() {
+    // Given
+    String search = "*";
+    String filter = "products/any(p: p eq 'prod-io')";
+    Integer top = 50;
+    Integer skip = 0;
+    String select = "id,description,taxCode";
+    String orderby = "description";
+
+    SearchServiceInstitutionResponse institutionResponse = createSearchServiceInstitutionAooResponse();
+    SearchServiceResponse searchServiceResponse = new SearchServiceResponse();
+    searchServiceResponse.setValue(List.of(institutionResponse));
+
+    when(azureSearchRestClient.searchInstitution(search, filter, top, skip, select, orderby))
+      .thenReturn(searchServiceResponse);
+
+    // When
+    List<SearchServiceInstitution> result = searchServiceConnector.searchInstitution(
+      search, filter, top, skip, select, orderby);
+
+    // Then
+    assertThat(result).isNotNull();
+    assertThat(result).hasSize(1);
+
+    SearchServiceInstitution institution = result.get(0);
+    assertThat(institution.getId()).isEqualTo("12345678");
+    assertThat(institution.getDescription()).isEqualTo("Polizia municipale");
+    assertThat(institution.getParentDescription()).isEqualTo("Comune di Reggio Emilia");
+    assertThat(institution.getTaxCode()).isEqualTo("00145920351");
+    assertThat(institution.getProducts()).containsExactly("prod-io", "prod-interop", "prod-interop-coll");
+    assertThat(institution.getInstitutionTypes()).containsExactly("PA", "GSP");
+
+    verify(azureSearchRestClient, times(1))
+      .searchInstitution(search, filter, top, skip, select, orderby);
+  }
+
+  @Test
   void searchInstitution_shouldReturnEmptyList_whenResponseIsNull() {
     // Given
     String search = "*";
@@ -264,6 +301,18 @@ public class SearchServiceConnectorImplTest {
     SearchServiceInstitutionResponse response = new SearchServiceInstitutionResponse();
     response.setId("12345678");
     response.setDescription("Comune di Reggio Emilia");
+    response.setTaxCode("00145920351");
+    response.setProducts(List.of("prod-io", "prod-interop", "prod-interop-coll"));
+    response.setInstitutionTypes(List.of("PA", "GSP"));
+    response.setLastModified(OffsetDateTime.parse("2023-10-10T17:13:44.263Z"));
+    return response;
+  }
+
+  private SearchServiceInstitutionResponse createSearchServiceInstitutionAooResponse() {
+    SearchServiceInstitutionResponse response = new SearchServiceInstitutionResponse();
+    response.setId("12345678");
+    response.setDescription("Polizia municipale");
+    response.setParentDescription("Comune di Reggio Emilia");
     response.setTaxCode("00145920351");
     response.setProducts(List.of("prod-io", "prod-interop", "prod-interop-coll"));
     response.setInstitutionTypes(List.of("PA", "GSP"));
