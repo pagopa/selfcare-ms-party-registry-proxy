@@ -3,15 +3,14 @@ package it.pagopa.selfcare.party.registry_proxy.core;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import io.dapr.client.DaprClient;
-import it.pagopa.selfcare.party.registry_proxy.connector.api.AzureSearchConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.InstitutionConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.api.SearchServiceConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ServiceUnavailableException;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.AzureSearchStatus;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.AzureSearchValue;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceInstitution;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceStatus;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.institution.Institution;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,10 +25,9 @@ import java.util.Map;
 @Service
 public class SearchServiceImpl implements SearchService {
 
-  private final DaprClient daprClient;
   private final ObjectMapper objectMapper = new ObjectMapper();
   private final InstitutionConnector institutionConnector;
-  private final AzureSearchConnector azureSearchConnector;
+  private final SearchServiceConnector searchServiceConnector;
 
   @Value("${dapr.queue.binding-name}")
   private String queueBindingName;
@@ -38,10 +36,9 @@ public class SearchServiceImpl implements SearchService {
   private String kafkaTopic;
 
   @Autowired
-  public SearchServiceImpl(DaprClient daprClient, InstitutionConnector institutionConnector, AzureSearchConnector azureSearchConnector) {
-    this.daprClient = daprClient;
+  public SearchServiceImpl(InstitutionConnector institutionConnector, SearchServiceConnector searchServiceConnector) {
     this.institutionConnector = institutionConnector;
-    this.azureSearchConnector = azureSearchConnector;
+    this.searchServiceConnector = searchServiceConnector;
     objectMapper.registerModule(new JavaTimeModule());
     objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
   }
@@ -64,7 +61,7 @@ public class SearchServiceImpl implements SearchService {
     if (institution == null) {
       throw new ResourceNotFoundException();
     }
-    AzureSearchStatus status = azureSearchConnector.indexInstitution(institution);
+    SearchServiceStatus status = searchServiceConnector.indexInstitution(institution);
 
     if (status == null || status.getValue() == null || status.getValue().isEmpty()) {
       throw new ServiceUnavailableException();
@@ -77,6 +74,50 @@ public class SearchServiceImpl implements SearchService {
       }
     }
     return true;
+  }
+
+  @Override
+  public List<SearchServiceInstitution> searchInstitution(String search, List<String> products, List<String> institutionTypes, String taxCode,
+                                                          Integer top, Integer skip, String select, String orderby) {
+    return searchServiceConnector.searchInstitution(search, buildFilter(products, institutionTypes, taxCode), top, skip, select, orderby);
+  }
+
+  public String buildFilter(List<String> products, List<String> institutionTypes, String taxCode) {
+    StringBuilder filterBuilder = new StringBuilder();
+
+    if (products != null && !products.isEmpty()) {
+      filterBuilder.append("products/any(p: ");
+      for (int i = 0; i < products.size(); i++) {
+        if (i > 0) {
+          filterBuilder.append(" or ");
+        }
+        filterBuilder.append("p eq '").append(products.get(i)).append("'");
+      }
+      filterBuilder.append(")");
+    }
+
+    if (institutionTypes != null && !institutionTypes.isEmpty()) {
+      if (!filterBuilder.isEmpty()) {
+        filterBuilder.append(" and ");
+      }
+      filterBuilder.append("institutionTypes/any(t: ");
+      for (int i = 0; i < institutionTypes.size(); i++) {
+        if (i > 0) {
+          filterBuilder.append(" or ");
+        }
+        filterBuilder.append("t eq '").append(institutionTypes.get(i)).append("'");
+      }
+      filterBuilder.append(")");
+    }
+
+    if (taxCode != null && !taxCode.isEmpty()) {
+      if (!filterBuilder.isEmpty()) {
+        filterBuilder.append(" and ");
+      }
+      filterBuilder.append("taxCode eq '").append(taxCode).append("'");
+    }
+
+    return filterBuilder.toString();
   }
 }
 

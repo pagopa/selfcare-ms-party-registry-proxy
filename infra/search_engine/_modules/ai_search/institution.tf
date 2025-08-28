@@ -29,6 +29,17 @@ resource "restapi_object" "search_index" {
         "analyzer" : "it.microsoft"
       },
       {
+        "name" : "parentDescription",
+        "type" : "Edm.String",
+        "key" : false,
+        "searchable" : true,
+        "filterable" : false,
+        "sortable" : true,
+        "facetable" : false,
+        "retrievable" : true,
+        "analyzer" : "it.microsoft"
+      },
+      {
         "name" : "taxCode",
         "type" : "Edm.String",
         "searchable" : true,

@@ -14,282 +14,6 @@
     "description" : "Generated server url"
   } ],
   "paths" : {
-    "/actors/{type}/{id}/method/{method}" : {
-      "put" : {
-        "tags" : [ "dapr-controller" ],
-        "operationId" : "invokeActorMethod",
-        "parameters" : [ {
-          "name" : "type",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "id",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "method",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "type" : "object",
-                "properties" : {
-                  "short" : {
-                    "type" : "integer",
-                    "format" : "int32"
-                  },
-                  "char" : {
-                    "type" : "string"
-                  },
-                  "int" : {
-                    "type" : "integer",
-                    "format" : "int32"
-                  },
-                  "long" : {
-                    "type" : "integer",
-                    "format" : "int64"
-                  },
-                  "float" : {
-                    "type" : "number",
-                    "format" : "float"
-                  },
-                  "double" : {
-                    "type" : "number",
-                    "format" : "double"
-                  },
-                  "direct" : {
-                    "type" : "boolean"
-                  },
-                  "readOnly" : {
-                    "type" : "boolean"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "type" : "string",
-                    "format" : "byte"
-                  }
-                }
-              }
-            }
-          },
-          "400" : {
-            "description" : "Bad Request"
-          },
-          "401" : {
-            "description" : "Unauthorized"
-          },
-          "404" : {
-            "description" : "Not Found"
-          },
-          "500" : {
-            "description" : "Internal Server Error"
-          }
-        },
-        "security" : [ {
-          "bearerAuth" : [ "global" ]
-        } ]
-      }
-    },
-    "/actors/{type}/{id}/method/timer/{timer}" : {
-      "put" : {
-        "tags" : [ "dapr-controller" ],
-        "operationId" : "invokeActorTimer",
-        "parameters" : [ {
-          "name" : "type",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "id",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "timer",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "type" : "object",
-                "properties" : {
-                  "short" : {
-                    "type" : "integer",
-                    "format" : "int32"
-                  },
-                  "char" : {
-                    "type" : "string"
-                  },
-                  "int" : {
-                    "type" : "integer",
-                    "format" : "int32"
-                  },
-                  "long" : {
-                    "type" : "integer",
-                    "format" : "int64"
-                  },
-                  "float" : {
-                    "type" : "number",
-                    "format" : "float"
-                  },
-                  "double" : {
-                    "type" : "number",
-                    "format" : "double"
-                  },
-                  "direct" : {
-                    "type" : "boolean"
-                  },
-                  "readOnly" : {
-                    "type" : "boolean"
-                  }
-                }
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "400" : {
-            "description" : "Bad Request"
-          },
-          "401" : {
-            "description" : "Unauthorized"
-          },
-          "404" : {
-            "description" : "Not Found"
-          },
-          "500" : {
-            "description" : "Internal Server Error"
-          }
-        },
-        "security" : [ {
-          "bearerAuth" : [ "global" ]
-        } ]
-      }
-    },
-    "/actors/{type}/{id}/method/remind/{reminder}" : {
-      "put" : {
-        "tags" : [ "dapr-controller" ],
-        "operationId" : "invokeActorReminder",
-        "parameters" : [ {
-          "name" : "type",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "id",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "reminder",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "type" : "object",
-                "properties" : {
-                  "short" : {
-                    "type" : "integer",
-                    "format" : "int32"
-                  },
-                  "char" : {
-                    "type" : "string"
-                  },
-                  "int" : {
-                    "type" : "integer",
-                    "format" : "int32"
-                  },
-                  "long" : {
-                    "type" : "integer",
-                    "format" : "int64"
-                  },
-                  "float" : {
-                    "type" : "number",
-                    "format" : "float"
-                  },
-                  "double" : {
-                    "type" : "number",
-                    "format" : "double"
-                  },
-                  "direct" : {
-                    "type" : "boolean"
-                  },
-                  "readOnly" : {
-                    "type" : "boolean"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "400" : {
-            "description" : "Bad Request"
-          },
-          "401" : {
-            "description" : "Unauthorized"
-          },
-          "404" : {
-            "description" : "Not Found"
-          },
-          "500" : {
-            "description" : "Internal Server Error"
-          }
-        },
-        "security" : [ {
-          "bearerAuth" : [ "global" ]
-        } ]
-      }
-    },
     "/info-camere/institutions" : {
       "post" : {
         "tags" : [ "infocamere", "support-pnpg" ],
@@ -313,129 +37,6 @@
               "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/BusinessesResource"
-                }
-              }
-            }
-          },
-          "400" : {
-            "description" : "Bad Request"
-          },
-          "401" : {
-            "description" : "Unauthorized"
-          },
-          "404" : {
-            "description" : "Not Found"
-          },
-          "500" : {
-            "description" : "Internal Server Error"
-          }
-        },
-        "security" : [ {
-          "bearerAuth" : [ "global" ]
-        } ]
-      }
-    },
-    "/dapr/subscribe" : {
-      "get" : {
-        "tags" : [ "dapr-controller" ],
-        "operationId" : "daprSubscribe",
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "type" : "string",
-                    "format" : "byte"
-                  }
-                }
-              }
-            }
-          },
-          "400" : {
-            "description" : "Bad Request"
-          },
-          "401" : {
-            "description" : "Unauthorized"
-          },
-          "404" : {
-            "description" : "Not Found"
-          },
-          "500" : {
-            "description" : "Internal Server Error"
-          }
-        },
-        "security" : [ {
-          "bearerAuth" : [ "global" ]
-        } ]
-      },
-      "post" : {
-        "tags" : [ "event-controller" ],
-        "operationId" : "subscribe",
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "type" : "object",
-                    "additionalProperties" : {
-                      "type" : "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400" : {
-            "description" : "Bad Request"
-          },
-          "401" : {
-            "description" : "Unauthorized"
-          },
-          "404" : {
-            "description" : "Not Found"
-          },
-          "500" : {
-            "description" : "Internal Server Error"
-          }
-        },
-        "security" : [ {
-          "bearerAuth" : [ "global" ]
-        } ]
-      }
-    },
-    "/dapr/events" : {
-      "post" : {
-        "tags" : [ "event-controller" ],
-        "operationId" : "handleEvent",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "type" : "object",
-                "additionalProperties" : {
-                  "type" : "object"
-                }
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "type" : "object",
-                  "additionalProperties" : {
-                    "type" : "object"
-                  }
                 }
               }
             }
@@ -784,6 +385,96 @@
               "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/StationResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "404" : {
+            "description" : "Not Found"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ "global" ]
+        } ]
+      }
+    },
+    "/search/institutions" : {
+      "get" : {
+        "tags" : [ "search-controller" ],
+        "operationId" : "searchInstitutions",
+        "parameters" : [ {
+          "name" : "products",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "institutionTypes",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "taxCode",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "searchText",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "default" : "*"
+          }
+        }, {
+          "name" : "top",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 50
+          }
+        }, {
+          "name" : "skip",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/SearchServiceInstitution"
+                  }
                 }
               }
             }
@@ -1400,79 +1091,6 @@
         } ]
       }
     },
-    "/dapr/health" : {
-      "get" : {
-        "tags" : [ "event-controller" ],
-        "operationId" : "health",
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "type" : "object",
-                  "additionalProperties" : {
-                    "type" : "string"
-                  }
-                }
-              }
-            }
-          },
-          "400" : {
-            "description" : "Bad Request"
-          },
-          "401" : {
-            "description" : "Unauthorized"
-          },
-          "404" : {
-            "description" : "Not Found"
-          },
-          "500" : {
-            "description" : "Internal Server Error"
-          }
-        },
-        "security" : [ {
-          "bearerAuth" : [ "global" ]
-        } ]
-      }
-    },
-    "/dapr/config" : {
-      "get" : {
-        "tags" : [ "dapr-controller" ],
-        "operationId" : "daprConfig",
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "type" : "string",
-                    "format" : "byte"
-                  }
-                }
-              }
-            }
-          },
-          "400" : {
-            "description" : "Bad Request"
-          },
-          "401" : {
-            "description" : "Unauthorized"
-          },
-          "404" : {
-            "description" : "Not Found"
-          },
-          "500" : {
-            "description" : "Internal Server Error"
-          }
-        },
-        "security" : [ {
-          "bearerAuth" : [ "global" ]
-        } ]
-      }
-    },
     "/categories" : {
       "get" : {
         "tags" : [ "category-controller" ],
@@ -1623,47 +1241,6 @@
                 }
               }
             }
-          },
-          "400" : {
-            "description" : "Bad Request"
-          },
-          "401" : {
-            "description" : "Unauthorized"
-          },
-          "404" : {
-            "description" : "Not Found"
-          },
-          "500" : {
-            "description" : "Internal Server Error"
-          }
-        },
-        "security" : [ {
-          "bearerAuth" : [ "global" ]
-        } ]
-      }
-    },
-    "/actors/{type}/{id}" : {
-      "delete" : {
-        "tags" : [ "dapr-controller" ],
-        "operationId" : "deactivateActor",
-        "parameters" : [ {
-          "name" : "type",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "id",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
           },
           "400" : {
             "description" : "Bad Request"
@@ -1935,6 +1512,39 @@
           "count" : {
             "type" : "integer",
             "format" : "int64"
+          }
+        }
+      },
+      "SearchServiceInstitution" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "parentDescription" : {
+            "type" : "string"
+          },
+          "taxCode" : {
+            "type" : "string"
+          },
+          "products" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "institutionTypes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "lastModified" : {
+            "type" : "string",
+            "format" : "date-time"
           }
         }
       },
