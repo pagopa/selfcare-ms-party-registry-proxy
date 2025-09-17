@@ -21,5 +21,9 @@ public class PDNDBusiness {
     private String address;
     private String digitalAddress;
     private List<String> atecoCodes;
+    private String disabledStateInstitution;
+    private String descriptionStateInstitution;
+    private String statusCompanyRI;
+    private String statusCompanyRD;
 
 }
