@@ -34,6 +34,10 @@ public interface PDNDBusinessMapper {
     @Mapping(target = "legalForm", source = "datiIdentificativiImpresa.legalForm")
     @Mapping(target = "atecoCodes", source = "infoAttivita.classificazioniAteco", qualifiedByName = "mapAtecoCodes")
     @Mapping(target = "address", source = "datiIdentificativiImpresa.localizzazione", qualifiedByName = "mapAddress")
+    @Mapping(target = "disabledStateInstitution", source = "infoAttivita.disabledStateInstitution")
+    @Mapping(target = "descriptionStateInstitution", source = "infoAttivita.descriptionStateInstitution")
+    @Mapping(target = "statusCompanyRI", source = "datiIdentificativiImpresa.statusCompanyRI")
+    @Mapping(target = "statusCompanyRD", source = "datiIdentificativiImpresa.statusCompanyRD")
     PDNDBusiness toPDNDBusiness(PDNDVisuraImpresa pdndImpresa);
 
     @Named("mapAtecoCodes")

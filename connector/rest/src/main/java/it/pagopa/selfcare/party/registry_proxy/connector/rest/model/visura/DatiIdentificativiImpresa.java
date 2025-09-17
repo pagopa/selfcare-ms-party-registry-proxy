@@ -32,4 +32,10 @@ public class DatiIdentificativiImpresa {
     @JacksonXmlProperty(isAttribute = true, localName = "partita-iva")
     private String vatNumber;
 
+    @JacksonXmlProperty(isAttribute = true, localName = "stato-impresa")
+    private String statusCompanyRI;
+
+    @JacksonXmlProperty(isAttribute = true, localName = "stato-ditta")
+    private String statusCompanyRD;
+
 }
