@@ -142,6 +142,10 @@ app_settings = [
   {
     name  = "AZURE_SEARCH_INSTITUTION_INDEX"
     value = "institution-index-ar"
+  },
+  {
+    name  = "ANAC_FTP_MODE"
+    value = "azure"
   }
 ]
 

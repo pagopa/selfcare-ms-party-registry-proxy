@@ -6,6 +6,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.ResourceResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -16,6 +17,7 @@ import java.util.Optional;
 @ConditionalOnProperty(
         value = "file.connector.type",
         havingValue = "azure")
+@PropertySource("classpath:config/ftp-config.properties")
 public class AnacDataConnectorImpl implements AnacDataConnector {
 
     private final FileStorageConnector fileStorageConnector;

@@ -20,7 +20,7 @@ spring:
 
 file:
   connector:
-    type: "azure"
+    type: ${ANAC_FTP_MODE:azure}
 
 ivass:
   file:
