@@ -20,7 +20,7 @@ spring:
 
 file:
   connector:
-    type: "sftp"
+    type: "azure"
 
 ivass:
   file:
