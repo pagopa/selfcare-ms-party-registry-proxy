@@ -15,6 +15,8 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProvi
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderPDND;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderVisura;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.XMLCleaner;
+
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -80,6 +82,8 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
     String bearer = BEARER + tokenResponse.getAccessToken();
     try {
       PDNDVisuraImpresa result = pdndVisuraInfoCamereRestClient.retrieveInstitutionDetail(taxCode, bearer);
+      byte[] document = pdndVisuraInfoCamereRawRestClient.getRawInstitutionDetail(taxCode, bearer);
+      this.saveStringToStorage(String.valueOf(document), "visura_" + taxCode + "_" + LocalDateTime.now() + ".xml");
       return pdndBusinessMapper.toPDNDBusiness(result);
     } catch (FeignException e) {
       if (e instanceof FeignException.BadRequest) {
@@ -119,5 +123,20 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
     PDNDImpresa result  = institutions.get(0);
     PDNDVisuraImpresa visuraImpresa = pdndVisuraInfoCamereRestClient.retrieveInstitutionDetail(result.getBusinessTaxId(), bearer);
     return pdndBusinessMapper.toPDNDBusiness(visuraImpresa);
+  }
+
+  private void saveStringToStorage(String document, String keyName) {
+    try (DaprClient client = new DaprClientBuilder().build()) {
+
+      client.saveState(
+              "nome-storage-state",
+              keyName,
+              document
+      ).block();
+
+      log.info("Document saved into Azure Storage with key: {}", keyName);
+    } catch (Exception e) {
+      log.error("Impossible to store document with key {} into Azure Sorage", keyName, e);
+    }
   }
 }
