@@ -2,7 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.model.institution;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import it.pagopa.selfcare.commons.base.utils.InstitutionType;
+import it.pagopa.selfcare.onboarding.common.InstitutionType;
 import lombok.Data;
 import lombok.experimental.FieldNameConstants;
 
