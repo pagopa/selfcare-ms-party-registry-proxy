@@ -35,6 +35,10 @@ info:
     version: "@project.version@"
 
 app:
+  data:
+    encryption:
+      key: ${ONBOARDING_DATA_ENCRIPTION_KEY:0123456789ABCDEF0123456789ABCDEF}
+      iv: ${ONBOARDING_DATA_ENCRIPTION_IV:bXy0jvL2z6TtXQ==}
   dapr:
     http-endpoint: http://localhost:3500
     grpc-endpoint: http://localhost:50001
@@ -88,4 +92,3 @@ resilience4j:
         failure-rate-threshold: 60
         ignore-exceptions:
           - it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException
-
