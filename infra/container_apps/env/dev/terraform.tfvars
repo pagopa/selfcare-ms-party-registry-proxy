@@ -168,4 +168,6 @@ secrets_names = {
   "JWT-BEARER-TOKEN-FUNCTIONS"            = "jwt-bearer-token-functions"
   "AZURE_SEARCH_API_KEY"                  = "azure-search-api-key"
   "APPINSIGHTS_CONNECTION_STRING"         = "appinsights-connection-string"
+  "ONBOARDING_DATA_ENCRIPTION_KEY"        = "onboarding-data-encryption-key"
+  "ONBOARDING_DATA_ENCRIPTION_IV"         = "onboarding-data-encryption-iv"
 }
