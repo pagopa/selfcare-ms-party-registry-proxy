@@ -1,7 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.model.institution;
 
 
-import it.pagopa.selfcare.commons.base.utils.InstitutionType;
+import it.pagopa.selfcare.onboarding.common.InstitutionType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
