@@ -161,7 +161,13 @@ secrets_names = {
   "PDND_INFOCAMERE_CLIENT_ID"             = "infocamere-interop-client-id"
   "PDND_INFOCAMERE_KID"                   = "infocamere-interop-kid"
   "PDND_INFOCAMERE_PURPOSE_ID"            = "infocamere-interop-purpose-id"
+  "PDND_INVITALIA_INFOCAMERE_PRIVATE_KEY" = "invitalia-interop-certificate-client-private-key"
+  "PDND_INVITALIA_INFOCAMERE_CLIENT_ID"   = "invitalia-interop-client-id"
+  "PDND_INVITALIA_INFOCAMERE_KID"         = "invitalia-interop-kid"
+  "PDND_INVITALIA_INFOCAMERE_PURPOSE_ID"  = "invitalia-interop-purpose-id"
   "JWT-BEARER-TOKEN-FUNCTIONS"            = "jwt-bearer-token-functions"
   "AZURE_SEARCH_API_KEY"                  = "azure-search-api-key"
   "APPINSIGHTS_CONNECTION_STRING"         = "appinsights-connection-string"
+  "ONBOARDING_DATA_ENCRIPTION_KEY"        = "onboarding-data-encryption-key"
+  "ONBOARDING_DATA_ENCRIPTION_IV"         = "onboarding-data-encryption-iv"
 }

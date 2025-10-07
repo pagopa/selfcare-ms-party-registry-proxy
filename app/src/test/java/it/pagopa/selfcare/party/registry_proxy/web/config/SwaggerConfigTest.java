@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.pagopa.selfcare.party.connector.dapr.client.DaprSelcClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.GeoTaxonomiesConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.NationalRegistriesConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.IvassConnectorImpl;
@@ -79,6 +80,12 @@ class SwaggerConfigTest {
 
     @MockBean
     private EventController eventController;
+
+    @MockBean
+    private ApplicationInsightsLogger applicationInsightsLogger;
+
+    @MockBean
+    private DaprSelcClient daprSelcClient;
 
     @Autowired
     WebApplicationContext context;

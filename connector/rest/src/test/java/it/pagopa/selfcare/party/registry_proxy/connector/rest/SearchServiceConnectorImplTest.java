@@ -1,6 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
-import it.pagopa.selfcare.commons.base.utils.InstitutionType;
+import it.pagopa.selfcare.onboarding.common.InstitutionType;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.AzureSearchValue;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceInstitution;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceStatus;
