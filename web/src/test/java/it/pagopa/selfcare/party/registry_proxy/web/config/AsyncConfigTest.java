@@ -4,11 +4,13 @@ package it.pagopa.selfcare.party.registry_proxy.web.config;
 import org.junit.jupiter.api.Test;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AsyncConfigTest {
+class AsyncConfigTest {
 
     private final AsyncConfig asyncConfig = new AsyncConfig();
 
@@ -35,19 +37,18 @@ public class AsyncConfigTest {
         ThreadPoolTaskExecutor executor = (ThreadPoolTaskExecutor) asyncConfig.storageTaskExecutor();
 
         assertNotNull(executor.getThreadPoolExecutor());
-        assertTrue(executor.getThreadPoolExecutor().isShutdown() == false);
+    assertFalse(executor.getThreadPoolExecutor().isShutdown());
     }
 
     @Test
     void testStorageTaskExecutorCanExecuteTasks() throws InterruptedException {
         ThreadPoolTaskExecutor executor = (ThreadPoolTaskExecutor) asyncConfig.storageTaskExecutor();
-        final boolean[] taskExecuted = {false};
+        CountDownLatch latch = new CountDownLatch(1);
 
-        executor.execute(() -> taskExecuted[0] = true);
+        executor.execute(() -> latch.countDown());
 
-        Thread.sleep(500);
-
-        assertTrue(taskExecuted[0]);
+        boolean completed = latch.await(1, TimeUnit.SECONDS);
+        assertTrue(completed, "Il task non è stato eseguito entro il tempo previsto");
 
         executor.shutdown();
     }
