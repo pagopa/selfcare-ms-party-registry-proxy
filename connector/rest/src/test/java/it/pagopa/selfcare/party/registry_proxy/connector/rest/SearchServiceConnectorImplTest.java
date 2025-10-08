@@ -126,7 +126,7 @@ public class SearchServiceConnectorImplTest {
     // Given
     String search = "*";
     String filter = "products/any(p: p eq 'prod-io')";
-    List<String> products = List.of("prod-io");
+    List<String> products = List.of("all");
     Integer top = 50;
     Integer skip = 0;
     String select = "id,description,taxCode";
