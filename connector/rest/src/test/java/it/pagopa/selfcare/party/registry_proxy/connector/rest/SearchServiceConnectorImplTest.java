@@ -50,7 +50,31 @@ public class SearchServiceConnectorImplTest {
     institution.setTaxCode("taxcode");
     Onboarding onboarding = new Onboarding();
     onboarding.setProductId("prod1");
-    onboarding.setInstitutionType(InstitutionType.PA);
+    onboarding.setInstitutionType(InstitutionType.PA.name());
+    institution.setOnboarding(List.of(onboarding));
+    institution.setUpdatedAt(OffsetDateTime.now());
+
+    when(searchServiceConnector.indexInstitution(institution)).thenReturn(searchServiceStatus);
+    SearchServiceStatus azureResponse = searchServiceConnector.indexInstitution(institution);
+    assertEquals(1, azureResponse.getValue().size());
+    assertEquals(200, azureResponse.getValue().get(0).getStatusCode());
+  }
+
+  @Test
+  public void testIndexInstitutionCustomType() {
+    SearchServiceStatus searchServiceStatus = new SearchServiceStatus();
+    AzureSearchValue azureSearchValue = new AzureSearchValue();
+    azureSearchValue.setStatus(true);
+    azureSearchValue.setStatusCode(200);
+    searchServiceStatus.setValue(List.of(azureSearchValue));
+
+    Institution institution = new Institution();
+    institution.setId("1");
+    institution.setDescription("Institution");
+    institution.setTaxCode("taxcode");
+    Onboarding onboarding = new Onboarding();
+    onboarding.setProductId("prod1");
+    onboarding.setInstitutionType("TYPE");
     institution.setOnboarding(List.of(onboarding));
     institution.setUpdatedAt(OffsetDateTime.now());
 
@@ -65,6 +89,7 @@ public class SearchServiceConnectorImplTest {
     // Given
     String search = "*";
     String filter = "products/any(p: p eq 'prod-io')";
+    List<String> products = List.of("prod-io");
     Integer top = 50;
     Integer skip = 0;
     String select = "id,description,taxCode";
@@ -79,7 +104,44 @@ public class SearchServiceConnectorImplTest {
 
     // When
     List<SearchServiceInstitution> result = searchServiceConnector.searchInstitution(
-      search, filter, top, skip, select, orderby);
+      search, filter, products, top, skip, select, orderby);
+
+    // Then
+    assertThat(result).isNotNull();
+    assertThat(result).hasSize(1);
+
+    SearchServiceInstitution institution = result.get(0);
+    assertThat(institution.getId()).isEqualTo("12345678");
+    assertThat(institution.getDescription()).isEqualTo("Comune di Reggio Emilia");
+    assertThat(institution.getTaxCode()).isEqualTo("00145920351");
+    assertThat(institution.getProducts()).containsExactly("prod-io");
+    assertThat(institution.getInstitutionTypes()).containsExactly("PA", "GSP");
+
+    verify(azureSearchRestClient, times(1))
+      .searchInstitution(search, filter, top, skip, select, orderby);
+  }
+
+  @Test
+  void searchInstitution_shouldReturnInstitutions_whenValidResponse_withAllProducts() {
+    // Given
+    String search = "*";
+    String filter = "products/any(p: p eq 'prod-io')";
+    List<String> products = List.of("prod-io");
+    Integer top = 50;
+    Integer skip = 0;
+    String select = "id,description,taxCode";
+    String orderby = "description";
+
+    SearchServiceInstitutionResponse institutionResponse = createSearchServiceInstitutionResponse();
+    SearchServiceResponse searchServiceResponse = new SearchServiceResponse();
+    searchServiceResponse.setValue(List.of(institutionResponse));
+
+    when(azureSearchRestClient.searchInstitution(search, filter, top, skip, select, orderby))
+      .thenReturn(searchServiceResponse);
+
+    // When
+    List<SearchServiceInstitution> result = searchServiceConnector.searchInstitution(
+      search, filter, products, top, skip, select, orderby);
 
     // Then
     assertThat(result).isNotNull();
@@ -115,7 +177,7 @@ public class SearchServiceConnectorImplTest {
 
     // When
     List<SearchServiceInstitution> result = searchServiceConnector.searchInstitution(
-      search, filter, top, skip, select, orderby);
+      search, filter, List.of("all"), top, skip, select, orderby);
 
     // Then
     assertThat(result).isNotNull();
@@ -150,7 +212,7 @@ public class SearchServiceConnectorImplTest {
 
     // When
     List<SearchServiceInstitution> result = searchServiceConnector.searchInstitution(
-      search, filter, top, skip, select, orderby);
+      search, filter, List.of("all"), top, skip, select, orderby);
 
     // Then
     assertThat(result).isNotNull();
@@ -178,7 +240,7 @@ public class SearchServiceConnectorImplTest {
 
     // When
     List<SearchServiceInstitution> result = searchServiceConnector.searchInstitution(
-      search, filter, top, skip, select, orderby);
+      search, filter, List.of("all"), top, skip, select, orderby);
 
     // Then
     assertThat(result).isNotNull();
@@ -206,7 +268,7 @@ public class SearchServiceConnectorImplTest {
 
     // When
     List<SearchServiceInstitution> result = searchServiceConnector.searchInstitution(
-      search, filter, top, skip, select, orderby);
+      search, filter, List.of("all"), top, skip, select, orderby);
 
     // Then
     assertThat(result).isNotNull();
@@ -240,7 +302,7 @@ public class SearchServiceConnectorImplTest {
 
     // When
     List<SearchServiceInstitution> result = searchServiceConnector.searchInstitution(
-      search, filter, top, skip, select, orderby);
+      search, filter, List.of("prod-io", "prod-interop"), top, skip, select, orderby);
 
     // Then
     assertThat(result).isNotNull();
@@ -265,7 +327,7 @@ public class SearchServiceConnectorImplTest {
 
     // When
     List<SearchServiceInstitution> result = searchServiceConnector.searchInstitution(
-      null, null, null, null, null, null);
+      null, null, null,null, null, null, null);
 
     // Then
     assertThat(result).isNotNull();
@@ -290,7 +352,7 @@ public class SearchServiceConnectorImplTest {
 
     // When & Then
     org.junit.jupiter.api.Assertions.assertThrows(RuntimeException.class, () -> {
-      searchServiceConnector.searchInstitution(search, filter, top, skip, select, orderby);
+      searchServiceConnector.searchInstitution(search, filter, List.of("all"), top, skip, select, orderby);
     });
 
     verify(azureSearchRestClient, times(1))

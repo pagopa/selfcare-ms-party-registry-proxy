@@ -26,4 +26,9 @@ public class SearchServiceInstitution {
     searchServiceInstitution.setLastModified(lastModified);
     return searchServiceInstitution;
   }
+
+  public SearchServiceInstitution updateProductsEnable(List<String> productsEnable) {
+    this.products = this.products.stream().filter(productsEnable::contains).toList();
+    return this;
+  }
 }

@@ -22,7 +22,7 @@ public class SearchServiceInstitutionRequest extends SearchServiceInstitution {
     searchServiceInstitutionRequest.setParentDescription(institution.getParentDescription());
     searchServiceInstitutionRequest.setTaxCode(institution.getTaxCode());
     searchServiceInstitutionRequest.setProducts(institution.getOnboarding().stream().map(Onboarding::getProductId).toList());
-    searchServiceInstitutionRequest.setInstitutionTypes(institution.getOnboarding().stream().map(onboarding -> onboarding.getInstitutionType().toString()).collect(Collectors.toSet()).stream().toList());
+    searchServiceInstitutionRequest.setInstitutionTypes(institution.getOnboarding().stream().map(Onboarding::getInstitutionType).collect(Collectors.toSet()).stream().toList());
     searchServiceInstitutionRequest.setLastModified(institution.getUpdatedAt());
     searchServiceInstitutionRequest.setAction("mergeOrUpload");
     return searchServiceInstitutionRequest;

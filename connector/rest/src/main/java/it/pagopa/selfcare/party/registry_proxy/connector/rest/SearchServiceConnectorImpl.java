@@ -35,11 +35,14 @@ public class SearchServiceConnectorImpl implements SearchServiceConnector {
 
   @Override
   @Retry(name = "retryServiceUnavailable")
-  public List<SearchServiceInstitution> searchInstitution(String search, String filter, Integer top, Integer skip, String select, String orderby) {
+  public List<SearchServiceInstitution> searchInstitution(String search, String filter, List<String> products, Integer top, Integer skip, String select, String orderby) {
     SearchServiceResponse searchServiceResponse = azureSearchRestClient.searchInstitution(search, filter, top, skip, select, orderby);
     List<SearchServiceInstitution> institutions = new ArrayList<>();
     Optional.of(searchServiceResponse).ifPresent(response -> {
-      institutions.addAll(response.getValue().stream().map(SearchServiceInstitution::createSearchServiceInstitution).toList());
+      institutions.addAll(response.getValue().stream()
+        .map(SearchServiceInstitution::createSearchServiceInstitution)
+        .map(searchServiceInstitution -> products.contains("all") ? searchServiceInstitution : searchServiceInstitution.updateProductsEnable(products))
+        .toList());
     });
     return institutions;
   }
