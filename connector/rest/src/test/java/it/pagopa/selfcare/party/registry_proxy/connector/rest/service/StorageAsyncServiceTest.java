@@ -31,7 +31,7 @@ class StorageAsyncServiceTest {
     }
 
     @Test
-    void testSaveStringToStorageSuccess() throws InterruptedException {
+    void testSaveStringToStorageSuccess() {
         final String document = "<xml>test</xml>";
         final String keyName = "visura_ABC_2025.xml";
 
@@ -44,10 +44,8 @@ class StorageAsyncServiceTest {
 
             storageAsyncService.saveStringToStorage(document, keyName);
 
-            Thread.sleep(1000);
-
             verify(daprSelcClient, times(1))
-                    .saveState(eq("blobstorage-state"), eq(keyName), eq("encrypted_data"));
+                    .saveState("blobstorage-state", keyName, "encrypted_data");
         }
     }
 

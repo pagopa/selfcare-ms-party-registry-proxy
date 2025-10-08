@@ -45,7 +45,7 @@ class AsyncConfigTest {
         ThreadPoolTaskExecutor executor = (ThreadPoolTaskExecutor) asyncConfig.storageTaskExecutor();
         CountDownLatch latch = new CountDownLatch(1);
 
-        executor.execute(() -> latch.countDown());
+        executor.execute(latch::countDown);
 
         boolean completed = latch.await(1, TimeUnit.SECONDS);
         assertTrue(completed, "Il task non è stato eseguito entro il tempo previsto");
