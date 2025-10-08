@@ -1,6 +1,9 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
 import feign.FeignException;
+import io.dapr.client.DaprClient;
+import it.pagopa.selfcare.onboarding.crypto.utils.DataEncryptionUtils;
+import it.pagopa.selfcare.party.connector.dapr.client.DaprSelcClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.PDNDInfoCamereConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries_pdnd.PDNDBusiness;
@@ -11,6 +14,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDInfoCam
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDVisuraInfoCamereRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.mapper.PDNDBusinessMapper;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.StorageAsyncService;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProvider;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderPDND;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderVisura;
@@ -36,6 +40,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
   private final TokenProviderVisura tokenProviderVisura;
   private final PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig;
   private final PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig;
+  private final StorageAsyncService storageAsyncService;
   private static final String BEARER = "Bearer ";
 
   public PDNDInfoCamereConnectorImpl(
@@ -46,7 +51,8 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
           TokenProviderPDND tokenProviderPDND,
           TokenProviderVisura tokenProviderVisura,
           PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig,
-          PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig) {
+          PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig,
+          StorageAsyncService storageAsyncService) {
     this.pdndInfoCamereRestClient = pdndInfoCamereRestClient;
     this.pdndVisuraInfoCamereRawRestClient = pdndVisuraInfoCamereRawRestClient;
     this.pdndVisuraInfoCamereRestClient = pdndVisuraInfoCamereRestClient;
@@ -55,6 +61,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
     this.tokenProviderVisura = tokenProviderVisura;
     this.pdndInfoCamereRestClientConfig = pdndInfoCamereRestClientConfig;
     this.pdndVisuraInfoCamereRestClientConfig = pdndVisuraInfoCamereRestClientConfig;
+    this.storageAsyncService = storageAsyncService;
   }
 
   @Override
@@ -83,7 +90,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
     try {
       PDNDVisuraImpresa result = pdndVisuraInfoCamereRestClient.retrieveInstitutionDetail(taxCode, bearer);
       byte[] document = pdndVisuraInfoCamereRawRestClient.getRawInstitutionDetail(taxCode, bearer);
-      this.saveStringToStorage(String.valueOf(document), "visura_" + taxCode + "_" + LocalDateTime.now() + ".xml");
+      storageAsyncService.saveStringToStorage(document.toString(), "visura_" + taxCode + "_" + LocalDateTime.now() + ".xml");
       return pdndBusinessMapper.toPDNDBusiness(result);
     } catch (FeignException e) {
       if (e instanceof FeignException.BadRequest) {
@@ -125,18 +132,4 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
     return pdndBusinessMapper.toPDNDBusiness(visuraImpresa);
   }
 
-  private void saveStringToStorage(String document, String keyName) {
-    try (DaprClient client = new DaprClientBuilder().build()) {
-
-      client.saveState(
-              "nome-storage-state",
-              keyName,
-              document
-      ).block();
-
-      log.info("Document saved into Azure Storage with key: {}", keyName);
-    } catch (Exception e) {
-      log.error("Impossible to store document with key {} into Azure Sorage", keyName, e);
-    }
-  }
 }

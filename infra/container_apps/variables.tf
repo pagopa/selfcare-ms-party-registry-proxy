@@ -97,3 +97,14 @@ variable "suffix_increment" {
   description = "Suffix increment Container App Environment name"
   default     = ""
 }
+
+variable "location" {
+  type    = string
+  default = "westeurope"
+}
+
+variable "cae_rg_name" {
+  type        = string
+  description = "Container App Environment Resource group name"
+  default     = "cae-rg"
+}

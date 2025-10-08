@@ -156,6 +156,11 @@
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>it.pagopa.selfcare</groupId>
+            <artifactId>onboarding-sdk-crypto</artifactId>
+            <version>${commons-sdk-version}</version>
+        </dependency>
     </dependencies>
 
     <modules>
