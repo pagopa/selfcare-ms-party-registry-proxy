@@ -33,7 +33,6 @@ public class StorageAsyncService {
      */
     private static String sanitizeForLog(String input) {
         if (input == null) return null;
-        // Remove '\n', '\r', and also (optionally) other control characters
-        return input.replaceAll("[\\r\\n]", "");
+        return input.replaceAll("[\\p{Cntrl}]", "");
     }
 }
