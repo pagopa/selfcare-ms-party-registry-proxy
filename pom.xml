@@ -160,6 +160,12 @@
             <groupId>it.pagopa.selfcare</groupId>
             <artifactId>onboarding-sdk-crypto</artifactId>
             <version>${commons-sdk-version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.grpc</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

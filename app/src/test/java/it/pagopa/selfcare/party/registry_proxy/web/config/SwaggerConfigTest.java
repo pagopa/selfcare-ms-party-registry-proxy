@@ -4,18 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.pagopa.selfcare.party.connector.dapr.client.DaprSelcClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.GeoTaxonomiesConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.NationalRegistriesConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.IvassConnectorImpl;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.GeoTaxonomiesRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.NationalRegistriesRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.core.*;
+import it.pagopa.selfcare.party.registry_proxy.web.controller.EventController;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import it.pagopa.selfcare.party.registry_proxy.web.controller.EventController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -83,9 +81,6 @@ class SwaggerConfigTest {
 
     @MockBean
     private ApplicationInsightsLogger applicationInsightsLogger;
-
-    @MockBean
-    private DaprSelcClient daprSelcClient;
 
     @Autowired
     WebApplicationContext context;
