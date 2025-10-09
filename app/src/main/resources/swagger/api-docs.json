@@ -409,11 +409,14 @@
     },
     "/search/institutions" : {
       "get" : {
-        "tags" : [ "search-controller" ],
-        "operationId" : "searchInstitutions",
+        "tags" : [ "external-v2" ],
+        "summary" : "Retrieve institutions",
+        "description" : "Retrieves a list of institutions based on a search engine query",
+        "operationId" : "retrieveInstitutionOnSearchEngine",
         "parameters" : [ {
           "name" : "products",
           "in" : "query",
+          "description" : "List of products to be filtered",
           "required" : false,
           "schema" : {
             "type" : "array",
@@ -424,6 +427,7 @@
         }, {
           "name" : "institutionTypes",
           "in" : "query",
+          "description" : "List of institution types to be filtered",
           "required" : false,
           "schema" : {
             "type" : "array",
@@ -434,6 +438,7 @@
         }, {
           "name" : "taxCode",
           "in" : "query",
+          "description" : "Institution fiscal code",
           "required" : false,
           "schema" : {
             "type" : "string"
@@ -441,6 +446,7 @@
         }, {
           "name" : "searchText",
           "in" : "query",
+          "description" : "Search text pattern",
           "required" : false,
           "schema" : {
             "type" : "string",
@@ -449,6 +455,7 @@
         }, {
           "name" : "top",
           "in" : "query",
+          "description" : "Maximum number of items per page. It is optional, and the default value is 10 when not specified",
           "required" : false,
           "schema" : {
             "type" : "integer",
@@ -458,6 +465,7 @@
         }, {
           "name" : "skip",
           "in" : "query",
+          "description" : "Desired page number for result pagination. It is optional, and the default value is 1 when not specified",
           "required" : false,
           "schema" : {
             "type" : "integer",
@@ -1842,10 +1850,10 @@
           "mail3" : {
             "type" : "string"
           },
-          "uriprotocolloInformatico" : {
+          "cap" : {
             "type" : "string"
           },
-          "cap" : {
+          "uriprotocolloInformatico" : {
             "type" : "string"
           }
         }
