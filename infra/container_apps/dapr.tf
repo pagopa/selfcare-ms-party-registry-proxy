@@ -10,7 +10,6 @@ resource "azurerm_storage_account" "dapr_storage" {
   location                  = azurerm_resource_group.storage_rg.location
   account_tier              = "Standard"
   account_replication_type  = "LRS"
-  enable_https_traffic_only = true
   tags                      = var.tags
 }
 
