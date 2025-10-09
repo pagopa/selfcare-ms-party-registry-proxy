@@ -14,6 +14,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
+import org.owasp.encoder.Encode;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -78,10 +79,10 @@ abstract class IndexSearchServiceTemplate<T> implements IndexSearchService<T> {
                                          String currentCategories,
                                          int page,
                                          int limit) {
-
         log.trace(FULL_TEXT_SEARCH_START);
+
         log.debug("fullTextSearch field = {}, value = {}, filter = {}, categories = {}, page = {}, limit = {}",
-                searchFieldDescription, currentDescription, searchFieldCategory, currentCategories, page, limit);
+                searchFieldDescription, Encode.forJava(currentDescription), searchFieldCategory, Encode.forJava(currentCategories), page, limit);
 
         Assert.notNull(searchFieldDescription, FIELD_IS_REQUIRED);
         Assert.notNull(currentDescription, VALUE_IS_REQUIRED);
