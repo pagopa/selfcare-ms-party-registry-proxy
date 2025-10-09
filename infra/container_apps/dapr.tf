@@ -1,6 +1,6 @@
 resource "azurerm_storage_container" "visura" {
   name                  = "visura"
-  storage_account_name  = data.azurerm_storage_account.existing_logs_storage.name
+  storage_account_id    = data.azurerm_storage_account.existing_logs_storage.id
   container_access_type = "private"
 }
 
