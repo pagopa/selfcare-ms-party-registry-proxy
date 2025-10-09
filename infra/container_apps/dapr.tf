@@ -21,24 +21,23 @@ resource "azurerm_storage_container" "dapr_container" {
 
 resource "azurerm_container_app_environment_dapr_component" "blob_state" {
   name                         = "blobstorage-state"
-  #container_app_environment_id = data.azurerm_container_app_environment.cae.id
-  container_app_environment_id = var.cae_id
+  container_app_environment_id = data.azurerm_container_app_environment.cae.id
   component_type               = "state.azure.blobstorage"
   version                      = "v1"
 
   metadata {
-    name  = "authMode"
-    value = "azureAD"
-  }
-
-  metadata {
-    name  = "azureClientId"
-    value = data.azurerm_user_assigned_identity.cae_identity.client_id
+    name  = "accountName"
+    value = azurerm_storage_account.dapr_storage.name
   }
 
   metadata {
     name  = "containerName"
     value = azurerm_storage_container.dapr_container.name
+  }
+
+  metadata {
+    name  = "azureClientId"
+    value = data.azurerm_user_assigned_identity.cae_identity.client_id
   }
 
 }
