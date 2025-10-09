@@ -8,17 +8,22 @@ resource "restapi_object" "search_index" {
     "name" : "institution-index-${var.domain}",
     "analyzers" : [
       {
-        "name" : "selfcare_ngram_analyzer",
+        "name" : "autocomplete_analyzer",
         "@odata.type" : "#Microsoft.Azure.Search.CustomAnalyzer",
-        "tokenizer" : "selfcare_ngram_tokenizer",
-        "tokenFilters" : ["lowercase", "asciifolding"],
-        "charFilters" : []
+        "tokenizer" : "autocomplete_tokenizer",
+        "tokenFilters" : ["lowercase", "asciifolding"]
+      },
+      {
+        "name" : "autocomplete_search_analyzer",
+        "@odata.type" : "#Microsoft.Azure.Search.CustomAnalyzer",
+        "tokenizer" : "lowercase",
+        "tokenFilters" : ["lowercase", "asciifolding"]
       }
     ],
     "tokenizers" : [
       {
-        "name" : "selfcare_ngram_tokenizer",
-        "@odata.type" : "#Microsoft.Azure.Search.NGramTokenizerV2",
+        "name" : "autocomplete_tokenizer",
+        "@odata.type" : "#Microsoft.Azure.Search.EdgeNGramTokenizer",
         "minGram" : 3,
         "maxGram" : 10,
         "tokenChars" : ["letter", "digit"]
@@ -44,8 +49,8 @@ resource "restapi_object" "search_index" {
         "sortable" : true,
         "facetable" : false,
         "retrievable" : true,
-        "analyzer" : "selfcare_ngram_analyzer",
-        "searchAnalyzer" : "it.microsoft",
+        "indexAnalyzer" : "autocomplete_analyzer",
+        "searchAnalyzer" : "autocomplete_search_analyzer"
       },
       {
         "name" : "parentDescription",
@@ -56,8 +61,8 @@ resource "restapi_object" "search_index" {
         "sortable" : true,
         "facetable" : false,
         "retrievable" : true,
-        "analyzer" : "selfcare_ngram_analyzer",
-        "searchAnalyzer" : "it.microsoft"
+        "indexAnalyzer" : "autocomplete_analyzer",
+        "searchAnalyzer" : "autocomplete_search_analyzer"
       },
       {
         "name" : "taxCode",
@@ -66,8 +71,7 @@ resource "restapi_object" "search_index" {
         "filterable" : true,
         "sortable" : true,
         "facetable" : false,
-        "analyzer" : "selfcare_ngram_analyzer",
-        "searchAnalyzer" : "standard.lucene"
+        "analyzer" : "standard.lucene"
       },
       {
         "name" : "products",
