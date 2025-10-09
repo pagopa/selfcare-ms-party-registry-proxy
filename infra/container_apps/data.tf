@@ -1,5 +1,5 @@
 data "azurerm_container_app_environment" "cae" {
-  name                = var.cae_name
+  name                = local.container_app_environment_name
   resource_group_name = var.cae_rg_name
 }
 
