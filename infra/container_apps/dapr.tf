@@ -21,7 +21,8 @@ resource "azurerm_storage_container" "dapr_container" {
 
 resource "azurerm_container_app_environment_dapr_component" "blob_state" {
   name                         = "blobstorage-state"
-  container_app_environment_id = data.azurerm_container_app_environment.cae.id
+  #container_app_environment_id = data.azurerm_container_app_environment.cae.id
+  container_app_environment_id = var.cae_id
   component_type               = "state.azure.blobstorage"
   version                      = "v1"
 
@@ -40,5 +41,4 @@ resource "azurerm_container_app_environment_dapr_component" "blob_state" {
     value = azurerm_storage_container.dapr_container.name
   }
 
-  scopes = [data.azurerm_container_app.ca.dapr[0].app_id]
 }
