@@ -156,10 +156,38 @@ public class SearchServiceImplTest {
   }
 
   @Test
+  void buildFilter_withAllParameters_andProductAll() {
+    // Arrange
+    List<String> products = List.of("all");
+    List<String> institutionTypes = List.of("PA", "GSP");
+    String taxCode = "12345678901";
+    String expectedFilter = "institutionTypes/any(t: t eq 'PA' or t eq 'GSP') and taxCode eq '12345678901'";
+
+    // Act
+    String result = searchService.buildFilter(products, institutionTypes, taxCode);
+
+    // Assert
+    assertEquals(expectedFilter, result);
+  }
+
+  @Test
   void buildFilter_withOnlyProducts() {
     // Arrange
     List<String> products = List.of("prod-io");
     String expectedFilter = "products/any(p: p eq 'prod-io')";
+
+    // Act
+    String result = searchService.buildFilter(products, null, null);
+
+    // Assert
+    assertEquals(expectedFilter, result);
+  }
+
+  @Test
+  void buildFilter_withOnlyProductsAndAll() {
+    // Arrange
+    List<String> products = List.of("prod-io", "all");
+    String expectedFilter = "";
 
     // Act
     String result = searchService.buildFilter(products, null, null);
@@ -219,7 +247,7 @@ public class SearchServiceImplTest {
     String expectedFilter = "products/any(p: p eq 'prod-io') and institutionTypes/any(t: t eq 'PA') and taxCode eq '12345678901'";
     List<SearchServiceInstitution> mockResponse = Collections.singletonList(new SearchServiceInstitution());
 
-    when(searchServiceConnector.searchInstitution(search, expectedFilter, top, skip, null, null))
+    when(searchServiceConnector.searchInstitution(search, expectedFilter, products, top, skip, null, null))
       .thenReturn(mockResponse);
 
     // Act
@@ -229,7 +257,7 @@ public class SearchServiceImplTest {
     assertNotNull(result);
     assertEquals(mockResponse, result);
 
-    verify(searchServiceConnector, times(1)).searchInstitution(search, expectedFilter, top, skip, null, null);
+    verify(searchServiceConnector, times(1)).searchInstitution(search, expectedFilter, products, top, skip, null, null);
   }
 
 }

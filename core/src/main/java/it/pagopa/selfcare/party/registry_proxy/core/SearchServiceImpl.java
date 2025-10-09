@@ -79,13 +79,13 @@ public class SearchServiceImpl implements SearchService {
   @Override
   public List<SearchServiceInstitution> searchInstitution(String search, List<String> products, List<String> institutionTypes, String taxCode,
                                                           Integer top, Integer skip, String select, String orderby) {
-    return searchServiceConnector.searchInstitution(search, buildFilter(products, institutionTypes, taxCode), top, skip, select, orderby);
+    return searchServiceConnector.searchInstitution(search, buildFilter(products, institutionTypes, taxCode), products, top, skip, select, orderby);
   }
 
   public String buildFilter(List<String> products, List<String> institutionTypes, String taxCode) {
     StringBuilder filterBuilder = new StringBuilder();
 
-    if (products != null && !products.isEmpty()) {
+    if (products != null && !products.isEmpty() && !products.contains("all")) {
       filterBuilder.append("products/any(p: ");
       for (int i = 0; i < products.size(); i++) {
         if (i > 0) {

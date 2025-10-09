@@ -1,6 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.model;
 
 import lombok.Data;
+import lombok.NonNull;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -25,5 +26,10 @@ public class SearchServiceInstitution {
     searchServiceInstitution.setInstitutionTypes(institutionTypes);
     searchServiceInstitution.setLastModified(lastModified);
     return searchServiceInstitution;
+  }
+
+  public SearchServiceInstitution updateProductsEnable(@NonNull List<String> productsEnable) {
+    this.products = this.products.stream().filter(productsEnable::contains).toList();
+    return this;
   }
 }

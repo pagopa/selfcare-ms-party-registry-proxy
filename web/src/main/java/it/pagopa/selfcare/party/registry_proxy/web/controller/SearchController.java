@@ -6,6 +6,7 @@ import it.pagopa.selfcare.party.registry_proxy.core.SearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,7 @@ import java.util.List;
 @RequestMapping(value = "/search")
 @Api(tags = "search")
 public class SearchController {
+
   private final SearchService searchService;
 
   public SearchController(SearchService searchService) {
@@ -25,6 +27,7 @@ public class SearchController {
   }
 
   @GetMapping("/institutions")
+  @PreAuthorize("hasPermission(new it.pagopa.selfcare.party.registry_proxy.web.security.FilterAuthorityDomain('PAGOPA'), 'Selc:SearchInstitutions')")
   public ResponseEntity<List<SearchServiceInstitution>> searchInstitutions(
     @RequestParam(required = false) List<String> products,
     @RequestParam(required = false) List<String> institutionTypes,
