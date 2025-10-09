@@ -40,5 +40,5 @@ resource "azurerm_container_app_environment_dapr_component" "blob_state" {
     value = azurerm_storage_container.dapr_container.name
   }
 
-  scopes = [data.azurerm_container_app.ca.name]
+  # sscopes = [data.azurerm_container_app.ca.name]
 }
