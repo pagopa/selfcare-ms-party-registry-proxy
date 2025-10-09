@@ -13,17 +13,6 @@ resource "azurerm_storage_account" "dapr_storage" {
   tags                     = var.tags
 }
 
-data "azurerm_container_app" "ca" {
-  name                = var.ca_name
-  resource_group_name = var.ca_rg_name
-}
-
-data "azurerm_container_app_environment" "cae" {
-  name                = var.cae_name
-  resource_group_name = var.cae_rg_name
-}
-
-# ✅ Fix: usare storage_account_id invece di storage_account_name
 resource "azurerm_storage_container" "dapr_container" {
   name                  = "dapr-state"
   storage_account_id    = azurerm_storage_account.dapr_storage.id
