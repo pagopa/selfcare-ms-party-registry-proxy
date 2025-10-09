@@ -98,6 +98,21 @@ variable "ca_rg_name" {
   default     = "cae-rg"
 }
 
+variable "key_vault_resource_group_name" {
+  type        = string
+  description = "Name of Key Vault resource group"
+}
+
+variable "key_vault_name" {
+  type        = string
+  description = "Name of Key Vault"
+}
+
+variable "existing_logs_rg" {
+  type        = string
+  description = "storage account logs resource group"
+}
+
 variable "cae_name" {
   type        = string
   description = "Container App Environment name"

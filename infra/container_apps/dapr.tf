@@ -1,21 +1,6 @@
-resource "azurerm_resource_group" "storage_rg" {
-  name     = "${local.project}-dapr-storage-rg"
-  location = var.location
-  tags     = var.tags
-}
-
-resource "azurerm_storage_account" "dapr_storage" {
-  name                     = "${replace(local.project, "-", "")}${local.pnpg_suffix}daprstorage"
-  resource_group_name      = azurerm_resource_group.storage_rg.name
-  location                 = azurerm_resource_group.storage_rg.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-  tags                     = var.tags
-}
-
-resource "azurerm_storage_container" "dapr_container" {
-  name                  = "dapr-state"
-  storage_account_id    = azurerm_storage_account.dapr_storage.id
+resource "azurerm_storage_container" "visura" {
+  name                  = "visura"
+  storage_account_name  = data.azurerm_storage_account.existing_logs_storage.name
   container_access_type = "private"
 }
 
@@ -27,17 +12,23 @@ resource "azurerm_container_app_environment_dapr_component" "blob_state" {
 
   metadata {
     name  = "accountName"
-    value = azurerm_storage_account.dapr_storage.name
+    value = data.azurerm_storage_account.existing_logs_storage.name
+  }
+
+  metadata {
+    name  = "accountKey"
+    value = data.azurerm_key_vault_secret.logs_storage_access_key.value
   }
 
   metadata {
     name  = "containerName"
-    value = azurerm_storage_container.dapr_container.name
+    value = azurerm_storage_container.visura.name
   }
 
   metadata {
-    name  = "azureClientId"
-    value = data.azurerm_user_assigned_identity.cae_identity.client_id
+    name  = "actorStateStore"
+    value = "true"
   }
 
+  scopes = [data.azurerm_container_app.ca.dapr[0].app_id]
 }
