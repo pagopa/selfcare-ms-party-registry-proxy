@@ -20,7 +20,7 @@ public class Onboarding {
     private OffsetDateTime updatedAt;
     private OffsetDateTime closedAt;
     private Boolean isAggregator;
-    private InstitutionType institutionType;
+    private String institutionType;
     private String origin;
     private String originId;
 

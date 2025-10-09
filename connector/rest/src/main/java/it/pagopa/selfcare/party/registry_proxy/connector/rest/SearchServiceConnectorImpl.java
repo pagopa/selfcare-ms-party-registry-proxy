@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -35,11 +36,15 @@ public class SearchServiceConnectorImpl implements SearchServiceConnector {
 
   @Override
   @Retry(name = "retryServiceUnavailable")
-  public List<SearchServiceInstitution> searchInstitution(String search, String filter, Integer top, Integer skip, String select, String orderby) {
+  public List<SearchServiceInstitution> searchInstitution(String search, String filter, List<String> products, Integer top, Integer skip, String select, String orderby) {
+    List<String> enabledProducts = Objects.isNull(products) ? List.of() : products;
     SearchServiceResponse searchServiceResponse = azureSearchRestClient.searchInstitution(search, filter, top, skip, select, orderby);
     List<SearchServiceInstitution> institutions = new ArrayList<>();
     Optional.of(searchServiceResponse).ifPresent(response -> {
-      institutions.addAll(response.getValue().stream().map(SearchServiceInstitution::createSearchServiceInstitution).toList());
+      institutions.addAll(response.getValue().stream()
+        .map(SearchServiceInstitution::createSearchServiceInstitution)
+        .map(searchServiceInstitution -> enabledProducts.contains("all") ? searchServiceInstitution : searchServiceInstitution.updateProductsEnable(enabledProducts))
+        .toList());
     });
     return institutions;
   }

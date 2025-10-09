@@ -19,7 +19,7 @@ public class OnboardedProductResponse {
     private OffsetDateTime createdAt;
     private OffsetDateTime updatedAt;
     private Boolean isAggregator;
-    private InstitutionType institutionType;
+    private String institutionType;
     private String origin;
     private String originId;
 }
