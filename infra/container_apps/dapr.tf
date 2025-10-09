@@ -5,12 +5,12 @@ resource "azurerm_resource_group" "storage_rg" {
 }
 
 resource "azurerm_storage_account" "dapr_storage" {
-  name                      = "${replace(local.project, "-", "")}${local.pnpg_suffix}daprstorage"
-  resource_group_name       = azurerm_resource_group.storage_rg.name
-  location                  = azurerm_resource_group.storage_rg.location
-  account_tier              = "Standard"
-  account_replication_type  = "LRS"
-  tags                      = var.tags
+  name                     = "${replace(local.project, "-", "")}${local.pnpg_suffix}daprstorage"
+  resource_group_name      = azurerm_resource_group.storage_rg.name
+  location                 = azurerm_resource_group.storage_rg.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+  tags                     = var.tags
 }
 
 variable "ca_name" {
@@ -35,9 +35,10 @@ data "azurerm_container_app_environment" "cae" {
   resource_group_name = var.cae_rg_name
 }
 
+# ✅ Fix: usare storage_account_id invece di storage_account_name
 resource "azurerm_storage_container" "dapr_container" {
   name                  = "dapr-state"
-  storage_account_name  = azurerm_storage_account.dapr_storage.name
+  storage_account_id    = azurerm_storage_account.dapr_storage.id
   container_access_type = "private"
 }
 
@@ -63,5 +64,4 @@ resource "azurerm_container_app_environment_dapr_component" "blob_state" {
   }
 
   scopes = [data.azurerm_container_app.ca.name]
-
 }
