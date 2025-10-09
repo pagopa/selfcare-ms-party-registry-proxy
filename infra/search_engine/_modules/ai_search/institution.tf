@@ -6,6 +6,29 @@ resource "restapi_object" "search_index" {
 
   data = jsonencode({
     "name" : "institution-index-${var.domain}",
+    "analyzers" : [
+      {
+        "name" : "autocomplete_analyzer",
+        "@odata.type" : "#Microsoft.Azure.Search.CustomAnalyzer",
+        "tokenizer" : "autocomplete_tokenizer",
+        "tokenFilters" : ["lowercase", "asciifolding"]
+      },
+      {
+        "name" : "autocomplete_search_analyzer",
+        "@odata.type" : "#Microsoft.Azure.Search.CustomAnalyzer",
+        "tokenizer" : "lowercase",
+        "tokenFilters" : ["lowercase", "asciifolding"]
+      }
+    ],
+    "tokenizers" : [
+      {
+        "name" : "autocomplete_tokenizer",
+        "@odata.type" : "#Microsoft.Azure.Search.EdgeNGramTokenizer",
+        "minGram" : 3,
+        "maxGram" : 10,
+        "tokenChars" : ["letter", "digit"]
+      }
+    ],
     "fields" : [
       {
         "name" : "id",
@@ -26,7 +49,8 @@ resource "restapi_object" "search_index" {
         "sortable" : true,
         "facetable" : false,
         "retrievable" : true,
-        "analyzer" : "it.microsoft"
+        "indexAnalyzer" : "autocomplete_analyzer",
+        "searchAnalyzer" : "autocomplete_search_analyzer"
       },
       {
         "name" : "parentDescription",
@@ -37,7 +61,8 @@ resource "restapi_object" "search_index" {
         "sortable" : true,
         "facetable" : false,
         "retrievable" : true,
-        "analyzer" : "it.microsoft"
+        "indexAnalyzer" : "autocomplete_analyzer",
+        "searchAnalyzer" : "autocomplete_search_analyzer"
       },
       {
         "name" : "taxCode",
@@ -76,7 +101,13 @@ resource "restapi_object" "search_index" {
     ]
   })
 
-  depends_on = [azurerm_search_service.srch_service, azurerm_role_assignment.admins_group_to_ai_search_reader, azurerm_role_assignment.developers_group_to_ai_search_reader, azurerm_role_assignment.infra_ci_to_ai_search_service_contributor, azurerm_role_assignment.infra_cd_to_ai_search_service_contributor]
+  depends_on = [
+    azurerm_search_service.srch_service,
+    azurerm_role_assignment.admins_group_to_ai_search_reader,
+    azurerm_role_assignment.developers_group_to_ai_search_reader,
+    azurerm_role_assignment.infra_ci_to_ai_search_service_contributor,
+    azurerm_role_assignment.infra_cd_to_ai_search_service_contributor
+  ]
 }
 
 # resource "restapi_object" "search_datasource" {

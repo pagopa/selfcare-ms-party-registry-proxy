@@ -53,7 +53,7 @@ module "dapr" {
 
   #redis
   redis_enable                   = true
-  redis_private_endpoint_enabled = false
+  redis_private_endpoint_enabled = true
   redis_capacity                 = 0
   redis_version                  = 6
   redis_family                   = "C"
