@@ -13,18 +13,6 @@ resource "azurerm_storage_account" "dapr_storage" {
   tags                     = var.tags
 }
 
-variable "ca_name" {
-  type        = string
-  description = "Container App name"
-  default     = "cae-cp"
-}
-
-variable "ca_rg_name" {
-  type        = string
-  description = "Container App Resource group name"
-  default     = "cae-rg"
-}
-
 data "azurerm_container_app" "ca" {
   name                = var.ca_name
   resource_group_name = var.ca_rg_name
