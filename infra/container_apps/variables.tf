@@ -121,11 +121,6 @@ variable "cae_rg_name" {
   default     = "cae-rg"
 }
 
-variable "cae_id" {
-  description = "Container App Environment ID"
-  type        = string
-}
-
 variable "cae_identity_client_id" {
   description = "Container App Environment Identity Client ID"
   type        = string
