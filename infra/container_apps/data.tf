@@ -22,8 +22,3 @@ data "azurerm_key_vault_secret" "logs_storage_access_key" {
   name         = "logs-storage-access-key"
   key_vault_id = data.azurerm_key_vault.key_vault.id
 }
-
-data "azurerm_user_assigned_identity" "cae_identity" {
-  name                = "${var.cae_name}-managed_identity"
-  resource_group_name = var.cae_rg_name
-}
