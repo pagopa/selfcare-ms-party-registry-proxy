@@ -136,8 +136,3 @@ variable "cae_rg_name" {
   default     = "cae-rg"
 }
 
-variable "ca_dapr_app_id" {
-  description = "Dapr App ID della Container App"
-  type        = string
-}
-
