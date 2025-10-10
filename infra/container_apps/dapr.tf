@@ -28,3 +28,22 @@ resource "azurerm_container_app_environment_dapr_component" "blob_state" {
   scopes = [data.azurerm_container_app.ca.dapr[0].app_id]
 
 }
+
+resource "azurerm_container_app_environment_dapr_component" "secrets" {
+  name                         = "${var.project_domain}-secrets"
+  container_app_environment_id = data.azurerm_container_app_environment.cae.id
+  component_type               = "secretstores.azure.keyvault"
+  version                      = "v1"
+
+  metadata {
+    name  = "vaultName"
+    value = data.azurerm_key_vault.key_vault.name
+  }
+
+  metadata {
+    name  = "azureClientId"
+    value = data.azurerm_user_assigned_identity.cae_identity.client_id
+  }
+
+  scopes = [data.azurerm_container_app.ca.dapr[0].app_id]
+}
