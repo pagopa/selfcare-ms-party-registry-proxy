@@ -3,12 +3,13 @@ private_dns_name                = "selc-d-party-reg-proxy-ca.whitemoss-eb7ef327.
 dns_zone_prefix                 = "dev.selfcare"
 api_dns_zone_prefix             = "api.dev.selfcare"
 suffix_increment                = "-002"
-#cae_name                        = "selc-d-cae-002"
 cae_name                        = "cae-002"
 cae_rg_name                     = "selc-d-container-app-002-rg"
 key_vault_name                  = "selc-d-kv"
 key_vault_resource_group_name   = "selc-d-sec-rg"
 existing_logs_rg                = "selc-d-logs-storage-rg"
+ca_name                         = "selc-d-party-reg-proxy-ca"
+ca_rg_name                      = "selc-d-container-app-002-rg"
 
 tags = {
   CreatedBy   = "Terraform"
