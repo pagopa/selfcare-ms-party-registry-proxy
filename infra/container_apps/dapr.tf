@@ -25,13 +25,4 @@ resource "azurerm_container_app_environment_dapr_component" "blob_state" {
     value = azurerm_storage_container.visura.name
   }
 
-  metadata {
-    name  = "actorStateStore"
-    value = "true"
-  }
-
-  lifecycle {
-    ignore_changes = [metadata]
-  }
-
 }
