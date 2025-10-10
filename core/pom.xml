@@ -30,12 +30,6 @@
             <groupId>io.dapr</groupId>
             <artifactId>dapr-sdk-springboot</artifactId>
             <version>1.16.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.protobuf</groupId>
-                    <artifactId>protobuf-java</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
