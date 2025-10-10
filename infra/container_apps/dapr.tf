@@ -31,7 +31,7 @@ resource "azurerm_container_app_environment_dapr_component" "blob_state" {
   }
 
   lifecycle {
-    ignore_changes = [secret]
+    ignore_changes = [metadata]
   }
 
 }
