@@ -16,22 +16,18 @@ resource "azurerm_container_app_environment_dapr_component" "blob_state" {
   }
 
   metadata {
-    name  = "accountKey"
-    value = data.azurerm_key_vault_secret.logs_storage_access_key.value
-  }
-
-  metadata {
     name  = "containerName"
     value = azurerm_storage_container.visura.name
   }
 
+  metadata {
+    name  = "azureClientId"
+    value = data.azurerm_user_assigned_identity.cae_identity.client_id
+  }
+
   scopes = [data.azurerm_container_app.ca.dapr[0].app_id]
 
+  lifecycle {
+    prevent_destroy = false
+  }
 }
-
-# # Role assignment per blob_state
-# resource "azurerm_role_assignment" "blob_state" {
-#   scope                = data.azurerm_container_app_environment_dapr_component.main.id
-#   role_definition_name = "Contributor"
-#   principal_id         = data.azurerm_user_assigned_identity.cae_identity.principal_id
-# }
