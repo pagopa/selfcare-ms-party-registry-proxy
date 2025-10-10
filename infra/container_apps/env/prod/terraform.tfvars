@@ -4,6 +4,12 @@ dns_zone_prefix     = "selfcare"
 api_dns_zone_prefix = "api.selfcare"
 suffix_increment    = "-002"
 cae_name            = "cae-002"
+cae_rg_name                     = "selc-p-container-app-002-rg"
+key_vault_name                  = "selc-p-kv"
+key_vault_resource_group_name   = "selc-p-sec-rg"
+existing_logs_rg                = "selc-p-logs-storage-rg"
+ca_name                         = "selc-p-party-reg-proxy-ca"
+ca_rg_name                      = "selc-p-container-app-002-rg"
 
 tags = {
   CreatedBy   = "Terraform"
