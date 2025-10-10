@@ -14,6 +14,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDVisuraI
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.mapper.PDNDBusinessMapper;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.DatiIdentificativiImpresa;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.StorageAsyncService;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderPDND;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderVisura;
 
@@ -41,6 +42,7 @@ class PDNDInfoCamereConnectorImplTest {
   @Mock private PDNDBusinessMapper pdndBusinessMapper;
   @Mock private PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig;
   @Mock private PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig;
+  @Mock private StorageAsyncService storageAsyncService;
 
   @Test
   void testRetrieveInstitutionsByDescription() {
@@ -55,7 +57,7 @@ class PDNDInfoCamereConnectorImplTest {
     mockPdndSecretValue();
     mockPdndToken();
     when(pdndInfoCamereRestClient.retrieveInstitutionsPdndByDescription(anyString(), anyString()))
-        .thenReturn(pdndImpresaList);
+            .thenReturn(pdndImpresaList);
     when(pdndBusinessMapper.toPDNDBusinesses(pdndImpresaList)).thenReturn(pdndBusinesses);
 
     // when
@@ -71,7 +73,7 @@ class PDNDInfoCamereConnectorImplTest {
     assertEquals(dummyPDNDImpresa().getBusinessStatus(), pdndBusiness.getBusinessStatus());
     assertEquals(dummyPDNDImpresa().getLegalNature(), pdndBusiness.getLegalNature());
     assertEquals(
-        dummyPDNDImpresa().getLegalNatureDescription(), pdndBusiness.getLegalNatureDescription());
+            dummyPDNDImpresa().getLegalNatureDescription(), pdndBusiness.getLegalNatureDescription());
     assertEquals(dummyPDNDImpresa().getAddress(), pdndBusiness.getAddress());
     assertEquals(dummyPDNDImpresa().getDigitalAddress(), pdndBusiness.getDigitalAddress());
     assertEquals(dummyPDNDImpresa().getNRea(), pdndBusiness.getNRea());
@@ -81,7 +83,7 @@ class PDNDInfoCamereConnectorImplTest {
     assertEquals(dummyPDNDImpresa().getBusinessAddress().getZipCode(), pdndBusiness.getZipCode());
 
     verify(pdndInfoCamereRestClient, times(1))
-        .retrieveInstitutionsPdndByDescription(anyString(), anyString());
+            .retrieveInstitutionsPdndByDescription(anyString(), anyString());
     verifyNoMoreInteractions(pdndInfoCamereRestClient);
   }
 
@@ -138,11 +140,11 @@ class PDNDInfoCamereConnectorImplTest {
     pdndImpresaList.add(dummyPDNDImpresa());
 
     when(pdndInfoCamereRestClient.retrieveInstitutionsPdndByDescription(anyString(), anyString()))
-        .thenReturn(pdndImpresaList);
+            .thenReturn(pdndImpresaList);
 
     // when
     Executable executable =
-        () -> pdndInfoCamereConnector.retrieveInstitutionsPdndByDescription(description);
+            () -> pdndInfoCamereConnector.retrieveInstitutionsPdndByDescription(description);
 
     // then
     IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
@@ -179,7 +181,7 @@ class PDNDInfoCamereConnectorImplTest {
     final String county = "county";
     when(pdndVisuraInfoCamereRestClient.retrieveInstitutionPdndFromRea(
             anyString(), anyString(), anyString()))
-        .thenReturn(Collections.emptyList());
+            .thenReturn(Collections.emptyList());
 
     mockPdndVisuraToken();
     mockPdndVisuraSecretValue();
@@ -225,7 +227,7 @@ class PDNDInfoCamereConnectorImplTest {
     mockPdndToken();
     mockPdndSecretValue();
     when(pdndInfoCamereRestClient.retrieveInstitutionPdndByTaxCode(anyString(), anyString()))
-        .thenReturn(pdndImpresaList);
+            .thenReturn(pdndImpresaList);
     when(pdndBusinessMapper.toPDNDBusiness(dummyPDNDImpresa())).thenReturn(pdndBusiness);
 
     // when
@@ -250,38 +252,44 @@ class PDNDInfoCamereConnectorImplTest {
     assertEquals(pdndImpresa.getBusinessAddress().getZipCode(), pdndBusiness.getZipCode());
 
     verify(pdndInfoCamereRestClient, times(1))
-        .retrieveInstitutionPdndByTaxCode(anyString(), anyString());
+            .retrieveInstitutionPdndByTaxCode(anyString(), anyString());
     verifyNoMoreInteractions(pdndInfoCamereRestClient);
   }
 
   @Test
   void testRetrieveInstitutionDetail() {
-
-    // given
     final String taxCode = "taxCode";
-    PDNDBusiness pdndBusiness = dummyPDNDBusiness();
-    PDNDVisuraImpresa pdndVisuraImpresa = dummyPDNDVisuraImpresa();
+    byte[] documentBytes = """
+    <blocchi-impresa>
+        <dati-identificativi>
+            <businessTaxId>12345678901</businessTaxId>
+            <nRea>MI-123456</nRea>
+            <cciaa>MI</cciaa>
+            <digitalAddress>impresa@example.com</digitalAddress>
+        </dati-identificativi>
+    </blocchi-impresa>
+    """.getBytes(StandardCharsets.UTF_8);
 
     mockPdndVisuraToken();
     mockPdndVisuraSecretValue();
-    when(pdndVisuraInfoCamereRestClient.retrieveInstitutionDetail(anyString(), anyString()))
-            .thenReturn(pdndVisuraImpresa);
-    when(pdndBusinessMapper.toPDNDBusiness(pdndVisuraImpresa)).thenReturn(pdndBusiness);
 
-    // when
+    when(pdndVisuraInfoCamereRawRestClient.getRawInstitutionDetail(anyString(), anyString()))
+            .thenReturn(documentBytes);
+
+    doNothing().when(storageAsyncService)
+            .saveStringToStorage(anyString(), anyString());
+
     var result = pdndInfoCamereConnector.retrieveInstitutionDetail(taxCode);
 
-    // then
-    assertNotNull(pdndBusiness);
-    assertEquals(pdndVisuraImpresa.getDatiIdentificativiImpresa().getBusinessTaxId(), result.getBusinessTaxId());
-    assertEquals(pdndVisuraImpresa.getDatiIdentificativiImpresa().getNRea(), result.getNRea());
-    assertEquals(pdndVisuraImpresa.getDatiIdentificativiImpresa().getCciaa(), result.getCciaa());
-    assertEquals(pdndVisuraImpresa.getDatiIdentificativiImpresa().getDigitalAddress(), result.getDigitalAddress());
+    // verifica chiamate
+    verify(pdndVisuraInfoCamereRawRestClient, times(1))
+            .getRawInstitutionDetail(anyString(), anyString());
+    verify(storageAsyncService, times(1))
+            .saveStringToStorage(anyString(), anyString());
 
-    verify(pdndVisuraInfoCamereRestClient, times(1))
-            .retrieveInstitutionDetail(anyString(), anyString());
-    verifyNoMoreInteractions(pdndVisuraInfoCamereRestClient);
+    verifyNoMoreInteractions(pdndVisuraInfoCamereRestClient, pdndVisuraInfoCamereRawRestClient, storageAsyncService);
   }
+
 
   @Test
   void testRetrieveInstitutionDetail_FeignExceptionBadRequest() {
@@ -291,7 +299,7 @@ class PDNDInfoCamereConnectorImplTest {
 
     mockPdndVisuraToken();
     mockPdndVisuraSecretValue();
-    when(pdndVisuraInfoCamereRestClient.retrieveInstitutionDetail(anyString(), anyString()))
+    when(pdndVisuraInfoCamereRawRestClient.getRawInstitutionDetail(anyString(), anyString()))
             .thenThrow(FeignException.BadRequest.class);
 
     // when
@@ -311,7 +319,7 @@ class PDNDInfoCamereConnectorImplTest {
 
     mockPdndVisuraToken();
     mockPdndVisuraSecretValue();
-    when(pdndVisuraInfoCamereRestClient.retrieveInstitutionDetail(anyString(), anyString()))
+    when(pdndVisuraInfoCamereRawRestClient.getRawInstitutionDetail(anyString(), anyString()))
             .thenThrow(FeignException.BadGateway.class);
 
     // when
@@ -350,7 +358,7 @@ class PDNDInfoCamereConnectorImplTest {
     pdndImpresaList.add(dummyPDNDImpresa());
 
     when(pdndInfoCamereRestClient.retrieveInstitutionPdndByTaxCode(anyString(), anyString()))
-        .thenReturn(pdndImpresaList);
+            .thenReturn(pdndImpresaList);
 
     // when
     Executable executable = () -> pdndInfoCamereConnector.retrieveInstitutionPdndByTaxCode(taxCode);
@@ -462,7 +470,7 @@ class PDNDInfoCamereConnectorImplTest {
     // then
     IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
     assertEquals(
-        "Impossible to parse document for institution with taxCode: " + taxCode, e.getMessage());
+            "Impossible to parse document for institution with taxCode: " + taxCode, e.getMessage());
     verify(pdndVisuraInfoCamereRawRestClient, times(1))
             .getRawInstitutionDetail(anyString(), anyString());
   }

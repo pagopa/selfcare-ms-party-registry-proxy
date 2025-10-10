@@ -86,6 +86,33 @@ variable "workload_profile_name" {
   default     = null
 }
 
+variable "ca_name" {
+  type        = string
+  description = "Container App name"
+  default     = "cae-cp"
+}
+
+variable "ca_rg_name" {
+  type        = string
+  description = "Container App Resource group name"
+  default     = "cae-rg"
+}
+
+variable "key_vault_resource_group_name" {
+  type        = string
+  description = "Name of Key Vault resource group"
+}
+
+variable "key_vault_name" {
+  type        = string
+  description = "Name of Key Vault"
+}
+
+variable "existing_logs_rg" {
+  type        = string
+  description = "storage account logs resource group"
+}
+
 variable "cae_name" {
   type        = string
   description = "Container App Environment name"
@@ -97,3 +124,15 @@ variable "suffix_increment" {
   description = "Suffix increment Container App Environment name"
   default     = ""
 }
+
+variable "location" {
+  type    = string
+  default = "westeurope"
+}
+
+variable "cae_rg_name" {
+  type        = string
+  description = "Container App Environment Resource group name"
+  default     = "cae-rg"
+}
+
