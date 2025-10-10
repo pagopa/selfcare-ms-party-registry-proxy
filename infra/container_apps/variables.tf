@@ -4,11 +4,6 @@ variable "is_pnpg" {
   description = "(Optional) True if you want to apply changes to PNPG environment"
 }
 
-variable "project_domain" {
-  type        = string
-  description = "Selfcare prefix and short environment"
-}
-
 variable "env_short" {
   description = "Environment short name"
   type        = string

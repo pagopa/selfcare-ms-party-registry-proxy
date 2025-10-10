@@ -10,7 +10,6 @@ key_vault_resource_group_name   = "selc-d-sec-rg"
 existing_logs_rg                = "selc-d-logs-storage-rg"
 ca_name                         = "selc-d-party-reg-proxy-ca"
 ca_rg_name                      = "selc-d-container-app-002-rg"
-project_domain                  = "selc-d-weu-ar"
 
 tags = {
   CreatedBy   = "Terraform"

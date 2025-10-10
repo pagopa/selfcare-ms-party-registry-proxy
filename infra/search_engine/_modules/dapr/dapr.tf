@@ -163,4 +163,9 @@ resource "azurerm_container_app_environment_dapr_component" "secrets" {
   }
 
   scopes = [data.azurerm_container_app.ca.dapr[0].app_id]
+
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
