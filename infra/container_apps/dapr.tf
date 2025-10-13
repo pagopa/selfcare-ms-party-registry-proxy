@@ -5,6 +5,7 @@ resource "azurerm_storage_container" "visura" {
 }
 
 resource "azurerm_container_app_environment_dapr_component" "blob_state" {
+  count                        = var.is_pnpg  ? 0 : 1
   name                         = "blobstorage-state"
   container_app_environment_id = data.azurerm_container_app_environment.cae.id
   component_type               = "state.azure.blobstorage"
