@@ -142,6 +142,7 @@ variable "cae_rg_name" {
 variable "storage_logs" {
   type        = string
   description = "Storage audit logs name"
+  default     = "storage-name"
 }
 
 
