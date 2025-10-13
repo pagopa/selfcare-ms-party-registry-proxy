@@ -9,7 +9,7 @@ data "azurerm_container_app" "ca" {
 }
 
 data "azurerm_storage_account" "existing_logs_storage" {
-  name                = "selcdstlogs"
+  name                = var.storage_logs
   resource_group_name = var.existing_logs_rg
 }
 
