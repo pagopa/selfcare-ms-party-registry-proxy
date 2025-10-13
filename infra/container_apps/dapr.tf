@@ -28,5 +28,10 @@ resource "azurerm_container_app_environment_dapr_component" "blob_state" {
     value = data.azurerm_user_assigned_identity.cae_identity.client_id
   }
 
-  scopes = [local.container_app_id]
+  scopes = [data.azurerm_container_app.ca.dapr[0].app_id]
+
+
+  lifecycle {
+    prevent_destroy = false
+  }
 }
