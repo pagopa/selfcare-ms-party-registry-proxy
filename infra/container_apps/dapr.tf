@@ -1,4 +1,5 @@
 resource "azurerm_storage_container" "visura" {
+  count                 = var.is_pnpg  ? 0 : 1
   name                  = "visura"
   storage_account_id    = data.azurerm_storage_account.existing_logs_storage.id
   container_access_type = "private"
