@@ -152,7 +152,7 @@ app_settings = [
   },
   {
     name  = "ANAC_FTP_MODE"
-    value = "azure"
+    value = "sftp"
   }
 ]
 
