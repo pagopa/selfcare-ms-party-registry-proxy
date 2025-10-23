@@ -13,19 +13,13 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDInfoCam
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDVisuraInfoCamereRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.mapper.PDNDBusinessMapper;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.StorageAsyncService;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProvider;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderPDND;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderVisura;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.XMLCleaner;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -44,6 +38,8 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
   private final StorageAsyncService storageAsyncService;
   private static final String BEARER = "Bearer ";
 
+  private final PdndVisuraServiceCacheble pdndVisuraServiceCacheble;
+
   public PDNDInfoCamereConnectorImpl(
           PDNDInfoCamereRestClient pdndInfoCamereRestClient,
           PDNDVisuraInfoCamereRawRestClient pdndVisuraInfoCamereRawRestClient,
@@ -53,7 +49,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
           TokenProviderVisura tokenProviderVisura,
           PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig,
           PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig,
-          StorageAsyncService storageAsyncService) {
+          StorageAsyncService storageAsyncService, PdndVisuraServiceCacheble pdndVisuraServiceCacheble) {
     this.pdndInfoCamereRestClient = pdndInfoCamereRestClient;
     this.pdndVisuraInfoCamereRawRestClient = pdndVisuraInfoCamereRawRestClient;
     this.pdndVisuraInfoCamereRestClient = pdndVisuraInfoCamereRestClient;
@@ -63,6 +59,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
     this.pdndInfoCamereRestClientConfig = pdndInfoCamereRestClientConfig;
     this.pdndVisuraInfoCamereRestClientConfig = pdndVisuraInfoCamereRestClientConfig;
     this.storageAsyncService = storageAsyncService;
+      this.pdndVisuraServiceCacheble = pdndVisuraServiceCacheble;
   }
 
   @Override
@@ -88,10 +85,10 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
     Assert.hasText(taxCode, TAX_CODE_REQUIRED_MESSAGE);
     try {
       var encryptedTaxCode = DataEncryptionUtils.encrypt(taxCode);
-      byte[] document = DataEncryptionUtils.decrypt(getEncryptedDocument(encryptedTaxCode)).getBytes();
+      byte[] document = DataEncryptionUtils.decrypt(pdndVisuraServiceCacheble.getEncryptedDocument(encryptedTaxCode)).getBytes();
 
-      storageAsyncService.saveStringToStorage(new String(document, StandardCharsets.UTF_8),
-              "visura_" + taxCode + "_" + LocalDateTime.now() + ".xml");
+      //storageAsyncService.saveStringToStorage(new String(document, StandardCharsets.UTF_8),
+      //        "visura_" + taxCode + "_" + LocalDateTime.now() + ".xml");
 
       PDNDVisuraImpresa result = xmlToVisuraImpresa(document);
 
@@ -108,27 +105,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
     }
   }
 
-  @Cacheable(value = "visure", key = "#encryptedTaxCode")
-  public String getEncryptedDocument(String encryptedTaxCode) {
-    log.info("getEncryptedDocument for {} START", encryptedTaxCode);
-    ClientCredentialsResponse tokenResponse = tokenProviderVisura.getTokenPdnd(pdndVisuraInfoCamereRestClientConfig.getPdndSecretValue());
-    String bearer = BEARER + tokenResponse.getAccessToken();
-    var taxCode = DataEncryptionUtils.decrypt(encryptedTaxCode);
-    try {
-      byte[] document = pdndVisuraInfoCamereRawRestClient.getRawInstitutionDetail(taxCode, bearer);
-      log.info("getEncryptedDocument for {} END", encryptedTaxCode);
-      return DataEncryptionUtils.encrypt(new String(document, StandardCharsets.UTF_8));
-    } catch (FeignException e) {
-      if (e instanceof FeignException.BadRequest) {
-        throw new ResourceNotFoundException("No institution found for taxCode: " + taxCode);
-      }
-      log.error("FeignException occurred while retrieving institution detail", e);
-      throw e;
-    } catch (Exception e) {
-      log.error("Unexpected exception occurred while retrieving institution detail", e);
-      throw new IllegalArgumentException("Unexpected error while retrieving institution detail", e);
-    }
-  }
+
 
   @Override
   public byte[] retrieveInstitutionDocument(String taxCode) {

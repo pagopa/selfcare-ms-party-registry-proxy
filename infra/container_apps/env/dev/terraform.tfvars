@@ -157,6 +157,10 @@ app_settings = [
   {
     name  = "REDIS_HOST"
     value = "selc-d-redis.redis.cache.windows.net"
+  },
+  {
+    name  = "REDIS_PORT"
+    value = "6380"
   }
 ]
 

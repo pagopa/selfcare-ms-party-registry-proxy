@@ -4,7 +4,6 @@ import feign.FeignException;
 import it.pagopa.selfcare.onboarding.crypto.utils.DataEncryptionUtils;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDVisuraInfoCamereRawRestClient;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDVisuraInfoCamereRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDVisuraInfoCamereRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,7 @@ import java.nio.charset.StandardCharsets;
 
 @Service
 @Slf4j
-public class PdndService {
+public class PdndVisuraServiceCacheble {
 
     @Autowired
     TokenProviderVisura tokenProviderVisura;
@@ -28,7 +27,6 @@ public class PdndService {
     PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig;
 
     private static final String BEARER = "Bearer ";
-
 
     @Cacheable(value = "visure", key = "#encryptedTaxCode")
     public String getEncryptedDocument(String encryptedTaxCode) {
