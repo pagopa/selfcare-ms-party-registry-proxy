@@ -153,6 +153,10 @@ app_settings = [
   {
       name  = "ANAC_FTP_MODE"
       value = "azure"
+  },
+  {
+    name  = "REDIS_HOST"
+    value = "selc-u-redis.redis.cache.windows.net"
   }
 ]
 
@@ -177,4 +181,5 @@ secrets_names = {
   "APPINSIGHTS_CONNECTION_STRING"         = "appinsights-connection-string"
   "ONBOARDING_DATA_ENCRIPTION_KEY"        = "onboarding-data-encryption-key"
   "ONBOARDING_DATA_ENCRIPTION_IV"         = "onboarding-data-encryption-iv"
+  "REDIS_PASSWORD"                        = "redis-primary-access-key"
 }

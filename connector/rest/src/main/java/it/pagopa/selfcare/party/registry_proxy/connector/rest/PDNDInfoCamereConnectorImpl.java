@@ -2,6 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import feign.FeignException;
+import it.pagopa.selfcare.onboarding.crypto.utils.DataEncryptionUtils;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.PDNDInfoCamereConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries_pdnd.PDNDBusiness;
@@ -17,19 +18,14 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProvi
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderPDND;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderVisura;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.XMLCleaner;
-
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Unmarshaller;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -89,29 +85,49 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
 
   @Override
   public PDNDBusiness retrieveInstitutionDetail(String taxCode) {
-      Assert.hasText(taxCode, TAX_CODE_REQUIRED_MESSAGE);
-      ClientCredentialsResponse tokenResponse = tokenProviderVisura.getTokenPdnd(pdndVisuraInfoCamereRestClientConfig.getPdndSecretValue());
-      String bearer = BEARER + tokenResponse.getAccessToken();
+    Assert.hasText(taxCode, TAX_CODE_REQUIRED_MESSAGE);
+    try {
+      var encryptedTaxCode = DataEncryptionUtils.encrypt(taxCode);
+      byte[] document = DataEncryptionUtils.decrypt(getEncryptedDocument(encryptedTaxCode)).getBytes();
 
-      try {
-        byte[] document = pdndVisuraInfoCamereRawRestClient.getRawInstitutionDetail(taxCode, bearer);
+      storageAsyncService.saveStringToStorage(new String(document, StandardCharsets.UTF_8),
+              "visura_" + taxCode + "_" + LocalDateTime.now() + ".xml");
 
-        storageAsyncService.saveStringToStorage(new String(document, StandardCharsets.UTF_8),
-                "visura_" + taxCode + "_" + LocalDateTime.now() + ".xml");
+      PDNDVisuraImpresa result = xmlToVisuraImpresa(document);
 
-        PDNDVisuraImpresa result = xmlToVisuraImpresa(document);
-
-        return pdndBusinessMapper.toPDNDBusiness(result);
-      } catch (FeignException e) {
-        if (e instanceof FeignException.BadRequest) {
-          throw new ResourceNotFoundException("No institution found for taxCode: " + taxCode);
-        }
-        log.error("FeignException occurred while retrieving institution detail", e);
-        throw e;
-      } catch (Exception e) {
-        log.error("Unexpected exception occurred while retrieving institution detail", e);
-        throw new IllegalArgumentException("Unexpected error while retrieving institution detail", e);
+      return pdndBusinessMapper.toPDNDBusiness(result);
+    } catch (FeignException e) {
+      if (e instanceof FeignException.BadRequest) {
+        throw new ResourceNotFoundException("No institution found for taxCode: " + taxCode);
       }
+      log.error("FeignException occurred while retrieving institution detail", e);
+      throw e;
+    } catch (Exception e) {
+      log.error("Unexpected exception occurred while retrieving institution detail", e);
+      throw new IllegalArgumentException("Unexpected error while retrieving institution detail", e);
+    }
+  }
+
+  @Cacheable(value = "visure", key = "#encryptedTaxCode")
+  public String getEncryptedDocument(String encryptedTaxCode) {
+    log.info("getEncryptedDocument for {} START", encryptedTaxCode);
+    ClientCredentialsResponse tokenResponse = tokenProviderVisura.getTokenPdnd(pdndVisuraInfoCamereRestClientConfig.getPdndSecretValue());
+    String bearer = BEARER + tokenResponse.getAccessToken();
+    var taxCode = DataEncryptionUtils.decrypt(encryptedTaxCode);
+    try {
+      byte[] document = pdndVisuraInfoCamereRawRestClient.getRawInstitutionDetail(taxCode, bearer);
+      log.info("getEncryptedDocument for {} END", encryptedTaxCode);
+      return DataEncryptionUtils.encrypt(new String(document, StandardCharsets.UTF_8));
+    } catch (FeignException e) {
+      if (e instanceof FeignException.BadRequest) {
+        throw new ResourceNotFoundException("No institution found for taxCode: " + taxCode);
+      }
+      log.error("FeignException occurred while retrieving institution detail", e);
+      throw e;
+    } catch (Exception e) {
+      log.error("Unexpected exception occurred while retrieving institution detail", e);
+      throw new IllegalArgumentException("Unexpected error while retrieving institution detail", e);
+    }
   }
 
   @Override
