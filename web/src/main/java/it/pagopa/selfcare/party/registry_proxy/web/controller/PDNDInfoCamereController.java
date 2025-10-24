@@ -1,5 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.web.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,7 +54,7 @@ public class PDNDInfoCamereController {
           operationId = "institutionPdndByTaxCodeUsingGET")
   @GetMapping("/institution/{taxCode}")
   public ResponseEntity<PDNDBusinessResource> institutionPdndByTaxCode(
-          @ApiParam("${swagger.model.institution.taxCode}") @PathVariable String taxCode) {
+          @ApiParam("${swagger.model.institution.taxCode}") @PathVariable String taxCode) throws JsonProcessingException {
     PDNDBusiness business = pdndInfoCamereService.retrieveInstitutionPdndByTaxCode(taxCode);
     return ResponseEntity.ok().body(pdndBusinessMapper.toResource(business));
   }

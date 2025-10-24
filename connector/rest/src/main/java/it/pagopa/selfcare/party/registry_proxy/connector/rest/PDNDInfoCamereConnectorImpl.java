@@ -1,5 +1,8 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import feign.FeignException;
 import it.pagopa.selfcare.onboarding.crypto.utils.DataEncryptionUtils;
@@ -78,10 +81,12 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
     }
 
     @Override
-    public PDNDBusiness retrieveInstitutionPdndByTaxCode(String taxCode) {
+    public PDNDBusiness retrieveInstitutionPdndByTaxCode(String taxCode) throws JsonProcessingException {
         Assert.hasText(taxCode, TAX_CODE_REQUIRED_MESSAGE);
-        var result = pdndVisuraServiceCacheable.getInfocamereImpresa(taxCode);
-        return pdndBusinessMapper.toPDNDBusiness(result);
+        String result = pdndVisuraServiceCacheable.getInfocamereImpresa(taxCode);
+        ObjectMapper objectMapper = new ObjectMapper();
+        PDNDImpresa pdndImpresa = objectMapper.readValue(result, new TypeReference<>() {});
+        return pdndBusinessMapper.toPDNDBusiness(pdndImpresa);
     }
 
     @Override

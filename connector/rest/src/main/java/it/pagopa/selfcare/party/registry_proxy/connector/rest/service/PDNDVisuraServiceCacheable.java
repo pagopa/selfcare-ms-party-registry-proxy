@@ -1,5 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
 import it.pagopa.selfcare.onboarding.crypto.utils.DataEncryptionUtils;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
@@ -72,10 +74,11 @@ public class PDNDVisuraServiceCacheable {
             @Cacheable(cacheManager = "visureRedisCacheManagerL2", key = "#taxCode", cacheNames = "imprese"),
             @Cacheable(cacheManager = "visureRedisCacheManagerL1", key = "#taxCode", cacheNames = "imprese")
     })
-    public PDNDImpresa getInfocamereImpresa(String taxCode) {
+    public String getInfocamereImpresa(String taxCode) throws JsonProcessingException {
         ClientCredentialsResponse tokenResponse = tokenProviderPDND.getTokenPdnd(pdndInfoCamereRestClientConfig.getPdndSecretValue());
         String bearer = BEARER + tokenResponse.getAccessToken();
-        return pdndInfoCamereRestClient.retrieveInstitutionPdndByTaxCode(taxCode, bearer).get(0);
+        PDNDImpresa impresa = pdndInfoCamereRestClient.retrieveInstitutionPdndByTaxCode(taxCode, bearer).get(0);
+        return new ObjectMapper().writeValueAsString(impresa);
     }
 
 }
