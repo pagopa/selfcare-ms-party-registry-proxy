@@ -61,16 +61,16 @@ public class CacheConfig {
         return caffeineCacheManager;
     }
 
-    @Bean
-    public RedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory) {
-        RedisCacheWriter redisCacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory);
-        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
-                .entryTtl(Duration.ofMinutes(TIMEOUT_IN_MINUTES));
-
-        return RedisCacheManager.builder(redisConnectionFactory)
-                .cacheWriter(redisCacheWriter)
-                .cacheDefaults(redisCacheConfiguration)
-                .build();
-    }
+//    @Bean
+//    public RedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory) {
+//        RedisCacheWriter redisCacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory);
+//        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
+//                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
+//                .entryTtl(Duration.ofMinutes(TIMEOUT_IN_MINUTES));
+//
+//        return RedisCacheManager.builder(redisConnectionFactory)
+//                .cacheWriter(redisCacheWriter)
+//                .cacheDefaults(redisCacheConfiguration)
+//                .build();
+//    }
 }
