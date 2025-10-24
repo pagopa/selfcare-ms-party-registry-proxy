@@ -20,7 +20,7 @@ spring:
   data:
     redis:
       port: ${REDIS_PORT:6380}
-      host: ${REDIS_HOST:localhost}
+      host: ${REDIS_URL:localhost}
       password: ${REDIS_PASSWORD}
 
 file:
