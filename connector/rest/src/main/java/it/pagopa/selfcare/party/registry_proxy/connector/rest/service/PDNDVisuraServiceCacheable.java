@@ -78,7 +78,7 @@ public class PDNDVisuraServiceCacheable {
         ClientCredentialsResponse tokenResponse = tokenProviderPDND.getTokenPdnd(pdndInfoCamereRestClientConfig.getPdndSecretValue());
         String bearer = BEARER + tokenResponse.getAccessToken();
         PDNDImpresa impresa = pdndInfoCamereRestClient.retrieveInstitutionPdndByTaxCode(taxCode, bearer).get(0);
-        return new ObjectMapper().writeValueAsString(impresa);
+        return DataEncryptionUtils.encrypt(new ObjectMapper().writeValueAsString(impresa));
     }
 
 }

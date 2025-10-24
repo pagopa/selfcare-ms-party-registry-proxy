@@ -85,7 +85,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
         Assert.hasText(taxCode, TAX_CODE_REQUIRED_MESSAGE);
         String result = pdndVisuraServiceCacheable.getInfocamereImpresa(taxCode);
         ObjectMapper objectMapper = new ObjectMapper();
-        PDNDImpresa pdndImpresa = objectMapper.readValue(result, new TypeReference<>() {});
+        PDNDImpresa pdndImpresa = objectMapper.readValue(DataEncryptionUtils.decrypt(result), new TypeReference<>() {});
         return pdndBusinessMapper.toPDNDBusiness(pdndImpresa);
     }
 
