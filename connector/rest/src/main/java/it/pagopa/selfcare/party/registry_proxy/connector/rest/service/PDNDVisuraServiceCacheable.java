@@ -33,13 +33,13 @@ public class PDNDVisuraServiceCacheable {
                                       PDNDVisuraInfoCamereRawRestClient pdndVisuraInfoCamereRawRestClient,
                                       PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig,
                                       PDNDInfoCamereRestClient pdndInfoCamereRestClient,
-                                      TokenProvider tokenProvider,
+                                      TokenProvider tokenProviderPDND,
                                       PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig) {
         this.tokenProviderVisura = tokenProviderVisura;
         this.pdndVisuraInfoCamereRawRestClient = pdndVisuraInfoCamereRawRestClient;
         this.pdndVisuraInfoCamereRestClientConfig = pdndVisuraInfoCamereRestClientConfig;
         this.pdndInfoCamereRestClient = pdndInfoCamereRestClient;
-        this.tokenProviderPDND = tokenProvider;
+        this.tokenProviderPDND = tokenProviderPDND;
         this.pdndInfoCamereRestClientConfig = pdndInfoCamereRestClientConfig;
     }
 
@@ -69,8 +69,8 @@ public class PDNDVisuraServiceCacheable {
     }
 
     @Caching(cacheable = {
-            @Cacheable(cacheManager = "visureRedisCacheManagerL2", key = "#encryptedTaxCode", cacheNames = "imprese"),
-            @Cacheable(cacheManager = "visureRedisCacheManagerL1", key = "#encryptedTaxCode", cacheNames = "imprese")
+            @Cacheable(cacheManager = "visureRedisCacheManagerL2", key = "#taxCode", cacheNames = "imprese"),
+            @Cacheable(cacheManager = "visureRedisCacheManagerL1", key = "#taxCode", cacheNames = "imprese")
     })
     public PDNDImpresa getInfocamereImpresa(String taxCode) {
         ClientCredentialsResponse tokenResponse = tokenProviderPDND.getTokenPdnd(pdndInfoCamereRestClientConfig.getPdndSecretValue());

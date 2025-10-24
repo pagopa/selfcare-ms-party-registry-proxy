@@ -16,7 +16,7 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
-import java.util.Collections;
+import java.util.Set;
 
 @Configuration
 @PropertySource("classpath:config/redis-config.properties")
@@ -56,7 +56,7 @@ public class RedisConfig {
 
         return RedisCacheManager.builder(RedisCacheWriter.nonLockingRedisCacheWriter(cf))
                 .cacheDefaults(cfg)
-                .initialCacheNames(Collections.singleton("visure"))
+                .initialCacheNames(Set.of("visure","imprese"))
                 .disableCreateOnMissingCache()
                 .build();
     }
