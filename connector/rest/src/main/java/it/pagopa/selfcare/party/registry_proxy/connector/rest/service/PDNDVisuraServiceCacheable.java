@@ -3,9 +3,12 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest.service;
 import feign.FeignException;
 import it.pagopa.selfcare.onboarding.crypto.utils.DataEncryptionUtils;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDInfoCamereRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDVisuraInfoCamereRawRestClient;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDInfoCamereRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDVisuraInfoCamereRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDImpresa;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -18,15 +21,26 @@ import java.nio.charset.StandardCharsets;
 public class PDNDVisuraServiceCacheable {
 
     private final TokenProviderVisura tokenProviderVisura;
+    private final TokenProvider tokenProviderPDND;
     private final PDNDVisuraInfoCamereRawRestClient pdndVisuraInfoCamereRawRestClient;
     private final PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig;
+    private final PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig;
+    private final PDNDInfoCamereRestClient pdndInfoCamereRestClient;
 
     private static final String BEARER = "Bearer ";
 
-    public PDNDVisuraServiceCacheable(TokenProviderVisura tokenProviderVisura, PDNDVisuraInfoCamereRawRestClient pdndVisuraInfoCamereRawRestClient, PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig) {
+    public PDNDVisuraServiceCacheable(TokenProviderVisura tokenProviderVisura,
+                                      PDNDVisuraInfoCamereRawRestClient pdndVisuraInfoCamereRawRestClient,
+                                      PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig,
+                                      PDNDInfoCamereRestClient pdndInfoCamereRestClient,
+                                      TokenProvider tokenProvider,
+                                      PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig) {
         this.tokenProviderVisura = tokenProviderVisura;
         this.pdndVisuraInfoCamereRawRestClient = pdndVisuraInfoCamereRawRestClient;
         this.pdndVisuraInfoCamereRestClientConfig = pdndVisuraInfoCamereRestClientConfig;
+        this.pdndInfoCamereRestClient = pdndInfoCamereRestClient;
+        this.tokenProviderPDND = tokenProvider;
+        this.pdndInfoCamereRestClientConfig = pdndInfoCamereRestClientConfig;
     }
 
     @Caching(cacheable = {
@@ -52,6 +66,16 @@ public class PDNDVisuraServiceCacheable {
             log.error("Unexpected exception occurred while retrieving institution detail", e);
             throw new IllegalArgumentException("Unexpected error while retrieving institution detail", e);
         }
+    }
+
+    @Caching(cacheable = {
+            @Cacheable(cacheManager = "visureRedisCacheManagerL2", key = "#encryptedTaxCode", cacheNames = "imprese"),
+            @Cacheable(cacheManager = "visureRedisCacheManagerL1", key = "#encryptedTaxCode", cacheNames = "imprese")
+    })
+    public PDNDImpresa getInfocamereImpresa(String taxCode) {
+        ClientCredentialsResponse tokenResponse = tokenProviderPDND.getTokenPdnd(pdndInfoCamereRestClientConfig.getPdndSecretValue());
+        String bearer = BEARER + tokenResponse.getAccessToken();
+        return pdndInfoCamereRestClient.retrieveInstitutionPdndByTaxCode(taxCode, bearer).get(0);
     }
 
 }
