@@ -17,11 +17,6 @@ spring:
     baggage:
       remote-fields: X-Client-Ip
       correlation-fields: X-Client-Ip
-  data:
-    redis:
-      port: ${REDIS_PORT:6380}
-      host: ${REDIS_URL:localhost}
-      password: ${REDIS_PASSWORD}
 
 file:
   connector:
