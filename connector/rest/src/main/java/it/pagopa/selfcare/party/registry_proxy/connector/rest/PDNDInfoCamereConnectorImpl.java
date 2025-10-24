@@ -11,22 +11,31 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDVisuraI
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDVisuraInfoCamereRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDInfoCamereRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDVisuraInfoCamereRestClientConfig;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.*;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDImpresa;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDVisuraImpresa;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.mapper.PDNDBusinessMapper;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.*;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.PDNDVisuraServiceCacheable;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProvider;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderPDND;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderVisura;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.XMLCleaner;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+
 @Slf4j
 @Service
 public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
+
   private static final String TAX_CODE_REQUIRED_MESSAGE = "TaxCode is required";
+  private static final String BEARER = "Bearer ";
+
   private final PDNDInfoCamereRestClient pdndInfoCamereRestClient;
   private final PDNDVisuraInfoCamereRawRestClient pdndVisuraInfoCamereRawRestClient;
   private final PDNDVisuraInfoCamereRestClient pdndVisuraInfoCamereRestClient;
@@ -35,10 +44,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
   private final TokenProviderVisura tokenProviderVisura;
   private final PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig;
   private final PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig;
-  private final StorageAsyncService storageAsyncService;
-  private static final String BEARER = "Bearer ";
-
-  private final PdndVisuraServiceCacheble pdndVisuraServiceCacheble;
+  private final PDNDVisuraServiceCacheable pdndVisuraServiceCacheable;
 
   public PDNDInfoCamereConnectorImpl(
           PDNDInfoCamereRestClient pdndInfoCamereRestClient,
@@ -49,7 +55,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
           TokenProviderVisura tokenProviderVisura,
           PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig,
           PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig,
-          StorageAsyncService storageAsyncService, PdndVisuraServiceCacheble pdndVisuraServiceCacheble) {
+          PDNDVisuraServiceCacheable pdndVisuraServiceCacheable) {
     this.pdndInfoCamereRestClient = pdndInfoCamereRestClient;
     this.pdndVisuraInfoCamereRawRestClient = pdndVisuraInfoCamereRawRestClient;
     this.pdndVisuraInfoCamereRestClient = pdndVisuraInfoCamereRestClient;
@@ -58,8 +64,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
     this.tokenProviderVisura = tokenProviderVisura;
     this.pdndInfoCamereRestClientConfig = pdndInfoCamereRestClientConfig;
     this.pdndVisuraInfoCamereRestClientConfig = pdndVisuraInfoCamereRestClientConfig;
-    this.storageAsyncService = storageAsyncService;
-      this.pdndVisuraServiceCacheble = pdndVisuraServiceCacheble;
+    this.pdndVisuraServiceCacheable = pdndVisuraServiceCacheable;
   }
 
   @Override
@@ -85,7 +90,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
     Assert.hasText(taxCode, TAX_CODE_REQUIRED_MESSAGE);
     try {
       var encryptedTaxCode = DataEncryptionUtils.encrypt(taxCode);
-      byte[] document = DataEncryptionUtils.decrypt(pdndVisuraServiceCacheble.getEncryptedDocument(encryptedTaxCode)).getBytes();
+      byte[] document = DataEncryptionUtils.decrypt(pdndVisuraServiceCacheable.getEncryptedDocument(encryptedTaxCode)).getBytes();
 
       //storageAsyncService.saveStringToStorage(new String(document, StandardCharsets.UTF_8),
       //        "visura_" + taxCode + "_" + LocalDateTime.now() + ".xml");

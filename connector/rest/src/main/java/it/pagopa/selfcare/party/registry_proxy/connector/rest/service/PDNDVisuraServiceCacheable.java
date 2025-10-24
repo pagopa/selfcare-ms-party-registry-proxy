@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
 
 @Service
 @Slf4j
-public class PdndVisuraServiceCacheble {
+public class PDNDVisuraServiceCacheable {
 
     @Autowired
     TokenProviderVisura tokenProviderVisura;
