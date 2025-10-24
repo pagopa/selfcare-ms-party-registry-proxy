@@ -99,12 +99,6 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
             PDNDVisuraImpresa result = xmlToVisuraImpresa(document);
 
             return pdndBusinessMapper.toPDNDBusiness(result);
-        } catch (FeignException e) {
-            if (e instanceof FeignException.BadRequest) {
-                throw new ResourceNotFoundException("No institution found for taxCode: " + taxCode);
-            }
-            log.error("FeignException occurred while retrieving institution detail", e);
-            throw e;
         } catch (Exception e) {
             log.error("Unexpected exception occurred while retrieving institution detail", e);
             throw new IllegalArgumentException("Unexpected error while retrieving institution detail", e);
