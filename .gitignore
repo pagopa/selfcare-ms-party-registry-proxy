@@ -49,18 +49,3 @@ override.tf.json
 **/app/write.lock
 **/app/segments_*
 /.run.prod/SelfCarePartyRegistryProxyApplicationPROD.run.xml
-
-#parent folder
-write.lock
-segments_1
-_0.cfe
-_0.cfs
-_0.si
-_1b.cfs
-_1b.si
-_1c.cfe
-_1c.cfs
-_1c.si
-_1.cfe
-_1.cfs
-_1.si
