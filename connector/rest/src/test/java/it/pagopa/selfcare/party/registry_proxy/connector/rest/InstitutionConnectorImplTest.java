@@ -1,23 +1,15 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.model.institution.Institution;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.cache.CacheConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.InstitutionRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.institution.InstitutionResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.institution.OnboardedProductResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.institution.RelationshipState;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
 import java.util.Collections;
@@ -25,11 +17,7 @@ import java.util.Collections;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ContextConfiguration(classes = {CacheConfig.class})
-@ExtendWith(SpringExtension.class)
-@TestPropertySource(locations = "classpath:config/selc-institution-rest-client.properties")
-@SpringBootTest
-@EnableCaching
+@ExtendWith(MockitoExtension.class)
 public class InstitutionConnectorImplTest {
 
   @InjectMocks
@@ -38,13 +26,7 @@ public class InstitutionConnectorImplTest {
   @Mock
   private InstitutionRestClient restClient;
 
-  @Test
-  void testGetById() {
-    InstitutionResponse institutionResponse = new InstitutionResponse();
-    institutionResponse.setId("1");
-    when(restClient.getById("1")).thenReturn(institutionResponse);
-    assertEquals("1", restClient.getById("1").getId());
-  }
+
 
   @Test
   void getById_shouldReturnInstitution() {

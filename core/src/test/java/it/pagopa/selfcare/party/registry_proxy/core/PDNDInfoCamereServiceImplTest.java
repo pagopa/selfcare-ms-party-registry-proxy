@@ -1,6 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.PDNDInfoCamereConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries_pdnd.PDNDBusiness;
 import org.junit.jupiter.api.Test;
@@ -101,7 +102,7 @@ class PDNDInfoCamereServiceImplTest {
     }
 
     @Test
-    void retrieveInstitutionByTaxCode() {
+    void retrieveInstitutionByTaxCode() throws JsonProcessingException {
         //given
         String taxCode = "taxCode";
         PDNDBusiness pdndBusiness = dummyPDNDBusiness();
@@ -155,7 +156,7 @@ class PDNDInfoCamereServiceImplTest {
     }
 
     @Test
-    void retrieveInstitutionByTaxCode_nullTaxCode() {
+    void retrieveInstitutionByTaxCode_nullTaxCode() throws JsonProcessingException {
         //given
         String taxCode = null;
         PDNDBusiness pdndBusiness = dummyPDNDBusiness();

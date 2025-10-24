@@ -30,9 +30,9 @@ import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 class PDNDInfoCamereConnectorImplTest {
 
   @InjectMocks private PDNDInfoCamereConnectorImpl pdndInfoCamereConnector;
@@ -139,11 +139,6 @@ class PDNDInfoCamereConnectorImplTest {
 
     // given
     String description = null;
-    List<PDNDImpresa> pdndImpresaList = new ArrayList<>();
-    pdndImpresaList.add(dummyPDNDImpresa());
-
-    when(pdndInfoCamereRestClient.retrieveInstitutionsPdndByDescription(anyString(), anyString()))
-            .thenReturn(pdndImpresaList);
 
     // when
     Executable executable =
@@ -160,11 +155,6 @@ class PDNDInfoCamereConnectorImplTest {
 
     // given
     final String rea = null;
-    List<PDNDImpresa> pdndImpresaList = new ArrayList<>();
-    pdndImpresaList.add(dummyPDNDImpresa());
-
-    when(pdndVisuraInfoCamereRestClient.retrieveInstitutionPdndFromRea(anyString(), anyString(), anyString()))
-            .thenReturn(pdndImpresaList);
 
     // when
     Executable executable =
@@ -227,31 +217,34 @@ class PDNDInfoCamereConnectorImplTest {
     PDNDImpresa pdndImpresa = dummyPDNDImpresa();
     String jsonImpresa = "{\"businessTaxId\":\"12345678901\",\"businessName\":\"Dummy Business Name\"}";
 
-    when(pdndVisuraServiceCacheable.getInfocamereImpresa(taxCode))
-            .thenReturn(jsonImpresa);
-    when(pdndBusinessMapper.toPDNDBusiness(any(PDNDImpresa.class))).thenReturn(pdndBusiness);
+    try (var mockedEncryption = mockStatic(DataEncryptionUtils.class)) {
+      mockedEncryption.when(() -> DataEncryptionUtils.decrypt(anyString())).thenReturn(jsonImpresa);
+      when(pdndVisuraServiceCacheable.getInfocamereImpresa(taxCode))
+              .thenReturn(jsonImpresa);
+      when(pdndBusinessMapper.toPDNDBusiness(any(PDNDImpresa.class))).thenReturn(pdndBusiness);
 
-    // when
-    PDNDBusiness result = pdndInfoCamereConnector.retrieveInstitutionPdndByTaxCode(taxCode);
+      // when
+      PDNDBusiness result = pdndInfoCamereConnector.retrieveInstitutionPdndByTaxCode(taxCode);
 
-    // then
-    assertNotNull(result);
-    assertNotNull(result.getClass());
-    assertEquals(pdndBusiness.getBusinessTaxId(), result.getBusinessTaxId());
-    assertEquals(pdndBusiness.getBusinessName(), result.getBusinessName());
-    assertEquals(pdndBusiness.getBusinessStatus(), result.getBusinessStatus());
-    assertEquals(pdndBusiness.getLegalNature(), result.getLegalNature());
-    assertEquals(pdndBusiness.getLegalNatureDescription(), result.getLegalNatureDescription());
-    assertEquals(pdndBusiness.getAddress(), result.getAddress());
-    assertEquals(pdndBusiness.getDigitalAddress(), result.getDigitalAddress());
-    assertEquals(pdndBusiness.getNRea(), result.getNRea());
-    assertEquals(pdndBusiness.getCciaa(), result.getCciaa());
-    assertEquals(pdndBusiness.getCity(), result.getCity());
-    assertEquals(pdndBusiness.getCounty(), result.getCounty());
-    assertEquals(pdndBusiness.getZipCode(), result.getZipCode());
+      // then
+      assertNotNull(result);
+      assertNotNull(result.getClass());
+      assertEquals(pdndBusiness.getBusinessTaxId(), result.getBusinessTaxId());
+      assertEquals(pdndBusiness.getBusinessName(), result.getBusinessName());
+      assertEquals(pdndBusiness.getBusinessStatus(), result.getBusinessStatus());
+      assertEquals(pdndBusiness.getLegalNature(), result.getLegalNature());
+      assertEquals(pdndBusiness.getLegalNatureDescription(), result.getLegalNatureDescription());
+      assertEquals(pdndBusiness.getAddress(), result.getAddress());
+      assertEquals(pdndBusiness.getDigitalAddress(), result.getDigitalAddress());
+      assertEquals(pdndBusiness.getNRea(), result.getNRea());
+      assertEquals(pdndBusiness.getCciaa(), result.getCciaa());
+      assertEquals(pdndBusiness.getCity(), result.getCity());
+      assertEquals(pdndBusiness.getCounty(), result.getCounty());
+      assertEquals(pdndBusiness.getZipCode(), result.getZipCode());
 
-    verify(pdndVisuraServiceCacheable, times(1)).getInfocamereImpresa(taxCode);
-    verify(pdndBusinessMapper, times(1)).toPDNDBusiness(any(PDNDImpresa.class));
+      verify(pdndVisuraServiceCacheable, times(1)).getInfocamereImpresa(taxCode);
+      verify(pdndBusinessMapper, times(1)).toPDNDBusiness(any(PDNDImpresa.class));
+    }
   }
 
   @Test

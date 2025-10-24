@@ -1,33 +1,24 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.cache.CacheConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PdndRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
-@ContextConfiguration(classes = {CacheConfig.class})
-@TestPropertySource(locations = "classpath:config/pdnd-rest-client.properties")
-@EnableCaching
+@ExtendWith(MockitoExtension.class)
 class PdndConnectorImplTest {
     @InjectMocks
-    static PdndConnectorImpl pdndConnectorImpl;
+    PdndConnectorImpl pdndConnectorImpl;
     @Mock
-    static PdndRestClient pdndRestClient;
+    PdndRestClient pdndRestClient;
 
     @Test
     void createTokenReturnsValidResponseForValidCredentials() {
