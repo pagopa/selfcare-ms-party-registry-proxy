@@ -3,7 +3,8 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import feign.FeignException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import it.pagopa.selfcare.onboarding.crypto.utils.DataEncryptionUtils;
 import it.pagopa.selfcare.party.registry_proxy.connector.exception.ResourceNotFoundException;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries_pdnd.PDNDBusiness;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDInfoCamereRestClient;
@@ -14,6 +15,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDVisuraI
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.mapper.PDNDBusinessMapper;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.DatiIdentificativiImpresa;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.PDNDVisuraServiceCacheable;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.StorageAsyncService;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderPDND;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.TokenProviderVisura;
@@ -43,6 +45,7 @@ class PDNDInfoCamereConnectorImplTest {
   @Mock private PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig;
   @Mock private PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig;
   @Mock private StorageAsyncService storageAsyncService;
+  @Mock private PDNDVisuraServiceCacheable pdndVisuraServiceCacheable;
 
   @Test
   void testRetrieveInstitutionsByDescription() {
@@ -216,50 +219,46 @@ class PDNDInfoCamereConnectorImplTest {
   }
 
   @Test
-  void testRetrieveInstitutionByTaxCode() {
+  void testRetrieveInstitutionByTaxCode() throws JsonProcessingException {
 
     // given
     String taxCode = "taxCode";
     PDNDBusiness pdndBusiness = dummyPDNDBusiness();
-    List<PDNDImpresa> pdndImpresaList = new ArrayList<>();
-    pdndImpresaList.add(dummyPDNDImpresa());
+    PDNDImpresa pdndImpresa = dummyPDNDImpresa();
+    String jsonImpresa = "{\"businessTaxId\":\"12345678901\",\"businessName\":\"Dummy Business Name\"}";
 
-    mockPdndToken();
-    mockPdndSecretValue();
-    when(pdndInfoCamereRestClient.retrieveInstitutionPdndByTaxCode(anyString(), anyString()))
-            .thenReturn(pdndImpresaList);
-    when(pdndBusinessMapper.toPDNDBusiness(dummyPDNDImpresa())).thenReturn(pdndBusiness);
+    when(pdndVisuraServiceCacheable.getInfocamereImpresa(taxCode))
+            .thenReturn(jsonImpresa);
+    when(pdndBusinessMapper.toPDNDBusiness(any(PDNDImpresa.class))).thenReturn(pdndBusiness);
 
     // when
-    pdndBusiness = pdndInfoCamereConnector.retrieveInstitutionPdndByTaxCode(taxCode);
+    PDNDBusiness result = pdndInfoCamereConnector.retrieveInstitutionPdndByTaxCode(taxCode);
 
     // then
-    assertNotNull(pdndBusiness);
-    assertNotNull(pdndBusiness.getClass());
-    assertEquals(1, pdndImpresaList.size());
-    PDNDImpresa pdndImpresa = pdndImpresaList.iterator().next();
-    assertEquals(pdndImpresa.getBusinessTaxId(), pdndBusiness.getBusinessTaxId());
-    assertEquals(pdndImpresa.getBusinessName(), pdndBusiness.getBusinessName());
-    assertEquals(pdndImpresa.getBusinessStatus(), pdndBusiness.getBusinessStatus());
-    assertEquals(pdndImpresa.getLegalNature(), pdndBusiness.getLegalNature());
-    assertEquals(pdndImpresa.getLegalNatureDescription(), pdndBusiness.getLegalNatureDescription());
-    assertEquals(pdndImpresa.getAddress(), pdndBusiness.getAddress());
-    assertEquals(pdndImpresa.getDigitalAddress(), pdndBusiness.getDigitalAddress());
-    assertEquals(pdndImpresa.getNRea(), pdndBusiness.getNRea());
-    assertEquals(pdndImpresa.getCciaa(), pdndBusiness.getCciaa());
-    assertEquals(pdndImpresa.getBusinessAddress().getCity(), pdndBusiness.getCity());
-    assertEquals(pdndImpresa.getBusinessAddress().getCounty(), pdndBusiness.getCounty());
-    assertEquals(pdndImpresa.getBusinessAddress().getZipCode(), pdndBusiness.getZipCode());
+    assertNotNull(result);
+    assertNotNull(result.getClass());
+    assertEquals(pdndBusiness.getBusinessTaxId(), result.getBusinessTaxId());
+    assertEquals(pdndBusiness.getBusinessName(), result.getBusinessName());
+    assertEquals(pdndBusiness.getBusinessStatus(), result.getBusinessStatus());
+    assertEquals(pdndBusiness.getLegalNature(), result.getLegalNature());
+    assertEquals(pdndBusiness.getLegalNatureDescription(), result.getLegalNatureDescription());
+    assertEquals(pdndBusiness.getAddress(), result.getAddress());
+    assertEquals(pdndBusiness.getDigitalAddress(), result.getDigitalAddress());
+    assertEquals(pdndBusiness.getNRea(), result.getNRea());
+    assertEquals(pdndBusiness.getCciaa(), result.getCciaa());
+    assertEquals(pdndBusiness.getCity(), result.getCity());
+    assertEquals(pdndBusiness.getCounty(), result.getCounty());
+    assertEquals(pdndBusiness.getZipCode(), result.getZipCode());
 
-    verify(pdndInfoCamereRestClient, times(1))
-            .retrieveInstitutionPdndByTaxCode(anyString(), anyString());
-    verifyNoMoreInteractions(pdndInfoCamereRestClient);
+    verify(pdndVisuraServiceCacheable, times(1)).getInfocamereImpresa(taxCode);
+    verify(pdndBusinessMapper, times(1)).toPDNDBusiness(any(PDNDImpresa.class));
   }
 
   @Test
   void testRetrieveInstitutionDetail() {
     final String taxCode = "taxCode";
-    byte[] documentBytes = """
+    final String encryptedTaxCode = "encryptedTaxCode";
+    final String documentString = """
     <blocchi-impresa>
         <dati-identificativi>
             <businessTaxId>12345678901</businessTaxId>
@@ -268,85 +267,75 @@ class PDNDInfoCamereConnectorImplTest {
             <digitalAddress>impresa@example.com</digitalAddress>
         </dati-identificativi>
     </blocchi-impresa>
-    """.getBytes(StandardCharsets.UTF_8);
+    """;
 
-    mockPdndVisuraToken();
-    mockPdndVisuraSecretValue();
+    PDNDBusiness pdndBusiness = dummyPDNDBusiness();
 
-    when(pdndVisuraInfoCamereRawRestClient.getRawInstitutionDetail(anyString(), anyString()))
-            .thenReturn(documentBytes);
+    try (var mockedEncryption = mockStatic(DataEncryptionUtils.class)) {
+      mockedEncryption.when(() -> DataEncryptionUtils.encrypt(taxCode)).thenReturn(encryptedTaxCode);
+      mockedEncryption.when(() -> DataEncryptionUtils.decrypt(anyString())).thenReturn(documentString);
+      when(pdndVisuraServiceCacheable.getEncryptedDocument(encryptedTaxCode))
+              .thenReturn(documentString);
+      doNothing().when(storageAsyncService)
+              .saveStringToStorage(anyString(), anyString());
+      when(pdndBusinessMapper.toPDNDBusiness(any(PDNDVisuraImpresa.class)))
+              .thenReturn(pdndBusiness);
 
-    doNothing().when(storageAsyncService)
-            .saveStringToStorage(anyString(), anyString());
+      // when
+      var result = pdndInfoCamereConnector.retrieveInstitutionDetail(taxCode);
 
-    var result = pdndInfoCamereConnector.retrieveInstitutionDetail(taxCode);
+      // then
+      assertNotNull(result);
+      assertEquals(pdndBusiness.getBusinessTaxId(), result.getBusinessTaxId());
 
-    // verifica chiamate
-    verify(pdndVisuraInfoCamereRawRestClient, times(1))
-            .getRawInstitutionDetail(anyString(), anyString());
-    verify(storageAsyncService, times(1))
-            .saveStringToStorage(anyString(), anyString());
-
-    verifyNoMoreInteractions(pdndVisuraInfoCamereRestClient, pdndVisuraInfoCamereRawRestClient, storageAsyncService);
+      verify(pdndVisuraServiceCacheable, times(1)).getEncryptedDocument(encryptedTaxCode);
+      verify(storageAsyncService, times(1))
+              .saveStringToStorage(anyString(), anyString());
+    }
   }
 
-
-  @Test
-  void testRetrieveInstitutionDetail_FeignExceptionBadRequest() {
-
-    // given
-    final String taxCode = "taxCode";
-
-    mockPdndVisuraToken();
-    mockPdndVisuraSecretValue();
-    when(pdndVisuraInfoCamereRawRestClient.getRawInstitutionDetail(anyString(), anyString()))
-            .thenThrow(FeignException.BadRequest.class);
-
-    // when
-    Executable executable = () -> pdndInfoCamereConnector.retrieveInstitutionDetail(taxCode);
-
-    // then
-    ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
-    assertEquals("No institution found for taxCode: " + taxCode, e.getMessage());
-    Mockito.verifyNoInteractions(pdndInfoCamereRestClient);
-  }
-
-  @Test
-  void testRetrieveInstitutionDetail_FeignExceptionBadGateway() {
-
-    // given
-    final String taxCode = "taxCode";
-
-    mockPdndVisuraToken();
-    mockPdndVisuraSecretValue();
-    when(pdndVisuraInfoCamereRawRestClient.getRawInstitutionDetail(anyString(), anyString()))
-            .thenThrow(FeignException.BadGateway.class);
-
-    // when
-    Executable executable = () -> pdndInfoCamereConnector.retrieveInstitutionDetail(taxCode);
-
-    // then
-    assertThrows(FeignException.BadGateway.class, executable);
-    Mockito.verifyNoInteractions(pdndInfoCamereRestClient);
-  }
 
   @Test
   void testRetrieveInstitutionDetail_Exception() {
 
     // given
     final String taxCode = "taxCode";
+    final String encryptedTaxCode = "encryptedTaxCode";
 
-    mockPdndVisuraToken();
-    mockPdndVisuraSecretValue();
-    when(pdndVisuraInfoCamereRestClient.retrieveInstitutionDetail(anyString(), anyString()))
-            .thenThrow(ResourceNotFoundException.class);
+    try (var mockedEncryption = mockStatic(DataEncryptionUtils.class)) {
+      mockedEncryption.when(() -> DataEncryptionUtils.encrypt(taxCode)).thenReturn(encryptedTaxCode);
+      when(pdndVisuraServiceCacheable.getEncryptedDocument(encryptedTaxCode))
+              .thenThrow(new RuntimeException("Test exception"));
 
-    // when
-    Executable executable = () -> pdndInfoCamereConnector.retrieveInstitutionDetail(taxCode);
+      // when
+      Executable executable = () -> pdndInfoCamereConnector.retrieveInstitutionDetail(taxCode);
 
-    // then
-    assertThrows(RuntimeException.class, executable);
-    Mockito.verifyNoInteractions(pdndInfoCamereRestClient);
+      // then
+      IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
+      assertEquals("Unexpected error while retrieving institution detail", e.getMessage());
+    }
+  }
+
+  @Test
+  void testRetrieveInstitutionDetail_DecryptionException() {
+
+    // given
+    final String taxCode = "taxCode";
+    final String encryptedTaxCode = "encryptedTaxCode";
+
+    try (var mockedEncryption = mockStatic(DataEncryptionUtils.class)) {
+      mockedEncryption.when(() -> DataEncryptionUtils.encrypt(taxCode)).thenReturn(encryptedTaxCode);
+      mockedEncryption.when(() -> DataEncryptionUtils.decrypt(anyString())).thenThrow(new RuntimeException("Decryption error"));
+      when(pdndVisuraServiceCacheable.getEncryptedDocument(encryptedTaxCode))
+              .thenReturn("encrypted document");
+
+      // when
+      Executable executable = () -> pdndInfoCamereConnector.retrieveInstitutionDetail(taxCode);
+
+      // then
+      IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
+      assertEquals("Unexpected error while retrieving institution detail", e.getMessage());
+    }
   }
 
   @Test
@@ -354,11 +343,6 @@ class PDNDInfoCamereConnectorImplTest {
 
     // given
     String taxCode = null;
-    List<PDNDImpresa> pdndImpresaList = new ArrayList<>();
-    pdndImpresaList.add(dummyPDNDImpresa());
-
-    when(pdndInfoCamereRestClient.retrieveInstitutionPdndByTaxCode(anyString(), anyString()))
-            .thenReturn(pdndImpresaList);
 
     // when
     Executable executable = () -> pdndInfoCamereConnector.retrieveInstitutionPdndByTaxCode(taxCode);
@@ -366,7 +350,7 @@ class PDNDInfoCamereConnectorImplTest {
     // then
     IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
     assertEquals("TaxCode is required", e.getMessage());
-    Mockito.verifyNoInteractions(pdndInfoCamereRestClient);
+    Mockito.verifyNoInteractions(pdndVisuraServiceCacheable);
   }
 
   @Test
