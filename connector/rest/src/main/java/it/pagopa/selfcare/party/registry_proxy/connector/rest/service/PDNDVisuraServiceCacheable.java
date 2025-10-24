@@ -8,6 +8,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDVisuraI
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -28,12 +29,10 @@ public class PDNDVisuraServiceCacheable {
         this.pdndVisuraInfoCamereRestClientConfig = pdndVisuraInfoCamereRestClientConfig;
     }
 
-    @Cacheable(
-            value = "visure",
-            key = "#encryptedTaxCode",
-            cacheManager = "visureRedisCacheManager",
-            sync = true
-    )
+    @Caching(cacheable = {
+            @Cacheable(cacheManager = "visureRedisCacheManagerL2", key = "#encryptedTaxCode", cacheNames = "visure"),
+            @Cacheable(cacheManager = "visureRedisCacheManagerL1", key = "#encryptedTaxCode", cacheNames = "visure")
+    })
     public String getEncryptedDocument(String encryptedTaxCode) {
         log.info("getEncryptedDocument for {} START", encryptedTaxCode);
         ClientCredentialsResponse tokenResponse = tokenProviderVisura.getTokenPdnd(pdndVisuraInfoCamereRestClientConfig.getPdndSecretValue());

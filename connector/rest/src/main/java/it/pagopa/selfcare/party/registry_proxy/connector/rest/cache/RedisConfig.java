@@ -12,7 +12,6 @@ import org.springframework.data.redis.connection.RedisPassword;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -46,24 +45,17 @@ public class RedisConfig {
         return redisStandaloneConfiguration;
     }
 
-//    @Bean
-//    public RedisTemplate<String, Object> redisTemplate() {
-//        RedisTemplate<String, Object> template = new RedisTemplate<>();
-//        template.setConnectionFactory(jedisConnectionFactory());
-//        return template;
-//    }
-
     @Primary
-    @Bean("visureRedisCacheManager")
+    @Bean(name = "visureRedisCacheManagerL2")
     public RedisCacheManager visureRedisCacheManager(JedisConnectionFactory cf) {
-        RedisCacheConfiguration visureCfg = RedisCacheConfiguration.defaultCacheConfig()
+        RedisCacheConfiguration cfg = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofHours(1))
                 .disableCachingNullValues()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()));
 
         return RedisCacheManager.builder(RedisCacheWriter.nonLockingRedisCacheWriter(cf))
-                .cacheDefaults(visureCfg)
+                .cacheDefaults(cfg)
                 .initialCacheNames(Collections.singleton("visure"))
                 .disableCreateOnMissingCache()
                 .build();
