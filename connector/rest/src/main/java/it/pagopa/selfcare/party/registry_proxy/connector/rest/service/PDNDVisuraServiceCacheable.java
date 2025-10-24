@@ -7,7 +7,6 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDVisuraI
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDVisuraInfoCamereRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -17,16 +16,17 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class PDNDVisuraServiceCacheable {
 
-    @Autowired
-    TokenProviderVisura tokenProviderVisura;
-
-    @Autowired
-    PDNDVisuraInfoCamereRawRestClient pdndVisuraInfoCamereRawRestClient;
-
-    @Autowired
-    PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig;
+    private final TokenProviderVisura tokenProviderVisura;
+    private final PDNDVisuraInfoCamereRawRestClient pdndVisuraInfoCamereRawRestClient;
+    private final PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig;
 
     private static final String BEARER = "Bearer ";
+
+    public PDNDVisuraServiceCacheable(TokenProviderVisura tokenProviderVisura, PDNDVisuraInfoCamereRawRestClient pdndVisuraInfoCamereRawRestClient, PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig) {
+        this.tokenProviderVisura = tokenProviderVisura;
+        this.pdndVisuraInfoCamereRawRestClient = pdndVisuraInfoCamereRawRestClient;
+        this.pdndVisuraInfoCamereRestClientConfig = pdndVisuraInfoCamereRestClientConfig;
+    }
 
     @Cacheable(value = "visure", key = "#encryptedTaxCode")
     public String getEncryptedDocument(String encryptedTaxCode) {
