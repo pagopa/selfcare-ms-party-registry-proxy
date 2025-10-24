@@ -155,7 +155,7 @@ app_settings = [
     value = "azure"
   },
   {
-    name  = "REDIS_HOST"
+    name  = "REDIS_URL"
     value = "selc-d-redis.redis.cache.windows.net"
   },
   {
