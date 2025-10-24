@@ -28,7 +28,12 @@ public class PDNDVisuraServiceCacheable {
         this.pdndVisuraInfoCamereRestClientConfig = pdndVisuraInfoCamereRestClientConfig;
     }
 
-    @Cacheable(value = "visure", key = "#encryptedTaxCode")
+    @Cacheable(
+            value = "visure",
+            key = "#encryptedTaxCode",
+            cacheManager = "visureRedisCacheManager",
+            sync = true
+    )
     public String getEncryptedDocument(String encryptedTaxCode) {
         log.info("getEncryptedDocument for {} START", encryptedTaxCode);
         ClientCredentialsResponse tokenResponse = tokenProviderVisura.getTokenPdnd(pdndVisuraInfoCamereRestClientConfig.getPdndSecretValue());
