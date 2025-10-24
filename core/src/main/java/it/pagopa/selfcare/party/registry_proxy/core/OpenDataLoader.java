@@ -50,12 +50,12 @@ public class OpenDataLoader implements CommandLineRunner {
     public void run(String... args) {
         log.trace("run start");
         openDataConnectors.forEach(openDataConnector -> {
-            /*institutionIndexWriterService.adds(openDataConnector.getInstitutions());
+            institutionIndexWriterService.adds(openDataConnector.getInstitutions());
             categoryIndexWriterService.adds(openDataConnector.getCategories());
             aooIndexWriterService.adds(openDataConnector.getAOOs());
             uoIndexWriterService.adds(openDataConnector.getUOs());
             stationIndexWriterService.adds(anacService.loadStations());
-            ivassIndexWriterService.adds(ivassDataConnector.getInsurances());*/
+            ivassIndexWriterService.adds(ivassDataConnector.getInsurances());
         });
         log.trace("run end");
     }
