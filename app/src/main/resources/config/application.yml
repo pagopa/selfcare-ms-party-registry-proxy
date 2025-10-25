@@ -58,6 +58,7 @@ springdoc:
 logging:
   level:
     it.pagopa.selfcare.party.registry_proxy: ${MS_PARTY_REGISTRY_PROXY_LOG_LEVEL:DEBUG}
+
   pattern:
     additional-info: ",%X{X-Client-Ip:-}]"
   appinsights:

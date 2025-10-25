@@ -151,8 +151,16 @@ app_settings = [
     value = "institution-index-ar"
   },
   {
-      name  = "ANAC_FTP_MODE"
-      value = "azure"
+    name  = "ANAC_FTP_MODE"
+    value = "azure"
+  },
+  {
+    name  = "REDIS_URL"
+    value = "selc-u-redis.redis.cache.windows.net"
+  },
+  {
+    name  = "REDIS_PORT"
+    value = "6380"
   }
 ]
 
@@ -177,4 +185,5 @@ secrets_names = {
   "APPINSIGHTS_CONNECTION_STRING"         = "appinsights-connection-string"
   "ONBOARDING_DATA_ENCRIPTION_KEY"        = "onboarding-data-encryption-key"
   "ONBOARDING_DATA_ENCRIPTION_IV"         = "onboarding-data-encryption-iv"
+  "REDIS_PASSWORD"                        = "redis-primary-access-key"
 }
