@@ -151,16 +151,16 @@ app_settings = [
     value = "institution-index-ar"
   },
   {
-      name  = "ANAC_FTP_MODE"
-      value = "azure"
+    name  = "ANAC_FTP_MODE"
+    value = "azure"
   },
   {
-      name  = "REDIS_URL"
-      value = "selc-u-redis.redis.cache.windows.net"
+    name  = "REDIS_URL"
+    value = "selc-u-redis.redis.cache.windows.net"
   },
   {
-     name  = "REDIS_PORT"
-     value = "6380"
+    name  = "REDIS_PORT"
+    value = "6380"
   }
 ]
 

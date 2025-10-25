@@ -155,12 +155,12 @@ app_settings = [
     value = "sftp"
   },
   {
-        name  = "REDIS_URL"
-        value = "selc-p-redis.redis.cache.windows.net"
+    name  = "REDIS_URL"
+    value = "selc-p-redis.redis.cache.windows.net"
   },
   {
-       name  = "REDIS_PORT"
-       value = "6380"
+    name  = "REDIS_PORT"
+    value = "6380"
   }
 ]
 
