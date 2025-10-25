@@ -24,6 +24,7 @@ import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -105,8 +106,8 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
 
         String decDocument = DataEncryptionUtils.decrypt(document);
 
-        //storageAsyncService.saveStringToStorage(document,
-        //        "visura_" + taxCode + "_" + LocalDateTime.now() + ".xml");
+        storageAsyncService.saveStringToStorage(document,
+               "visura_" + taxCode + "_" + LocalDateTime.now() + ".xml");
 
         PDNDVisuraImpresa result = xmlToVisuraImpresa(decDocument.getBytes(StandardCharsets.UTF_8));
 
