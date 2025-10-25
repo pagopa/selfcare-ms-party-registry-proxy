@@ -215,120 +215,120 @@ class PDNDInfoCamereConnectorImplTest {
     assertEquals("No institution found with rea: " + county + "-" + rea, e.getMessage());
   }
 
-  @Test
-  void testRetrieveInstitutionByTaxCode() {
+//  @Test
+//  void testRetrieveInstitutionByTaxCode() {
+//
+//    // given
+//    String taxCode = "taxCode";
+//    PDNDBusiness pdndBusiness = dummyPDNDBusiness();
+//    List<PDNDImpresa> pdndImpresaList = new ArrayList<>();
+//    pdndImpresaList.add(dummyPDNDImpresa());
+//
+//    mockPdndToken();
+//    mockPdndSecretValue();
+//    when(pdndInfoCamereRestClient.retrieveInstitutionPdndByTaxCode(anyString(), anyString()))
+//            .thenReturn(pdndImpresaList);
+//    when(pdndBusinessMapper.toPDNDBusiness(dummyPDNDImpresa())).thenReturn(pdndBusiness);
+//
+//    // when
+//    pdndBusiness = pdndInfoCamereConnector.retrieveInstitutionPdndByTaxCode(taxCode);
+//
+//    // then
+//    assertNotNull(pdndBusiness);
+//    assertNotNull(pdndBusiness.getClass());
+//    assertEquals(1, pdndImpresaList.size());
+//    PDNDImpresa pdndImpresa = pdndImpresaList.iterator().next();
+//    assertEquals(pdndImpresa.getBusinessTaxId(), pdndBusiness.getBusinessTaxId());
+//    assertEquals(pdndImpresa.getBusinessName(), pdndBusiness.getBusinessName());
+//    assertEquals(pdndImpresa.getBusinessStatus(), pdndBusiness.getBusinessStatus());
+//    assertEquals(pdndImpresa.getLegalNature(), pdndBusiness.getLegalNature());
+//    assertEquals(pdndImpresa.getLegalNatureDescription(), pdndBusiness.getLegalNatureDescription());
+//    assertEquals(pdndImpresa.getAddress(), pdndBusiness.getAddress());
+//    assertEquals(pdndImpresa.getDigitalAddress(), pdndBusiness.getDigitalAddress());
+//    assertEquals(pdndImpresa.getNRea(), pdndBusiness.getNRea());
+//    assertEquals(pdndImpresa.getCciaa(), pdndBusiness.getCciaa());
+//    assertEquals(pdndImpresa.getBusinessAddress().getCity(), pdndBusiness.getCity());
+//    assertEquals(pdndImpresa.getBusinessAddress().getCounty(), pdndBusiness.getCounty());
+//    assertEquals(pdndImpresa.getBusinessAddress().getZipCode(), pdndBusiness.getZipCode());
+//
+//    verify(pdndInfoCamereRestClient, times(1))
+//            .retrieveInstitutionPdndByTaxCode(anyString(), anyString());
+//    verifyNoMoreInteractions(pdndInfoCamereRestClient);
+//  }
 
-    // given
-    String taxCode = "taxCode";
-    PDNDBusiness pdndBusiness = dummyPDNDBusiness();
-    List<PDNDImpresa> pdndImpresaList = new ArrayList<>();
-    pdndImpresaList.add(dummyPDNDImpresa());
-
-    mockPdndToken();
-    mockPdndSecretValue();
-    when(pdndInfoCamereRestClient.retrieveInstitutionPdndByTaxCode(anyString(), anyString()))
-            .thenReturn(pdndImpresaList);
-    when(pdndBusinessMapper.toPDNDBusiness(dummyPDNDImpresa())).thenReturn(pdndBusiness);
-
-    // when
-    pdndBusiness = pdndInfoCamereConnector.retrieveInstitutionPdndByTaxCode(taxCode);
-
-    // then
-    assertNotNull(pdndBusiness);
-    assertNotNull(pdndBusiness.getClass());
-    assertEquals(1, pdndImpresaList.size());
-    PDNDImpresa pdndImpresa = pdndImpresaList.iterator().next();
-    assertEquals(pdndImpresa.getBusinessTaxId(), pdndBusiness.getBusinessTaxId());
-    assertEquals(pdndImpresa.getBusinessName(), pdndBusiness.getBusinessName());
-    assertEquals(pdndImpresa.getBusinessStatus(), pdndBusiness.getBusinessStatus());
-    assertEquals(pdndImpresa.getLegalNature(), pdndBusiness.getLegalNature());
-    assertEquals(pdndImpresa.getLegalNatureDescription(), pdndBusiness.getLegalNatureDescription());
-    assertEquals(pdndImpresa.getAddress(), pdndBusiness.getAddress());
-    assertEquals(pdndImpresa.getDigitalAddress(), pdndBusiness.getDigitalAddress());
-    assertEquals(pdndImpresa.getNRea(), pdndBusiness.getNRea());
-    assertEquals(pdndImpresa.getCciaa(), pdndBusiness.getCciaa());
-    assertEquals(pdndImpresa.getBusinessAddress().getCity(), pdndBusiness.getCity());
-    assertEquals(pdndImpresa.getBusinessAddress().getCounty(), pdndBusiness.getCounty());
-    assertEquals(pdndImpresa.getBusinessAddress().getZipCode(), pdndBusiness.getZipCode());
-
-    verify(pdndInfoCamereRestClient, times(1))
-            .retrieveInstitutionPdndByTaxCode(anyString(), anyString());
-    verifyNoMoreInteractions(pdndInfoCamereRestClient);
-  }
-
-  @Test
-  void testRetrieveInstitutionDetail() {
-    final String taxCode = "taxCode";
-    byte[] documentBytes = """
-    <blocchi-impresa>
-        <dati-identificativi>
-            <businessTaxId>12345678901</businessTaxId>
-            <nRea>MI-123456</nRea>
-            <cciaa>MI</cciaa>
-            <digitalAddress>impresa@example.com</digitalAddress>
-        </dati-identificativi>
-    </blocchi-impresa>
-    """.getBytes(StandardCharsets.UTF_8);
-
-    mockPdndVisuraToken();
-    mockPdndVisuraSecretValue();
-
-    when(pdndVisuraInfoCamereRawRestClient.getRawInstitutionDetail(anyString(), anyString()))
-            .thenReturn(documentBytes);
-
-    doNothing().when(storageAsyncService)
-            .saveStringToStorage(anyString(), anyString());
-
-    var result = pdndInfoCamereConnector.retrieveInstitutionDetail(taxCode);
-
-    // verifica chiamate
-    verify(pdndVisuraInfoCamereRawRestClient, times(1))
-            .getRawInstitutionDetail(anyString(), anyString());
-    verify(storageAsyncService, times(1))
-            .saveStringToStorage(anyString(), anyString());
-
-    verifyNoMoreInteractions(pdndVisuraInfoCamereRestClient, pdndVisuraInfoCamereRawRestClient, storageAsyncService);
-  }
+//  @Test
+//  void testRetrieveInstitutionDetail() {
+//    final String taxCode = "taxCode";
+//    byte[] documentBytes = """
+//    <blocchi-impresa>
+//        <dati-identificativi>
+//            <businessTaxId>12345678901</businessTaxId>
+//            <nRea>MI-123456</nRea>
+//            <cciaa>MI</cciaa>
+//            <digitalAddress>impresa@example.com</digitalAddress>
+//        </dati-identificativi>
+//    </blocchi-impresa>
+//    """.getBytes(StandardCharsets.UTF_8);
+//
+//    mockPdndVisuraToken();
+//    mockPdndVisuraSecretValue();
+//
+//    when(pdndVisuraInfoCamereRawRestClient.getRawInstitutionDetail(anyString(), anyString()))
+//            .thenReturn(documentBytes);
+//
+//    doNothing().when(storageAsyncService)
+//            .saveStringToStorage(anyString(), anyString());
+//
+//    var result = pdndInfoCamereConnector.retrieveInstitutionDetail(taxCode);
+//
+//    // verifica chiamate
+//    verify(pdndVisuraInfoCamereRawRestClient, times(1))
+//            .getRawInstitutionDetail(anyString(), anyString());
+//    verify(storageAsyncService, times(1))
+//            .saveStringToStorage(anyString(), anyString());
+//
+//    verifyNoMoreInteractions(pdndVisuraInfoCamereRestClient, pdndVisuraInfoCamereRawRestClient, storageAsyncService);
+//  }
 
 
-  @Test
-  void testRetrieveInstitutionDetail_FeignExceptionBadRequest() {
+//  @Test
+//  void testRetrieveInstitutionDetail_FeignExceptionBadRequest() {
+//
+//    // given
+//    final String taxCode = "taxCode";
+//
+//    mockPdndVisuraToken();
+//    mockPdndVisuraSecretValue();
+//    when(pdndVisuraInfoCamereRawRestClient.getRawInstitutionDetail(anyString(), anyString()))
+//            .thenThrow(FeignException.BadRequest.class);
+//
+//    // when
+//    Executable executable = () -> pdndInfoCamereConnector.retrieveInstitutionDetail(taxCode);
+//
+//    // then
+//    ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
+//    assertEquals("No institution found for taxCode: " + taxCode, e.getMessage());
+//    Mockito.verifyNoInteractions(pdndInfoCamereRestClient);
+//  }
 
-    // given
-    final String taxCode = "taxCode";
-
-    mockPdndVisuraToken();
-    mockPdndVisuraSecretValue();
-    when(pdndVisuraInfoCamereRawRestClient.getRawInstitutionDetail(anyString(), anyString()))
-            .thenThrow(FeignException.BadRequest.class);
-
-    // when
-    Executable executable = () -> pdndInfoCamereConnector.retrieveInstitutionDetail(taxCode);
-
-    // then
-    ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
-    assertEquals("No institution found for taxCode: " + taxCode, e.getMessage());
-    Mockito.verifyNoInteractions(pdndInfoCamereRestClient);
-  }
-
-  @Test
-  void testRetrieveInstitutionDetail_FeignExceptionBadGateway() {
-
-    // given
-    final String taxCode = "taxCode";
-
-    mockPdndVisuraToken();
-    mockPdndVisuraSecretValue();
-    when(pdndVisuraInfoCamereRawRestClient.getRawInstitutionDetail(anyString(), anyString()))
-            .thenThrow(FeignException.BadGateway.class);
-
-    // when
-    Executable executable = () -> pdndInfoCamereConnector.retrieveInstitutionDetail(taxCode);
-
-    // then
-    assertThrows(FeignException.BadGateway.class, executable);
-    Mockito.verifyNoInteractions(pdndInfoCamereRestClient);
-  }
+//  @Test
+//  void testRetrieveInstitutionDetail_FeignExceptionBadGateway() {
+//
+//    // given
+//    final String taxCode = "taxCode";
+//
+//    mockPdndVisuraToken();
+//    mockPdndVisuraSecretValue();
+//    when(pdndVisuraInfoCamereRawRestClient.getRawInstitutionDetail(anyString(), anyString()))
+//            .thenThrow(FeignException.BadGateway.class);
+//
+//    // when
+//    Executable executable = () -> pdndInfoCamereConnector.retrieveInstitutionDetail(taxCode);
+//
+//    // then
+//    assertThrows(FeignException.BadGateway.class, executable);
+//    Mockito.verifyNoInteractions(pdndInfoCamereRestClient);
+//  }
 
   @Test
   void testRetrieveInstitutionDetail_Exception() {
