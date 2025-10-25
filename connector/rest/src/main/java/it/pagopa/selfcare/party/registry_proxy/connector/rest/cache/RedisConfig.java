@@ -19,7 +19,6 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -54,7 +53,7 @@ public class RedisConfig {
     }
 
     @Bean(name = "redisCacheManager")
-    public RedisCacheManager visureRedisCacheManager(JedisConnectionFactory jedisConnectionFactory) {
+    public RedisCacheManager redisCacheManager(JedisConnectionFactory jedisConnectionFactory) {
 
         ObjectMapper om = new ObjectMapper();
         om.registerModule(new JavaTimeModule());
