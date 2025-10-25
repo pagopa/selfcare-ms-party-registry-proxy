@@ -12,21 +12,21 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDVisuraI
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDVisuraInfoCamereRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDInfoCamereRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDVisuraInfoCamereRestClientConfig;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.*;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDImpresa;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDVisuraImpresa;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.mapper.PDNDBusinessMapper;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.service.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.XMLCleaner;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -41,7 +41,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
   private final PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig;
   private final PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig;
   private final StorageAsyncService storageAsyncService;
-  private final PDNDCacheableService PDNDcacheableService;
+  private final PDNDCacheableService PDNDCacheableService;
   private static final String BEARER = "Bearer ";
 
   private ObjectMapper objectMapper;
@@ -55,7 +55,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
           TokenProviderVisura tokenProviderVisura,
           PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig,
           PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig,
-          StorageAsyncService storageAsyncService, PDNDCacheableService PDNDcacheableService) {
+          StorageAsyncService storageAsyncService, PDNDCacheableService PDNDCacheableService) {
     this.pdndInfoCamereRestClient = pdndInfoCamereRestClient;
     this.pdndVisuraInfoCamereRawRestClient = pdndVisuraInfoCamereRawRestClient;
     this.pdndVisuraInfoCamereRestClient = pdndVisuraInfoCamereRestClient;
@@ -65,7 +65,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
     this.pdndInfoCamereRestClientConfig = pdndInfoCamereRestClientConfig;
     this.pdndVisuraInfoCamereRestClientConfig = pdndVisuraInfoCamereRestClientConfig;
     this.storageAsyncService = storageAsyncService;
-      this.PDNDcacheableService = PDNDcacheableService;
+      this.PDNDCacheableService = PDNDCacheableService;
   }
 
   @Override
@@ -84,7 +84,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
       PDNDImpresa impresa = null;
 
       try {
-          String encResult = PDNDcacheableService.getEncryptedPDNDImpresa(encTaxCode);
+          String encResult = PDNDCacheableService.getEncryptedPDNDImpresa(encTaxCode);
           String decResult = DataEncryptionUtils.decrypt(encResult);
 
           impresa = new ObjectMapper().readValue(decResult, new TypeReference<>(){
@@ -101,12 +101,14 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
       Assert.hasText(taxCode, TAX_CODE_REQUIRED_MESSAGE);
         String encTaxCode = DataEncryptionUtils.encrypt(taxCode);
       try {
-        String document = PDNDcacheableService.getEncryptedDocument(encTaxCode);
+        String document = PDNDCacheableService.getEncryptedDocument(encTaxCode);
+
+        String decDocument = DataEncryptionUtils.decrypt(document);
 
         //storageAsyncService.saveStringToStorage(document,
         //        "visura_" + taxCode + "_" + LocalDateTime.now() + ".xml");
 
-        PDNDVisuraImpresa result = xmlToVisuraImpresa(document.getBytes(StandardCharsets.UTF_8));
+        PDNDVisuraImpresa result = xmlToVisuraImpresa(decDocument.getBytes(StandardCharsets.UTF_8));
 
         return pdndBusinessMapper.toPDNDBusiness(result);
 
