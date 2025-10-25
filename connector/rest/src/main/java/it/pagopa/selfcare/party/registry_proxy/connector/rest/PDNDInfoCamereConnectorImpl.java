@@ -30,6 +30,7 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -79,6 +80,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
   }
 
   @Override
+  @Cacheable(cacheNames = "pdndInfocamere", cacheManager = "redisCacheManager", key = "'retrieveInstitutionPdndByTaxCode:' + #taxCode")
   public PDNDBusiness retrieveInstitutionPdndByTaxCode(String taxCode) {
     Assert.hasText(taxCode, TAX_CODE_REQUIRED_MESSAGE);
     ClientCredentialsResponse tokenResponse = tokenProviderPDND.getTokenPdnd(pdndInfoCamereRestClientConfig.getPdndSecretValue());
@@ -88,6 +90,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
   }
 
   @Override
+  @Cacheable(cacheNames = "pdndInfocamere", cacheManager = "redisCacheManager", key = "'retrieveInstitutionDetail:' + #taxCode")
   public PDNDBusiness retrieveInstitutionDetail(String taxCode) {
       Assert.hasText(taxCode, TAX_CODE_REQUIRED_MESSAGE);
       ClientCredentialsResponse tokenResponse = tokenProviderVisura.getTokenPdnd(pdndVisuraInfoCamereRestClientConfig.getPdndSecretValue());
