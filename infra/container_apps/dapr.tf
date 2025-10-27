@@ -24,6 +24,11 @@ resource "azurerm_container_app_environment_dapr_component" "blob_state" {
   }
 
   metadata {
+    name  = "actorStateStore"
+    value = "true"
+  }
+
+  metadata {
     name  = "azureClientId"
     value = data.azurerm_user_assigned_identity.cae_identity.client_id
   }
