@@ -46,7 +46,7 @@ resource "azurerm_container_app_environment_dapr_component" "memory_state" {
   count = var.is_pnpg ? 1 : 0
 
   name                         = "blobstorage-state"  # Stesso nome!
-  container_app_environment_id = local.cae_id
+  container_app_environment_id = "selc-d-pnpg-cae-cp"
   component_type               = "state.in-memory"
   version                      = "v1"
 
