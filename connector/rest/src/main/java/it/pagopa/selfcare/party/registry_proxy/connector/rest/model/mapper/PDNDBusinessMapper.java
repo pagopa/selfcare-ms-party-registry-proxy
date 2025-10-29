@@ -54,7 +54,7 @@ public interface PDNDBusinessMapper {
                             .get(0).getCodiceAttivita())
                     .filter(Objects::nonNull).toList());
         }
-        return atecoCodes.stream().distinct().toList();
+        return atecoCodes.stream().toList();
     }
 
 
