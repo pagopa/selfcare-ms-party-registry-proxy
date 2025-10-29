@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.DatiIdentificativiImpresa;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.InfoAttivita;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.Localizzazioni;
 import lombok.Data;
 
 @Data
@@ -17,5 +18,10 @@ public class PDNDVisuraImpresa {
 
   @JsonProperty("info-attivita")
   private InfoAttivita infoAttivita;
+
+  @JsonProperty("localizzazioni")
+  private Localizzazioni pointOfSales;
+
+
 
 }

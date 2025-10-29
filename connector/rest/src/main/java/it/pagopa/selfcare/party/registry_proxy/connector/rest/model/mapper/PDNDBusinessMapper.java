@@ -1,17 +1,14 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.model.mapper;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries_pdnd.PDNDBusiness;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.ClassificazioneAteco;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.ClassificazioniAteco;
-import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.Localizzazione;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDImpresa;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDVisuraImpresa;
-
-import java.util.Collections;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.ClassificazioneAteco;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.Localizzazione;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -32,7 +29,7 @@ public interface PDNDBusinessMapper {
     @Mapping(target = "zipCode", source = "datiIdentificativiImpresa.localizzazione.cap")
     @Mapping(target = "vatNumber", source = "datiIdentificativiImpresa.vatNumber")
     @Mapping(target = "legalForm", source = "datiIdentificativiImpresa.legalForm")
-    @Mapping(target = "atecoCodes", source = "infoAttivita.classificazioniAteco", qualifiedByName = "mapAtecoCodes")
+    @Mapping(target = "atecoCodes", source = ".", qualifiedByName = "mapAtecoCodes")
     @Mapping(target = "address", source = "datiIdentificativiImpresa.localizzazione", qualifiedByName = "mapAddress")
     @Mapping(target = "disabledStateInstitution", source = "infoAttivita.disabledStateInstitution")
     @Mapping(target = "descriptionStateInstitution", source = "infoAttivita.descriptionStateInstitution")
@@ -41,15 +38,25 @@ public interface PDNDBusinessMapper {
     PDNDBusiness toPDNDBusiness(PDNDVisuraImpresa pdndImpresa);
 
     @Named("mapAtecoCodes")
-    default List<String> mapAtecoCodes(ClassificazioniAteco classificazioniAteco) {
-        if (classificazioniAteco == null || classificazioniAteco.getClassificazioniAteco() == null) {
-            return Collections.emptyList();
+    default List<String> mapAtecoCodes(PDNDVisuraImpresa pdndVisuraImpresa) {
+        List<String> atecoCodes = new ArrayList<>();
+        var classificazioniAteco = pdndVisuraImpresa.getInfoAttivita().getClassificazioniAteco();
+        if (Objects.nonNull(classificazioniAteco) && Objects.nonNull(classificazioniAteco.getClassificazioniAteco())) {
+             atecoCodes =  classificazioniAteco.getClassificazioniAteco().stream()
+                     .map(ClassificazioneAteco::getCodiceAttivita)
+                     .filter(Objects::nonNull)
+                     .collect(Collectors.toList());
+        }
+        var pointOfSales = pdndVisuraImpresa.getPointOfSales();
+        if (Objects.nonNull(pointOfSales) && Objects.nonNull(pointOfSales.getLocalizzazioni())) {
+            atecoCodes.addAll(pointOfSales.getLocalizzazioni().stream()
+                    .map(localizzazione -> localizzazione.getClassificazioniAteco()
+                            .getClassificazioniAteco()
+                            .get(0).getCodiceAttivita())
+                    .filter(Objects::nonNull).toList());
         }
 
-        return classificazioniAteco.getClassificazioniAteco().stream()
-                .map(ClassificazioneAteco::getCodiceAttivita)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+        return atecoCodes;
     }
 
 
