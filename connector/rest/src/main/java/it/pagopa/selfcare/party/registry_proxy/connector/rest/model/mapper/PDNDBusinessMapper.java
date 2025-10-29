@@ -5,9 +5,8 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDImpresa;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDVisuraImpresa;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.ClassificazioneAteco;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.Localizzazione;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+
+import java.util.*;
 import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -39,13 +38,13 @@ public interface PDNDBusinessMapper {
 
     @Named("mapAtecoCodes")
     default List<String> mapAtecoCodes(PDNDVisuraImpresa pdndVisuraImpresa) {
-        List<String> atecoCodes = new ArrayList<>();
+    Set<String> atecoCodes = new HashSet<>();
         var classificazioniAteco = pdndVisuraImpresa.getInfoAttivita().getClassificazioniAteco();
         if (Objects.nonNull(classificazioniAteco) && Objects.nonNull(classificazioniAteco.getClassificazioniAteco())) {
              atecoCodes =  classificazioniAteco.getClassificazioniAteco().stream()
                      .map(ClassificazioneAteco::getCodiceAttivita)
                      .filter(Objects::nonNull)
-                     .collect(Collectors.toList());
+                     .collect(Collectors.toSet());
         }
         var pointOfSales = pdndVisuraImpresa.getPointOfSales();
         if (Objects.nonNull(pointOfSales) && Objects.nonNull(pointOfSales.getLocalizzazioni())) {
