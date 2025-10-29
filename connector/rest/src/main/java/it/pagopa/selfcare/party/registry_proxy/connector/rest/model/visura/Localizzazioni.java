@@ -12,7 +12,7 @@ import lombok.Data;
 public class Localizzazioni {
 
  @JacksonXmlElementWrapper(useWrapping = false)
- @JacksonXmlProperty(localName = "localizzazioni")
+ @JacksonXmlProperty(localName = "localizzazione")
  private List<LocalizzazioneWrapper> localizzazioni;
 
 }
