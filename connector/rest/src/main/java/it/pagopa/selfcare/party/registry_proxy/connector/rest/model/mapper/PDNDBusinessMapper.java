@@ -53,11 +53,9 @@ public interface PDNDBusinessMapper {
                     .map(localizzazione -> localizzazione.getClassificazioniAteco()
                             .getClassificazioniAteco()
                             .get(0).getCodiceAttivita())
-                    .filter(Objects::nonNull)
-                    .distinct().toList());
+                    .filter(Objects::nonNull).toList());
         }
-
-        return atecoCodes;
+        return atecoCodes.stream().distinct().toList();
     }
 
 
