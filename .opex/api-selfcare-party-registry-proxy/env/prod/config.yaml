@@ -184,3 +184,21 @@ overrides:
       availability_evaluation_frequency: 10 # Default: 10
       availability_evaluation_time_window: 30 # Default: 20
       availability_event_occurrences: 3 # Default: 1
+    /search/institutions:
+      response_time_threshold: 100 # Default: 1
+      response_time_evaluation_frequency: 10 # Default: 10
+      response_time_evaluation_time_window: 30 # Default: 20
+      response_time_event_occurrences: 30 # Default:
+      availability_threshold: 0.8
+      availability_evaluation_frequency: 10 # Default: 10
+      availability_evaluation_time_window: 30 # Default: 20
+      availability_event_occurrences: 3 # Default: 1
+    /dapr/events:
+      response_time_threshold: 100 # Default: 1
+      response_time_evaluation_frequency: 10 # Default: 10
+      response_time_evaluation_time_window: 30 # Default: 20
+      response_time_event_occurrences: 30 # Default:
+      availability_threshold: 0.8
+      availability_evaluation_frequency: 10 # Default: 10
+      availability_evaluation_time_window: 30 # Default: 20
+      availability_event_occurrences: 3 # Default: 1
