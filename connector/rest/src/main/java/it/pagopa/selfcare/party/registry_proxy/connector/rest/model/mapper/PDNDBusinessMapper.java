@@ -38,23 +38,35 @@ public interface PDNDBusinessMapper {
 
     @Named("mapAtecoCodes")
     default List<String> mapAtecoCodes(PDNDVisuraImpresa pdndVisuraImpresa) {
-    Set<String> atecoCodes = new HashSet<>();
+        Set<String> atecoCodes = new HashSet<>();
         var classificazioniAteco = pdndVisuraImpresa.getInfoAttivita().getClassificazioniAteco();
-        if (Objects.nonNull(classificazioniAteco) && Objects.nonNull(classificazioniAteco.getClassificazioniAteco())) {
-             atecoCodes =  classificazioniAteco.getClassificazioniAteco().stream()
-                     .map(ClassificazioneAteco::getCodiceAttivita)
-                     .filter(Objects::nonNull)
-                     .collect(Collectors.toSet());
+        if (Objects.nonNull(classificazioniAteco)
+                && Objects.nonNull(classificazioniAteco.getClassificazioniAteco())) {
+            atecoCodes.addAll(
+                    classificazioniAteco.getClassificazioniAteco().stream()
+                            .map(ClassificazioneAteco::getCodiceAttivita)
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.toSet()));
         }
+
         var pointOfSales = pdndVisuraImpresa.getPointOfSales();
         if (Objects.nonNull(pointOfSales) && Objects.nonNull(pointOfSales.getLocalizzazioni())) {
-            atecoCodes.addAll(pointOfSales.getLocalizzazioni().stream()
-                    .map(localizzazione -> localizzazione.getClassificazioniAteco()
-                            .getClassificazioniAteco()
-                            .get(0).getCodiceAttivita())
-                    .filter(Objects::nonNull).toList());
+            atecoCodes.addAll(
+                    pointOfSales.getLocalizzazioni().stream()
+                            .filter(
+                                    loc ->
+                                            Objects.nonNull(loc.getClassificazioniAteco())
+                                                    && Objects.nonNull(
+                                                    loc.getClassificazioniAteco().getClassificazioniAteco()))
+                            .flatMap(
+                                    loc ->
+                                            loc.getClassificazioniAteco().getClassificazioniAteco().stream()
+                                                    .map(ClassificazioneAteco::getCodiceAttivita)
+                                                    .filter(Objects::nonNull))
+                            .collect(Collectors.toSet()));
         }
-        return atecoCodes.stream().toList();
+
+        return new ArrayList<>(atecoCodes);
     }
 
 

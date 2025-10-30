@@ -19,8 +19,7 @@ public class StorageAsyncService {
     @Async("storageTaskExecutor")
     public void saveStringToStorage(String document, String keyName) {
         try {
-            var encryptedDocument = DataEncryptionUtils.encrypt(document);
-            daprSelcClient.saveState("blobstorage-state", keyName, encryptedDocument).block();
+            daprSelcClient.saveState("blobstorage-state", keyName, document).block();
             log.info("Document saved into Azure Storage with key: {}", sanitizeForLog(keyName));
         } catch (Exception e) {
             log.error("Impossible to store document with key {} into Azure Storage", sanitizeForLog(keyName), e);
