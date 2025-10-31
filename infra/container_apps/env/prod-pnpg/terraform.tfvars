@@ -102,6 +102,14 @@ app_settings = [
   {
     name  = "IVASS_BASE_URL"
     value = "https://infostat-ivass.bancaditalia.it"
+  },
+  {
+    name  = "REDIS_URL"
+    value = "selc-p-weu-pnpg-redis.redis.cache.windows.net"
+  },
+  {
+    name  = "REDIS_PORT"
+    value = "6380"
   }
 ]
 
@@ -114,4 +122,5 @@ secrets_names = {
   "PDND_INFOCAMERE_CLIENT_ID"             = "infocamere-interop-client-id"
   "PDND_INFOCAMERE_KID"                   = "infocamere-interop-kid"
   "PDND_INFOCAMERE_PURPOSE_ID"            = "infocamere-interop-purpose-id"
+  "REDIS_PASSWORD"                        = "redis-primary-access-key"
 }
