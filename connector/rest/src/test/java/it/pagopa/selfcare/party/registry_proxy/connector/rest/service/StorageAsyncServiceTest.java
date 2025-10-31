@@ -1,10 +1,10 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.service;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import io.dapr.client.DaprClient;
-import it.pagopa.selfcare.onboarding.crypto.utils.DataEncryptionUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -37,31 +37,17 @@ class StorageAsyncServiceTest {
 
         when(daprSelcClient.saveState(anyString(), anyString(), any()))
                 .thenReturn(Mono.empty());
-
-        try (MockedStatic<DataEncryptionUtils> encryptionMock = mockStatic(DataEncryptionUtils.class)) {
-            encryptionMock.when(() -> DataEncryptionUtils.encrypt(document))
-                    .thenReturn("encrypted_data");
-
-            storageAsyncService.saveStringToStorage(document, keyName);
-
-            verify(daprSelcClient, times(1))
-                    .saveState("blobstorage-state", keyName, "encrypted_data");
-        }
+        storageAsyncService.saveStringToStorage(document, keyName);
+        verify(daprSelcClient, times(1))
+                .saveState("blobstorage-state", keyName, document);
     }
 
     @Test
     void testSaveStringToStorageError() {
         final String document = "<xml>broken</xml>";
         final String keyName = "visura_ERR_2025.xml";
-
-        try (MockedStatic<DataEncryptionUtils> encryptionMock = mockStatic(DataEncryptionUtils.class)) {
-            encryptionMock.when(() -> DataEncryptionUtils.encrypt(document))
-                    .thenThrow(new RuntimeException("Encryption failed"));
-
-            storageAsyncService.saveStringToStorage(document, keyName);
-
-            verify(daprSelcClient, never()).saveState(any(), any(), any());
-            encryptionMock.verify(() -> DataEncryptionUtils.encrypt(document), times(1));
-        }
+        when(daprSelcClient.saveState(any(), any(), any())).thenThrow(new IllegalArgumentException());
+        assertDoesNotThrow(() -> storageAsyncService.saveStringToStorage(document, keyName));
+        verify(daprSelcClient).saveState("blobstorage-state", keyName, document);
     }
 }
