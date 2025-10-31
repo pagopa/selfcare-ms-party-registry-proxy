@@ -28,7 +28,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ComponentScan(basePackages = {"it.pagopa.selfcare.party.registry_proxy.web.controller", "it.pagopa.selfcare.party.registry_proxy.web.model.mapper"})
-@TestPropertySource(locations = "classpath:config/application.yml")
+@TestPropertySource(locations = "classpath:config/application.yml", properties = {"ivass.file.connector.type=rest"})
 class SwaggerConfigTest {
 
     @MockBean
