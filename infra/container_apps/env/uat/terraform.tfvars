@@ -161,6 +161,10 @@ app_settings = [
   {
     name  = "REDIS_PORT"
     value = "6380"
+  },
+  {
+    name = "PDND_SKIP_LOCALIZZAZIONE_NODES"
+    value = "false"
   }
 ]
 
