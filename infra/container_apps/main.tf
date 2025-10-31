@@ -27,7 +27,7 @@ module "container_app_party_reg_proxy" {
   user_assigned_identity_id           = data.azurerm_user_assigned_identity.cae_identity.id
   user_assigned_identity_principal_id = data.azurerm_user_assigned_identity.cae_identity.principal_id
 
-  dapr_settings = [{
+  dapr_settings = var.is_pnpg ? [] : [{
     app_id       = "party-reg-proxy"
     app_port     = 8080
     app_protocol = "http"
