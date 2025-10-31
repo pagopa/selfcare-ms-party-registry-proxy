@@ -45,8 +45,6 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
   private final PDNDCacheableService PDNDCacheableService;
   private static final String BEARER = "Bearer ";
 
-  private ObjectMapper objectMapper;
-
   public PDNDInfoCamereConnectorImpl(
           PDNDInfoCamereRestClient pdndInfoCamereRestClient,
           PDNDVisuraInfoCamereRawRestClient pdndVisuraInfoCamereRawRestClient,
