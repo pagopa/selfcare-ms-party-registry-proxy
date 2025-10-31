@@ -15,7 +15,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-@Mapper(componentModel = "spring", uses = PDNDConfig.class)
+@Mapper(componentModel = "spring")
 public interface PDNDBusinessMapper {
 
     List<PDNDBusiness> toPDNDBusinesses(List<PDNDImpresa> pdndImpresaList);
@@ -37,7 +37,7 @@ public interface PDNDBusinessMapper {
     @Mapping(target = "descriptionStateInstitution", source = "infoAttivita.descriptionStateInstitution")
     @Mapping(target = "statusCompanyRI", source = "datiIdentificativiImpresa.statusCompanyRI")
     @Mapping(target = "statusCompanyRD", source = "datiIdentificativiImpresa.statusCompanyRD")
-    PDNDBusiness toPDNDBusiness(PDNDVisuraImpresa pdndImpresa);
+    PDNDBusiness toPDNDBusiness(PDNDVisuraImpresa pdndImpresa, @Context PDNDConfig config);
 
     @Named("mapAtecoCodes")
     default List<String> mapAtecoCodes(PDNDVisuraImpresa pdndVisuraImpresa, @Context PDNDConfig config) {
