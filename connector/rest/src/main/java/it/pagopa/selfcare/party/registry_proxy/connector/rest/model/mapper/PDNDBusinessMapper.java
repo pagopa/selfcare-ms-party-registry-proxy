@@ -52,7 +52,7 @@ public interface PDNDBusinessMapper {
                             .collect(Collectors.toSet()));
         }
 
-        if (Boolean.TRUE.equals(config.getSkipLocalizzazioneNodes())) {
+        if (Boolean.FALSE.equals(config.getSkipLocalizzazioneNodes())) {
             var pointOfSales = pdndVisuraImpresa.getPointOfSales();
             if (Objects.nonNull(pointOfSales) && Objects.nonNull(pointOfSales.getLocalizzazioni())) {
                 atecoCodes.addAll(
