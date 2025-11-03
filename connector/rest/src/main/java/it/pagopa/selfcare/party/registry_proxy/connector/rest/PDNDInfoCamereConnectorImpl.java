@@ -10,6 +10,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registri
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDInfoCamereRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDVisuraInfoCamereRawRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDVisuraInfoCamereRestClient;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDInfoCamereRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDVisuraInfoCamereRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
@@ -43,6 +44,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
   private final PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig;
   private final StorageAsyncService storageAsyncService;
   private final PDNDCacheableService PDNDCacheableService;
+  private final PDNDConfig pdndConfig;
   private static final String BEARER = "Bearer ";
 
   public PDNDInfoCamereConnectorImpl(
@@ -54,7 +56,8 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
           TokenProviderVisura tokenProviderVisura,
           PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig,
           PDNDVisuraInfoCamereRestClientConfig pdndVisuraInfoCamereRestClientConfig,
-          StorageAsyncService storageAsyncService, PDNDCacheableService PDNDCacheableService) {
+          StorageAsyncService storageAsyncService, PDNDCacheableService PDNDCacheableService,
+          PDNDConfig pdndConfig) {
     this.pdndInfoCamereRestClient = pdndInfoCamereRestClient;
     this.pdndVisuraInfoCamereRawRestClient = pdndVisuraInfoCamereRawRestClient;
     this.pdndVisuraInfoCamereRestClient = pdndVisuraInfoCamereRestClient;
@@ -64,7 +67,8 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
     this.pdndInfoCamereRestClientConfig = pdndInfoCamereRestClientConfig;
     this.pdndVisuraInfoCamereRestClientConfig = pdndVisuraInfoCamereRestClientConfig;
     this.storageAsyncService = storageAsyncService;
-      this.PDNDCacheableService = PDNDCacheableService;
+    this.PDNDCacheableService = PDNDCacheableService;
+    this.pdndConfig = pdndConfig;
   }
 
   @Override
@@ -109,7 +113,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
 
         PDNDVisuraImpresa result = xmlToVisuraImpresa(decDocument.getBytes(StandardCharsets.UTF_8));
 
-        return pdndBusinessMapper.toPDNDBusiness(result);
+        return pdndBusinessMapper.toPDNDBusiness(result, pdndConfig);
 
       } catch (Exception e) {
         log.error("Unexpected exception occurred while retrieving institution detail", e);
@@ -142,7 +146,7 @@ public class PDNDInfoCamereConnectorImpl implements PDNDInfoCamereConnector {
     }
     PDNDImpresa result  = institutions.get(0);
     PDNDVisuraImpresa visuraImpresa = pdndVisuraInfoCamereRestClient.retrieveInstitutionDetail(result.getBusinessTaxId(), bearer);
-    return pdndBusinessMapper.toPDNDBusiness(visuraImpresa);
+    return pdndBusinessMapper.toPDNDBusiness(visuraImpresa, pdndConfig);
   }
 
   private PDNDVisuraImpresa xmlToVisuraImpresa(byte[] xmlBytes) throws IOException {

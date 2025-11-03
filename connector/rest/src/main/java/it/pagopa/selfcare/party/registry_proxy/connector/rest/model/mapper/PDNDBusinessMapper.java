@@ -1,6 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.model.mapper;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registries_pdnd.PDNDBusiness;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDImpresa;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.PDNDVisuraImpresa;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.ClassificazioneAteco;
@@ -8,6 +9,8 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.visura.Local
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -34,10 +37,10 @@ public interface PDNDBusinessMapper {
     @Mapping(target = "descriptionStateInstitution", source = "infoAttivita.descriptionStateInstitution")
     @Mapping(target = "statusCompanyRI", source = "datiIdentificativiImpresa.statusCompanyRI")
     @Mapping(target = "statusCompanyRD", source = "datiIdentificativiImpresa.statusCompanyRD")
-    PDNDBusiness toPDNDBusiness(PDNDVisuraImpresa pdndImpresa);
+    PDNDBusiness toPDNDBusiness(PDNDVisuraImpresa pdndImpresa, @Context PDNDConfig config);
 
     @Named("mapAtecoCodes")
-    default List<String> mapAtecoCodes(PDNDVisuraImpresa pdndVisuraImpresa) {
+    default List<String> mapAtecoCodes(PDNDVisuraImpresa pdndVisuraImpresa, @Context PDNDConfig config) {
         Set<String> atecoCodes = new HashSet<>();
         var classificazioniAteco = pdndVisuraImpresa.getInfoAttivita().getClassificazioniAteco();
         if (Objects.nonNull(classificazioniAteco)
@@ -49,21 +52,23 @@ public interface PDNDBusinessMapper {
                             .collect(Collectors.toSet()));
         }
 
-        var pointOfSales = pdndVisuraImpresa.getPointOfSales();
-        if (Objects.nonNull(pointOfSales) && Objects.nonNull(pointOfSales.getLocalizzazioni())) {
-            atecoCodes.addAll(
-                    pointOfSales.getLocalizzazioni().stream()
-                            .filter(
-                                    loc ->
-                                            Objects.nonNull(loc.getClassificazioniAteco())
-                                                    && Objects.nonNull(
-                                                    loc.getClassificazioniAteco().getClassificazioniAteco()))
-                            .flatMap(
-                                    loc ->
-                                            loc.getClassificazioniAteco().getClassificazioniAteco().stream()
-                                                    .map(ClassificazioneAteco::getCodiceAttivita)
-                                                    .filter(Objects::nonNull))
-                            .collect(Collectors.toSet()));
+        if (Boolean.FALSE.equals(config.getSkipLocalizzazioneNodes())) {
+            var pointOfSales = pdndVisuraImpresa.getPointOfSales();
+            if (Objects.nonNull(pointOfSales) && Objects.nonNull(pointOfSales.getLocalizzazioni())) {
+                atecoCodes.addAll(
+                        pointOfSales.getLocalizzazioni().stream()
+                                .filter(
+                                        loc ->
+                                                Objects.nonNull(loc.getClassificazioniAteco())
+                                                        && Objects.nonNull(
+                                                        loc.getClassificazioniAteco().getClassificazioniAteco()))
+                                .flatMap(
+                                        loc ->
+                                                loc.getClassificazioniAteco().getClassificazioniAteco().stream()
+                                                        .map(ClassificazioneAteco::getCodiceAttivita)
+                                                        .filter(Objects::nonNull))
+                                .collect(Collectors.toSet()));
+            }
         }
 
         return new ArrayList<>(atecoCodes);

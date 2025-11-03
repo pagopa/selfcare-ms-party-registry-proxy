@@ -8,6 +8,7 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.national_registri
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDInfoCamereRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDVisuraInfoCamereRawRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.PDNDVisuraInfoCamereRestClient;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDInfoCamereRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.PDNDVisuraInfoCamereRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.ClientCredentialsResponse;
@@ -53,6 +54,8 @@ class PDNDInfoCamereConnectorImplTest {
     private TokenProviderVisura tokenProviderVisura;
     @Mock
     private PDNDBusinessMapper pdndBusinessMapper;
+    @Mock
+    private PDNDConfig pdndConfig;
     @Mock
     private PDNDInfoCamereRestClientConfig pdndInfoCamereRestClientConfig;
     @Mock
@@ -123,7 +126,7 @@ class PDNDInfoCamereConnectorImplTest {
                 .thenReturn(List.of(pdndImpresa));
         when(pdndVisuraInfoCamereRestClient.retrieveInstitutionDetail(anyString(), anyString()))
                 .thenReturn(pdndVisuraImpresa);
-        when(pdndBusinessMapper.toPDNDBusiness(pdndVisuraImpresa)).thenReturn(pdndBusiness);
+        when(pdndBusinessMapper.toPDNDBusiness(pdndVisuraImpresa, pdndConfig)).thenReturn(pdndBusiness);
 
         // when
         PDNDBusiness result = pdndInfoCamereConnector.retrieveInstitutionFromRea(rea, county);

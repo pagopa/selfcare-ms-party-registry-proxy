@@ -18,6 +18,9 @@ spring:
       remote-fields: X-Client-Ip
       correlation-fields: X-Client-Ip
 
+pdnd:
+  skipLocalizzazioneNodes: ${PDND_SKIP_LOCALIZZAZIONE_NODES:false}
+
 file:
   connector:
     type: ${ANAC_FTP_MODE:azure}
