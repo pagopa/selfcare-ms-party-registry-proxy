@@ -42,14 +42,16 @@ public interface PDNDBusinessMapper {
     @Named("mapAtecoCodes")
     default List<String> mapAtecoCodes(PDNDVisuraImpresa pdndVisuraImpresa, @Context PDNDConfig config) {
         Set<String> atecoCodes = new HashSet<>();
-        var classificazioniAteco = pdndVisuraImpresa.getInfoAttivita().getClassificazioniAteco();
-        if (Objects.nonNull(classificazioniAteco)
-                && Objects.nonNull(classificazioniAteco.getClassificazioniAteco())) {
-            atecoCodes.addAll(
-                    classificazioniAteco.getClassificazioniAteco().stream()
-                            .map(ClassificazioneAteco::getCodiceAttivita)
-                            .filter(Objects::nonNull)
-                            .collect(Collectors.toSet()));
+        if (Objects.nonNull(pdndVisuraImpresa.getInfoAttivita())) {
+            var classificazioniAteco = pdndVisuraImpresa.getInfoAttivita().getClassificazioniAteco();
+            if (Objects.nonNull(classificazioniAteco)
+                    && Objects.nonNull(classificazioniAteco.getClassificazioniAteco())) {
+                atecoCodes.addAll(
+                        classificazioniAteco.getClassificazioniAteco().stream()
+                                .map(ClassificazioneAteco::getCodiceAttivita)
+                                .filter(Objects::nonNull)
+                                .collect(Collectors.toSet()));
+            }
         }
 
         if (Boolean.FALSE.equals(config.getSkipLocalizzazioneNodes())) {
