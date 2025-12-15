@@ -7,8 +7,10 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.institution.Insti
 import java.util.List;
 
 public interface SearchServiceConnector {
+  List<SearchServiceInstitution> findInstitutionIPAById(String id);
   SearchServiceStatus indexInstitution(Institution institution);
+  void deleteIndex(String indexName, String apiVersion);
+  SearchServiceStatus indexInstitutionsIPA(List<it.pagopa.selfcare.party.registry_proxy.connector.model.Institution> institutions);
   List<SearchServiceInstitution> searchInstitution(String search, String filter, List<String> products, Integer top, Integer skip, String select, String orderby);
-
-
+  List<SearchServiceInstitution> searchInstitutionFromIPA(String search, String filter, Integer top, Integer skip);
 }

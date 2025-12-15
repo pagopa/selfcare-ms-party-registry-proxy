@@ -1,6 +1,8 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.client;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceStatus;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.AISearchServiceResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.SearchServiceInstitutionResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.SearchServiceRequest;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.AzureSearchRestClientConfig;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.SearchServiceRequestBody;
@@ -14,7 +16,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public interface AzureSearchRestClient {
   @PostMapping(value = "${rest-client.ai-search.institution.add.path}", consumes = APPLICATION_JSON_VALUE)
   @ResponseBody
-  SearchServiceStatus indexInstitution(@RequestBody SearchServiceRequest searchServiceRequest);
+  SearchServiceStatus indexInstitution(@RequestBody SearchServiceRequest searchServiceRequest,
+                                       @PathVariable("indexName") String indexName);
+
+  @DeleteMapping("/indexes/{indexName}")
+  void deleteIndex(
+          @PathVariable("indexName") String indexName,
+          @RequestParam("api-version") String apiVersion
+  );
 
   @GetMapping("${rest-client.ai-search.institution.search.path}")
   SearchServiceResponse searchInstitution(
@@ -26,10 +35,23 @@ public interface AzureSearchRestClient {
     @RequestParam(value = "$orderby", required = false) String orderby
   );
 
+  @GetMapping("${rest-client.ai-search.institution.search.path}")
+  SearchServiceResponse findById(
+          @RequestParam("search") String id
+  );
+
   @PostMapping("/indexes/{indexName}/docs/search")
   SearchServiceResponse searchWithBody(
     @PathVariable("indexName") String indexName,
     @RequestParam("api-version") String apiVersion,
     @RequestBody SearchServiceRequestBody searchRequest
+  );
+
+  @GetMapping("${rest-client.ai-search.institution-from-ipa.search.path}")
+  AISearchServiceResponse<SearchServiceInstitutionResponse> searchInstitutionFromIPA(
+          @RequestParam("search") String search,
+          @RequestParam(value = "$filter", required = false) String filter,
+          @RequestParam(value = "$top", required = false) Integer top,
+          @RequestParam(value = "$skip", required = false) Integer skip
   );
 }

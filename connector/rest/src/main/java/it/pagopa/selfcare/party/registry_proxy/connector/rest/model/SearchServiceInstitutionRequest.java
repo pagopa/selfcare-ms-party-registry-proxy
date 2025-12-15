@@ -7,6 +7,8 @@ import it.pagopa.selfcare.party.registry_proxy.connector.model.institution.Onboa
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Setter
@@ -27,4 +29,24 @@ public class SearchServiceInstitutionRequest extends SearchServiceInstitution {
     searchServiceInstitutionRequest.setAction("mergeOrUpload");
     return searchServiceInstitutionRequest;
   }
+
+  public static SearchServiceInstitutionRequest createFromInstitutionIPA(it.pagopa.selfcare.party.registry_proxy.connector.model.Institution institution) {
+    SearchServiceInstitutionRequest searchServiceInstitutionRequest = new SearchServiceInstitutionRequest();
+    searchServiceInstitutionRequest.setId(institution.getId());
+    searchServiceInstitutionRequest.setDescription(institution.getDescription());
+    searchServiceInstitutionRequest.setTaxCode(institution.getTaxCode());
+    searchServiceInstitutionRequest.setAction("mergeOrUpload");
+    return searchServiceInstitutionRequest;
+  }
+
+  public static List<SearchServiceInstitutionRequest> createFromInstitutions(List<it.pagopa.selfcare.party.registry_proxy.connector.model.Institution> institutions) {
+    List<SearchServiceInstitutionRequest> requestList = new ArrayList<>();
+    institutions.stream().forEach(institution -> {
+      SearchServiceInstitutionRequest searchServiceInstitutionRequest = createFromInstitutionIPA(institution);
+      requestList.add(searchServiceInstitutionRequest);
+    });
+    return requestList;
+  }
+
+
 }
