@@ -1,5 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.client;
 
+import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchIndexDefinition;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceStatus;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.AISearchServiceResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.*;

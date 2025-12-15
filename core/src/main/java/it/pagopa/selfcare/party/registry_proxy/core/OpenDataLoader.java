@@ -1,5 +1,9 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
+import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const.INDEX_API_VERSION;
+import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const.IPA_INDEX_NAME;
+
+import feign.FeignException;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IvassDataConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.OpenDataConnector;
@@ -10,9 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
-import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const.INDEX_API_VERSION;
-import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const.IPA_INDEX_NAME;
 
 @Slf4j
 @Component
@@ -65,19 +66,34 @@ public class OpenDataLoader implements CommandLineRunner {
             stationIndexWriterService.adds(anacService.loadStations());
             ivassIndexWriterService.adds(ivassDataConnector.getInsurances());
             //AI Azure search
-            writeIndexIPA(openDataConnector);
+            rebuildIndexIPA(openDataConnector);
         });
 
         log.trace("run end");
     }
 
-    private void writeIndexIPA(OpenDataConnector openDataConnector) {
+    private void rebuildIndexIPA(OpenDataConnector openDataConnector) {
         List<Institution> institutions = openDataConnector.getInstitutions();
         if (!institutions.isEmpty()) {
-            searchServiceConnector.deleteIndex(IPA_INDEX_NAME, INDEX_API_VERSION);
-            searchServiceConnector.createIndex(IPA_INDEX_NAME, INDEX_API_VERSION);
+            try {
+                searchServiceConnector.deleteIndex(IPA_INDEX_NAME, INDEX_API_VERSION);
+            } catch (FeignException.NotFound ignored) {}
+            SearchIndexDefinition indexDefinition = buildIpaIndexDefinition();
+            searchServiceConnector.createIndex(IPA_INDEX_NAME, INDEX_API_VERSION, indexDefinition);
             searchServiceConnector.indexInstitutionsIPA(institutions);
         }
     }
 
+    private SearchIndexDefinition buildIpaIndexDefinition() {
+        SearchIndexDefinition indexDefinition = new SearchIndexDefinition();
+        indexDefinition.setName(IPA_INDEX_NAME);
+
+        indexDefinition.setFields(List.of(
+                AzureSearchField.field("id", "Edm.String", true, false, true, true),
+                AzureSearchField.field("name", "Edm.String", false, true, false, false),
+                AzureSearchField.field("city", "Edm.String", false, true, true, false)
+        ));
+
+        return indexDefinition;
+    }
 }

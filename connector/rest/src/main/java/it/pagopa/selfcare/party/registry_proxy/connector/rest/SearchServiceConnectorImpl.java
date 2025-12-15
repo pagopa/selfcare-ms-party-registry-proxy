@@ -2,6 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
 import io.github.resilience4j.retry.annotation.Retry;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.SearchServiceConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchIndexDefinition;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceInstitution;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceStatus;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.institution.Institution;
@@ -50,8 +51,8 @@ public class SearchServiceConnectorImpl implements SearchServiceConnector {
   }
 
   @Override
-  public void createIndex(String indexName, String apiVersion) {
-    azureSearchRestClient.createOrUpdateIndex(indexName, new SearchIndexDefinition(), apiVersion);
+  public void createIndex(String indexName, String apiVersion, SearchIndexDefinition indexDefinition) {
+    azureSearchRestClient.createOrUpdateIndex(indexName, indexDefinition, apiVersion);
   }
 
   @Override
