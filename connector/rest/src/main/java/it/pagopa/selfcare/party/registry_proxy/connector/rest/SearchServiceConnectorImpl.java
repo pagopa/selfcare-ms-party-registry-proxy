@@ -1,8 +1,5 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
-import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const.AR_INDEX_NAME;
-import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const.IPA_INDEX_NAME;
-
 import io.github.resilience4j.retry.annotation.Retry;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.SearchServiceConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceInstitution;
@@ -17,6 +14,8 @@ import java.util.Objects;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const.*;
 
 @Slf4j
 @Service
@@ -42,7 +41,7 @@ public class SearchServiceConnectorImpl implements SearchServiceConnector {
   @Override
   public SearchServiceStatus indexInstitution(Institution institution) {
     SearchServiceInstitutionRequest searchServiceInstitutionRequest = SearchServiceInstitutionRequest.createFromInstitution(institution);
-    return azureSearchRestClient.indexInstitution(SearchServiceRequest.createFromInstitution(searchServiceInstitutionRequest), AR_INDEX_NAME);
+    return azureSearchRestClient.indexInstitution(SearchServiceRequest.createFromInstitution(searchServiceInstitutionRequest), AR_INDEX_NAME, "2023-11-01");
   }
 
   @Override
@@ -51,11 +50,16 @@ public class SearchServiceConnectorImpl implements SearchServiceConnector {
   }
 
   @Override
+  public void createIndex(String indexName, String apiVersion) {
+    azureSearchRestClient.createOrUpdateIndex(indexName, new SearchIndexDefinition(), apiVersion);
+  }
+
+  @Override
   public SearchServiceStatus indexInstitutionsIPA(List<it.pagopa.selfcare.party.registry_proxy.connector.model.Institution> institutions) {
     SearchServiceRequest request = new SearchServiceRequest();
     List<SearchServiceInstitutionRequest> list = SearchServiceInstitutionRequest.createFromInstitutions(institutions);
     request.setValue(list);
-    return azureSearchRestClient.indexInstitution(request, IPA_INDEX_NAME);
+    return azureSearchRestClient.indexInstitution(request, IPA_INDEX_NAME, INDEX_API_VERSION);
   }
 
   @Override

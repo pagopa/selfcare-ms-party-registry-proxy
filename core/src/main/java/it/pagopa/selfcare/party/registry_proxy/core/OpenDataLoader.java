@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const.INDEX_API_VERSION;
 import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const.IPA_INDEX_NAME;
 
 @Slf4j
@@ -73,7 +74,8 @@ public class OpenDataLoader implements CommandLineRunner {
     private void writeIndexIPA(OpenDataConnector openDataConnector) {
         List<Institution> institutions = openDataConnector.getInstitutions();
         if (!institutions.isEmpty()) {
-            searchServiceConnector.deleteIndex(IPA_INDEX_NAME, "1.0.0");
+            searchServiceConnector.deleteIndex(IPA_INDEX_NAME, INDEX_API_VERSION);
+            searchServiceConnector.createIndex(IPA_INDEX_NAME, INDEX_API_VERSION);
             searchServiceConnector.indexInstitutionsIPA(institutions);
         }
     }

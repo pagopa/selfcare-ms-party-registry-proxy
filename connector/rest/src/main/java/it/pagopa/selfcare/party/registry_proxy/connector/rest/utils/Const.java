@@ -10,5 +10,6 @@ public class Const {
     public static final String AR_INDEX_NAME = "institution-index-ar";
     public static final String IPA_INDEX_NAME = "ipa-index";
     public static final String IVASS_INDEX_NAME = "ivass-index";
+    public static final String INDEX_API_VERSION = "1.0.0";
 
 }
