@@ -3,12 +3,15 @@ package it.pagopa.selfcare.party.registry_proxy.core;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.IvassDataConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.OpenDataConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.api.SearchServiceConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const.IPA_INDEX_NAME;
 
 @Slf4j
 @Component
@@ -24,6 +27,8 @@ public class OpenDataLoader implements CommandLineRunner {
     private final ANACService anacService;
     private final IvassDataConnector ivassDataConnector;
 
+    private final SearchServiceConnector searchServiceConnector;
+
     @Autowired
     public OpenDataLoader(List<OpenDataConnector> openDataConnectors,
                           IndexWriterService<Institution> institutionIndexWriterService,
@@ -33,7 +38,8 @@ public class OpenDataLoader implements CommandLineRunner {
                           IndexWriterService<Station> stationIndexWriterService,
                           IndexWriterService<InsuranceCompany> ivassIndexWriterService,
                           ANACService anacService,
-                          IvassDataConnector ivassDataConnector) {
+                          IvassDataConnector ivassDataConnector,
+                          SearchServiceConnector searchServiceConnector) {
         log.trace("Initializing {}", OpenDataLoader.class.getSimpleName());
         this.openDataConnectors = openDataConnectors;
         this.institutionIndexWriterService = institutionIndexWriterService;
@@ -44,6 +50,7 @@ public class OpenDataLoader implements CommandLineRunner {
         this.ivassIndexWriterService = ivassIndexWriterService;
         this.anacService = anacService;
         this.ivassDataConnector = ivassDataConnector;
+        this.searchServiceConnector = searchServiceConnector;
     }
 
     @Override
@@ -56,8 +63,19 @@ public class OpenDataLoader implements CommandLineRunner {
             uoIndexWriterService.adds(openDataConnector.getUOs());
             stationIndexWriterService.adds(anacService.loadStations());
             ivassIndexWriterService.adds(ivassDataConnector.getInsurances());
+            //AI Azure search
+            writeIndexIPA(openDataConnector);
         });
+
         log.trace("run end");
+    }
+
+    private void writeIndexIPA(OpenDataConnector openDataConnector) {
+        List<Institution> institutions = openDataConnector.getInstitutions();
+        if (!institutions.isEmpty()) {
+            searchServiceConnector.deleteIndex(IPA_INDEX_NAME, "1.0.0");
+            searchServiceConnector.indexInstitutionsIPA(institutions);
+        }
     }
 
 }
