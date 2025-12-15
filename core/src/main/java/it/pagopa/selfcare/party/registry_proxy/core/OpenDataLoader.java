@@ -1,5 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
+import static it.pagopa.selfcare.party.registry_proxy.connector.model.AzureSearchField.field;
 import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const.INDEX_API_VERSION;
 import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const.IPA_INDEX_NAME;
 
@@ -85,13 +86,32 @@ public class OpenDataLoader implements CommandLineRunner {
     }
 
     private SearchIndexDefinition buildIpaIndexDefinition() {
+
         SearchIndexDefinition indexDefinition = new SearchIndexDefinition();
         indexDefinition.setName(IPA_INDEX_NAME);
 
         indexDefinition.setFields(List.of(
-                AzureSearchField.field("id", "Edm.String", true, false, true, true),
-                AzureSearchField.field("name", "Edm.String", false, true, false, false),
-                AzureSearchField.field("city", "Edm.String", false, true, true, false)
+                field("id", "Edm.String", true,  false, true,  true),
+
+                field("entityType", "Edm.String", false, false, true,  false),
+                field("originId", "Edm.String", false, false, true,  false),
+
+                field("description", "Edm.String", false, true,  false, true),
+                field("descriptionFull", "Edm.String", false, true,  false, true),
+
+                field("taxCode", "Edm.String", false, false, true,  false),
+                field("category", "Edm.String", false, false, true,  false),
+
+                field("digitalAddress", "Edm.String", false, false, false, false),
+                field("address", "Edm.String", false, true,  false, false),
+                field("zipCode", "Edm.String", false, false, true,  false),
+
+                field("origin", "Edm.String", false, false, true,  false),
+                field("istatCode", "Edm.String", false, false, true,  false),
+
+                field("o", "Edm.String", false, false, true,  false),
+                field("ou", "Edm.String", false, false, true,  false),
+                field("aoo", "Edm.String", false, false, true,  false)
         ));
 
         return indexDefinition;

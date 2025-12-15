@@ -19,10 +19,7 @@ public interface AzureSearchRestClient {
                                        @PathVariable("indexName") String indexName,
                                        @RequestParam("api-version") String apiVersion);
   @DeleteMapping("/indexes/{indexName}")
-  void deleteIndex(
-          @PathVariable("indexName") String indexName,
-          @RequestParam("api-version") String apiVersion
-  );
+  void deleteIndex(@PathVariable("indexName") String indexName, @RequestParam("api-version") String apiVersion);
 
   @GetMapping("${rest-client.ai-search.institution.search.path}")
   SearchServiceResponse searchInstitution(
