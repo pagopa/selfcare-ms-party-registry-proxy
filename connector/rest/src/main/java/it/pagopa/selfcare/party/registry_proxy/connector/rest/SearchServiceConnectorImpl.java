@@ -4,6 +4,7 @@ import io.github.resilience4j.retry.annotation.Retry;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.SearchServiceConnector;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchIndexDefinition;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceInstitution;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceInstitutionIPA;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceStatus;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.institution.Institution;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.AzureSearchRestClient;
@@ -77,11 +78,11 @@ public class SearchServiceConnectorImpl implements SearchServiceConnector {
   }
 
   @Override
-  public List<SearchServiceInstitution> searchInstitutionFromIPA(String search, String filter, Integer top, Integer skip) {
-    AISearchServiceResponse<SearchServiceInstitutionResponse> searchServiceResponse = azureSearchRestClient.searchInstitutionFromIPA(search, filter, top, skip);
-    List<SearchServiceInstitution> institutions = new ArrayList<>();
+  public List<SearchServiceInstitutionIPA> searchInstitutionFromIPA(String search, String filter, Integer top, Integer skip) {
+    AISearchServiceResponse<SearchServiceInstitutionIPAResponse> searchServiceResponse = azureSearchRestClient.searchInstitutionFromIPA(search, filter, top, skip);
+    List<SearchServiceInstitutionIPA> institutions = new ArrayList<>();
     Optional.of(searchServiceResponse).ifPresent(response -> institutions.addAll(response.getValue().stream()
-            .map(SearchServiceInstitution::createSearchServiceInstitution)
+            .map(SearchServiceInstitutionIPA::createSearchServiceInstitution)
             .toList()));
     return institutions;
   }

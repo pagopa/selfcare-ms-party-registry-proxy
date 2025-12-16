@@ -4,10 +4,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.Origin;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceInstitution;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceInstitutionIPA;
 import it.pagopa.selfcare.party.registry_proxy.core.SearchInstitutionService;
 import it.pagopa.selfcare.party.registry_proxy.web.model.InstitutionResource;
+import it.pagopa.selfcare.party.registry_proxy.web.model.InstitutionsResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.InstitutionMapper;
+import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.InstitutionsMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,26 +40,29 @@ public class SearchInstitutionController {
     @Operation(summary = "${swagger.api.institution.search.summary}",
             description = "${swagger.api.institution.search.notes}",
             operationId = "searchInstitutionsUsingGET")
-    public List<SearchServiceInstitution> search(@ApiParam("${swagger.model.institution.search}")
-                                                 @RequestParam(value = "search", required = false)
-                                                 Optional<String> search,
-                                                 @ApiParam(value = "${swagger.model.*.page}")
-                                                 @RequestParam(value = "page", required = false, defaultValue = "1")
-                                                 Integer page,
-                                                 @ApiParam(value = "${swagger.model.*.limit}")
-                                                 @RequestParam(value = "limit", required = false, defaultValue = "10")
-                                                 Integer limit,
-                                                 @ApiParam(value = "${swagger.model.*.categories}")
-                                                 @RequestParam(value = "categories", required = false)
-                                                 String categories) {
+    public InstitutionsResource search(@ApiParam("${swagger.model.institution.search}")
+                                       @RequestParam(value = "search", required = false)
+                                       Optional<String> search,
+                                       @ApiParam(value = "${swagger.model.*.page}")
+                                       @RequestParam(value = "page", required = false, defaultValue = "1")
+                                       Integer page,
+                                       @ApiParam(value = "${swagger.model.*.limit}")
+                                       @RequestParam(value = "limit", required = false, defaultValue = "10")
+                                       Integer limit,
+                                       @ApiParam(value = "${swagger.model.*.categories}")
+                                       @RequestParam(value = "categories", required = false)
+                                       String categories) {
         log.trace("search start");
         log.debug("search search = {}, page = {}, limit = {}", search, page, limit);
-        final List<SearchServiceInstitution> result = categories == null ? institutionService.search(search, page, limit)
+        final List<SearchServiceInstitutionIPA> result = categories == null ? institutionService.search(search, page, limit)
                 : institutionService.search(search, categories, page, limit);
-
-        log.debug("search result = {}", result);
+        final InstitutionsResource institutionsResource = InstitutionsMapper.toResource(result.stream()
+                        .map(InstitutionMapper::toResource)
+                        .collect(Collectors.toList()),
+                100);
+        log.debug("search result = {}", institutionsResource);
         log.trace("search end");
-        return result;
+        return institutionsResource;
     }
 
     @GetMapping("{id}")

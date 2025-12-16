@@ -3,6 +3,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest.client;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchIndexDefinition;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceStatus;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.AISearchServiceResponse;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.SearchServiceInstitutionIPAResponse;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.config.AzureSearchRestClientConfig;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -54,7 +55,7 @@ public interface AzureSearchRestClient {
   );
 
   @GetMapping("${rest-client.ai-search.institution-from-ipa.search.path}")
-  AISearchServiceResponse<SearchServiceInstitutionResponse> searchInstitutionFromIPA(
+  AISearchServiceResponse<SearchServiceInstitutionIPAResponse> searchInstitutionFromIPA(
           @RequestParam("search") String search,
           @RequestParam(value = "$filter", required = false) String filter,
           @RequestParam(value = "$top", required = false) Integer top,
