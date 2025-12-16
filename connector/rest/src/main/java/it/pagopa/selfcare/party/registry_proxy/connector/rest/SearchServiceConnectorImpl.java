@@ -30,7 +30,7 @@ public class SearchServiceConnectorImpl implements SearchServiceConnector {
   @Override
   public List<SearchServiceInstitution> findInstitutionIPAById(String id) {
     SearchServiceRequestBody request = SearchServiceRequestBody.builder().filter("id eq '" + id + "'").build();
-    SearchServiceResponse searchServiceResponse = azureSearchRestClient.searchWithBody(AR_INDEX_NAME, "1.0.0", request);
+    SearchServiceResponse searchServiceResponse = azureSearchRestClient.searchWithBody(AR_INDEX_NAME, INDEX_API_VERSION, request);
     List<SearchServiceInstitution> institutions = new ArrayList<>();
     Optional.of(searchServiceResponse).ifPresent(response -> institutions.addAll(response.getValue().stream()
             .map(SearchServiceInstitution::createSearchServiceInstitution)
@@ -41,7 +41,7 @@ public class SearchServiceConnectorImpl implements SearchServiceConnector {
   @Override
   public SearchServiceStatus indexInstitution(Institution institution) {
     SearchServiceInstitutionRequest searchServiceInstitutionRequest = SearchServiceInstitutionRequest.createFromInstitution(institution);
-    return azureSearchRestClient.indexInstitution(SearchServiceRequest.createFromInstitution(searchServiceInstitutionRequest), AR_INDEX_NAME, "2023-11-01");
+    return azureSearchRestClient.indexInstitution(SearchServiceRequest.createFromInstitution(searchServiceInstitutionRequest), AR_INDEX_NAME, INDEX_API_VERSION);
   }
 
   @Override
@@ -62,11 +62,11 @@ public class SearchServiceConnectorImpl implements SearchServiceConnector {
 
     for (List<it.pagopa.selfcare.party.registry_proxy.connector.model.Institution> batch : batches) {
 
-      SearchServiceRequest request = new SearchServiceRequest();
-      request.setValue(SearchServiceInstitutionRequest.createFromInstitutions(batch));
+      SearchServiceIPARequest request = new SearchServiceIPARequest();
+      request.setValue(SearchServiceInstitutionIPARequest.createFromInstitutions(batch));
 
       SearchServiceStatus status =
-              azureSearchRestClient.indexInstitution(
+              azureSearchRestClient.indexInstitutionIPA(
                       request,
                       IPA_INDEX_NAME,
                       INDEX_API_VERSION

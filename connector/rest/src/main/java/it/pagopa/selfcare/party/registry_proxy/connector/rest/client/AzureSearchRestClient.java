@@ -16,9 +16,16 @@ public interface AzureSearchRestClient {
 
   @PostMapping(value = "${rest-client.ai-search.institution.add.path}", consumes = APPLICATION_JSON_VALUE)
   @ResponseBody
+  SearchServiceStatus indexInstitutionIPA(@RequestBody SearchServiceIPARequest searchServiceRequest,
+                                       @PathVariable("indexName") String indexName,
+                                       @RequestParam("api-version") String apiVersion);
+
+  @PostMapping(value = "${rest-client.ai-search.institution.add.path}", consumes = APPLICATION_JSON_VALUE)
+  @ResponseBody
   SearchServiceStatus indexInstitution(@RequestBody SearchServiceRequest searchServiceRequest,
                                        @PathVariable("indexName") String indexName,
                                        @RequestParam("api-version") String apiVersion);
+
   @DeleteMapping("/indexes/{indexName}")
   void deleteIndex(@PathVariable("indexName") String indexName, @RequestParam("api-version") String apiVersion);
 

@@ -5,11 +5,11 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class SearchServiceRequest {
-  List<SearchServiceInstitutionRequest> value;
+public class SearchServiceIPARequest {
+  List<SearchServiceInstitutionIPARequest> value;
 
-  public static SearchServiceRequest createFromInstitution(SearchServiceInstitutionRequest searchServiceInstitutionRequest) {
-    SearchServiceRequest searchServiceRequest = new SearchServiceRequest();
+  public static SearchServiceIPARequest createFromInstitution(SearchServiceInstitutionIPARequest searchServiceInstitutionRequest) {
+    SearchServiceIPARequest searchServiceRequest = new SearchServiceIPARequest();
     searchServiceRequest.setValue(new ArrayList<>());
     searchServiceRequest.getValue().add(searchServiceInstitutionRequest);
     return searchServiceRequest;

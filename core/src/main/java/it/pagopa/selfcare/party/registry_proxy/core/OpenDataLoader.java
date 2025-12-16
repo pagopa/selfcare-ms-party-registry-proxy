@@ -78,7 +78,7 @@ public class OpenDataLoader implements CommandLineRunner {
         if (!institutions.isEmpty()) {
             try {
                 searchServiceConnector.deleteIndex(IPA_INDEX_NAME, INDEX_API_VERSION);
-            } catch (FeignException.NotFound ignored) {}
+            } catch (Exception ignored) {}
             SearchIndexDefinition indexDefinition = buildIpaIndexDefinition();
             searchServiceConnector.createIndex(IPA_INDEX_NAME, INDEX_API_VERSION, indexDefinition);
             searchServiceConnector.indexInstitutionsIPA(institutions);
