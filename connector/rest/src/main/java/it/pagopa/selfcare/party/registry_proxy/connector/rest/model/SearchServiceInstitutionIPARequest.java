@@ -23,6 +23,8 @@ public class SearchServiceInstitutionIPARequest extends SearchServiceInstitution
     searchServiceInstitutionRequest.setTaxCode(institution.getTaxCode());
     searchServiceInstitutionRequest.setAoo(institution.getAoo());
     searchServiceInstitutionRequest.setUo(institution.getOu());
+    searchServiceInstitutionRequest.setAddress(institution.getAddress());
+    searchServiceInstitutionRequest.setZipCode(institution.getZipCode());
     searchServiceInstitutionRequest.setAction("mergeOrUpload");
     return searchServiceInstitutionRequest;
   }

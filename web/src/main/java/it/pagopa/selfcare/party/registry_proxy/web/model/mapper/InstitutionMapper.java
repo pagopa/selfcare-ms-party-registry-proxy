@@ -40,9 +40,9 @@ public class InstitutionMapper {
             institutionResource.setTaxCode(institution.getTaxCode());
             institutionResource.setCategory(institution.getCategory());
             institutionResource.setDescription(institution.getDescription());
-            // institutionResource.setDigitalAddress(institution.ge());
-            // institutionResource.setAddress(institution.getAddress());
-            // institutionResource.setZipCode(institution.getZipCode());
+            institutionResource.setDigitalAddress(institution.getDigitalAddress());
+            institutionResource.setAddress(institution.getAddress());
+            institutionResource.setZipCode(institution.getZipCode());
             institutionResource.setOrigin(Origin.valueOf(institution.getOrigin()));
             institutionResource.setIstatCode(institution.getIstatCode());
         }

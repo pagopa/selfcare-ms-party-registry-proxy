@@ -17,6 +17,8 @@ public class SearchServiceInstitutionIPA {
     private String origin;
     private String istatCode;
     private String digitalAddress;
+    private String address;
+    private String zipCode;
 
     public SearchServiceInstitutionIPA createSearchServiceInstitution() {
         SearchServiceInstitutionIPA searchServiceInstitution = new SearchServiceInstitutionIPA();
