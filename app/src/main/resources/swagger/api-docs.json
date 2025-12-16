@@ -409,7 +409,7 @@
     },
     "/search/institutions" : {
       "get" : {
-        "tags" : [ "external-v2" ],
+        "tags" : [ "external-v2", "support" ],
         "summary" : "Retrieve institutions",
         "description" : "Retrieves a list of institutions based on a search engine query",
         "operationId" : "retrieveInstitutionOnSearchEngine",
