@@ -2,10 +2,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest;
 
 import io.github.resilience4j.retry.annotation.Retry;
 import it.pagopa.selfcare.party.registry_proxy.connector.api.SearchServiceConnector;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchIndexDefinition;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceInstitution;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceInstitutionIPA;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceStatus;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.institution.Institution;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.AzureSearchRestClient;
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.*;
@@ -24,6 +21,7 @@ import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const
 public class SearchServiceConnectorImpl implements SearchServiceConnector {
 
   private final AzureSearchRestClient azureSearchRestClient;
+  private static final int AZURE_BATCH_SIZE = 1000;
 
   public SearchServiceConnectorImpl(AzureSearchRestClient azureSearchRestClient) {
     this.azureSearchRestClient = azureSearchRestClient;
@@ -48,7 +46,7 @@ public class SearchServiceConnectorImpl implements SearchServiceConnector {
 
   @Override
   public void deleteIndex(String indexName, String apiVersion) {
-      azureSearchRestClient.deleteIndex(indexName, apiVersion);
+    azureSearchRestClient.deleteIndex(indexName, apiVersion);
   }
 
   @Override
@@ -58,10 +56,28 @@ public class SearchServiceConnectorImpl implements SearchServiceConnector {
 
   @Override
   public SearchServiceStatus indexInstitutionsIPA(List<it.pagopa.selfcare.party.registry_proxy.connector.model.Institution> institutions) {
-    SearchServiceRequest request = new SearchServiceRequest();
-    List<SearchServiceInstitutionRequest> list = SearchServiceInstitutionRequest.createFromInstitutions(institutions);
-    request.setValue(list);
-    return azureSearchRestClient.indexInstitution(request, IPA_INDEX_NAME, INDEX_API_VERSION);
+
+    List<List<it.pagopa.selfcare.party.registry_proxy.connector.model.Institution>> batches = partition(institutions);
+    SearchServiceStatus lastStatus = null;
+
+    for (List<it.pagopa.selfcare.party.registry_proxy.connector.model.Institution> batch : batches) {
+
+      SearchServiceRequest request = new SearchServiceRequest();
+      request.setValue(SearchServiceInstitutionRequest.createFromInstitutions(batch));
+
+      SearchServiceStatus status =
+              azureSearchRestClient.indexInstitution(
+                      request,
+                      IPA_INDEX_NAME,
+                      INDEX_API_VERSION
+              );
+
+      if (!isBatchSuccessful(status)) {
+        throw new IllegalStateException("Indexing batch failed: " + status);
+      }
+      lastStatus = status;
+    }
+    return lastStatus;
   }
 
   @Override
@@ -71,9 +87,9 @@ public class SearchServiceConnectorImpl implements SearchServiceConnector {
     SearchServiceResponse searchServiceResponse = azureSearchRestClient.searchInstitution(search, filter, top, skip, select, orderby);
     List<SearchServiceInstitution> institutions = new ArrayList<>();
     Optional.of(searchServiceResponse).ifPresent(response -> institutions.addAll(response.getValue().stream()
-      .map(SearchServiceInstitution::createSearchServiceInstitution)
-      .map(searchServiceInstitution -> enabledProducts.contains("all") ? searchServiceInstitution : searchServiceInstitution.updateProductsEnable(enabledProducts))
-      .toList()));
+            .map(SearchServiceInstitution::createSearchServiceInstitution)
+            .map(searchServiceInstitution -> enabledProducts.contains("all") ? searchServiceInstitution : searchServiceInstitution.updateProductsEnable(enabledProducts))
+            .toList()));
     return institutions;
   }
 
@@ -85,5 +101,20 @@ public class SearchServiceConnectorImpl implements SearchServiceConnector {
             .map(SearchServiceInstitutionIPA::createSearchServiceInstitution)
             .toList()));
     return institutions;
+  }
+
+  private <T> List<List<T>> partition(List<T> list) {
+    int size = AZURE_BATCH_SIZE;
+    List<List<T>> partitions = new ArrayList<>();
+    for (int i = 0; i < list.size(); i += size) {
+      partitions.add(list.subList(i, Math.min(i + size, list.size())));
+    }
+    return partitions;
+  }
+
+  private boolean isBatchSuccessful(SearchServiceStatus status) {
+    return status != null
+            && status.getValue() != null
+            && status.getValue().stream().allMatch(AzureSearchValue::getStatus);
   }
 }
