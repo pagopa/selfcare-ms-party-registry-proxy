@@ -24,20 +24,10 @@ public interface IvassAzureSearchRestClient {
           @PathVariable("indexName") String indexName,
           @RequestParam("api-version") String apiVersion,
           @RequestParam("search") String search,
+          @RequestParam(value = "$searchFields", required = false) String searchFields,
           @RequestParam(value = "$filter", required = false) String filter,
-          @RequestParam(value = "$top", required = false) Integer top,
           @RequestParam(value = "$skip", required = false) Integer skip,
-          @RequestParam(value = "$count", required = false) Boolean count
-  );
-
-  @GetMapping("/indexes/{indexName}/docs")
-  IvassSearchServiceResponse searchFields(
-          @PathVariable("indexName") String indexName,
-          @RequestParam("api-version") String apiVersion,
-          @RequestParam("search") String search,
-          @RequestParam(value = "$searchFields", required = false) String $searchFields,
           @RequestParam(value = "$top", required = false) Integer top,
-          @RequestParam(value = "$skip", required = false) Integer skip,
           @RequestParam(value = "$count", required = false) Boolean count
   );
 }

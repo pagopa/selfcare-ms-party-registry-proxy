@@ -4,7 +4,7 @@ package it.pagopa.selfcare.party.registry_proxy.connector.model;
 import lombok.Data;
 
 @Data
-public class SearchServiceInsuranceCompanyIVASS {
+public class SearchServiceInsuranceCompanyIVASS implements InsuranceCompany {
 
     private String id;
     private String originId;

@@ -1,5 +1,6 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
+import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const.INDEX_API_VERSION;
 import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const.IPA_INDEX_NAME;
 
 import com.opencsv.bean.CsvToBean;
@@ -94,7 +95,7 @@ class SearchInstitutionServiceImpl implements SearchInstitutionService {
         log.trace("start update Institutions IPA index");
         List<Institution> institutions = getInstitutions();
         if (!institutions.isEmpty()) {
-            searchServiceConnector.deleteIndex(IPA_INDEX_NAME, "1.0.0");
+            searchServiceConnector.deleteIndex(IPA_INDEX_NAME, INDEX_API_VERSION);
             searchServiceConnector.indexInstitutionsIPA(institutions);
         }
         log.trace("updated Institutions IPA index end");

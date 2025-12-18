@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/ai-search/institutions", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/institutions", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(tags = "institution")
 public class SearchInstitutionController {
 

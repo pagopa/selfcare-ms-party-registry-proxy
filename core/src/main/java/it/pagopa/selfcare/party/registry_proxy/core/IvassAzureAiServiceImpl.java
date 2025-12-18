@@ -36,12 +36,14 @@ public class IvassAzureAiServiceImpl implements IvassAiSearchService {
                         IVASS_INDEX_NAME,
                         INDEX_API_VERSION,
                         text,
-                        String.format("%s eq '%s'", InsuranceCompany.Field.DESCRIPTION, text),
+                        InsuranceCompany.Field.DESCRIPTION.name(),
+                        null,
                         skip,
                         limit,
                         true
                         ))
-                .orElseGet(() -> ivassAzureSearchRestClient.search("ipa-index", "1.0.0","*", null, skip, limit, true));
+                .orElseGet(() -> ivassAzureSearchRestClient.search(IVASS_INDEX_NAME, INDEX_API_VERSION,"*", null,null, skip, limit, true));
+
         log.debug("search result = {}", queryResult);
         log.trace("search end");
         return new IvassQueryResultImpl(queryResult);
@@ -53,7 +55,8 @@ public class IvassAzureAiServiceImpl implements IvassAiSearchService {
         IvassSearchServiceResponse searchServiceResponse = ivassAzureSearchRestClient.search(
                 IVASS_INDEX_NAME,
                 INDEX_API_VERSION,
-                originId,
+                null,
+                null,
                 String.format("%s eq '%s'",
                         InsuranceCompany.Field.ORIGIN_ID,
                         originId.toUpperCase()

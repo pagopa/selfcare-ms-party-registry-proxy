@@ -1,7 +1,7 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.InsuranceCompany;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.SearchServiceInsuranceCompanyIVASSResponse;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +16,6 @@ public class IvassSearchServiceResponse {
   @JsonProperty("@odata.count")
   private Long odataCount;
 
-  private List<InsuranceCompany> value;
+  private List<SearchServiceInsuranceCompanyIVASSResponse> value;
 
 }

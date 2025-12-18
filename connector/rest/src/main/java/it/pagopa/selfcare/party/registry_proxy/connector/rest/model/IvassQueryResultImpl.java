@@ -2,10 +2,12 @@ package it.pagopa.selfcare.party.registry_proxy.connector.rest.model;
 
 import it.pagopa.selfcare.party.registry_proxy.connector.model.InsuranceCompany;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
+import it.pagopa.selfcare.party.registry_proxy.connector.rest.SearchServiceInsuranceCompanyIVASSResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 @Data
 @NoArgsConstructor
@@ -16,7 +18,8 @@ public class IvassQueryResultImpl implements QueryResult<InsuranceCompany> {
 
         @Override
         public List<InsuranceCompany> getItems() {
-            return azureResponse.getValue();
+            List<SearchServiceInsuranceCompanyIVASSResponse> searchResults = azureResponse.getValue();
+            return new ArrayList<>(searchResults);
         }
 
         @Override
