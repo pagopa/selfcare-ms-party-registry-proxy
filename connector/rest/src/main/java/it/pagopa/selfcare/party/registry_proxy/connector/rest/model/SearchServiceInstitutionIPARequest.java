@@ -20,6 +20,9 @@ public class SearchServiceInstitutionIPARequest extends SearchServiceInstitution
     searchServiceInstitutionRequest.setOriginId(institution.getOriginId());
     searchServiceInstitutionRequest.setCategory(institution.getCategory());
     searchServiceInstitutionRequest.setDescription(institution.getDescription());
+    searchServiceInstitutionRequest.setDescriptionFull(institution.getDescription());
+    searchServiceInstitutionRequest.setIstatCode(institution.getIstatCode());
+    searchServiceInstitutionRequest.setDigitalAddress(institution.getDigitalAddress());
     searchServiceInstitutionRequest.setTaxCode(institution.getTaxCode());
     searchServiceInstitutionRequest.setAoo(institution.getAoo());
     searchServiceInstitutionRequest.setUo(institution.getOu());

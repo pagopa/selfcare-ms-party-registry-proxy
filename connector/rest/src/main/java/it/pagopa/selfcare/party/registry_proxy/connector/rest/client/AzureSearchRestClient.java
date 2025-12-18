@@ -45,7 +45,7 @@ public interface AzureSearchRestClient {
   );
 
   @PostMapping("/indexes/{indexName}/docs/search")
-  SearchServiceResponse searchWithBody(
+  AISearchServiceResponse<SearchServiceInstitutionIPAResponse> searchWithBody(
           @PathVariable("indexName") String indexName,
           @RequestParam("api-version") String apiVersion,
           @RequestBody SearchServiceRequestBody searchRequest
@@ -66,6 +66,7 @@ public interface AzureSearchRestClient {
           @RequestParam("search") String search,
           @RequestParam(value = "$filter", required = false) String filter,
           @RequestParam(value = "$top", required = false) Integer top,
-          @RequestParam(value = "$skip", required = false) Integer skip
+          @RequestParam(value = "$skip", required = false) Integer skip,
+          @RequestParam(value = "$count", required = false) Boolean count
   );
 }

@@ -1,16 +1,13 @@
 package it.pagopa.selfcare.party.registry_proxy.core;
 
 import static it.pagopa.selfcare.party.registry_proxy.connector.model.AzureSearchField.field;
-import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const.INDEX_API_VERSION;
-import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const.IPA_INDEX_NAME;
+import static it.pagopa.selfcare.party.registry_proxy.connector.rest.utils.Const.*;
 
-import feign.FeignException;
-import it.pagopa.selfcare.party.registry_proxy.connector.api.IndexWriterService;
-import it.pagopa.selfcare.party.registry_proxy.connector.api.IvassDataConnector;
-import it.pagopa.selfcare.party.registry_proxy.connector.api.OpenDataConnector;
-import it.pagopa.selfcare.party.registry_proxy.connector.api.SearchServiceConnector;
+import it.pagopa.selfcare.party.registry_proxy.connector.api.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
 import java.util.List;
+import java.util.Objects;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -32,6 +29,8 @@ public class OpenDataLoader implements CommandLineRunner {
 
     private final SearchServiceConnector searchServiceConnector;
 
+    private final SearchIvassServiceConnector searchIvassServiceConnector;
+
     @Autowired
     public OpenDataLoader(List<OpenDataConnector> openDataConnectors,
                           IndexWriterService<Institution> institutionIndexWriterService,
@@ -42,7 +41,8 @@ public class OpenDataLoader implements CommandLineRunner {
                           IndexWriterService<InsuranceCompany> ivassIndexWriterService,
                           ANACService anacService,
                           IvassDataConnector ivassDataConnector,
-                          SearchServiceConnector searchServiceConnector) {
+                          SearchServiceConnector searchServiceConnector,
+                          SearchIvassServiceConnector searchIvassServiceConnector) {
         log.trace("Initializing {}", OpenDataLoader.class.getSimpleName());
         this.openDataConnectors = openDataConnectors;
         this.institutionIndexWriterService = institutionIndexWriterService;
@@ -54,6 +54,7 @@ public class OpenDataLoader implements CommandLineRunner {
         this.anacService = anacService;
         this.ivassDataConnector = ivassDataConnector;
         this.searchServiceConnector = searchServiceConnector;
+        this.searchIvassServiceConnector = searchIvassServiceConnector;
     }
 
     @Override
@@ -67,21 +68,46 @@ public class OpenDataLoader implements CommandLineRunner {
             stationIndexWriterService.adds(anacService.loadStations());
             ivassIndexWriterService.adds(ivassDataConnector.getInsurances());
             //AI Azure search
+            rebuildIndexIVASS(ivassDataConnector);
             rebuildIndexIPA(openDataConnector);
         });
 
         log.trace("run end");
     }
 
+    private void rebuildIndexIVASS(IvassDataConnector ivassDataConnector) {
+        List<InsuranceCompany> companies = ivassDataConnector.getInsurances();
+
+        List<InsuranceCompany> filteredCompanies = companies
+                .stream()
+                .filter(company -> Objects.nonNull(company.getId()) && !Objects.equals(company.getId(), ""))
+                .toList();
+
+        if (!filteredCompanies.isEmpty()) {
+            try {
+                searchServiceConnector.deleteIndex(IVASS_INDEX_NAME, INDEX_API_VERSION);
+            } catch (Exception ignored) {}
+            SearchIndexDefinition indexDefinition = buildIvassIndexDefinition();
+            searchServiceConnector.createIndex(IVASS_INDEX_NAME, INDEX_API_VERSION, indexDefinition);
+            searchIvassServiceConnector.indexIVASS(filteredCompanies);
+        }
+    }
+
     private void rebuildIndexIPA(OpenDataConnector openDataConnector) {
         List<Institution> institutions = openDataConnector.getInstitutions();
-        if (!institutions.isEmpty()) {
+
+        List<Institution> filteredInstitutions = institutions
+                .stream()
+                .filter(institution -> Objects.nonNull(institution.getId()) && !Objects.equals(institution.getId(), ""))
+                .toList();
+
+        if (!filteredInstitutions.isEmpty()) {
             try {
                 searchServiceConnector.deleteIndex(IPA_INDEX_NAME, INDEX_API_VERSION);
             } catch (Exception ignored) {}
             SearchIndexDefinition indexDefinition = buildIpaIndexDefinition();
             searchServiceConnector.createIndex(IPA_INDEX_NAME, INDEX_API_VERSION, indexDefinition);
-            searchServiceConnector.indexInstitutionsIPA(institutions);
+            searchServiceConnector.indexInstitutionsIPA(filteredInstitutions);
         }
     }
 
@@ -113,6 +139,33 @@ public class OpenDataLoader implements CommandLineRunner {
                 field("ou", "Edm.String", false, false, true,  false),
                 field("aoo", "Edm.String", false, false, true,  false)
         ));
+
+        return indexDefinition;
+    }
+
+    private SearchIndexDefinition buildIvassIndexDefinition() {
+        SearchIndexDefinition indexDefinition = new SearchIndexDefinition();
+        indexDefinition.setName(IVASS_INDEX_NAME);
+
+        indexDefinition.setFields(List.of(
+                field("id", "Edm.String", true,  false, true,  true),
+
+                field("originId", "Edm.String", false, false, true,  true),
+
+                field("description", "Edm.String", false, true,  false, true),
+
+                field("taxCode", "Edm.String", false, false, false,  false),
+
+                field("workType", "Edm.String", false, false, false,  false),
+
+                field("registerType", "Edm.String", false, false, false,  false),
+
+                field("address", "Edm.String", false, false,  false, false),
+
+                field("digitalAddress", "Edm.String", false, false, false, false),
+
+                field("origin", "Edm.String", false, false, false,  false)
+                ));
 
         return indexDefinition;
     }

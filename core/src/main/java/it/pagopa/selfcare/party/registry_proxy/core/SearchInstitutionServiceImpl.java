@@ -13,7 +13,6 @@ import it.pagopa.selfcare.party.registry_proxy.connector.rest.client.OpenDataRes
 import it.pagopa.selfcare.party.registry_proxy.connector.rest.model.IPAOpenDataInstitution;
 import it.pagopa.selfcare.party.registry_proxy.core.exception.TooManyResourceFoundException;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -47,7 +46,7 @@ class SearchInstitutionServiceImpl implements SearchInstitutionService {
     public List<SearchServiceInstitutionIPA> search(Optional<String> searchText, int page, int limit) {
         log.trace("search start");
         log.debug("search searchText = {}, page = {}, limit = {}", searchText, page, limit);
-        List<SearchServiceInstitutionIPA> institutions = searchServiceConnector.searchInstitutionFromIPA(searchText.get(), buildFilter(null), page, limit);
+        List<SearchServiceInstitutionIPA> institutions = searchServiceConnector.searchInstitutionFromIPA(searchText.get(), buildFilter(null), limit, page);
         log.debug("search result = {}", institutions);
         log.trace("search end");
         return institutions;
@@ -57,26 +56,24 @@ class SearchInstitutionServiceImpl implements SearchInstitutionService {
     public List<SearchServiceInstitutionIPA> search(Optional<String> searchText, String categories, int page, int limit) {
         log.trace("search start");
         log.debug("search searchText = {}, categories = {}, page = {}, limit = {}", searchText, categories, page, limit);
-        List<SearchServiceInstitutionIPA> institutions = searchServiceConnector.searchInstitutionFromIPA(searchText.get(), buildFilter(Arrays.asList(categories.split(","))), page, limit);
+        List<SearchServiceInstitutionIPA> institutions = searchServiceConnector.searchInstitutionFromIPA(searchText.get(), buildFilter(Arrays.asList(categories.split(","))), limit, page);
         log.debug("search result = {}", institutions);
         log.trace("search end");
         return institutions;
     }
 
     @Override
-    public Institution findById(String id, Optional<Origin> origin, List<String> categories) {
+    public SearchServiceInstitutionIPA findById(String id, Optional<Origin> origin, List<String> categories) {
         log.trace("findById start");
         log.debug("findById id = {}, origin = {}", id, origin);
         if (origin.map(Origin.INFOCAMERE::equals).orElse(false)) {
             throw new RuntimeException("Not implemented yet");//TODO: onboarding privati
         } else {
-            final List<SearchServiceInstitution> list = searchServiceConnector.findInstitutionIPAById(id);
-            var convertedList = convertToInstituions(list);
-            List<Institution> institutions;
+            final List<SearchServiceInstitutionIPA> list = searchServiceConnector.findInstitutionIPAById(id, IPA_INDEX_NAME);
 
             Origin orig = origin.get();
-            institutions = convertedList.stream()
-                    .filter(institution -> institution.getOrigin().equals(orig) &&
+            List<SearchServiceInstitutionIPA> institutions = list.stream()
+                    .filter(institution -> institution.getOrigin().equals(orig.name()) &&
                             (categories.isEmpty() || categories.contains(institution.getCategory())))
                     .toList();
 
@@ -85,85 +82,11 @@ class SearchInstitutionServiceImpl implements SearchInstitutionService {
             } else if (institutions.size() > 1) {
                 throw new TooManyResourceFoundException();
             }
-            final Institution institution = institutions.get(0);
+            final SearchServiceInstitutionIPA institution = institutions.get(0);
             log.debug("findById result = {}", institution);
             log.trace("findById end");
             return institution;
         }
-    }
-
-    private List<Institution> convertToInstituions(List<SearchServiceInstitution> list) {
-        List<Institution> institutions = new ArrayList<>();
-        list.stream().map(searchServiceInstitution -> {
-            Institution institution = new Institution() {
-                @Override
-                public String getId() {
-                    return null;
-                }
-
-                @Override
-                public String getOriginId() {
-                    return null;
-                }
-
-                @Override
-                public String getO() {
-                    return null;
-                }
-
-                @Override
-                public String getOu() {
-                    return null;
-                }
-
-                @Override
-                public String getAoo() {
-                    return null;
-                }
-
-                @Override
-                public String getTaxCode() {
-                    return null;
-                }
-
-                @Override
-                public String getCategory() {
-                    return null;
-                }
-
-                @Override
-                public String getDescription() {
-                    return null;
-                }
-
-                @Override
-                public String getDigitalAddress() {
-                    return null;
-                }
-
-                @Override
-                public String getAddress() {
-                    return null;
-                }
-
-                @Override
-                public String getZipCode() {
-                    return null;
-                }
-
-                @Override
-                public Origin getOrigin() {
-                    return null;
-                }
-
-                @Override
-                public String getIstatCode() {
-                    return null;
-                }
-            };
-            return institution;
-        }).collect(Collectors.toList());
-        return institutions;
     }
 
     @Scheduled(cron = "0 0 2 * * *")
@@ -200,14 +123,9 @@ class SearchInstitutionServiceImpl implements SearchInstitutionService {
         StringBuilder filterBuilder = new StringBuilder();
 
         if (categories != null && !categories.isEmpty() && !categories.contains("all")) {
-            filterBuilder.append("categories/any(p: ");
-            for (int i = 0; i < categories.size(); i++) {
-                if (i > 0) {
-                    filterBuilder.append(" or ");
-                }
-                filterBuilder.append("p eq '").append(categories.get(i)).append("'");
-            }
-            filterBuilder.append(")");
+            return categories.stream()
+                    .map(c -> "category eq '" + c + "'")
+                    .collect(Collectors.joining(" or "));
         }
         return filterBuilder.toString();
     }

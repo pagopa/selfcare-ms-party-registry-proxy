@@ -33,6 +33,8 @@ public class SearchServiceInstitutionIPA {
         searchServiceInstitution.setOriginId(originId);
         searchServiceInstitution.setIstatCode(istatCode);
         searchServiceInstitution.setDigitalAddress(digitalAddress);
+        searchServiceInstitution.setAddress(address);
+        searchServiceInstitution.setZipCode(zipCode);
         return searchServiceInstitution;
     }
 

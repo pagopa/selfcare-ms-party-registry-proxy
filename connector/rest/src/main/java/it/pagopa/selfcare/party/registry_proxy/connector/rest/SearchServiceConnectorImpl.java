@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -28,12 +31,12 @@ public class SearchServiceConnectorImpl implements SearchServiceConnector {
   }
 
   @Override
-  public List<SearchServiceInstitution> findInstitutionIPAById(String id) {
+  public List<SearchServiceInstitutionIPA> findInstitutionIPAById(String id, String indexName) {
     SearchServiceRequestBody request = SearchServiceRequestBody.builder().filter("id eq '" + id + "'").build();
-    SearchServiceResponse searchServiceResponse = azureSearchRestClient.searchWithBody(AR_INDEX_NAME, INDEX_API_VERSION, request);
-    List<SearchServiceInstitution> institutions = new ArrayList<>();
+    AISearchServiceResponse<SearchServiceInstitutionIPAResponse> searchServiceResponse = azureSearchRestClient.searchWithBody(indexName, INDEX_API_VERSION, request);
+    List<SearchServiceInstitutionIPA> institutions = new ArrayList<>();
     Optional.of(searchServiceResponse).ifPresent(response -> institutions.addAll(response.getValue().stream()
-            .map(SearchServiceInstitution::createSearchServiceInstitution)
+            .map(SearchServiceInstitutionIPA::createSearchServiceInstitution)
             .toList()));
     return institutions;
   }
@@ -57,26 +60,47 @@ public class SearchServiceConnectorImpl implements SearchServiceConnector {
   @Override
   public SearchServiceStatus indexInstitutionsIPA(List<it.pagopa.selfcare.party.registry_proxy.connector.model.Institution> institutions) {
 
-    List<List<it.pagopa.selfcare.party.registry_proxy.connector.model.Institution>> batches = partition(institutions);
+    return indexInBatches(
+            institutions,
+            batch -> {
+              SearchServiceIPARequest req = new SearchServiceIPARequest();
+              req.setValue(
+                      SearchServiceInstitutionIPARequest.createFromInstitutions(batch)
+              );
+              return req;
+            },
+            (req, index) -> azureSearchRestClient.indexInstitutionIPA(
+                    req,
+                    index,
+                    INDEX_API_VERSION
+            ),
+            IPA_INDEX_NAME
+    );
+  }
+
+  public <T, R> SearchServiceStatus indexInBatches(
+          List<T> items,
+          Function<List<T>, R> requestMapper,
+          BiFunction<R, String, SearchServiceStatus> indexer,
+          String indexName
+  ) {
+    List<List<T>> batches = partition(items);
     SearchServiceStatus lastStatus = null;
 
-    for (List<it.pagopa.selfcare.party.registry_proxy.connector.model.Institution> batch : batches) {
+    for (List<T> batch : batches) {
 
-      SearchServiceIPARequest request = new SearchServiceIPARequest();
-      request.setValue(SearchServiceInstitutionIPARequest.createFromInstitutions(batch));
+      R request = requestMapper.apply(batch);
 
       SearchServiceStatus status =
-              azureSearchRestClient.indexInstitutionIPA(
-                      request,
-                      IPA_INDEX_NAME,
-                      INDEX_API_VERSION
-              );
+              indexer.apply(request, indexName);
 
       if (!isBatchSuccessful(status)) {
-        throw new IllegalStateException("Indexing batch failed: " + status);
+        log.error("Indexing batch failed: {}", status);
       }
+
       lastStatus = status;
     }
+
     return lastStatus;
   }
 
@@ -95,7 +119,8 @@ public class SearchServiceConnectorImpl implements SearchServiceConnector {
 
   @Override
   public List<SearchServiceInstitutionIPA> searchInstitutionFromIPA(String search, String filter, Integer top, Integer skip) {
-    AISearchServiceResponse<SearchServiceInstitutionIPAResponse> searchServiceResponse = azureSearchRestClient.searchInstitutionFromIPA(search, filter, top, skip);
+    int skipSearch = (skip - 1) * top;
+    AISearchServiceResponse<SearchServiceInstitutionIPAResponse> searchServiceResponse = azureSearchRestClient.searchInstitutionFromIPA(search, filter, top, skipSearch, true);
     List<SearchServiceInstitutionIPA> institutions = new ArrayList<>();
     Optional.of(searchServiceResponse).ifPresent(response -> institutions.addAll(response.getValue().stream()
             .map(SearchServiceInstitutionIPA::createSearchServiceInstitution)

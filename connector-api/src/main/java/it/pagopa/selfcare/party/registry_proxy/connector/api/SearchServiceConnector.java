@@ -1,15 +1,12 @@
 package it.pagopa.selfcare.party.registry_proxy.connector.api;
 
-import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchIndexDefinition;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceInstitution;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceInstitutionIPA;
-import it.pagopa.selfcare.party.registry_proxy.connector.model.SearchServiceStatus;
+import it.pagopa.selfcare.party.registry_proxy.connector.model.*;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.institution.Institution;
 
 import java.util.List;
 
 public interface SearchServiceConnector {
-  List<SearchServiceInstitution> findInstitutionIPAById(String id);
+  List<SearchServiceInstitutionIPA> findInstitutionIPAById(String id, String indexName);
   SearchServiceStatus indexInstitution(Institution institution);
   void deleteIndex(String indexName, String apiVersion);
   void createIndex(String indexName, String apiVersion, SearchIndexDefinition indexDefinition);

@@ -14,6 +14,6 @@ public interface SearchInstitutionService {
 
     List<SearchServiceInstitutionIPA> search(Optional<String> searchText, String categories, int page, int limit);
 
-    Institution findById(String id, Optional<Origin> origin, List<String> categories);
+    SearchServiceInstitutionIPA findById(String id, Optional<Origin> origin, List<String> categories);
 
 }

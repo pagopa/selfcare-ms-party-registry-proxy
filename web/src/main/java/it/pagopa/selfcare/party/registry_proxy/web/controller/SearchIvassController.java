@@ -5,29 +5,31 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.InsuranceCompany;
 import it.pagopa.selfcare.party.registry_proxy.connector.model.QueryResult;
-import it.pagopa.selfcare.party.registry_proxy.core.IvassService;
+import it.pagopa.selfcare.party.registry_proxy.core.IvassAiSearchService;
+import it.pagopa.selfcare.party.registry_proxy.core.IvassAzureAiServiceImpl;
 import it.pagopa.selfcare.party.registry_proxy.web.model.InsuranceCompaniesResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.InsuranceCompanyResource;
 import it.pagopa.selfcare.party.registry_proxy.web.model.mapper.InsuranceCompanyMapper;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Slf4j
 @RestController
-@RequestMapping(value = "/azure-ai/insurance-companies", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/insurance-companies", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(tags = "insurance-companies")
-public class IvassController {
+public class SearchIvassController {
 
-    private final IvassService ivassService;
+    private final IvassAiSearchService ivassService;
     private final InsuranceCompanyMapper insuranceCompanyMapper;
 
-    public IvassController(IvassService ivassService,
-                           InsuranceCompanyMapper insuranceCompanyMapper) {
-        this.ivassService = ivassService;
+    public SearchIvassController(IvassAzureAiServiceImpl ivassAzureAiService,
+                                 InsuranceCompanyMapper insuranceCompanyMapper) {
+        this.ivassService = ivassAzureAiService;
         this.insuranceCompanyMapper = insuranceCompanyMapper;
     }
 
@@ -35,16 +37,16 @@ public class IvassController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "${swagger.api.insurance-company.search.byOriginId.summary}",
             description = "${swagger.api.insurance-company.search.byOriginId.notes}",
-            operationId = "searchInsurancesUsingGET")
-    public InsuranceCompanyResource searchByOriginId(@ApiParam("${swagger.model.insurance-company.originId}")
+            operationId = "azureAiSearchInsurancesUsingGET")
+    public InsuranceCompanyResource ivassAzureAiSearchByOriginId(@ApiParam("${swagger.model.insurance-company.originId}")
                                                      @PathVariable("originId") String originId) {
-        log.trace("searchByOriginId start");
+        log.trace("ivassAzureAiSearchByOriginId start");
         if (originId.matches("\\w*")) {
-            log.debug("searchByOriginId parameter = {}", originId);
+            log.debug("ivassAzureAiSearchByOriginId parameter = {}", originId);
         }
         final InsuranceCompanyResource insuranceCompany = insuranceCompanyMapper.toResource(ivassService.findByOriginId(originId));
-        log.debug("searchByOriginId result = {}", insuranceCompany);
-        log.trace("searchByOriginId end");
+        log.debug("ivassAzureAiSearchByOriginId result = {}", insuranceCompany);
+        log.trace("ivassAzureAiSearchByOriginId end");
         return insuranceCompany;
     }
 
@@ -52,18 +54,18 @@ public class IvassController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "${swagger.api.insurance-company.search.summary}",
             description = "${swagger.api.insurance-company.search.notes}",
-            operationId = "searchInsuranceByIvassCode")
-    public InsuranceCompaniesResource search(@ApiParam("${swagger.model.*.search}")
+            operationId = "azureAiSearchInsuranceByIvassCode")
+    public InsuranceCompaniesResource ivassAzureAiSearch(@ApiParam("${swagger.model.*.search}")
                                              @RequestParam(value = "search", required = false)
                                              Optional<String> search,
-                                             @ApiParam(value = "${swagger.model.*.page}")
+                                                         @ApiParam(value = "${swagger.model.*.page}")
                                              @RequestParam(value = "page", required = false, defaultValue = "1")
                                              Integer page,
-                                             @ApiParam(value = "${swagger.model.*.limit}")
+                                                         @ApiParam(value = "${swagger.model.*.limit}")
                                              @RequestParam(value = "limit", required = false, defaultValue = "10")
                                              Integer limit) {
-        log.trace("search start");
-        log.debug("search search = {}, page = {}, limit = {}", search, page, limit);
+        log.trace("ivassAzureAiSearch start");
+        log.debug("ivassAzureAiSearch search = {}, page = {}, limit = {}", search, page, limit);
         final QueryResult<InsuranceCompany> result = ivassService.search(search, page, limit);
         final InsuranceCompaniesResource companiesResource = InsuranceCompaniesResource.builder()
                 .items(result.getItems().stream()
@@ -71,8 +73,8 @@ public class IvassController {
                         .collect(Collectors.toList()))
                 .count(result.getTotalHits())
                 .build();
-        log.debug("search result = {}", companiesResource);
-        log.trace("search end");
+        log.debug("ivassAzureAiSearch result = {}", companiesResource);
+        log.trace("ivassAzureAiSearch end");
         return companiesResource;
     }
 }
