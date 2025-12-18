@@ -35,7 +35,7 @@ public class SearchIvassServiceConnectorImpl implements SearchIvassServiceConnec
       SearchServiceStatus status =
               azureSearchRestClient.indexInsuranceCompanyIVASS(
                       request,
-                      IPA_INDEX_NAME,
+                      IVASS_INDEX_NAME,
                       INDEX_API_VERSION
               );
 
