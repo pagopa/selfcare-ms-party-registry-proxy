@@ -35,7 +35,7 @@ public class IvassAzureAiServiceImpl implements IvassAiSearchService {
                 .map(text -> ivassAzureSearchRestClient.search(
                         IVASS_INDEX_NAME,
                         INDEX_API_VERSION,
-                        text+"*",
+                        text,
                         InsuranceCompany.Field.DESCRIPTION.name(),
                         null,
                         skip,
