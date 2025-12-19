@@ -87,8 +87,8 @@ public class OpenDataLoader implements CommandLineRunner {
             try {
                 searchServiceConnector.deleteIndex(IVASS_INDEX_NAME, INDEX_API_VERSION);
             } catch (Exception ignored) {}
-//            SearchIndexDefinition indexDefinition = buildIvassIndexDefinition();
-//            searchServiceConnector.createIndex(IVASS_INDEX_NAME, INDEX_API_VERSION, indexDefinition);
+            SearchIndexDefinition indexDefinition = buildIvassIndexDefinition();
+            searchServiceConnector.createIndex(IVASS_INDEX_NAME, INDEX_API_VERSION, indexDefinition);
             searchIvassServiceConnector.indexIVASS(filteredCompanies);
         }
     }
@@ -105,8 +105,8 @@ public class OpenDataLoader implements CommandLineRunner {
             try {
                 searchServiceConnector.deleteIndex(IPA_INDEX_NAME, INDEX_API_VERSION);
             } catch (Exception ignored) {}
-//            SearchIndexDefinition indexDefinition = buildIpaIndexDefinition();
-//            searchServiceConnector.createIndex(IPA_INDEX_NAME, INDEX_API_VERSION, indexDefinition);
+            SearchIndexDefinition indexDefinition = buildIpaIndexDefinition();
+            searchServiceConnector.createIndex(IPA_INDEX_NAME, INDEX_API_VERSION, indexDefinition);
             searchServiceConnector.indexInstitutionsIPA(filteredInstitutions);
         }
     }

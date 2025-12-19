@@ -47,7 +47,7 @@ class SearchInstitutionServiceImpl implements SearchInstitutionService {
     public List<SearchServiceInstitutionIPA> search(Optional<String> searchText, int page, int limit) {
         log.trace("search start");
         log.debug("search searchText = {}, page = {}, limit = {}", searchText, page, limit);
-        List<SearchServiceInstitutionIPA> institutions = searchServiceConnector.searchInstitutionFromIPA(searchText.get(), buildFilter(null), limit, page);
+        List<SearchServiceInstitutionIPA> institutions = searchServiceConnector.searchInstitutionFromIPA(searchText.get()+"*", buildFilter(null), limit, page);
         log.debug("search result = {}", institutions);
         log.trace("search end");
         return institutions;
@@ -57,7 +57,7 @@ class SearchInstitutionServiceImpl implements SearchInstitutionService {
     public List<SearchServiceInstitutionIPA> search(Optional<String> searchText, String categories, int page, int limit) {
         log.trace("search start");
         log.debug("search searchText = {}, categories = {}, page = {}, limit = {}", searchText, categories, page, limit);
-        List<SearchServiceInstitutionIPA> institutions = searchServiceConnector.searchInstitutionFromIPA(searchText.get(), buildFilter(Arrays.asList(categories.split(","))), limit, page);
+        List<SearchServiceInstitutionIPA> institutions = searchServiceConnector.searchInstitutionFromIPA(searchText.get()+"*", buildFilter(Arrays.asList(categories.split(","))), limit, page);
         log.debug("search result = {}", institutions);
         log.trace("search end");
         return institutions;
