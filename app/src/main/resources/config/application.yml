@@ -28,7 +28,7 @@ file:
 ivass:
   file:
     connector:
-      type: "azure"
+      type: "rest"
 
 info:
   build:
